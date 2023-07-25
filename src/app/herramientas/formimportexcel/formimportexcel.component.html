@@ -1,0 +1,28 @@
+<div class="modal-header">
+  <h5 class="modal-title" >Importar Registros</h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+<form (ngSubmit)="enviarArchivo()" [formGroup]="archivoForm">
+  <div class="modal-body">
+      <div class="mb-3">
+        <label for="nombre-field" class="form-label">(*) Archivo Excel (.xlsx) </label>
+        <!-- <input (change)="handleFileInput($event)" type="file" id="archivo-field" class="form-control uppercase" placeholder="Seleccione archivo" required  formControlName="archivo" [ngClass]="{ 'is-invalid': submitted && formArchive['archivo'].errors }"/> -->
+        <div *ngIf="submitted && !archivoExcel" class="row" >
+          <div class="text-danger">Este campo es obligatorio</div>
+        </div>
+
+        <ngx-dropzone (change)="handleFileInput($event)" [multiple]="false" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msexcel" >
+          <ngx-dropzone-label>Seleccione archivo</ngx-dropzone-label>
+          <ngx-dropzone-preview *ngIf="archivoExcel" [file]="archivoExcel" [removable]="true" (removed)="onRemove()">
+            <ngx-dropzone-label>{{ archivoExcel.name }}</ngx-dropzone-label>
+          </ngx-dropzone-preview>
+        </ngx-dropzone>
+      </div>
+  </div>
+  <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="cerrarModal()">Cancelar</button>
+          <button type="submit" class="btn btn-success" id="add-btn"><i class="mdi mdi-save"></i> Enviar</button>
+      </div>
+  </div>
+</form>

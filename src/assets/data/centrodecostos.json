@@ -1,0 +1,13 @@
+﻿{
+"centrodecostos": [
+	{
+		"id" : 1,
+		"name" : "Centro de costos 1"
+	},{
+		"id" : 2,
+		"name" : "Centro de costos 2"
+	},{
+		"id" : 3,
+		"name" : "Centro de costos 3"
+	}
+]}

@@ -1,0 +1,165 @@
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body border-bottom">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-0 card-title flex-grow-1">{{titulo}}</h5>
+            <div class="flex-shrink-0 d-flex gap-1">
+              <a class="btn btn-primary btn-icon" *ngIf="botonNuevo" (click)="irNuevo()" routerLinkActive="active"><i class="mdi mdi-plus me-1"></i>Nuevo</a>
+
+              <a class="btn btn-light" (click)="refrescar()"><i class="mdi mdi-refresh"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="card-body border-bottom accordion-form">
+          <accordion [isAnimated]="true" [closeOthers]="true" *ngIf="mostrarFormBusqueda">
+            <accordion-group heading="Búsqueda Rápida" class="text-black" [isOpen]="true">
+              <div class="row g-3">
+                <div class="col-sm-10">
+                  <input type="search" class="form-control uppercase" id="inputBuscar" [(ngModel)]="inputBuscar" (ngModelChange)="buscarKeydown(false)" placeholder="{{textoBuscar}}">
+                </div>
+                <div class="col-sm-2">
+                  <button type="button" class="btn btn-secondary w-100" (click)="buscarKeydown(true)"><i class="bx bx-search-alt-2"></i> Buscar</button>
+                </div>
+              </div>
+            </accordion-group>
+            <accordion-group heading="Búsqueda Personalizada" *ngIf="busquedaAvanzada">
+              <div class="row g-3 mt-1">
+                <div id="busquedaAvanzada">
+                  <div class="row">
+                    <div *ngFor="let filtro of cabecerasFiltrables" class="col-md-6">
+                      <div [ngSwitch]="estructuraDatos.cabeceras[filtro].filtrotipo">
+                        <div class="mb-3 input-group" *ngSwitchCase="'rango_fechas'">
+                          <div class="input-group-text">{{ estructuraDatos.cabeceras[filtro].etiqueta_form }}</div>
+                          <input type="text" [(ngModel)]="estructuraDatos.cabeceras[filtro].valor" class="form-control date" (click)="daterange_hidden=!daterange_hidden" name="daterange" autocomplete="off" bsDaterangepicker />
+                        </div>
+                        <div class="input-group" *ngSwitchCase="'rango'">
+                          <div class="input-group-text">{{ estructuraDatos.cabeceras[filtro].texto }}</div>
+                          <input [(ngModel)]="estructuraDatos.cabeceras[filtro].valormin" type="number" class="form-control" id="autoSizingInputGroup" placeholder="min">
+                          <input [(ngModel)]="estructuraDatos.cabeceras[filtro].valormax" type="number" class="form-control" id="autoSizingInputGroup" placeholder="max">
+                        </div>
+                        <div class="input-group mb-3 " *ngSwitchCase="'select'">
+                          <div class="input-group-text">{{ estructuraDatos.cabeceras[filtro].texto }}</div>
+                          <ng-select notFoundText="Sin registros" [(ngModel)]="estructuraDatos.cabeceras[filtro].valor" class="form-control" [items]="estructuraDatos.cabeceras[filtro].datos" bindLabel="nombre" bindValue="id">
+                          </ng-select>
+                        </div>
+                        <div class="input-group" *ngSwitchCase="'selectmultiple'">
+                          <div class="input-group-text">{{ estructuraDatos.cabeceras[filtro].texto }}</div>
+                          <ng-select style="width:1%;flex:1 1 auto" [(ngModel)]="estructuraDatos.cabeceras[filtro].valor" [items]="estructuraDatos.cabeceras[filtro].datos" bindLabel="name" bindValue="id" [multiple]="true"></ng-select>
+                        </div>
+                        <div class="input-group" *ngSwitchCase="'checkbox'">
+                          <div class="input-group-text">{{ estructuraDatos.cabeceras[filtro].texto }}</div>
+                          <div class="form-control">
+                            <div class="form-check form-check-inline" *ngFor="let subcampo of estructuraDatos.cabeceras[filtro].datos; index as i; ">
+                              <input [(ngModel)]="estructuraDatos.cabeceras[filtro].datos[i].valor" type="checkbox" class="form-check-input" name="{{filtro+'_'+subcampo.id}}" id="{{filtro+'_'+subcampo.id}}" value="{{subcampo.id}}">
+                              <label class="form-check-label" for="{{filtro+'_'+subcampo.id}}">{{subcampo.name}}</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="input-group" *ngSwitchCase="'boolean'">
+                          <div class="input-group-text">{{ estructuraDatos.cabeceras[filtro].texto }}</div>
+                          <div class="form-control">
+                            <div class="form-check form-check-inline">
+                              <input [(ngModel)]="estructuraDatos.cabeceras[filtro].valor" class="form-check-input" type="checkbox" name="{{ filtro + '_'+estructuraDatos.cabeceras[filtro].id }}" id="{{ filtro + '_'+estructuraDatos.cabeceras[filtro].id }}">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="input-group mb-3 " *ngSwitchCase="'texto'">
+                          <div class="input-group-text">{{ estructuraDatos.cabeceras[filtro].texto }}</div>
+                          <input type="text" class="form-control uppercase" [(ngModel)]="estructuraDatos.cabeceras[filtro].valor" id="autoSizingInputGroup" placeholder="">
+                        </div>
+                        <div class="input-group" *ngSwitchDefault>
+                          <div class="input-group-text">{{ estructuraDatos.cabeceras[filtro].texto }}</div>
+                          <input type="text" class="form-control uppercase" [(ngModel)]="estructuraDatos.cabeceras[filtro].valor" id="autoSizingInputGroup" placeholder="">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 col text-center float-end">
+                      <button type="button" class="btn btn-secondary w-100" (click)="filtrar()"><i class="mdi mdi-filter-outline align-middle"></i> Filtrar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </accordion-group>
+          </accordion>
+          <div class="row g-3 mt-1">
+            <div class="table-responsive">
+              <ng-template *ngIf="templateTop !== undefined; then isTemplateTop"></ng-template>
+              <ng-template #isTemplateTop >
+                <ng-container [ngTemplateOutlet] = "templateTop">
+                </ng-container>
+              </ng-template>
+              <ng-template *ngIf="templateDescargas !== undefined; then isTemplateDescargas"></ng-template>
+              <ng-template #isTemplateDescargas>
+                <ng-container [ngTemplateOutlet] = "templateDescargas">
+                  <div class="row d-inline-block justify-content-between btn-group" >
+                    <div class="align-items-center" dropdown>
+                      <button class="btn btn-sm btn-info ms-2 " type="button" id="*dropdownMenuButton" dropdownToggle><i class="mdi mdi-download"></i> Descargar <i class="mdi mdi-chevron-down"></i></button>
+                      <div class="dropdown-menu text-center" *dropdownMenu>
+                        <button class="dropdown-item" (click)="descargarArchivo('excel')"><i class="mdi mdi-file-excel"></i> Excel <i class="mdi mdi-download"></i></button>
+                        <button class="dropdown-item" (click)="descargarArchivo('pdf')"><i class="mdi mdi-file-pdf"></i> PDF <i class="mdi mdi-download"></i></button>
+                      </div>
+                    </div>&nbsp;
+                  </div>
+                </ng-container>
+              </ng-template>
+              <table class="table table-bordered align-middle nowrap data-table">
+                <thead>
+                  <tr>
+                    <th scope="col" *ngFor="let campo of this.cabeceras; index as i ">
+                      <button *ngIf="estructuraDatos.cabeceras[campo].sortable===undefined?true:estructuraDatos.cabeceras[campo].sortable" (click)="ordenar($event)" class="colCabecera" id="{{campo}}">{{estructuraDatos.cabeceras[campo].texto}} </button>
+                      <button *ngIf="estructuraDatos.cabeceras[campo].sortable===undefined?false:!estructuraDatos.cabeceras[campo].sortable" class="colCabecera noCursor" style="cursor:default" id="{{campo}}">{{estructuraDatos.cabeceras[campo].texto}} </button>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody appCargandoTools [cargando]="estaCargando">
+                  <ng-template *ngIf="templateTbody!==undefined; then isTemplatetbody else noTemplatetbody"></ng-template>
+                  <ng-template #isTemplatetbody>
+                    <ng-container [ngTemplateOutlet]="templateTbody" [ngTemplateOutletContext]="{datosFiltrados:datosFiltrados}"></ng-container>
+                  </ng-template>
+                  <ng-template #noTemplatetbody>
+                    <tr *ngFor="let data of datosFiltrados">
+                      <ng-template [ngIf]="templateFila!==undefined" [ngIfElse]="sintemplate">
+                        <ng-container [ngTemplateOutlet]="templateFila" [ngTemplateOutletContext]="{filaData:data}"></ng-container>
+                      </ng-template>
+                      <ng-template #sintemplate>
+                        <td *ngFor="let key of this.cabeceras ">
+                          {{data[key]}}
+                        </td>
+                      </ng-template>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+            <div class="row justify-content-between align-items-center" *ngIf="datos">
+              <div class="col-auto me-auto">
+                <p class="text-muted mb-0">Mostrando <b>{{datosFiltrados.length}}</b> de <b>{{total}}</b> registros</p>
+              </div>
+              <div class="col-auto me-auto">
+                <select class="form-select" [value]="10" [(ngModel)]="porPagina" (change)="obtenerDatos()">
+                  <option value="10">Mostrar 10</option>
+                  <option value="20">Mostrar 20</option>
+                  <option value="1000">Mostrar Todo</option>
+                </select>
+              </div>
+              <div class="col-auto">
+                <div class="card d-inline-block ms-auto mb-0">
+                  <div class="card-body p-2">
+                    <nav aria-label="Page navigation example" class="mb-0">
+                      <ul class="pagination mb-0">
+                        <pagination [boundaryLinks]="true" [directionLinks]="true" [(ngModel)]="paginaActual" [totalItems]="total" [maxSize]="10" [itemsPerPage]="porPagina" (pageChanged)="pageChanged($event)" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
