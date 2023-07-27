@@ -16,7 +16,7 @@ $sidebar-collapsed-width:  70px;
 $sidebar-width-sm:  160px;
 
 // Vertical Sidebar - Dark
-$sidebar-dark-bg: #2a3042; //2c313a
+$sidebar-dark-bg: #2c313a; //2c313a
 $sidebar-dark-menu-item-color: #a6b0cf;
 $sidebar-dark-menu-sub-item-color: #79829c;
 $sidebar-dark-menu-item-icon-color: #6a7187;
@@ -53,7 +53,7 @@ $rightbar-width:  280px;
 $display-none: none;
 $display-block: block;
 
-// Brand 
+// Brand
 $navbar-brand-box-width: 250px;
 
 // Boxed layout width
@@ -545,7 +545,7 @@ $container-max-widths: (
 // Set the number of columns and specify the width of the gutters.
 
 $grid-columns:                12;
-$grid-gutter-width:           24px;
+$grid-gutter-width:           0px;
 $grid-row-columns:            6;
 
 // Container padding
@@ -629,7 +629,7 @@ $font-family-code:            var(--#{$variable-prefix}font-monospace);
 
 // $font-size-root effects the value of `rem`, which is used for as well font sizes, paddings and margins
 // $font-size-base effects the font size of the body text
-$font-size-root:              null;
+$font-size-root:              0.8125rem;
 $font-size-base:              0.8125rem;
 $font-size-sm:                $font-size-base * .875;
 $font-size-lg:                $font-size-base * 1.25;

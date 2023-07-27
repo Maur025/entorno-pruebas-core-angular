@@ -85,32 +85,6 @@ export class NotificacionService {
       });
   }
 
-  alertaConfirmacionRegistro(message='¿Esta seguro(a) que desea realizar el registro?',functionCallback): void {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger ms-2'
-      },
-      buttonsStyling: false
-    });
-
-    swalWithBootstrapButtons
-      .fire({
-        title: message,
-        icon: 'warning',
-        confirmButtonText: 'Sí, registrar',
-        cancelButtonText: 'No, cancelar',
-        showCancelButton: true
-      })
-      .then(result => {
-        if (result.value) {
-          functionCallback(true);
-        } else {
-          functionCallback(false);
-        }
-      });
-  }
-
   alertaSimpleConfirmacion(functionCallback,message='¿Esta seguro(a) que desea realizar el registro?'): void {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -125,32 +99,6 @@ export class NotificacionService {
         title: message,
         icon: 'warning',
         confirmButtonText: 'Sí, registrar',
-        cancelButtonText: 'No, cancelar',
-        showCancelButton: true
-      })
-      .then(result => {
-        if (result.value) {
-          functionCallback(true);
-        } else {
-          functionCallback(false);
-        }
-      });
-  }
-
-  alertaGrabarConfirmacion(functionCallback,message='¿Esta seguro(a) que desea guardar los datos?'): void {
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger ms-2'
-      },
-      buttonsStyling: false
-    });
-
-    swalWithBootstrapButtons
-      .fire({
-        title: message,
-        icon: 'warning',
-        confirmButtonText: 'Sí, guardar',
         cancelButtonText: 'No, cancelar',
         showCancelButton: true
       })
@@ -188,4 +136,5 @@ export class NotificacionService {
         }
       });
   }
+
 }
