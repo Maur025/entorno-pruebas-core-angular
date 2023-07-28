@@ -31,7 +31,7 @@ export class LayoutComponent implements OnInit, AfterViewInit {
     this.mode = LAYOUT_MODE;
     this.sidebartype = SIDEBAR_TYPE;
 
-    // document.body.setAttribute('data-layout-mode', this.mode);
+    document.body.setAttribute('data-layout-mode', this.mode);
 
     // listen to event and change the layout, theme, etc
     this.eventService.subscribe('changeLayout', (layout) => {

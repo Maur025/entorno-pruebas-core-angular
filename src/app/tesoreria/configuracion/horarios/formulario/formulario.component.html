@@ -1,0 +1,75 @@
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-lg-12">
+      <form (ngSubmit)="guardar()" [formGroup]="formGroup">
+        <div class="card">
+          <div class="card-body row">
+
+            
+
+                <div class="mb-6 col-sm-12 d-none">
+                    <label for="nombre">id </label>
+                    <input type="number"  class="form-control uppercase" id="id" (click)="alCambiar(form)"  formControlName="id" [ngClass]="{ 'is-invalid': submitted && form['id'].errors }">
+                    <div *ngIf="submitted && form['id'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['id'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['id'].errors['minlength']">Debe tener al menos {{form['id'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['id'].errors['maxlength']">Debe tener menos de {{form['id'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['id'].errors['min']">Debe tener mayor o igual que {{form['id'].errors['min']['min']}} </div>
+                    <div *ngIf="form['id'].errors['max']">Debe tener menor o igual que {{form['id'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-12 ">
+                    <label for="nombre">(*)Nombre de Horario </label>
+                    <input type="text"  class="form-control uppercase" id="nombre" (click)="alCambiar(form)" required formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }">
+                    <div *ngIf="submitted && form['nombre'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['nombre'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['nombre'].errors['minlength']">Debe tener al menos {{form['nombre'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['nombre'].errors['maxlength']">Debe tener menos de {{form['nombre'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['nombre'].errors['min']">Debe tener mayor o igual que {{form['nombre'].errors['min']['min']}} </div>
+                    <div *ngIf="form['nombre'].errors['max']">Debe tener menor o igual que {{form['nombre'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-12 d-none">
+                    <label for="formrow-firstname-input ">Dias</label>
+                    <select class="form-control form-select" id="horario"  formControlName="horario" name="horario" [ngClass]="{ 'is-invalid': submitted && form['horario'].errors }">
+                    <option *ngFor="let t of horariodia" value="{{t.id}}"  >{{t.horario_id}} </option>
+                    </select>
+                    <div *ngIf="submitted && form['horario'].errors" class="invalid-feedback" align="left" >
+                    <div *ngIf="form['horario'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['horario'].errors['minlength']">Debe tener al menos {{form['horario'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['horario'].errors['maxlength']">Debe tener menos de {{form['horario'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['horario'].errors['min']">Debe tener mayor o igual que {{form['horario'].errors['min']['min']}} </div>
+                    <div *ngIf="form['horario'].errors['max']">Debe tener menor o igual que {{form['horario'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+            
+                <div class="mb-6 col-sm-12" *ngIf="dataEdit">
+                    <hr>
+                    <ul class="nav nav-tabs nav-tabs-dark" role="tablist">                        
+                        
+                    <li class="nav-item" >
+                        <a class="nav-link atabx active" data-bs-toggle="tab" data-bs-target="#tab-horariodia" role="button" aria-current="page" href="#">Dias</a>
+                    </li>
+                    </ul>
+                    <div class="tab-content">
+                        
+                    <div class="tab-pane border active" id="tab-horariodia" >
+                        <app-listado-horariodia *ngIf="rel_prefix" [rel_prefix]="rel_prefix" [rel_field]="'horario_id'" > </app-listado-horariodia>
+                    </div>
+                    </div>
+                </div> 
+            <hr>
+            <div class="col-lg-6">
+              <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>
+              <button *ngIf="dataEdit" type="submit" class="btn btn-primary w-md">Guardar</button>
+              <span *ngIf="!esModal" (click)="volver()"  class="btn btn-secondary w-md">Volver</span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

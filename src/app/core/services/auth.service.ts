@@ -1,83 +1,96 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 
-import { User, Log } from '../models/auth.models';
+import { Auth } from '../models/auth.models';
 import { environment } from '../../../environments/environment';
+import { Router } from '@angular/router';
+import { User } from '../models/auth.models';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    private currentUserSubject: BehaviorSubject<User>;
-    public currentUser: Observable<User>;
-    private logUserSubject: any;
-    public logUser: Observable<Log>;
-    private logEmpSubject: any;
-    public logEmp: Observable<Log>;
 
-    constructor(private http: HttpClient) {
-        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUserKNB')));
-        this.currentUser = this.currentUserSubject.asObservable();
-        this.logUserSubject = new BehaviorSubject<Log>(JSON.parse(localStorage.getItem('logUserComKNB')));
-        this.logUser = this.logUserSubject.asObservable();
-    }
+  /* auth service cuando esta con la autenticacion de laravel */
+  contabilidadApiUrl = 'cambiar_ruta_por_la_url_enviroment';
 
-    public reload(){
+  private currentUserSubject: BehaviorSubject<User>;
+  public currentUser: Observable<User>;
 
-      this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUserKNB')));
-      this.currentUser = this.currentUserSubject.asObservable();
-    }
-    public  currentUserValue(): User {
-        return this.currentUserSubject.value;
-    }
+  constructor(private http: HttpClient) {
+    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUserKNB')));
+    this.currentUser = this.currentUserSubject.asObservable();
+  }
 
-    public  logUserValue(): User {
-        let loguser = JSON.parse(localStorage.getItem('logUserComKNB'));
-        if (loguser)
-          return loguser;
-        return this.logUserSubject.value;
-    }
+  public currentUserValue(): User {
+    return this.currentUserSubject.value;
+  }
 
-    public getLogUserObservable(): Observable<string> {
-        return this.logUserSubject.asObservable();
-    }
 
-    public  logEmpValue(): any {
-        if(localStorage.getItem('logEmpComKNB')){
-            return JSON.parse(localStorage.getItem('logEmpComKNB'));
+  /**
+   * Performs the auth
+   * @param email email of user
+   * @param password password of user
+   */
+  login(email: string, password: string) {
+    return this.http.post<any>(this.contabilidadApiUrl + `/login`, { email, password })
+      .pipe(map(user => {
+        if (user && user.authorisation && user.status == 'success') {
+          localStorage.setItem('currentUserKNB', JSON.stringify(user));
+          this.currentUserSubject.next(user);
         }
-        return null;
-    }
+        return user;
+      }));
+  }
+  /**
+   * Performs the register
+   * @param email email
+   * @param password password
+   */
+  register(email: string, password: string) {
+    // return getFirebaseBackend().registerUser(email, password).then((response: any) => {
+    //     const user = response;
+    //     return user;
+    // });
+  }
 
-    /**
-     * Logout the user
-     */
-    /*logout() {
-        localStorage.clear();
-        this.currentUserSubject.next(null);
-        window.open(environment.authUrl,"_self");
-    }*/
+  /**
+   * Reset password
+   * @param email email
+   */
+  resetPassword(email: string) {
+    // return getFirebaseBackend().forgetPassword(email).then((response: any) => {
+    //     const message = response.data;
+    //     return message;
+    // });
+  }
+  updateUserLocal(name, email) {
+    let local = this.currentUserSubject.value;
+    let usuario = {
+      status: local['status'],
+      user: {
+        id: local['user']['id'],
+        name: name,
+        email: email,
+        estado: local['user']['estado'],
+        nombre_completo: local['user']['nombre_completo'],
+        nro_documento: local['user']['nro_documento'],
+      },
 
-    /*setLog(data:any, user:any){
-        localStorage.setItem('logUserComKNB', JSON.stringify(data));
-        this.logUserSubject.next(data);
-       // this.logUserSubject.complete();
-        localStorage.setItem('currentUserKNB', JSON.stringify(user));
-        this.currentUserSubject.next(user);
-       // this.currentUserSubject.complete();
-        console.log("this.logUserSubject",this.logUserSubject);
-        console.log("this.logUserSubject.value",this.logUserSubject.value);
-        //localStorage.removeItem('logEmpComKNB');
-    }*/
-
-    setEmp(data:any){
-        localStorage.setItem('logEmpComKNB', JSON.stringify(data));
+      authorisation: {
+        token: local['authorisation']['token'],
+        type: local['authorisation']['type']
+      }
     }
-
-    removeEmp(){
-        localStorage.removeItem('logEmpComKNB');
-    }
-    public removeDatas(){
-        localStorage.clear();
-        localStorage.removeItem('logEmpComKNB');
-    }
+    localStorage.setItem('currentUserKNB', JSON.stringify(usuario));
+  }
+  /**
+   * Logout the user
+   */
+  logout() {
+    // remove user from local storage to log user out
+    localStorage.removeItem('currentUserKNB');
+    localStorage.removeItem('gestionActualKNB');
+    this.currentUserSubject.next(null);
+    /* window.open(environment.authAppUrl, "_self"); */ //crear otro authAppUrl que sea con el keycloak
+  }
 }

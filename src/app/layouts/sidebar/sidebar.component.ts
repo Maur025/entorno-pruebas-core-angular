@@ -2,10 +2,12 @@ import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, Input, OnChang
 import MetisMenu from 'metismenujs';
 import { EventService } from '../../core/services/event.service';
 import { Router, NavigationEnd } from '@angular/router';
-import { Location } from '@angular/common';
+
 import { HttpClient } from '@angular/common/http';
 
+import { MENU } from './menu';
 import { MenuItem } from './menu.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sidebar',
@@ -26,7 +28,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
 
   @ViewChild('sideMenu') sideMenu: ElementRef;
 
-  constructor(private eventService: EventService, private router: Router, private http: HttpClient,private location: Location) {
+  constructor(private eventService: EventService, private router: Router, public translate: TranslateService, private http: HttpClient) {
     router.events.forEach((event) => {
       if (event instanceof NavigationEnd) {
         this._activateMenuDropdown();
@@ -63,9 +65,9 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
       if (document.getElementsByClassName("mm-active").length > 0) {
         const currentPosition = document.getElementsByClassName("mm-active")[0]['offsetTop'];
         if (currentPosition > 500)
-          if (this.scrollRef.SimpleBar !== null)
-            this.scrollRef.SimpleBar.getScrollElement().scrollTop =
-              currentPosition + 300;
+        if(this.scrollRef.SimpleBar !== null)
+          this.scrollRef.SimpleBar.getScrollElement().scrollTop =
+            currentPosition + 300;
       }
     }, 300);
   }
@@ -91,12 +93,12 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
     // tslint:disable-next-line: prefer-for-of
     const paths = [];
     for (let i = 0; i < links.length; i++) {
-      paths.push(links[i]['hash'].slice(1));
+      paths.push(links[i]['pathname']);
     }
-    var itemIndex = paths.indexOf(this.location.path());
+    var itemIndex = paths.indexOf(window.location.pathname);
     if (itemIndex === -1) {
-      const strIndex = this.location.path().lastIndexOf('/');
-      const item = this.location.path().substr(0, strIndex).toString();
+      const strIndex = window.location.pathname.lastIndexOf('/');
+      const item = window.location.pathname.substr(0, strIndex).toString();
       menuItemEl = links[paths.indexOf(item)];
     } else {
       menuItemEl = links[itemIndex];
@@ -137,46 +139,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
    * Initialize
    */
   initialize(): void {
-
-    //this.menuItems = MENU;
-    //this.menuItems = [];
-    this.menuItems = [
-      {
-        id: 1,
-        label: 'Tesoreria',
-        isTitle: true
-      },
-      {
-        id: 2,
-        label: 'Registro Fondos',
-        icon: 'bx-shopping-bag',
-      },
-      {
-        id: 3,
-        label: 'Registro Bancos',
-        icon: 'bx-shopping-bag',
-        subItems: [
-            {
-                id: 31,
-                label: 'Nuevo Banco',
-                parentId: 3,
-                link: '/',
-            },
-            {
-                id: 32,
-                label: 'Libreta Bacaria',
-                parentId: 3,
-                link: '/',
-            },
-        ]
-      },
-      {
-          id: 9,
-          label: 'Configuración',
-          isTitle: true
-      },
-      
-    ];
+    this.menuItems = MENU;
   }
 
   /**
