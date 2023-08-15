@@ -1,0 +1,49 @@
+<div class="card">
+  <div class="card-body row" role="group" >
+
+    <div class="mb-3 col-12 ">
+      <div class="input-group" >
+        <span class="input-group-text">Nombre de banco </span>
+        <input type="text" class="form-control" [(ngModel)]="keyword" />
+        <span class="input-group-text btn btn-outline-primary" (click)="buscar($event)"><i class="mdi mdi-search-outline"></i>Buscar</span>
+      </div>
+    </div>
+
+
+  </div>
+  <div *ngIf="bancos_encontrados" class="card-body" >
+    <div *ngFor="let b of bancos_encontrados;let i = index " class="border  row ">
+      <div class="col-8 ">
+        {{ b.nombre }}
+      </div>
+      <div  class="col-4" role="group" >
+        <input type="checkbox" class="btn-check" [(ngModel)]="b.seleccionado" name="btnradio" id="btnradio{{i}}" autocomplete="off" >
+        <label class="btn btn-outline-primary" for="btnradio{{i}}">Seleccionar</label>
+      </div>
+    </div>
+  </div>
+<!--
+  <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off" checked>
+    <label class="btn btn-outline-secondary" for="btnradio4">Radio 4</label>
+
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio5" autocomplete="off">
+    <label class="btn btn-outline-secondary" for="btnradio5">Radio 5</label>
+
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio6" autocomplete="off">
+    <label class="btn btn-outline-secondary" for="btnradio6">Radio 6</label>
+  </div>
+-->
+
+  <span role="button" class="btn btn-success siguiente" (click)="siguiente($event)">Elegir</span>
+
+</div>
+
+
+<div>
+
+  <div class="card" *ngIf="existe">
+    <span role="button" class="btn btn-success">Crear</span>
+  </div>
+
+</div>

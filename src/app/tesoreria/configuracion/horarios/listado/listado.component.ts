@@ -2,7 +2,8 @@ import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { HorariosService } from "../servicios/horarios.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
-import { HorariodiaService } from '../servicios/horariodia.service';
+import { HorariosdiaService } from '../servicios/horariosdia.service';
+import { Router } from "@angular/router";
 
 type NewType = NotificacionService;
 
@@ -21,9 +22,10 @@ export class ListadoComponent implements OnInit {
   dataEdit = null;
   titulo: any = "Listado de Horarios";
 
-  horariodia:any = [];
+  horarios_dia:any = [];
 
   constructor(
+    private _router: Router,
     public HorariosService: HorariosService,
     private modalService: BsModalService,
     private NotificacionService: NotificacionService
@@ -32,7 +34,7 @@ export class ListadoComponent implements OnInit {
   ngOnInit(): void {
     if (this.rel_prefix) this.HorariosService.setPrefix(this.rel_prefix);
     this.formato = {
-      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"nombre":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Nombre de Horario","colsize":"12","filtrotipo":"text"},"horario":{"texto":"Dias","colsize":"12","mascara":{"campo":"horario","valor":"horario_id"}}}
+      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"nombre":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Nombre de Horario","colsize":"12","filtrotipo":"text"},"horarios_dia":{"texto":"Horarios Asignados","colsize":"12","mascara":{"campo":"horarios_dia","valor":"horario_id"}}}
     };
 
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
@@ -40,9 +42,10 @@ export class ListadoComponent implements OnInit {
 
   crear(data: any, template) {
     this.dataEdit = null;
-    this.modalRef = this.modalService.show(template, {
+    this._router.navigate(["/nuevo"],{});
+    /*this.modalRef = this.modalService.show(template, {
       class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
-    });
+    });*/
   }
 
   editar(data: any, template) {

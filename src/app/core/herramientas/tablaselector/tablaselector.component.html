@@ -18,7 +18,12 @@
     (alHabilitar)="alHabilitar.emit($event)"
     (alDeshabilitar)="alDeshabilitar.emit($event)"
     (alEliminar)="alEliminar.emit($event)"
+    (alImportar)="alImportar.emit($event)"
+    (alExportar)="alExportar.emit($event)"
     [conOpciones]="conOpciones"
+    [botonImportar]="botonImportar"
+    [botonExportar]="botonExportar"
+    [botonNuevo]="botonNuevo"
     ></sub-tabla>
 </ng-template>
 
@@ -43,6 +48,11 @@
   (alHabilitar)="alHabilitar.emit($event)"
   (alDeshabilitar)="alDeshabilitar.emit($event)"
   (alEliminar)="alEliminar.emit($event)"
+  (alImportar)="alImportar.emit($event)"
+  (alExportar)="alExportar.emit($event)"
   [conOpciones]="conOpciones"
+  [botonImportar]="botonImportar"
+  [botonExportar]="botonExportar"
+  [botonNuevo]="botonNuevo"
   ></tabla-normal>
 </ng-template>

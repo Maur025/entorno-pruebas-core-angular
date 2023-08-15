@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { HorariosService } from "../servicios/horarios.service";
-import { HorariodiaService } from '../servicios/horariodia.service';
+import { HorariosdiaService } from '../servicios/horariosdia.service';
 @Component({
   selector: "app-formulario-horarios",
   templateUrl: "./formulario.component.html",
@@ -21,7 +21,7 @@ export class FormularioComponent implements OnInit {
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
 
-  horariodia:any = [];
+  horarios_dia:any = [];
   estados: any = [
     { value: "habilitado", name: "Habilitado" },
     { value: "deshabilitado", name: "Deshabilitado" },
@@ -33,7 +33,7 @@ export class FormularioComponent implements OnInit {
     private FormBuilder: FormBuilder,
     private notificacionService: NotificacionService,
     private HorariosService: HorariosService,
-    private HorariodiaService: HorariodiaService
+    private HorariosdiaService: HorariosdiaService
   ) {}
 
   get form() {
@@ -44,20 +44,22 @@ export class FormularioComponent implements OnInit {
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
-    this.HorariodiaService.getAll(100, 1, 'horario_id', false, '').subscribe((res:any) => { this.horariodia = res.content; });
-    this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[Validators.required,Validators.minLength(2),Validators.maxLength(100)] ],horario:["",[] ]});
+  ngOnInit(): void {
+    //this.HorariosdiaService.getAll(100, 1, 'horario_id', false, '').subscribe((res:any) => { this.horarios_dia = res.content; });
+    this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[Validators.required,Validators.minLength(2),Validators.maxLength(100)] ],horarios_dia:[[],[] ]});
     if (this.dataEdit != null) {
-      this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,horario:this.dataEdit.horario});
+      this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,horarios_dia:this.dataEdit.horarios_dia});
       this.rel_prefix = "/horarios/"+this.dataEdit.id;
-    }
+      console.log("this.formGroup",this.formGroup);
+    }else
+      this.rel_prefix = "/horarios/-1";
     let id = this.route.snapshot.params['id'];
     if (this.rel_prefix && this.rel_field) this.formGroup.get(this.rel_field).disable();
     if (id != null && !this.esModal && id!="nuevo" ) {
       this.HorariosService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
         this.dataEdit= result.content[0];
-          this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,horario:this.dataEdit.horario});
+          this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,horarios_dia:this.dataEdit.horarios_dia});
           this.rel_prefix = "/horarios/"+id;
       });
     }
@@ -66,7 +68,7 @@ export class FormularioComponent implements OnInit {
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
       let sendData = this.formGroup.value;

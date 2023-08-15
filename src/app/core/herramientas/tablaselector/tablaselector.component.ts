@@ -23,6 +23,8 @@ export class TablaselectorComponent implements OnInit {
   @Input() encabezados: any;
   @Input() formato: any;
   @Input() botonNuevo = true;
+  @Input() botonImportar = false;
+  @Input() botonExportar = true;
   @Input() campoEstado:any = 'estado';
   @Input() valueEstado:any = 'habilitado';
   @Input() textoBuscar: string = 'Ingrese criterio de busqueda';
@@ -32,6 +34,8 @@ export class TablaselectorComponent implements OnInit {
   @Output() alDeshabilitar: EventEmitter<any> = new EventEmitter();
   @Output() alHabilitar: EventEmitter<any> = new EventEmitter();
   @Output() alEliminar: EventEmitter<any> = new EventEmitter();
+  @Output() alImportar: EventEmitter<any> = new EventEmitter();
+  @Output() alExportar: EventEmitter<any> = new EventEmitter();
 
   @Input() getAll: any;
   @Input() templateFila: TemplateRef<any>;

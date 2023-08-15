@@ -5,7 +5,7 @@ import { ListadoComponent } from './listado/listado.component';
 import { HerramientasModule } from 'src/app/core/herramientas/herramientas.module';
 import { FormularioComponent } from './formulario/formulario.component';
 import { HorariosRoutingModule } from './horarios-routing.module';
-import { HorariodiaModule } from '../horariodia/horariodia.module';
+import { HorariosdiaModule } from '../horariosdia/horariosdia.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import { HorariodiaModule } from '../horariodia/horariodia.module';
     HerramientasModule,
     FormsModule,
     ReactiveFormsModule,
-    HorariodiaModule
+    HorariosdiaModule
   ],
   exports: [
     ListadoComponent,
