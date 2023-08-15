@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { ActivatedRoute, Router } from "@angular/router";
 import { FondotipoService } from "../servicios/fondotipo.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 
@@ -21,12 +22,14 @@ export class ListadoComponent implements OnInit {
   dataEdit = null;
   titulo: any = "Tipos de Fondos";
 
-  
+
 
   constructor(
     public FondotipoService: FondotipoService,
     private modalService: BsModalService,
-    private NotificacionService: NotificacionService
+    private NotificacionService: NotificacionService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { ActivatedRoute, Router } from "@angular/router";
 import { CreditoService } from "../servicios/credito.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { CuotastiempoService } from '../servicios/cuotastiempo.service';
@@ -42,7 +43,9 @@ credito_pagos:any = [];
   constructor(
     public CreditoService: CreditoService,
     private modalService: BsModalService,
-    private NotificacionService: NotificacionService
+    private NotificacionService: NotificacionService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {

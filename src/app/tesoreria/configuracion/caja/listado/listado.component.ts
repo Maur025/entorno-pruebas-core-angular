@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { ActivatedRoute, Router } from "@angular/router";
 import { CajaService } from "../servicios/caja.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { FondoService } from '../servicios/fondo.service';
@@ -28,7 +29,9 @@ caja_horarios:any = [];
   constructor(
     public CajaService: CajaService,
     private modalService: BsModalService,
-    private NotificacionService: NotificacionService
+    private NotificacionService: NotificacionService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -48,10 +51,11 @@ caja_horarios:any = [];
   }
 
   editar(data: any, template) {
-    this.dataEdit = data;
+    this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
+/*this.dataEdit = data;
     this.modalRef = this.modalService.show(template, {
       class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
-    });
+    });*/
   }
 
   habilitar(data: any, component) {

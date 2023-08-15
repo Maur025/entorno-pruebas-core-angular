@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { ActivatedRoute, Router } from "@angular/router";
 import { CajahorariosService } from "../servicios/cajahorarios.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { CajaService } from '../servicios/caja.service';
@@ -30,7 +31,9 @@ usuarios:any = [];
   constructor(
     public CajahorariosService: CajahorariosService,
     private modalService: BsModalService,
-    private NotificacionService: NotificacionService
+    private NotificacionService: NotificacionService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -50,10 +53,11 @@ usuarios:any = [];
   }
 
   editar(data: any, template) {
-    this.dataEdit = data;
+    this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
+/*this.dataEdit = data;
     this.modalRef = this.modalService.show(template, {
       class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
-    });
+    });*/
   }
 
   habilitar(data: any, component) {

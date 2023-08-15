@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { ActivatedRoute, Router } from "@angular/router";
 import { BancoService } from "../servicios/banco.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
-import { ActivatedRoute, Router } from "@angular/router";
 import { ContactobancoService } from '../servicios/contactobanco.service';
 import { CuentabancoService } from '../servicios/cuentabanco.service';
 
@@ -31,7 +31,7 @@ cuenta_banco:any = [];
     private modalService: BsModalService,
     private NotificacionService: NotificacionService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -53,7 +53,8 @@ cuenta_banco:any = [];
 
   editar(data: any, template) {
     this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
-    /*this.dataEdit = data;
+    /*this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
+/*this.dataEdit = data;
     this.modalRef = this.modalService.show(template, {
       class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
     });*/

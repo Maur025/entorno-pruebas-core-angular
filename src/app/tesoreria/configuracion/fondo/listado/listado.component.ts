@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { ActivatedRoute, Router } from "@angular/router";
 import { FondoService } from "../servicios/fondo.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
-import { ActivatedRoute, Router } from "@angular/router";
 import { FondotipoService } from '../servicios/fondotipo.service';
 import { FondoresponsablesService } from '../servicios/fondoresponsables.service';
 import { FondocentrodecostosService } from '../servicios/fondocentrodecostos.service';
@@ -35,7 +35,7 @@ fondo_forma_cobro:any = [];
     private modalService: BsModalService,
     private NotificacionService: NotificacionService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -57,7 +57,7 @@ fondo_forma_cobro:any = [];
 
   editar(data: any, template) {
     this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
-    /*this.dataEdit = data;
+/*this.dataEdit = data;
     this.modalRef = this.modalService.show(template, {
       class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
     });*/

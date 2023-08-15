@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ContactoService } from "../servicios/contacto.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { TipoidentificacionService } from '../servicios/tipoidentificacion.service';
@@ -28,7 +29,9 @@ contacto_grupo:any = [];
   constructor(
     public ContactoService: ContactoService,
     private modalService: BsModalService,
-    private NotificacionService: NotificacionService
+    private NotificacionService: NotificacionService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
