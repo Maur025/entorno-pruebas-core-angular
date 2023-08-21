@@ -18,6 +18,7 @@ export class FormularioComponent implements OnInit {
   @Output() alActualizar = new EventEmitter<any>();
 
   @Input() esModal:boolean = false;
+  @Input() show_rel:boolean = true;
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
@@ -46,10 +47,11 @@ contacto_grupo:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.TipoidentificacionService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.tipo_identificacion = res.content; });
-this.ContactogrupoService.getAll(100, 1, 'contacto_id', false, '').subscribe((res:any) => { this.contacto_grupo = res.content; });
+    this.ContactogrupoService.getAll(100, 1, 'contacto_id', false, '').subscribe((res:any) => { this.contacto_grupo = res.content; });
     this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[Validators.required,Validators.minLength(2),Validators.maxLength(100)] ],telefono:["",[] ],correo:["",[] ],direccion:["",[] ],descripción:["",[] ],identificacion:["",[] ],tipo_identificacion_id:["",[] ],contacto_grupos:["",[] ]});
+
     if (this.dataEdit != null) {
       this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,telefono:this.dataEdit.telefono,correo:this.dataEdit.correo,direccion:this.dataEdit.direccion,descripción:this.dataEdit.descripción,identificacion:this.dataEdit.identificacion,tipo_identificacion_id:this.dataEdit.tipo_identificacion_id,contacto_grupos:this.dataEdit.contacto_grupos});
       this.rel_prefix = "/contacto/"+this.dataEdit.id;
@@ -69,7 +71,7 @@ this.ContactogrupoService.getAll(100, 1, 'contacto_id', false, '').subscribe((re
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
       let sendData = this.formGroup.value;

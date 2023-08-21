@@ -18,6 +18,7 @@ export class FormularioComponent implements OnInit {
   @Output() alActualizar = new EventEmitter<any>();
 
   @Input() esModal:boolean = false;
+  @Input() show_rel:boolean = true;
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
@@ -42,6 +43,18 @@ forma_cobro:any = [];
     return this.formGroup.controls;
   }
 
+  getDataFromFormname(array, formName){
+    let element =  array.find( e => e.id == this.form[formName].value)
+    return element;
+  }
+  setDataFromFormname(array, formName, data:any){
+    let temp_value = this.form[formName].value;
+    let el = array[array.indexOf(array.find( e => e.id == this.form[formName].value))];
+    Object.keys(data.content).forEach( k => {
+        el[k] = data.content[k];
+    });
+  }
+
   alCambiar(control){
     console.log("control",control);
   }
@@ -49,7 +62,7 @@ forma_cobro:any = [];
   ngOnInit(): void {    
     this.FondoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.fondo = res.content; });
 this.FormacobroService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.forma_cobro = res.content; });
-    this.formGroup = this.FormBuilder.group({id:["",[] ],fondo_id:["",[Validators.required] ],forma_cobro_id:["",[Validators.required] ]});
+    this.formGroup = this.FormBuilder.group({id:["",[] ],fondo_id:["",[] ],forma_cobro_id:["",[] ]});
     if (this.dataEdit != null) {
       this.formGroup.setValue({id:this.dataEdit.id,fondo_id:this.dataEdit.fondo_id,forma_cobro_id:this.dataEdit.forma_cobro_id});
       this.rel_prefix = "/fondoformacobro/"+this.dataEdit.id;

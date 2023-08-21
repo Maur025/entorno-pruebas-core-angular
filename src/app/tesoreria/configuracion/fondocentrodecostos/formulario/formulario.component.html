@@ -35,17 +35,13 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="formrow-firstname-input ">Centro  de Costos</label>
-                    <select class="form-control form-select" id="centrodecostos_id"  formControlName="centrodecostos_id" name="centrodecostos_id" [ngClass]="{ 'is-invalid': submitted && form['centrodecostos_id'].errors }">
-                    <option *ngFor="let t of centrodecostos" value="{{t.id}}"  >{{t.nombre}} </option>
-                    </select>
-                    <div *ngIf="submitted && form['centrodecostos_id'].errors" class="invalid-feedback" align="left" >
-                    <div *ngIf="form['centrodecostos_id'].errors['required']">Es requerido</div>
-                    <div *ngIf="form['centrodecostos_id'].errors['minlength']">Debe tener al menos {{form['centrodecostos_id'].errors['minlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['centrodecostos_id'].errors['maxlength']">Debe tener menos de {{form['centrodecostos_id'].errors['maxlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['centrodecostos_id'].errors['min']">Debe tener mayor o igual que {{form['centrodecostos_id'].errors['min']['min']}} </div>
-                    <div *ngIf="form['centrodecostos_id'].errors['max']">Debe tener menor o igual que {{form['centrodecostos_id'].errors['max']['max']}} </div>
-                    </div>
+                    <app-selector-add #centrodecostosSelector  label="Centro de Costos" [templateEditar]="centrodecostosTemplateEditar" [templateNuevo]="centrodecostosTemplateNuevo" name="centrodecostos_id" [submitted]="submitted" [dataArray]="centrodecostos" formControlName="centrodecostos_id"  ></app-selector-add>
+                    <ng-template #centrodecostosTemplateNuevo>
+                        <app-formulario-centrodecostos [esModal]="true" (alGuardar)="centrodecostos.push($event['content']);form['centrodecostos_id'].setValue($event['content']['id']);centrodecostosSelector.close()" ></app-formulario-centrodecostos>
+                    </ng-template>
+                    <ng-template #centrodecostosTemplateEditar>
+                        <app-formulario-centrodecostos [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(centrodecostos, 'centrodecostos_id')" (alActualizar)="centrodecostosSelector.close();setDataFromFormname(centrodecostos, 'centrodecostos_id',$event)" ></app-formulario-centrodecostos>
+                    </ng-template>
                 </div>
             
             <hr>

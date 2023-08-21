@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { ActivatedRoute, Router } from "@angular/router";
 import { HorariosdiaService } from "../servicios/horariosdia.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
+import { ActivatedRoute, Router } from "@angular/router";
 import { HorariosService } from '../servicios/horarios.service';
 import { DiasService } from '../servicios/dias.service';
 
@@ -21,13 +21,13 @@ export class ListadoComponent implements OnInit {
 
   formato: any;
   dataEdit = null;
-  titulo: any = "Días de horario";
+  titulo: any = "Días de Horario";
 
   horarios:any = [];
 dias:any = [];
 
   constructor(
-    public readonly HorariosdiaService: HorariosdiaService,
+    public HorariosdiaService: HorariosdiaService,
     private modalService: BsModalService,
     private NotificacionService: NotificacionService,
     private route: ActivatedRoute,
@@ -37,25 +37,32 @@ dias:any = [];
   ngOnInit(): void {
     if (this.rel_prefix) this.HorariosdiaService.setPrefix(this.rel_prefix);
     this.formato = {
-      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"horario_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Horario","colsize":"12","filtrotipo":"number","mascara":{"campo":"horario","valor":"nombre"}},"dia_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Día","colsize":"12","filtrotipo":"number","mascara":{"campo":"dias","valor":"nombre"}},"apertura":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Apertura","colsize":"12","filtrotipo":"text"},"cierre":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Cierre","colsize":"12","filtrotipo":"text"}}
+      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"horario_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Horario","colsize":"12","filtrotipo":"number","mascara":{"campo":"horario","valor":"nombre"}},"dia_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Día de la semana","colsize":"12","filtrotipo":"number","mascara":{"campo":"dias","valor":"nombre"}},"apertura":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Hora de Apertura","colsize":"12","filtrotipo":"text"},"cierre":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Hora de Cierre","colsize":"12","filtrotipo":"text"}}
     };
 
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
   }
 
   crear(data: any, template) {
-    this.dataEdit = null;
-    this.modalRef = this.modalService.show(template, {
-      class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
-    });
+    if (this.rel_prefix == null)
+      this.router.navigate(['./nuevo', { }],{relativeTo: this.route});
+    else{
+      this.dataEdit = null;
+      this.modalRef = this.modalService.show(template, {
+        class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
+      });
+    }
   }
 
-  editar(data: any, template) {
-    this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
-/*this.dataEdit = data;
-    this.modalRef = this.modalService.show(template, {
-      class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
-    });*/
+  editar(data: any, template) {    
+    if (this.rel_prefix == null)
+      this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
+    else{
+      this.dataEdit = data;
+      this.modalRef = this.modalService.show(template, {
+        class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
+      });
+    }
   }
 
   habilitar(data: any, component) {

@@ -1,15 +1,20 @@
 import { MenuItem } from "./menu.model";
 
 export const MENU: MenuItem[] = [
+{
+    id: 2,
+    label: 'Líneas de créditos',
+    link : 'configuracion/lineacredito',
+    icon: 'bx-home-circle',
+},
 
 
   {
-    id: 2,
-    label: "Fondo",
-    link: "configuracion/fondo",
-    icon: "bx-home-circle",
+      id: 2,
+      label: 'Bancos',
+      link : 'configuracion/banco',
+      icon: 'bx-home-circle',
   },
-
 
   {
     id: 2,

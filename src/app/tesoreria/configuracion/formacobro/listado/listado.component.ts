@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { ActivatedRoute, Router } from "@angular/router";
 import { FormacobroService } from "../servicios/formacobro.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
+import { ActivatedRoute, Router } from "@angular/router";
 
 
 type NewType = NotificacionService;
@@ -22,7 +22,7 @@ export class ListadoComponent implements OnInit {
   dataEdit = null;
   titulo: any = "Formas de Cobro";
 
-
+  
 
   constructor(
     public FormacobroService: FormacobroService,
@@ -42,18 +42,25 @@ export class ListadoComponent implements OnInit {
   }
 
   crear(data: any, template) {
-    this.dataEdit = null;
-    this.modalRef = this.modalService.show(template, {
-      class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
-    });
+    if (this.rel_prefix == null)
+      this.router.navigate(['./nuevo', { }],{relativeTo: this.route});
+    else{
+      this.dataEdit = null;
+      this.modalRef = this.modalService.show(template, {
+        class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
+      });
+    }
   }
 
-  editar(data: any, template) {
-    this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
-/*this.dataEdit = data;
-    this.modalRef = this.modalService.show(template, {
-      class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
-    });*/
+  editar(data: any, template) {    
+    if (this.rel_prefix == null)
+      this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
+    else{
+      this.dataEdit = data;
+      this.modalRef = this.modalService.show(template, {
+        class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
+      });
+    }
   }
 
   habilitar(data: any, component) {

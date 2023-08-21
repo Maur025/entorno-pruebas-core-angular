@@ -18,6 +18,7 @@ export class FormularioComponent implements OnInit {
   @Output() alActualizar = new EventEmitter<any>();
 
   @Input() esModal:boolean = false;
+  @Input() show_rel:boolean = true;
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
@@ -42,6 +43,18 @@ caja_horarios:any = [];
     return this.formGroup.controls;
   }
 
+  getDataFromFormname(array, formName){
+    let element =  array.find( e => e.id == this.form[formName].value)
+    return element;
+  }
+  setDataFromFormname(array, formName, data:any){
+    let temp_value = this.form[formName].value;
+    let el = array[array.indexOf(array.find( e => e.id == this.form[formName].value))];
+    Object.keys(data.content).forEach( k => {
+        el[k] = data.content[k];
+    });
+  }
+
   alCambiar(control){
     console.log("control",control);
   }
@@ -49,7 +62,7 @@ caja_horarios:any = [];
   ngOnInit(): void {    
     this.FondoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.fondo = res.content; });
 this.CajahorariosService.getAll(100, 1, 'caja_id', false, '').subscribe((res:any) => { this.caja_horarios = res.content; });
-    this.formGroup = this.FormBuilder.group({id:["",[] ],fondo_id:["",[Validators.required] ],nombre:["",[Validators.required,Validators.minLength(2),Validators.maxLength(100)] ],caja_horarios:["",[] ]});
+    this.formGroup = this.FormBuilder.group({id:["",[] ],fondo_id:["",[] ],nombre:["",[] ],caja_horarios:["",[] ]});
     if (this.dataEdit != null) {
       this.formGroup.setValue({id:this.dataEdit.id,fondo_id:this.dataEdit.fondo_id,nombre:this.dataEdit.nombre,caja_horarios:this.dataEdit.caja_horarios});
       this.rel_prefix = "/caja/"+this.dataEdit.id;

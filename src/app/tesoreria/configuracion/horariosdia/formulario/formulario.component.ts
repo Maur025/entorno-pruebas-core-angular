@@ -18,6 +18,7 @@ export class FormularioComponent implements OnInit {
   @Output() alActualizar = new EventEmitter<any>();
 
   @Input() esModal:boolean = false;
+  @Input() show_rel:boolean = true;
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
@@ -34,7 +35,7 @@ dias:any = [];
     private route: ActivatedRoute,
     private FormBuilder: FormBuilder,
     private notificacionService: NotificacionService,
-    private readonly HorariosdiaService: HorariosdiaService,
+    private HorariosdiaService: HorariosdiaService,
     private HorariosService: HorariosService,private DiasService: DiasService
   ) {}
 
@@ -42,16 +43,28 @@ dias:any = [];
     return this.formGroup.controls;
   }
 
+  getDataFromFormname(array, formName){
+    let element =  array.find( e => e.id == this.form[formName].value)
+    return element;
+  }
+  setDataFromFormname(array, formName, data:any){
+    let temp_value = this.form[formName].value;
+    let el = array[array.indexOf(array.find( e => e.id == this.form[formName].value))];
+    Object.keys(data.content).forEach( k => {
+        el[k] = data.content[k];
+    });
+  }
+
   alCambiar(control){
     console.log("control",control);
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     this.HorariosService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.horarios = res.content; });
-    this.DiasService.getAll(100, 1, 'id', false, '').subscribe((res:any) => { this.dias = res.content; });
-    this.formGroup = this.FormBuilder.group({id:["",[] ],horario_id:["",[Validators.required] ],dia_id:["",[Validators.required] ],apertura:["",[Validators.required] ],cierre:["",[Validators.required] ]});
+this.DiasService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.dias = res.content; });
+    this.formGroup = this.FormBuilder.group({id:["",[] ],horario_id:["",[] ],dia_id:["",[] ],apertura:["",[] ],cierre:["",[] ]});
     if (this.dataEdit != null) {
-      this.formGroup.setValue({id:this.dataEdit.id,horario_id:this.dataEdit.horario_id?this.dataEdit.horario_id:'',dia_id:this.dataEdit.dia_id,apertura:this.dataEdit.apertura,cierre:this.dataEdit.cierre});
+      this.formGroup.setValue({id:this.dataEdit.id,horario_id:this.dataEdit.horario_id,dia_id:this.dataEdit.dia_id,apertura:this.dataEdit.apertura,cierre:this.dataEdit.cierre});
       this.rel_prefix = "/horariosdia/"+this.dataEdit.id;
     }
     let id = this.route.snapshot.params['id'];
@@ -69,12 +82,10 @@ dias:any = [];
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;
+    this.submitted = true;    
     if (this.formGroup.valid) {
-
       this.submitted = false;
       let sendData = this.formGroup.value;
-      sendData['dias'] = this.dias.filter(x=>x.id==sendData.dia_id);
       if (this.dataEdit == null) {
         this.HorariosdiaService.register(sendData).subscribe(
           (res: any) => {

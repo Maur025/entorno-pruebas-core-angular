@@ -38,12 +38,12 @@ export class CentrodecostosService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Centro de Costos'] = 'habilitar';
+    datos['Centros de Costos'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Centro de Costos'] = 'deshabilitar';
+    datos['Centros de Costos'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

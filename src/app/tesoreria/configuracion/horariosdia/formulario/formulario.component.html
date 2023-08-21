@@ -21,8 +21,8 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="formrow-firstname-input ">(*)Horario</label>
-                    <select class="form-control form-select" id="horario_id" required formControlName="horario_id" name="horario_id" [ngClass]="{ 'is-invalid': submitted && form['horario_id'].errors }">
+                    <label for="formrow-firstname-input ">Horario</label>
+                    <select class="form-control form-select" id="horario_id"  formControlName="horario_id" name="horario_id" [ngClass]="{ 'is-invalid': submitted && form['horario_id'].errors }">
                     <option *ngFor="let t of horarios" value="{{t.id}}"  >{{t.nombre}} </option>
                     </select>
                     <div *ngIf="submitted && form['horario_id'].errors" class="invalid-feedback" align="left" >
@@ -35,8 +35,8 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="formrow-firstname-input ">(*)Día</label>
-                    <select class="form-control form-select" id="dia_id" required formControlName="dia_id" name="dia_id" [ngClass]="{ 'is-invalid': submitted && form['dia_id'].errors }">
+                    <label for="formrow-firstname-input ">Día de la semana</label>
+                    <select class="form-control form-select" id="dia_id"  formControlName="dia_id" name="dia_id" [ngClass]="{ 'is-invalid': submitted && form['dia_id'].errors }">
                     <option *ngFor="let t of dias" value="{{t.id}}"  >{{t.nombre}} </option>
                     </select>
                     <div *ngIf="submitted && form['dia_id'].errors" class="invalid-feedback" align="left" >
@@ -49,8 +49,8 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">(*)Apertura </label>
-                    <input type="time" step=600 class="form-control uppercase" id="apertura" (click)="alCambiar(form)" required formControlName="apertura" [ngClass]="{ 'is-invalid': submitted && form['apertura'].errors }">
+                    <label for="nombre">Hora de Apertura </label>
+                    <input type="time" step=600 class="form-control uppercase" id="apertura" (click)="alCambiar(form)"  formControlName="apertura" [ngClass]="{ 'is-invalid': submitted && form['apertura'].errors }">
                     <div *ngIf="submitted && form['apertura'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['apertura'].errors['required']">Es requerido</div>
                     <div *ngIf="form['apertura'].errors['minlength']">Debe tener al menos {{form['apertura'].errors['minlength']['requiredLength']}} caracteres</div>
@@ -61,8 +61,8 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">(*)Cierre </label>
-                    <input type="time" step=600 class="form-control uppercase" id="cierre" (click)="alCambiar(form)" required formControlName="cierre" [ngClass]="{ 'is-invalid': submitted && form['cierre'].errors }">
+                    <label for="nombre">Hora de Cierre </label>
+                    <input type="time" step=600 class="form-control uppercase" id="cierre" (click)="alCambiar(form)"  formControlName="cierre" [ngClass]="{ 'is-invalid': submitted && form['cierre'].errors }">
                     <div *ngIf="submitted && form['cierre'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['cierre'].errors['required']">Es requerido</div>
                     <div *ngIf="form['cierre'].errors['minlength']">Debe tener al menos {{form['cierre'].errors['minlength']['requiredLength']}} caracteres</div>

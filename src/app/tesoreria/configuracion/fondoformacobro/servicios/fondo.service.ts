@@ -38,12 +38,12 @@ export class FondoService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Fondo - Forma de Cobro'] = 'habilitar';
+    datos['Formas de Cobro de Fondos'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Fondo - Forma de Cobro'] = 'deshabilitar';
+    datos['Formas de Cobro de Fondos'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

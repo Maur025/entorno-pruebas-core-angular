@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-body row">
 
-            
+
 
                 <div class="mb-6 col-sm-12 d-none">
                     <label for="nombre">id </label>
@@ -119,22 +119,22 @@
                     <div *ngIf="form['contacto_grupos'].errors['max']">Debe tener menor o igual que {{form['contacto_grupos'].errors['max']['max']}} </div>
                     </div>
                 </div>
-            
-                <div class="mb-6 col-sm-12" *ngIf="dataEdit">
+
+                <div class="mb-6 col-sm-12" *ngIf="dataEdit && show_rel">
                     <hr>
-                    <ul class="nav nav-tabs nav-tabs-dark" role="tablist">                        
-                        
+                    <ul class="nav nav-tabs nav-tabs-dark" role="tablist">
+
                     <li class="nav-item" >
                         <a class="nav-link atabx active" data-bs-toggle="tab" data-bs-target="#tab-contactogrupo" role="button" aria-current="page" href="#">Grupos a los que pertenece</a>
                     </li>
                     </ul>
                     <div class="tab-content">
-                        
+
                     <div class="tab-pane border active" id="tab-contactogrupo" >
                         <app-listado-contactogrupo *ngIf="rel_prefix" [rel_prefix]="rel_prefix" [rel_field]="'contacto_id'" > </app-listado-contactogrupo>
                     </div>
                     </div>
-                </div> 
+                </div>
             <hr>
             <div class="col-lg-6">
               <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>

@@ -7,6 +7,7 @@ import { FormularioComponent } from './formulario/formulario.component';
 import { BancoRoutingModule } from './banco-routing.module';
 import { ContactobancoModule } from '../contactobanco/contactobanco.module';
 import { CuentabancoModule } from '../cuentabanco/cuentabanco.module';
+import { LineacreditobancoModule } from '../lineacreditobanco/lineacreditobanco.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { CuentabancoModule } from '../cuentabanco/cuentabanco.module';
     FormsModule,
     ReactiveFormsModule,
     ContactobancoModule,
-CuentabancoModule
+CuentabancoModule,
+LineacreditobancoModule
   ],
   exports: [
     ListadoComponent,

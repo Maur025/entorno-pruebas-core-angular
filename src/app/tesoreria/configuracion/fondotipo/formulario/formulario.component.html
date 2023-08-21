@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">(*)Nombre de tipo de fondo </label>
+                    <label for="nombre">(*)Nombre </label>
                     <input type="text"  class="form-control uppercase" id="nombre" (click)="alCambiar(form)" required formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }">
                     <div *ngIf="submitted && form['nombre'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['nombre'].errors['required']">Es requerido</div>
@@ -33,8 +33,8 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">Descripcion </label><br>
-                    <textarea class="form-control uppercase" rows=5 id="descripcion" (click)="alCambiar(form)"  formControlName="descripcion" [ngClass]="{ 'is-invalid': submitted && form['descripcion'].errors }"></textarea>
+                    <label for="nombre">Descripción </label>
+                    <input type="text"  class="form-control uppercase" id="descripcion" (click)="alCambiar(form)"  formControlName="descripcion" [ngClass]="{ 'is-invalid': submitted && form['descripcion'].errors }">
                     <div *ngIf="submitted && form['descripcion'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['descripcion'].errors['required']">Es requerido</div>
                     <div *ngIf="form['descripcion'].errors['minlength']">Debe tener al menos {{form['descripcion'].errors['minlength']['requiredLength']}} caracteres</div>
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">es rotativo? </label><br>
+                    <label for="nombre">Es Rotativo </label><br>
                     <input type="checkbox" class="form-check-input uppercase" id="esrotativo"  (click)="alCambiar(form)" formControlName="esrotativo" [ngClass]="{ 'is-invalid': submitted && form['esrotativo'].errors }">
                     <div *ngIf="submitted && form['esrotativo'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['esrotativo'].errors['required']">Es requerido</div>
@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">es operativo? </label><br>
+                    <label for="nombre">Es Operativo </label><br>
                     <input type="checkbox" class="form-check-input uppercase" id="esoperativo"  (click)="alCambiar(form)" formControlName="esoperativo" [ngClass]="{ 'is-invalid': submitted && form['esoperativo'].errors }">
                     <div *ngIf="submitted && form['esoperativo'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['esoperativo'].errors['required']">Es requerido</div>
@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">tiene rendición? </label><br>
+                    <label for="nombre">Con Rendición </label><br>
                     <input type="checkbox" class="form-check-input uppercase" id="conrendicion"  (click)="alCambiar(form)" formControlName="conrendicion" [ngClass]="{ 'is-invalid': submitted && form['conrendicion'].errors }">
                     <div *ngIf="submitted && form['conrendicion'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['conrendicion'].errors['required']">Es requerido</div>

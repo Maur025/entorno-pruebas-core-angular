@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 d-none">
-                    <label for="formrow-firstname-input ">Contacto</label>
+                    <label for="formrow-firstname-input ">Contactos</label>
                     <select class="form-control form-select" id="contacto"  formControlName="contacto" name="contacto" [ngClass]="{ 'is-invalid': submitted && form['contacto'].errors }">
                     <option *ngFor="let t of contacto_banco" value="{{t.id}}"  >{{t.banco_id}} </option>
                     </select>
@@ -95,17 +95,35 @@
                     <div *ngIf="form['cuentas'].errors['max']">Debe tener menor o igual que {{form['cuentas'].errors['max']['max']}} </div>
                     </div>
                 </div>
+
+                <div class="mb-6 col-sm-12 d-none">
+                    <label for="formrow-firstname-input ">Líneas de Crédito</label>
+                    <select class="form-control form-select" id="lineasdecredito"  formControlName="lineasdecredito" name="lineasdecredito" [ngClass]="{ 'is-invalid': submitted && form['lineasdecredito'].errors }">
+                    <option *ngFor="let t of lineacredito_banco" value="{{t.id}}"  >{{t.banco_id}} </option>
+                    </select>
+                    <div *ngIf="submitted && form['lineasdecredito'].errors" class="invalid-feedback" align="left" >
+                    <div *ngIf="form['lineasdecredito'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['lineasdecredito'].errors['minlength']">Debe tener al menos {{form['lineasdecredito'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['lineasdecredito'].errors['maxlength']">Debe tener menos de {{form['lineasdecredito'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['lineasdecredito'].errors['min']">Debe tener mayor o igual que {{form['lineasdecredito'].errors['min']['min']}} </div>
+                    <div *ngIf="form['lineasdecredito'].errors['max']">Debe tener menor o igual que {{form['lineasdecredito'].errors['max']['max']}} </div>
+                    </div>
+                </div>
             
                 <div class="mb-6 col-sm-12" *ngIf="dataEdit">
                     <hr>
                     <ul class="nav nav-tabs nav-tabs-dark" role="tablist">                        
                         
                     <li class="nav-item" >
-                        <a class="nav-link atabx active" data-bs-toggle="tab" data-bs-target="#tab-contactobanco" role="button" aria-current="page" href="#">Contacto</a>
+                        <a class="nav-link atabx active" data-bs-toggle="tab" data-bs-target="#tab-contactobanco" role="button" aria-current="page" href="#">Contactos</a>
                     </li>
 
                     <li class="nav-item" >
                         <a class="nav-link atabx " data-bs-toggle="tab" data-bs-target="#tab-cuentabanco" role="button" aria-current="page" href="#">Cuentas</a>
+                    </li>
+
+                    <li class="nav-item" >
+                        <a class="nav-link atabx " data-bs-toggle="tab" data-bs-target="#tab-lineacreditobanco" role="button" aria-current="page" href="#">Líneas de Crédito</a>
                     </li>
                     </ul>
                     <div class="tab-content">
@@ -116,6 +134,10 @@
 
                     <div class="tab-pane border " id="tab-cuentabanco" >
                         <app-listado-cuentabanco *ngIf="rel_prefix" [rel_prefix]="rel_prefix" [rel_field]="'banco_id'" > </app-listado-cuentabanco>
+                    </div>
+
+                    <div class="tab-pane border " id="tab-lineacreditobanco" >
+                        <app-listado-lineacreditobanco *ngIf="rel_prefix" [rel_prefix]="rel_prefix" [rel_field]="'banco_id'" > </app-listado-lineacreditobanco>
                     </div>
                     </div>
                 </div> 

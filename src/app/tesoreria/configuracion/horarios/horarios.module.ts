@@ -18,7 +18,7 @@ import { HorariosdiaModule } from '../horariosdia/horariosdia.module';
     HerramientasModule,
     FormsModule,
     ReactiveFormsModule,
-    HorariosdiaModule
+    HorariosdiaModule,
   ],
   exports: [
     ListadoComponent,

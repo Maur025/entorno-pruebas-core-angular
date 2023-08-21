@@ -21,8 +21,8 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">(*)Nombre de Horario </label>
-                    <input type="text"  class="form-control uppercase" id="nombre" (click)="alCambiar(form)" required formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }">
+                    <label for="nombre">Nombre </label>
+                    <input type="text"  class="form-control uppercase" id="nombre" (click)="alCambiar(form)"  formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }">
                     <div *ngIf="submitted && form['nombre'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['nombre'].errors['required']">Es requerido</div>
                     <div *ngIf="form['nombre'].errors['minlength']">Debe tener al menos {{form['nombre'].errors['minlength']['requiredLength']}} caracteres</div>
@@ -33,25 +33,21 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 d-none">
-                    <label for="formrow-firstname-input ">Horarios Asignados</label>
-                    <select class="form-control form-select" id="horarios_dia"  formControlName="horarios_dia" name="horarios_dia" [ngClass]="{ 'is-invalid': submitted && form['horarios_dia'].errors }">
-                    <option *ngFor="let t of horarios_dia" value="{{t.id}}"  >{{t.horario_id}} </option>
-                    </select>
-                    <div *ngIf="submitted && form['horarios_dia'].errors" class="invalid-feedback" align="left" >
-                    <div *ngIf="form['horarios_dia'].errors['required']">Es requerido</div>
-                    <div *ngIf="form['horarios_dia'].errors['minlength']">Debe tener al menos {{form['horarios_dia'].errors['minlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['horarios_dia'].errors['maxlength']">Debe tener menos de {{form['horarios_dia'].errors['maxlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['horarios_dia'].errors['min']">Debe tener mayor o igual que {{form['horarios_dia'].errors['min']['min']}} </div>
-                    <div *ngIf="form['horarios_dia'].errors['max']">Debe tener menor o igual que {{form['horarios_dia'].errors['max']['max']}} </div>
-                    </div>
+                    <app-selector-add #horarios_diaSelector  label="Días de Horario" [templateEditar]="horarios_diaTemplateEditar" [templateNuevo]="horarios_diaTemplateNuevo" name="horarios_dia" [submitted]="submitted" [dataArray]="horarios_dia" formControlName="horarios_dia"  ></app-selector-add>
+                    <ng-template #horarios_diaTemplateNuevo>
+                        <app-formulario-horariosdia [esModal]="true" (alGuardar)="horarios_dia.push($event['content']);form['horarios_dia'].setValue($event['content']['id']);horarios_diaSelector.close()" ></app-formulario-horariosdia>
+                    </ng-template>
+                    <ng-template #horarios_diaTemplateEditar>
+                        <app-formulario-horariosdia [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(horarios_dia, 'horarios_dia')" (alActualizar)="horarios_diaSelector.close();setDataFromFormname(horarios_dia, 'horarios_dia',$event)" ></app-formulario-horariosdia>
+                    </ng-template>
                 </div>
 
-                <div class="mb-6 col-sm-12" >
+                <div class="mb-6 col-sm-12" *ngIf="dataEdit">
                     <hr>
                     <ul class="nav nav-tabs nav-tabs-dark" role="tablist">
 
                     <li class="nav-item" >
-                        <a class="nav-link atabx active" data-bs-toggle="tab" data-bs-target="#tab-horariosdia" role="button" aria-current="page" href="#">Horarios Asignados</a>
+                        <a class="nav-link atabx active" data-bs-toggle="tab" data-bs-target="#tab-horariosdia" role="button" aria-current="page" href="#">Días de Horario</a>
                     </li>
                     </ul>
                     <div class="tab-content">

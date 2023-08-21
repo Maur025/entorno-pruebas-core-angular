@@ -38,12 +38,12 @@ export class FondoService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Caja Chica'] = 'habilitar';
+    datos['Listado de Caja'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Caja Chica'] = 'deshabilitar';
+    datos['Listado de Caja'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

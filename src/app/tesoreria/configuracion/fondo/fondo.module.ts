@@ -5,6 +5,7 @@ import { ListadoComponent } from './listado/listado.component';
 import { HerramientasModule } from 'src/app/core/herramientas/herramientas.module';
 import { FormularioComponent } from './formulario/formulario.component';
 import { FondoRoutingModule } from './fondo-routing.module';
+import { FondotipoModule } from '../fondotipo/fondotipo.module';
 import { FondoresponsablesModule } from '../fondoresponsables/fondoresponsables.module';
 import { FondocentrodecostosModule } from '../fondocentrodecostos/fondocentrodecostos.module';
 import { FondoformacobroModule } from '../fondoformacobro/fondoformacobro.module';
@@ -20,7 +21,8 @@ import { FondoformacobroModule } from '../fondoformacobro/fondoformacobro.module
     HerramientasModule,
     FormsModule,
     ReactiveFormsModule,
-    FondoresponsablesModule,
+    FondotipoModule,
+FondoresponsablesModule,
 FondocentrodecostosModule,
 FondoformacobroModule
   ],

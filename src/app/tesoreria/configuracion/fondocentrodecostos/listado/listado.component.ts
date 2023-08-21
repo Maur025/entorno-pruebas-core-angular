@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { ActivatedRoute, Router } from "@angular/router";
 import { FondocentrodecostosService } from "../servicios/fondocentrodecostos.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
+import { ActivatedRoute, Router } from "@angular/router";
 import { FondoService } from '../servicios/fondo.service';
 import { CentrodecostosService } from '../servicios/centrodecostos.service';
 
@@ -21,7 +21,7 @@ export class ListadoComponent implements OnInit {
 
   formato: any;
   dataEdit = null;
-  titulo: any = "Fondos - Centro de Costos";
+  titulo: any = "Centro de Costos de Fondo";
 
   fondo:any = [];
 centrodecostos:any = [];
@@ -37,25 +37,32 @@ centrodecostos:any = [];
   ngOnInit(): void {
     if (this.rel_prefix) this.FondocentrodecostosService.setPrefix(this.rel_prefix);
     this.formato = {
-      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"fondo_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Fondo","colsize":"12","filtrotipo":"number","mascara":{"campo":"fondo","valor":"nombre"}},"centrodecostos_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Centro  de Costos","colsize":"12","filtrotipo":"number","mascara":{"campo":"centrodecostos","valor":"nombre"}}}
+      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"fondo_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Fondo","colsize":"12","filtrotipo":"number","mascara":{"campo":"fondo","valor":"nombre"}},"centrodecostos_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Centro de Costos","colsize":"12","filtrotipo":"number","mascara":{"campo":"centrodecostos","valor":"nombre"}}}
     };
 
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
   }
 
   crear(data: any, template) {
-    this.dataEdit = null;
-    this.modalRef = this.modalService.show(template, {
-      class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
-    });
+    if (this.rel_prefix == null)
+      this.router.navigate(['./nuevo', { }],{relativeTo: this.route});
+    else{
+      this.dataEdit = null;
+      this.modalRef = this.modalService.show(template, {
+        class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
+      });
+    }
   }
 
-  editar(data: any, template) {
-    this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
-/*this.dataEdit = data;
-    this.modalRef = this.modalService.show(template, {
-      class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
-    });*/
+  editar(data: any, template) {    
+    if (this.rel_prefix == null)
+      this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
+    else{
+      this.dataEdit = data;
+      this.modalRef = this.modalService.show(template, {
+        class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
+      });
+    }
   }
 
   habilitar(data: any, component) {

@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">(*)Nombre de fondo </label>
+                    <label for="nombre">(*)Nombre </label>
                     <input type="text"  class="form-control uppercase" id="nombre" (click)="alCambiar(form)" required formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }">
                     <div *ngIf="submitted && form['nombre'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['nombre'].errors['required']">Es requerido</div>
@@ -33,8 +33,8 @@
                 </div>
 
                 <div class="mb-6 col-sm-6 ">
-                    <label for="nombre">Dirección </label><br>
-                    <textarea class="form-control uppercase" rows=5 id="direccion" (click)="alCambiar(form)"  formControlName="direccion" [ngClass]="{ 'is-invalid': submitted && form['direccion'].errors }"></textarea>
+                    <label for="nombre">Dirección </label>
+                    <input type="text"  class="form-control uppercase" id="direccion" (click)="alCambiar(form)"  formControlName="direccion" [ngClass]="{ 'is-invalid': submitted && form['direccion'].errors }">
                     <div *ngIf="submitted && form['direccion'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['direccion'].errors['required']">Es requerido</div>
                     <div *ngIf="form['direccion'].errors['minlength']">Debe tener al menos {{form['direccion'].errors['minlength']['requiredLength']}} caracteres</div>
@@ -45,8 +45,8 @@
                 </div>
 
                 <div class="mb-6 col-sm-6 ">
-                    <label for="nombre">Descripción </label><br>
-                    <textarea class="form-control uppercase" rows=5 id="descripcion" (click)="alCambiar(form)"  formControlName="descripcion" [ngClass]="{ 'is-invalid': submitted && form['descripcion'].errors }"></textarea>
+                    <label for="nombre">Descripción </label>
+                    <input type="text"  class="form-control uppercase" id="descripcion" (click)="alCambiar(form)"  formControlName="descripcion" [ngClass]="{ 'is-invalid': submitted && form['descripcion'].errors }">
                     <div *ngIf="submitted && form['descripcion'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['descripcion'].errors['required']">Es requerido</div>
                     <div *ngIf="form['descripcion'].errors['minlength']">Debe tener al menos {{form['descripcion'].errors['minlength']['requiredLength']}} caracteres</div>
@@ -56,22 +56,18 @@
                     </div>
                 </div>
 
-                <div class="mb-6 col-sm-6 ">
-                    <label for="formrow-firstname-input ">Tipo de Fondo</label>
-                    <select class="form-control form-select" id="fondo_tipo_id"  formControlName="fondo_tipo_id" name="fondo_tipo_id" [ngClass]="{ 'is-invalid': submitted && form['fondo_tipo_id'].errors }">
-                    <option *ngFor="let t of fondo_tipo" value="{{t.id}}"  >{{t.nombre}} </option>
-                    </select>
-                    <div *ngIf="submitted && form['fondo_tipo_id'].errors" class="invalid-feedback" align="left" >
-                    <div *ngIf="form['fondo_tipo_id'].errors['required']">Es requerido</div>
-                    <div *ngIf="form['fondo_tipo_id'].errors['minlength']">Debe tener al menos {{form['fondo_tipo_id'].errors['minlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['fondo_tipo_id'].errors['maxlength']">Debe tener menos de {{form['fondo_tipo_id'].errors['maxlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['fondo_tipo_id'].errors['min']">Debe tener mayor o igual que {{form['fondo_tipo_id'].errors['min']['min']}} </div>
-                    <div *ngIf="form['fondo_tipo_id'].errors['max']">Debe tener menor o igual que {{form['fondo_tipo_id'].errors['max']['max']}} </div>
-                    </div>
+                <div class="mb-6 col-sm-12 ">
+                    <app-selector-add #fondo_tipoSelector  label="Tipo de Fondo" [templateEditar]="fondo_tipoTemplateEditar" [templateNuevo]="fondo_tipoTemplateNuevo" name="fondo_tipo_id" [submitted]="submitted" [dataArray]="fondo_tipo" formControlName="fondo_tipo_id"  ></app-selector-add>
+                    <ng-template #fondo_tipoTemplateNuevo>
+                        <app-formulario-fondotipo [esModal]="true" (alGuardar)="fondo_tipo.push($event['content']);form['fondo_tipo_id'].setValue($event['content']['id']);fondo_tipoSelector.close()" ></app-formulario-fondotipo>
+                    </ng-template>
+                    <ng-template #fondo_tipoTemplateEditar>
+                        <app-formulario-fondotipo [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(fondo_tipo, 'fondo_tipo_id')" (alActualizar)="fondo_tipoSelector.close();setDataFromFormname(fondo_tipo, 'fondo_tipo_id',$event)" ></app-formulario-fondotipo>
+                    </ng-template>
                 </div>
 
-                <div class="mb-6 col-sm-6 ">
-                    <label for="nombre">Solicitud # </label>
+                <div class="mb-6 col-sm-12 ">
+                    <label for="nombre">Solicitud </label>
                     <input type="number"  class="form-control uppercase" id="solicitud_id" (click)="alCambiar(form)"  formControlName="solicitud_id" [ngClass]="{ 'is-invalid': submitted && form['solicitud_id'].errors }">
                     <div *ngIf="submitted && form['solicitud_id'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['solicitud_id'].errors['required']">Es requerido</div>
@@ -97,7 +93,7 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 d-none">
-                    <label for="formrow-firstname-input ">Centro de Costos</label>
+                    <label for="formrow-firstname-input ">Centros de Costo</label>
                     <select class="form-control form-select" id="fondo_centrodecostos"  formControlName="fondo_centrodecostos" name="fondo_centrodecostos" [ngClass]="{ 'is-invalid': submitted && form['fondo_centrodecostos'].errors }">
                     <option *ngFor="let t of fondo_centrodecostos" value="{{t.id}}"  >{{t.fondo_id}} </option>
                     </select>
@@ -111,7 +107,7 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 d-none">
-                    <label for="formrow-firstname-input ">Formas de cobro</label>
+                    <label for="formrow-firstname-input ">Formas de Cobro</label>
                     <select class="form-control form-select" id="fondo_forma_cobro"  formControlName="fondo_forma_cobro" name="fondo_forma_cobro" [ngClass]="{ 'is-invalid': submitted && form['fondo_forma_cobro'].errors }">
                     <option *ngFor="let t of fondo_forma_cobro" value="{{t.id}}"  >{{t.fondo_id}} </option>
                     </select>
@@ -133,11 +129,11 @@
                     </li>
 
                     <li class="nav-item" >
-                        <a class="nav-link atabx " data-bs-toggle="tab" data-bs-target="#tab-fondocentrodecostos" role="button" aria-current="page" href="#">Centro de Costos</a>
+                        <a class="nav-link atabx " data-bs-toggle="tab" data-bs-target="#tab-fondocentrodecostos" role="button" aria-current="page" href="#">Centros de Costo</a>
                     </li>
 
                     <li class="nav-item" >
-                        <a class="nav-link atabx " data-bs-toggle="tab" data-bs-target="#tab-fondoformacobro" role="button" aria-current="page" href="#">Formas de cobro</a>
+                        <a class="nav-link atabx " data-bs-toggle="tab" data-bs-target="#tab-fondoformacobro" role="button" aria-current="page" href="#">Formas de Cobro</a>
                     </li>
                     </ul>
                     <div class="tab-content">

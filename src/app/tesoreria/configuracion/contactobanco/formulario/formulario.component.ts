@@ -18,6 +18,7 @@ export class FormularioComponent implements OnInit {
   @Output() alActualizar = new EventEmitter<any>();
 
   @Input() esModal:boolean = false;
+  @Input() show_rel:boolean = true;
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
@@ -42,6 +43,18 @@ contacto:any = [];
     return this.formGroup.controls;
   }
 
+  getDataFromFormname(array, formName){
+    let element =  array.find( e => e.id == this.form[formName].value)
+    return element;
+  }
+  setDataFromFormname(array, formName, data:any){
+    let temp_value = this.form[formName].value;
+    let el = array[array.indexOf(array.find( e => e.id == this.form[formName].value))];
+    Object.keys(data.content).forEach( k => {
+        el[k] = data.content[k];
+    });
+  }
+
   alCambiar(control){
     console.log("control",control);
   }
@@ -49,7 +62,7 @@ contacto:any = [];
   ngOnInit(): void {    
     this.BancoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.banco = res.content; });
 this.ContactoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.contacto = res.content; });
-    this.formGroup = this.FormBuilder.group({id:["",[] ],banco_id:["",[Validators.required] ],contacto_id:["",[Validators.required] ]});
+    this.formGroup = this.FormBuilder.group({id:["",[] ],banco_id:["",[] ],contacto_id:["",[Validators.required] ]});
     if (this.dataEdit != null) {
       this.formGroup.setValue({id:this.dataEdit.id,banco_id:this.dataEdit.banco_id,contacto_id:this.dataEdit.contacto_id});
       this.rel_prefix = "/contactobanco/"+this.dataEdit.id;

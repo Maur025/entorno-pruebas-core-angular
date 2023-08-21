@@ -21,8 +21,8 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="formrow-firstname-input ">(*)Banco</label>
-                    <select class="form-control form-select" id="banco_id" required formControlName="banco_id" name="banco_id" [ngClass]="{ 'is-invalid': submitted && form['banco_id'].errors }">
+                    <label for="formrow-firstname-input ">Banco</label>
+                    <select class="form-control form-select" id="banco_id"  formControlName="banco_id" name="banco_id" [ngClass]="{ 'is-invalid': submitted && form['banco_id'].errors }">
                     <option *ngFor="let t of banco" value="{{t.id}}"  >{{t.nombre}} </option>
                     </select>
                     <div *ngIf="submitted && form['banco_id'].errors" class="invalid-feedback" align="left" >
@@ -35,17 +35,13 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="formrow-firstname-input ">(*)Contacto</label>
-                    <select class="form-control form-select" id="contacto_id" required formControlName="contacto_id" name="contacto_id" [ngClass]="{ 'is-invalid': submitted && form['contacto_id'].errors }">
-                    <option *ngFor="let t of contacto" value="{{t.id}}"  >{{t.nombre}} </option>
-                    </select>
-                    <div *ngIf="submitted && form['contacto_id'].errors" class="invalid-feedback" align="left" >
-                    <div *ngIf="form['contacto_id'].errors['required']">Es requerido</div>
-                    <div *ngIf="form['contacto_id'].errors['minlength']">Debe tener al menos {{form['contacto_id'].errors['minlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['contacto_id'].errors['maxlength']">Debe tener menos de {{form['contacto_id'].errors['maxlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['contacto_id'].errors['min']">Debe tener mayor o igual que {{form['contacto_id'].errors['min']['min']}} </div>
-                    <div *ngIf="form['contacto_id'].errors['max']">Debe tener menor o igual que {{form['contacto_id'].errors['max']['max']}} </div>
-                    </div>
+                    <app-selector-add #contactoSelector  label="(*)Contacto" [templateEditar]="contactoTemplateEditar" [templateNuevo]="contactoTemplateNuevo" name="contacto_id" [submitted]="submitted" [dataArray]="contacto" formControlName="contacto_id"  ></app-selector-add>
+                    <ng-template #contactoTemplateNuevo>
+                        <app-formulario-contacto [esModal]="true" (alGuardar)="contacto.push($event['content']);form['contacto_id'].setValue($event['content']['id']);contactoSelector.close()" ></app-formulario-contacto>
+                    </ng-template>
+                    <ng-template #contactoTemplateEditar>
+                        <app-formulario-contacto [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(contacto, 'contacto_id')" (alActualizar)="contactoSelector.close();setDataFromFormname(contacto, 'contacto_id',$event)" ></app-formulario-contacto>
+                    </ng-template>
                 </div>
             
             <hr>

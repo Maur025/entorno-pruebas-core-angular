@@ -17,6 +17,7 @@ export class BancosComponent implements OnInit {
 
   bancos_encontrados:any [] = [];
   bancos_elegidos:any = [] ;
+  errores_validacion:any[] = []
   existe:boolean = false;
   keyword:string = '';
 
@@ -35,7 +36,7 @@ export class BancosComponent implements OnInit {
       res => {
         res['content'].forEach(element => {
           element.seleccionado = '';
-        });;
+        });
         this.bancos_encontrados = res['content'];
       },
       err => {
@@ -43,13 +44,12 @@ export class BancosComponent implements OnInit {
       }
     );
   }
-  validacion:any[] = []
 
   validar(){
-    this.validacion= [];
-    if (this.bancos_elegidos.length==0) this.validacion.push("No se ha selccionado ningun banco");
-    if (this.existe) this.validacion.push("El banco no existe");
-    if (this.validacion.length>0) return false;
+    this.errores_validacion= [];
+    if (this.bancos_elegidos.length==0) this.errores_validacion.push("No se ha selccionado ningun banco");
+    if (this.existe) this.errores_validacion.push("El banco no existe");
+    if (this.errores_validacion.length>0) return false;
     return true;
   }
 
@@ -63,7 +63,7 @@ export class BancosComponent implements OnInit {
       console.log("this.completado.emit");
     }else{
 
-      this.NotificacionService.alertError(this.validacion.join("\n\r"));
+      this.NotificacionService.alertError(this.errores_validacion.join("\n\r"));
     }
   }
 

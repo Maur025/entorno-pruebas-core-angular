@@ -5,6 +5,7 @@ import { ListadoComponent } from './listado/listado.component';
 import { HerramientasModule } from 'src/app/core/herramientas/herramientas.module';
 import { FormularioComponent } from './formulario/formulario.component';
 import { CajaRoutingModule } from './caja-routing.module';
+import { FondoModule } from '../fondo/fondo.module';
 import { CajahorariosModule } from '../cajahorarios/cajahorarios.module';
 
 @NgModule({
@@ -18,7 +19,8 @@ import { CajahorariosModule } from '../cajahorarios/cajahorarios.module';
     HerramientasModule,
     FormsModule,
     ReactiveFormsModule,
-    CajahorariosModule
+    FondoModule,
+CajahorariosModule
   ],
   exports: [
     ListadoComponent,

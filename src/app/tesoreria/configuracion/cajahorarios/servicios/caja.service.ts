@@ -38,12 +38,12 @@ export class CajaService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Caja - Horarios'] = 'habilitar';
+    datos['Listado de Cajahorarios'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Caja - Horarios'] = 'deshabilitar';
+    datos['Listado de Cajahorarios'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

@@ -24,7 +24,8 @@
 
   <ng-template #modalNuevo role="document" let-modal>
     <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLabel"><a [routerLink]="['./nuevo']" (click)="modalRef.hide()">Nuevo forma de cobro</a></h5>
+      <!-- <h5 class="modal-title" id="exampleModalLabel"><a [routerLink]="['./nuevo']" (click)="modalRef.hide()">Nuevo Forma de Cobro</a></h5> -->
+      <h5 class="modal-title" id="exampleModalLabel">Nuevo Forma de Cobro</h5>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()" ></button>
     </div>
     <app-formulario-formacobro [esModal]="true" [rel_prefix]="rel_prefix" [rel_field]="rel_field" (alGuardar)="modalRef.hide(); tabla.obtenerDatos();"></app-formulario-formacobro>
@@ -33,7 +34,8 @@
 
   <ng-template #modalEditar role="document" let-modal>
     <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLabel"> <a [routerLink]="['./'+dataEdit.id]" (click)="modalRef.hide()">Editar forma de cobro {{dataEdit.nombre}}</a></h5>
+      <!-- <h5 class="modal-title" id="exampleModalLabel"> <a [routerLink]="['./'+dataEdit.id]" (click)="modalRef.hide()">Editar Forma de Cobro {{dataEdit.nombre}}</a></h5> -->
+      <h5 class="modal-title" id="exampleModalLabel"> Editar Forma de Cobro {{dataEdit.nombre}}</h5>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()" ></button>
     </div>
     <app-formulario-formacobro [esModal]="true" [rel_prefix]="rel_prefix" [rel_field]="rel_field"[dataEdit]="dataEdit" (alActualizar)="modalRef.hide(); tabla.obtenerDatos();"></app-formulario-formacobro>

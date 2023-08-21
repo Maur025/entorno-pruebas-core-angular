@@ -38,12 +38,12 @@ export class HorariosService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Horarios'] = 'habilitar';
+    datos['Horarios'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Horarios'] = 'deshabilitar';
+    datos['Horarios'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

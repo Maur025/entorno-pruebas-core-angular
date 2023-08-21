@@ -19,6 +19,7 @@ export class FormularioComponent implements OnInit {
   @Output() alActualizar = new EventEmitter<any>();
 
   @Input() esModal:boolean = false;
+  @Input() show_rel:boolean = true;
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
@@ -44,12 +45,24 @@ usuarios:any = [];
     return this.formGroup.controls;
   }
 
+  getDataFromFormname(array, formName){
+    let element =  array.find( e => e.id == this.form[formName].value)
+    return element;
+  }
+  setDataFromFormname(array, formName, data:any){
+    let temp_value = this.form[formName].value;
+    let el = array[array.indexOf(array.find( e => e.id == this.form[formName].value))];
+    Object.keys(data.content).forEach( k => {
+        el[k] = data.content[k];
+    });
+  }
+
   alCambiar(control){
     console.log("control",control);
   }
 
   ngOnInit(): void {    
-    this.CajaService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.caja = res.content; });
+    this.CajaService.getAll(100, 1, 'id', false, '').subscribe((res:any) => { this.caja = res.content; });
 this.HorariosService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.horarios = res.content; });
 this.UsuariosService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.usuarios = res.content; });
     this.formGroup = this.FormBuilder.group({id:["",[] ],caja_id:["",[Validators.required] ],horario_id:["",[Validators.required] ],responsable_id:["",[Validators.required] ]});

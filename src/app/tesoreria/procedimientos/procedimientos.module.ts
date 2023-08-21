@@ -9,9 +9,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ArchwizardModule } from 'angular-archwizard';
 
+import { LineacreditoModule } from '../configuracion/lineacredito/lineacredito.module';
+
 @NgModule({
   declarations: [
-    LineacreditoComponent
+    LineacreditoComponent,
+
   ],
   imports: [
     CommonModule,
@@ -20,7 +23,8 @@ import { ArchwizardModule } from 'angular-archwizard';
     ProcedimientosRoutingModule,
     UIModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LineacreditoModule
   ]
 })
 export class ProcedimientosModule { }

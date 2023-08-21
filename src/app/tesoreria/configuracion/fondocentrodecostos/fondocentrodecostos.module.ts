@@ -5,7 +5,7 @@ import { ListadoComponent } from './listado/listado.component';
 import { HerramientasModule } from 'src/app/core/herramientas/herramientas.module';
 import { FormularioComponent } from './formulario/formulario.component';
 import { FondocentrodecostosRoutingModule } from './fondocentrodecostos-routing.module';
-
+import { CentrodecostosModule } from '../centrodecostos/centrodecostos.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import { FondocentrodecostosRoutingModule } from './fondocentrodecostos-routing.
     HerramientasModule,
     FormsModule,
     ReactiveFormsModule,
-    
+    CentrodecostosModule
   ],
   exports: [
     ListadoComponent,

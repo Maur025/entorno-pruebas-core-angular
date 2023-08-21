@@ -11,30 +11,14 @@ export class HorariosdiaService {
   apiUrl = environment.apiUrl ;
   apiName = 'horarios_dia';
   prefix = '';
-  isFake=true;
-  fakeData: {
-    content : [{}],
-    pagination:{
-      "pages": 1,
-      "rowsNumber": 2
-    }
-  };
   constructor(private http: HttpClient) { }
 
   setPrefix(prefix: string){
     this.prefix = prefix;
   }
 
-  register(datos: any): Observable<any> {
-    let self = this;
-    console.log("trying");
-    if (this.isFake) return new Observable<any>(function subscribe(observer) {
-      console.log("completado");
-      self.fakeData.content.push(datos);
-      observer.next(datos);
-      //observer.complete();
-    });
-    else return this.http.post(this.apiUrl + this.prefix+ `/${this.apiName}`, datos);
+  register(datos: any) {
+    return this.http.post(this.apiUrl + this.prefix+ `/${this.apiName}`, datos);
   }
 
   update(datos: any, id: any): Observable<any> {
@@ -46,10 +30,7 @@ export class HorariosdiaService {
   }
 
   getAll(size: number = 100, page: number = 1, sortBy:string = 'id', descending:false, keyword:any = '') {
-    if (this.isFake) return new Observable((observer) => {
-      observer.complete();
-    });
-    else return this.http.get(this.apiUrl + this.prefix+ `/${this.apiName}?size=${size}&page=${page-1}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`);
+    return this.http.get(this.apiUrl + this.prefix+ `/${this.apiName}?size=${size}&page=${page-1}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`);
   }
 
   delete(id: string | number): Observable<any> {
@@ -57,12 +38,12 @@ export class HorariosdiaService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Horarios'] = 'habilitar';
+    datos['Horarios'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Horarios'] = 'deshabilitar';
+    datos['Horarios'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

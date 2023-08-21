@@ -18,6 +18,7 @@ export class FormularioComponent implements OnInit {
   @Output() alActualizar = new EventEmitter<any>();
 
   @Input() esModal:boolean = false;
+  @Input() show_rel:boolean = true;
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
@@ -42,6 +43,18 @@ fondo:any = [];
     return this.formGroup.controls;
   }
 
+  getDataFromFormname(array, formName){
+    let element =  array.find( e => e.id == this.form[formName].value)
+    return element;
+  }
+  setDataFromFormname(array, formName, data:any){
+    let temp_value = this.form[formName].value;
+    let el = array[array.indexOf(array.find( e => e.id == this.form[formName].value))];
+    Object.keys(data.content).forEach( k => {
+        el[k] = data.content[k];
+    });
+  }
+
   alCambiar(control){
     console.log("control",control);
   }
@@ -49,7 +62,7 @@ fondo:any = [];
   ngOnInit(): void {    
     this.UsuariosService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.usuarios = res.content; });
 this.FondoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.fondo = res.content; });
-    this.formGroup = this.FormBuilder.group({id:["",[] ],responsable_id:["",[Validators.required] ],fondo_id:["",[Validators.required] ],estado:["",[Validators.required,Validators.minLength(0),Validators.maxLength(255)] ]});
+    this.formGroup = this.FormBuilder.group({id:["",[] ],responsable_id:["",[] ],fondo_id:["",[] ],estado:["",[] ]});
     if (this.dataEdit != null) {
       this.formGroup.setValue({id:this.dataEdit.id,responsable_id:this.dataEdit.responsable_id,fondo_id:this.dataEdit.fondo_id,estado:this.dataEdit.estado});
       this.rel_prefix = "/fondoresponsables/"+this.dataEdit.id;

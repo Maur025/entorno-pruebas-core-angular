@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { ActivatedRoute, Router } from "@angular/router";
 import { CajahorariosService } from "../servicios/cajahorarios.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
+import { ActivatedRoute, Router } from "@angular/router";
 import { CajaService } from '../servicios/caja.service';
 import { HorariosService } from '../servicios/horarios.service';
 import { UsuariosService } from '../servicios/usuarios.service';
@@ -22,7 +22,7 @@ export class ListadoComponent implements OnInit {
 
   formato: any;
   dataEdit = null;
-  titulo: any = "Caja - Horarios";
+  titulo: any = "Listado de Cajahorarios";
 
   caja:any = [];
 horarios:any = [];
@@ -39,25 +39,32 @@ usuarios:any = [];
   ngOnInit(): void {
     if (this.rel_prefix) this.CajahorariosService.setPrefix(this.rel_prefix);
     this.formato = {
-      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"caja_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Caja","colsize":"12","filtrotipo":"number","mascara":{"campo":"caja","valor":"nombre"}},"horario_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Horario","colsize":"12","filtrotipo":"number","mascara":{"campo":"horarios","valor":"nombre"}},"responsable_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Responsable","colsize":"12","filtrotipo":"number","mascara":{"campo":"responsables","valor":"nombre"}}}
+      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"caja_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Caja","colsize":"12","filtrotipo":"number","mascara":{"campo":"caja","valor":"fondo.fondo_forma_cobro"}},"horario_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Horarrio","colsize":"12","filtrotipo":"number","mascara":{"campo":"horarios","valor":"nombre"}},"responsable_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Responsable","colsize":"12","filtrotipo":"number","mascara":{"campo":"responsables","valor":"nombre"}}}
     };
 
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
   }
 
   crear(data: any, template) {
-    this.dataEdit = null;
-    this.modalRef = this.modalService.show(template, {
-      class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
-    });
+    if (this.rel_prefix == null)
+      this.router.navigate(['./nuevo', { }],{relativeTo: this.route});
+    else{
+      this.dataEdit = null;
+      this.modalRef = this.modalService.show(template, {
+        class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
+      });
+    }
   }
 
-  editar(data: any, template) {
-    this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
-/*this.dataEdit = data;
-    this.modalRef = this.modalService.show(template, {
-      class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
-    });*/
+  editar(data: any, template) {    
+    if (this.rel_prefix == null)
+      this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
+    else{
+      this.dataEdit = data;
+      this.modalRef = this.modalService.show(template, {
+        class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
+      });
+    }
   }
 
   habilitar(data: any, component) {

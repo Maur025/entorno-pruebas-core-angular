@@ -38,12 +38,12 @@ export class FondotipoService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Tipos de Fondos'] = 'habilitar';
+    datos['Tipos de Fondo'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Tipos de Fondos'] = 'deshabilitar';
+    datos['Tipos de Fondo'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

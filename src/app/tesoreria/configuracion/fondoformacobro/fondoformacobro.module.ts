@@ -5,7 +5,7 @@ import { ListadoComponent } from './listado/listado.component';
 import { HerramientasModule } from 'src/app/core/herramientas/herramientas.module';
 import { FormularioComponent } from './formulario/formulario.component';
 import { FondoformacobroRoutingModule } from './fondoformacobro-routing.module';
-
+import { FormacobroModule } from '../formacobro/formacobro.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import { FondoformacobroRoutingModule } from './fondoformacobro-routing.module';
     HerramientasModule,
     FormsModule,
     ReactiveFormsModule,
-    
+    FormacobroModule
   ],
   exports: [
     ListadoComponent,

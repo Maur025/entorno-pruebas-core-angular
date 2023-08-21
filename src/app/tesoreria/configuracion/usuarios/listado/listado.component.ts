@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { ActivatedRoute, Router } from "@angular/router";
 import { UsuariosService } from "../servicios/usuarios.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
+import { ActivatedRoute, Router } from "@angular/router";
 
 
 type NewType = NotificacionService;
@@ -20,9 +20,9 @@ export class ListadoComponent implements OnInit {
 
   formato: any;
   dataEdit = null;
-  titulo: any = "Usuarios";
+  titulo: any = "Listado de Usuarios";
 
-
+  
 
   constructor(
     public UsuariosService: UsuariosService,
@@ -35,25 +35,32 @@ export class ListadoComponent implements OnInit {
   ngOnInit(): void {
     if (this.rel_prefix) this.UsuariosService.setPrefix(this.rel_prefix);
     this.formato = {
-      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"nombre":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Nombre de Usuario","colsize":"12","filtrotipo":"text"},"nombrecompleto":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Nombre Completo","colsize":"12","filtrotipo":"text"},"cargo":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Cargo","colsize":"12","filtrotipo":"text"},"uid":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"UID - Keycloak","colsize":"12","filtrotipo":"number"}}
+      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"nombre":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Usuario","colsize":"12","filtrotipo":"text"},"nombrecompleto":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Nombre completo","colsize":"12","filtrotipo":"text"},"cargo":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Cargo","colsize":"12","filtrotipo":"text"},"uid":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Keycloak UID","colsize":"12","filtrotipo":"number"}}
     };
 
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
   }
 
   crear(data: any, template) {
-    this.dataEdit = null;
-    this.modalRef = this.modalService.show(template, {
-      class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
-    });
+    if (this.rel_prefix == null)
+      this.router.navigate(['./nuevo', { }],{relativeTo: this.route});
+    else{
+      this.dataEdit = null;
+      this.modalRef = this.modalService.show(template, {
+        class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
+      });
+    }
   }
 
-  editar(data: any, template) {
-    this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
-/*this.dataEdit = data;
-    this.modalRef = this.modalService.show(template, {
-      class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
-    });*/
+  editar(data: any, template) {    
+    if (this.rel_prefix == null)
+      this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
+    else{
+      this.dataEdit = data;
+      this.modalRef = this.modalService.show(template, {
+        class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
+      });
+    }
   }
 
   habilitar(data: any, component) {

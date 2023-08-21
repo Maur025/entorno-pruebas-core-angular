@@ -5,7 +5,7 @@ import { ListadoComponent } from './listado/listado.component';
 import { HerramientasModule } from 'src/app/core/herramientas/herramientas.module';
 import { FormularioComponent } from './formulario/formulario.component';
 import { ContactobancoRoutingModule } from './contactobanco-routing.module';
-
+import { ContactoModule } from '../contacto/contacto.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import { ContactobancoRoutingModule } from './contactobanco-routing.module';
     HerramientasModule,
     FormsModule,
     ReactiveFormsModule,
-    
+    ContactoModule
   ],
   exports: [
     ListadoComponent,

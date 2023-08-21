@@ -38,12 +38,12 @@ export class UsuariosService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Usuarios'] = 'habilitar';
+    datos['Listado de Usuarios'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Usuarios'] = 'deshabilitar';
+    datos['Listado de Usuarios'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

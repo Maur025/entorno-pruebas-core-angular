@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-{ path: 'tipodato', loadChildren: () => import('./tipodato/tipodato.module').then(m => m.TipodatoModule  )},
+{ path: 'lineacredito', loadChildren: () => import('./lineacredito/lineacredito.module').then(m => m.LineacreditoModule  )},
 
-{ path: 'tabla', loadChildren: () => import('./tabla/tabla.module').then(m => m.TablaModule  )},
+{ path: 'contactobanco', loadChildren: () => import('./contactobanco/contactobanco.module').then(m => m.ContactobancoModule  )},
+
 
 { path: 'creditopagos', loadChildren: () => import('./creditopagos/creditopagos.module').then(m => m.CreditopagosModule  )},
 
@@ -28,7 +29,6 @@ const routes: Routes = [
 
 { path: 'estadocredito', loadChildren: () => import('./estadocredito/estadocredito.module').then(m => m.EstadocreditoModule  )},
 
-{ path: 'contactobanco', loadChildren: () => import('./contactobanco/contactobanco.module').then(m => m.ContactobancoModule  )},
 
 { path: 'banco', loadChildren: () => import('./banco/banco.module').then(m => m.BancoModule  )},
 

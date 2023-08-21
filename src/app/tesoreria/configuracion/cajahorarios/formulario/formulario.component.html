@@ -23,7 +23,7 @@
                 <div class="mb-6 col-sm-12 ">
                     <label for="formrow-firstname-input ">(*)Caja</label>
                     <select class="form-control form-select" id="caja_id" required formControlName="caja_id" name="caja_id" [ngClass]="{ 'is-invalid': submitted && form['caja_id'].errors }">
-                    <option *ngFor="let t of caja" value="{{t.id}}"  >{{t.nombre}} </option>
+                    <option *ngFor="let t of caja" value="{{t.id}}"  >{{t.fondo.fondo_forma_cobro}} </option>
                     </select>
                     <div *ngIf="submitted && form['caja_id'].errors" class="invalid-feedback" align="left" >
                     <div *ngIf="form['caja_id'].errors['required']">Es requerido</div>
@@ -35,31 +35,23 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="formrow-firstname-input ">(*)Horario</label>
-                    <select class="form-control form-select" id="horario_id" required formControlName="horario_id" name="horario_id" [ngClass]="{ 'is-invalid': submitted && form['horario_id'].errors }">
-                    <option *ngFor="let t of horarios" value="{{t.id}}"  >{{t.nombre}} </option>
-                    </select>
-                    <div *ngIf="submitted && form['horario_id'].errors" class="invalid-feedback" align="left" >
-                    <div *ngIf="form['horario_id'].errors['required']">Es requerido</div>
-                    <div *ngIf="form['horario_id'].errors['minlength']">Debe tener al menos {{form['horario_id'].errors['minlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['horario_id'].errors['maxlength']">Debe tener menos de {{form['horario_id'].errors['maxlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['horario_id'].errors['min']">Debe tener mayor o igual que {{form['horario_id'].errors['min']['min']}} </div>
-                    <div *ngIf="form['horario_id'].errors['max']">Debe tener menor o igual que {{form['horario_id'].errors['max']['max']}} </div>
-                    </div>
+                    <app-selector-add #horariosSelector  label="(*)Horarrio" [showAdd]="false" [templateEditar]="horariosTemplateEditar" [templateNuevo]="horariosTemplateNuevo" name="horario_id" [submitted]="submitted" [dataArray]="horarios" formControlName="horario_id"  ></app-selector-add>
+                    <ng-template #horariosTemplateNuevo>
+                        <app-formulario-horarios [esModal]="true" (alGuardar)="horarios.push($event['content']);form['horario_id'].setValue($event['content']['id']);horariosSelector.close()" ></app-formulario-horarios>
+                    </ng-template>
+                    <ng-template #horariosTemplateEditar>
+                        <app-formulario-horarios [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(horarios, 'horario_id')" (alActualizar)="horariosSelector.close();setDataFromFormname(horarios, 'horario_id',$event)" ></app-formulario-horarios>
+                    </ng-template>
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="formrow-firstname-input ">(*)Responsable</label>
-                    <select class="form-control form-select" id="responsable_id" required formControlName="responsable_id" name="responsable_id" [ngClass]="{ 'is-invalid': submitted && form['responsable_id'].errors }">
-                    <option *ngFor="let t of usuarios" value="{{t.id}}"  >{{t.nombre}} </option>
-                    </select>
-                    <div *ngIf="submitted && form['responsable_id'].errors" class="invalid-feedback" align="left" >
-                    <div *ngIf="form['responsable_id'].errors['required']">Es requerido</div>
-                    <div *ngIf="form['responsable_id'].errors['minlength']">Debe tener al menos {{form['responsable_id'].errors['minlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['responsable_id'].errors['maxlength']">Debe tener menos de {{form['responsable_id'].errors['maxlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['responsable_id'].errors['min']">Debe tener mayor o igual que {{form['responsable_id'].errors['min']['min']}} </div>
-                    <div *ngIf="form['responsable_id'].errors['max']">Debe tener menor o igual que {{form['responsable_id'].errors['max']['max']}} </div>
-                    </div>
+                    <app-selector-add #usuariosSelector  label="(*)Responsable" [templateEditar]="usuariosTemplateEditar" [templateNuevo]="usuariosTemplateNuevo" name="responsable_id" [submitted]="submitted" [dataArray]="usuarios" formControlName="responsable_id"  ></app-selector-add>
+                    <ng-template #usuariosTemplateNuevo>
+                        <app-formulario-usuarios [esModal]="true" (alGuardar)="usuarios.push($event['content']);form['responsable_id'].setValue($event['content']['id']);usuariosSelector.close()" ></app-formulario-usuarios>
+                    </ng-template>
+                    <ng-template #usuariosTemplateEditar>
+                        <app-formulario-usuarios [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(usuarios, 'responsable_id')" (alActualizar)="usuariosSelector.close();setDataFromFormname(usuarios, 'responsable_id',$event)" ></app-formulario-usuarios>
+                    </ng-template>
                 </div>
             
             <hr>

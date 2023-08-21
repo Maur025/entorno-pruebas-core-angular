@@ -6,6 +6,7 @@ import { NotificacionService } from "src/app/core/services/notificacion.service"
 import { BancoService } from "../servicios/banco.service";
 import { ContactobancoService } from '../servicios/contactobanco.service';
 import { CuentabancoService } from '../servicios/cuentabanco.service';
+import { LineacreditobancoService } from '../servicios/lineacreditobanco.service';
 @Component({
   selector: "app-formulario-banco",
   templateUrl: "./formulario.component.html",
@@ -18,12 +19,14 @@ export class FormularioComponent implements OnInit {
   @Output() alActualizar = new EventEmitter<any>();
 
   @Input() esModal:boolean = false;
+  @Input() show_rel:boolean = true;
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
 
   contacto_banco:any = [];
 cuenta_banco:any = [];
+lineacredito_banco:any = [];
   estados: any = [
     { value: "habilitado", name: "Habilitado" },
     { value: "deshabilitado", name: "Deshabilitado" },
@@ -35,11 +38,23 @@ cuenta_banco:any = [];
     private FormBuilder: FormBuilder,
     private notificacionService: NotificacionService,
     private BancoService: BancoService,
-    private ContactobancoService: ContactobancoService,private CuentabancoService: CuentabancoService
+    private ContactobancoService: ContactobancoService,private CuentabancoService: CuentabancoService,private LineacreditobancoService: LineacreditobancoService
   ) {}
 
   get form() {
     return this.formGroup.controls;
+  }
+
+  getDataFromFormname(array, formName){
+    let element =  array.find( e => e.id == this.form[formName].value)
+    return element;
+  }
+  setDataFromFormname(array, formName, data:any){
+    let temp_value = this.form[formName].value;
+    let el = array[array.indexOf(array.find( e => e.id == this.form[formName].value))];
+    Object.keys(data.content).forEach( k => {
+        el[k] = data.content[k];
+    });
   }
 
   alCambiar(control){
@@ -49,9 +64,10 @@ cuenta_banco:any = [];
   ngOnInit(): void {    
     this.ContactobancoService.getAll(100, 1, 'banco_id', false, '').subscribe((res:any) => { this.contacto_banco = res.content; });
 this.CuentabancoService.getAll(100, 1, 'banco_id', false, '').subscribe((res:any) => { this.cuenta_banco = res.content; });
-    this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[Validators.required,Validators.minLength(2),Validators.maxLength(255)] ],descripcion:["",[Validators.minLength(0),Validators.maxLength(255)] ],direccion:["",[Validators.minLength(0),Validators.maxLength(255)] ],url:["",[Validators.minLength(0),Validators.maxLength(255)] ],contacto:["",[] ],cuentas:["",[] ]});
+this.LineacreditobancoService.getAll(100, 1, 'banco_id', false, '').subscribe((res:any) => { this.lineacredito_banco = res.content; });
+    this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[Validators.required,Validators.minLength(2),Validators.maxLength(255)] ],descripcion:["",[] ],direccion:["",[] ],url:["",[] ],contacto:["",[] ],cuentas:["",[] ],lineasdecredito:["",[] ]});
     if (this.dataEdit != null) {
-      this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,descripcion:this.dataEdit.descripcion,direccion:this.dataEdit.direccion,url:this.dataEdit.url,contacto:this.dataEdit.contacto,cuentas:this.dataEdit.cuentas});
+      this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,descripcion:this.dataEdit.descripcion,direccion:this.dataEdit.direccion,url:this.dataEdit.url,contacto:this.dataEdit.contacto,cuentas:this.dataEdit.cuentas,lineasdecredito:this.dataEdit.lineasdecredito});
       this.rel_prefix = "/banco/"+this.dataEdit.id;
     }
     let id = this.route.snapshot.params['id'];
@@ -60,7 +76,7 @@ this.CuentabancoService.getAll(100, 1, 'banco_id', false, '').subscribe((res:any
       this.BancoService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
         this.dataEdit= result.content[0];
-          this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,descripcion:this.dataEdit.descripcion,direccion:this.dataEdit.direccion,url:this.dataEdit.url,contacto:this.dataEdit.contacto,cuentas:this.dataEdit.cuentas});
+          this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,descripcion:this.dataEdit.descripcion,direccion:this.dataEdit.direccion,url:this.dataEdit.url,contacto:this.dataEdit.contacto,cuentas:this.dataEdit.cuentas,lineasdecredito:this.dataEdit.lineasdecredito});
           this.rel_prefix = "/banco/"+id;
       });
     }

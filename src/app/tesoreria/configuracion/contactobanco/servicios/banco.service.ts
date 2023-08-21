@@ -29,7 +29,6 @@ export class BancoService {
     return this.http.get(this.apiUrl + this.prefix+ `/${this.apiName}/${id}`);
   }
 
-
   getAll(size: number = 100, page: number = 1, sortBy:string = 'id', descending:false, keyword:any = '') {
     return this.http.get(this.apiUrl + this.prefix+ `/${this.apiName}?size=${size}&page=${page-1}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`);
   }
@@ -39,12 +38,12 @@ export class BancoService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Contacto - Banco'] = 'habilitar';
+    datos['Contactos de Bancos'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Contacto - Banco'] = 'deshabilitar';
+    datos['Contactos de Bancos'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

@@ -20,8 +20,8 @@
                     </div>
                 </div>
 
-                <div class="mb-6 col-sm-8 ">
-                    <label for="nombre">(*)Moneda </label>
+                <div class="mb-6 col-sm-12 ">
+                    <label for="nombre">(*)Nombre </label>
                     <input type="text"  class="form-control uppercase" id="nombre" (click)="alCambiar(form)" required formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }">
                     <div *ngIf="submitted && form['nombre'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['nombre'].errors['required']">Es requerido</div>
@@ -32,7 +32,7 @@
                     </div>
                 </div>
 
-                <div class="mb-6 col-sm-4 ">
+                <div class="mb-6 col-sm-12 ">
                     <label for="nombre">(*)Sigla </label>
                     <input type="text"  class="form-control uppercase" id="sigla" (click)="alCambiar(form)" required formControlName="sigla" [ngClass]="{ 'is-invalid': submitted && form['sigla'].errors }">
                     <div *ngIf="submitted && form['sigla'].errors" class="invalid-feedback" align="left">
