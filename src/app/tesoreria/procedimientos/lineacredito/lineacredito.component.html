@@ -1,0 +1,84 @@
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title mb-4"> Registro de línea de crédito </h4>
+      <aw-wizard [navBarLocation]="'left'" [navBarLayout]="'large-empty-symbols'">
+        <aw-wizard-step stepTitle="Selección de Banco" [canEnter]="procedimientos[0].validado">
+          <ng-template awWizardStepSymbol let-wizardStep="wizardStep">
+            <i *ngIf="!wizardStep.completed" class="far fa-file"></i>
+            <i *ngIf="wizardStep.completed" class="mdi mdi-check"></i>
+          </ng-template>
+
+          <div class="col-lg-12">
+            <div class="text-center">
+              <div>
+                <h5>Seleccione un banco </h5>
+                <app-seleccion-bancos (completado)="validarSiguiente($event)" [datosentrada]="procedimientos[0].datos_entrada" [(datossalida)]="procedimientos[0].datos_salida"></app-seleccion-bancos>
+              </div>
+            </div>
+          </div>
+          <!-- <ul class="list-inline wizard mb-0">
+            <li class="next list-inline-item float-end"><button class="btn btn-primary"  awNextStep>Siguiente</button>
+            </li>
+          </ul>-->
+        </aw-wizard-step>
+
+        <aw-wizard-step stepTitle="Registro de datos de crédito" [canEnter]="procedimientos[0].validado">
+          <ng-template awWizardStepSymbol>2</ng-template>
+          <app-formulario-lineacredito></app-formulario-lineacredito>
+          <ul class="list-inline wizard mb-0">
+            <li class="previous list-inline-item"><button class="btn btn-primary" awPreviousStep>Anterior</button>
+            </li>
+            <li class="next list-inline-item float-end"><button class="btn btn-primary" awNextStep>Siguiente</button>
+            </li>
+          </ul>
+        </aw-wizard-step>
+
+        <aw-wizard-step stepTitle="Adjuntar Garantías">
+          <ng-template awWizardStepSymbol>3</ng-template>
+          <ul class="list-inline wizard mb-0">
+            <li class="previous list-inline-item"><button class="btn btn-primary" awPreviousStep>Anterior</button>
+            </li>
+            <li class="next list-inline-item float-end"><button class="btn btn-primary" awNextStep>Siguiente</button>
+            </li>
+          </ul>
+        </aw-wizard-step>
+
+        <aw-wizard-step stepTitle="Registro de línea de crédito">
+          <ng-template awWizardStepSymbol>4</ng-template>
+          <ul class="list-inline wizard mb-0">
+            <li class="previous list-inline-item"><button class="btn btn-primary" awPreviousStep>Anterior</button>
+            </li>
+            <li class="next list-inline-item float-end"><button class="btn btn-primary" awNextStep>Siguiente</button>
+            </li>
+          </ul>
+        </aw-wizard-step>
+
+        <aw-wizard-step stepTitle="Fin de proceso">
+          <ng-template awWizardStepSymbol>8</ng-template>
+          <div class="row justify-content-center">
+            <div class="col-lg-6">
+              <div class="text-center">
+                <div class="mb-4">
+                  <i class="mdi mdi-check-circle-outline text-success display-4"></i>
+                </div>
+                <div>
+                  <h5>Confirm Detail</h5>
+                  <p class="text-muted">If several languages coalesce, the grammar of the resulting</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ul class="list-inline wizard mb-0">
+            <li class="previous list-inline-item"><button class="btn btn-primary" awPreviousStep>Anterior</button>
+            </li>
+            <li class="next list-inline-item float-end"><button class="btn btn-primary" awNextStep>Siguiente</button>
+            </li>
+          </ul>
+        </aw-wizard-step>
+
+      </aw-wizard>
+    </div>
+  </div>
+
+</div>

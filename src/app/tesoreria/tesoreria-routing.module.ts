@@ -11,6 +11,7 @@ const routes: Routes = [
     { path: '', component: PaneldecontrolComponent },
 
     { path: 'configuracion', loadChildren: () => import('./configuracion/configuracion.module').then(m => m.ConfiguracionModule )},
+    { path: 'procedimientos', loadChildren: () => import('./procedimientos/procedimientos.module').then(m => m.ProcedimientosModule )},
     //{ path: 'clientes', loadChildren: () => import('./parametricas/clientes/clientes.module').then(m => m.ClientesModule)},
 ];
 

@@ -18,7 +18,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
   declarations: [
     DefaultComponent,
     CargandoDirective,
-    PaneldecontrolComponent,
+    PaneldecontrolComponent
   ],
   imports: [
     CommonModule,

@@ -10,6 +10,8 @@
             <input type="search" class="form-control form-control-sm" id="inputBuscar" [(ngModel)]="inputBuscar" (keydown)="buscarKeyDown($event)" placeholder="{{ textoBuscar }}" />
             <div class="float-end ">
               <div class="btn-group dropup" dropdown [autoClose]="config_autoclose" placement="top">
+                <button type="button" class="btn btn-sm btn-success" *ngIf="botonImportar" (click)="alImportar.emit({event:$event,search:inputBuscar,columnas:cabeceras})" > <i class="bx bx-upload"></i> Importar</button>
+                <button type="button" class="btn btn-sm btn-secondary" *ngIf="botonExportar" (click)="alExportar.emit({event:$event,search:inputBuscar,columnas:cabeceras});exportar(modalExportar)" > <i class="bx bx-download"></i> Exportar</button>
                 <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" dropdownToggle> Columnas </button>
                 <div class="dropdown-menu dropdown-menu-end" *dropdownMenu>
                   <ng-template ngFor let-campo [ngForOf]="this.cabeceras">
@@ -20,7 +22,7 @@
                   </ng-template>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" role="button" (click)="mostrarTodas()">Mostrar Todas</a>
-                  <a class="dropdown-item" role="button" (click)="ampliar()">Ampliar</a>
+                  <!-- <a class="dropdown-item" role="button" (click)="ampliar()">Ampliar</a> -->
                 </div>
               </div>
             </div>
@@ -37,8 +39,8 @@
                     <ng-template *ngIf="formato.cabeceras[campo].visibleCheck; then tempTH"></ng-template>
                     <ng-template #tempTH>
                       <th>
-                        <button *ngIf="formato.cabeceras[campo].sortable === undefined ? true : formato.cabeceras[campo].sortable " (click)="ordenar($event)" class="colCabecera" id="{{ campo }}"> {{ formato.cabeceras[campo].texto }} </button>
-                        <button *ngIf="formato.cabeceras[campo].sortable === undefined? false: !formato.cabeceras[campo].sortable" class="colCabecera noCursor" style="cursor: default" id="{{ campo }}"> {{ formato.cabeceras[campo].texto }} </button>
+                        <span *ngIf="formato.cabeceras[campo].sortable === undefined ? true : formato.cabeceras[campo].sortable " (click)="ordenar($event)" class="colCabecera" id="{{ campo }}"> {{ formato.cabeceras[campo].texto }} </span>
+                        <span *ngIf="formato.cabeceras[campo].sortable === undefined? false: !formato.cabeceras[campo].sortable" class="colCabecera noCursor" style="cursor: default" id="{{ campo }}"> {{ formato.cabeceras[campo].texto }} </span>
                       </th>
                     </ng-template>
                   </ng-template>
@@ -72,7 +74,7 @@
                     <ng-template *ngIf="conOpciones; then tempOptionsTD"></ng-template>
                     <ng-template #tempOptionsTD>
                       <td>
-                        <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-toolbar d-flex justify-content-center" role="toolbar">
                           <div class="btn-group me-2" role="group">
                             <button type="button" class="btn btn-sm btn-primary" (click)="alEditar.emit(data)"> <i class="fas fa-edit"></i> </button>
                             <ng-template [ngIf]="softDelete" [ngIfElse]="templateHard">
@@ -125,3 +127,12 @@
     </div>
   </div>
 </div>
+
+<ng-template #modalExportar role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel"> Exportar </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()" ></button>
+  </div>
+  <krn-exportar [titulo]="titulo" [datosService]="datosService" [formato]=formato [encabezados]="encabezados" [cabeceras]=cabeceras [keyword]="inputBuscar" ></krn-exportar>
+</ng-template>
+

@@ -1,0 +1,85 @@
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-lg-12">
+      <form (ngSubmit)="guardar()" [formGroup]="formGroup">
+        <div class="card">
+          <div class="card-body row">
+
+            
+
+                <div class="mb-6 col-sm-12 d-none">
+                    <label for="nombre">id </label>
+                    <input type="number"  class="form-control uppercase" id="id" (click)="alCambiar(form)"  formControlName="id" [ngClass]="{ 'is-invalid': submitted && form['id'].errors }">
+                    <div *ngIf="submitted && form['id'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['id'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['id'].errors['minlength']">Debe tener al menos {{form['id'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['id'].errors['maxlength']">Debe tener menos de {{form['id'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['id'].errors['min']">Debe tener mayor o igual que {{form['id'].errors['min']['min']}} </div>
+                    <div *ngIf="form['id'].errors['max']">Debe tener menor o igual que {{form['id'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-12 ">
+                    <app-selector-add #fondoSelector  label="fondo_id" [templateEditar]="fondoTemplateEditar" [templateNuevo]="fondoTemplateNuevo" name="fondo_id" [submitted]="submitted" [dataArray]="fondo" formControlName="fondo_id"  ></app-selector-add>
+                    <ng-template #fondoTemplateNuevo>
+                        <app-formulario-fondo [esModal]="true" (alGuardar)="fondo.push($event['content']);form['fondo_id'].setValue($event['content']['id']);fondoSelector.close()" ></app-formulario-fondo>
+                    </ng-template>
+                    <ng-template #fondoTemplateEditar>
+                        <app-formulario-fondo [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(fondo, 'fondo_id')" (alActualizar)="fondoSelector.close();setDataFromFormname(fondo, 'fondo_id',$event)" ></app-formulario-fondo>
+                    </ng-template>
+                </div>
+
+                <div class="mb-6 col-sm-12 ">
+                    <label for="nombre">Nombre de Caja </label>
+                    <input type="text"  class="form-control uppercase" id="nombre" (click)="alCambiar(form)"  formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }">
+                    <div *ngIf="submitted && form['nombre'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['nombre'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['nombre'].errors['minlength']">Debe tener al menos {{form['nombre'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['nombre'].errors['maxlength']">Debe tener menos de {{form['nombre'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['nombre'].errors['min']">Debe tener mayor o igual que {{form['nombre'].errors['min']['min']}} </div>
+                    <div *ngIf="form['nombre'].errors['max']">Debe tener menor o igual que {{form['nombre'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-12 d-none">
+                    <label for="formrow-firstname-input ">Horarios</label>
+                    <select class="form-control form-select" id="caja_horarios"  formControlName="caja_horarios" name="caja_horarios" [ngClass]="{ 'is-invalid': submitted && form['caja_horarios'].errors }">
+                    <option *ngFor="let t of caja_horarios" value="{{t.id}}"  >{{t.caja_id}} </option>
+                    </select>
+                    <div *ngIf="submitted && form['caja_horarios'].errors" class="invalid-feedback" align="left" >
+                    <div *ngIf="form['caja_horarios'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['caja_horarios'].errors['minlength']">Debe tener al menos {{form['caja_horarios'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['caja_horarios'].errors['maxlength']">Debe tener menos de {{form['caja_horarios'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['caja_horarios'].errors['min']">Debe tener mayor o igual que {{form['caja_horarios'].errors['min']['min']}} </div>
+                    <div *ngIf="form['caja_horarios'].errors['max']">Debe tener menor o igual que {{form['caja_horarios'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+            
+                <div class="mb-6 col-sm-12" *ngIf="dataEdit">
+                    <hr>
+                    <ul class="nav nav-tabs nav-tabs-dark" role="tablist">                        
+                        
+                    <li class="nav-item" >
+                        <a class="nav-link atabx active" data-bs-toggle="tab" data-bs-target="#tab-cajahorarios" role="button" aria-current="page" href="#">Horarios</a>
+                    </li>
+                    </ul>
+                    <div class="tab-content">
+                        
+                    <div class="tab-pane border active" id="tab-cajahorarios" >
+                        <app-listado-cajahorarios *ngIf="rel_prefix" [rel_prefix]="rel_prefix" [rel_field]="'caja_id'" > </app-listado-cajahorarios>
+                    </div>
+                    </div>
+                </div> 
+            <hr>
+            <div class="col-lg-6">
+              <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>
+              <button *ngIf="dataEdit" type="submit" class="btn btn-primary w-md">Guardar</button>
+              <span *ngIf="!esModal" (click)="volver()"  class="btn btn-secondary w-md">Volver</span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

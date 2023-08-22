@@ -46,7 +46,7 @@ export class FormularioComponent implements OnInit {
 
   ngOnInit(): void {    
     
-    this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[Validators.required,Validators.minLength(2)] ]});
+    this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[] ]});
     if (this.dataEdit != null) {
       this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre});
       this.rel_prefix = "/dias/"+this.dataEdit.id;

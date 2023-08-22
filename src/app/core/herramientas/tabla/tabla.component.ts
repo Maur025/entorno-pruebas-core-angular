@@ -6,6 +6,7 @@ import { Component, Input, OnInit, Output, TemplateRef, EventEmitter, enableProd
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 import { ApiServicio } from 'src/app/core/services/apiservicio';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'tabla-normal',
@@ -14,20 +15,26 @@ import { ApiServicio } from 'src/app/core/services/apiservicio';
 })
 
 export class TablaComponent implements OnInit {
+  modalRef?: BsModalRef;
+
   @Input() datosService : any;
   @Input() titulo: string ='';
   @Input() encabezados: any;
   @Input() formato: any;
   @Input() botonNuevo = true;
+  @Input() botonImportar = false;
+  @Input() botonExportar = false;
   @Input() campoEstado:any = 'estado';
   @Input() valueEstado:any = 'habilitado';
-  @Input() textoBuscar: string = 'Ingrese criterio de busqueda';
+  @Input() textoBuscar: string = 'Ingrese criterio de búsqueda';
   @Output() alCrear: EventEmitter<any> = new EventEmitter();
   @Output() alFiltrar: EventEmitter<any> = new EventEmitter();
   @Output() alEditar: EventEmitter<any> = new EventEmitter();
   @Output() alDeshabilitar: EventEmitter<any> = new EventEmitter();
   @Output() alHabilitar: EventEmitter<any> = new EventEmitter();
   @Output() alEliminar: EventEmitter<any> = new EventEmitter();
+  @Output() alImportar: EventEmitter<any> = new EventEmitter();
+  @Output() alExportar: EventEmitter<any> = new EventEmitter();
 
   @Input() getAll: any;
 
@@ -64,7 +71,7 @@ export class TablaComponent implements OnInit {
   mostrarTodas() {
     this.cabeceras.forEach(key => {
       let campo = this.formato.cabeceras[key];
-      if (campo.buscable && campo.buscableCheck) {
+      if (campo.buscable && campo.buscableCheck && campo.visible) {
         campo.visibleCheck = true;
       }
     });
@@ -73,7 +80,8 @@ export class TablaComponent implements OnInit {
     this.smallTable = !this.smallTable;
   }
 
-  constructor(public notificacionService: NotificacionService){}
+  constructor(public notificacionService: NotificacionService,
+    private modalService: BsModalService){}
 
   ngOnInit(): void{
     this.cabeceras = this.objectKeys(this.formato.cabeceras);
@@ -163,6 +171,14 @@ export class TablaComponent implements OnInit {
         data[campo.mascara.campo].forEach(element => arrValues.push(element[campo.mascara.valor]));
         return arrValues.join(" ");
       }else
-        return data[campo.mascara.campo][campo.mascara.valor];
+        if (data[campo.mascara.campo]!=null)
+          return data[campo.mascara.campo][campo.mascara.valor];
+        else
+          return "";
+  }
+  exportar(template) {
+    this.modalRef = this.modalService.show(template, {
+      class: `modal-xl modal-fullscreen-xl-down modal-dialog-centered`,
+    });
   }
 }

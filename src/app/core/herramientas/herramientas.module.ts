@@ -31,16 +31,20 @@ import { FormularioComponent } from './tabla/formulario/formulario.component';
 import { TablaBasicaComponent } from './tabla-basica/tabla-basica.component';
 import { TablaselectorComponent } from './tablaselector/tablaselector.component';
 
+import { ExportarComponent } from './exportar/exportar.component';
+import { SelectorAddComponent } from './selector-add/selector-add.component';
+
 @NgModule({
   declarations: [
     TablaComponent,
-
+    ExportarComponent,
     TablaselectorComponent,
     SubtablaComponent,
     CargandotoolsDirective,
     FormularioComponent,
     SubFormularioComponent,
-    TablaBasicaComponent
+    TablaBasicaComponent,
+    SelectorAddComponent
 
   ],
   imports: [
@@ -70,8 +74,10 @@ import { TablaselectorComponent } from './tablaselector/tablaselector.component'
   exports: [
     CommonModule,
     TablaComponent,
+    ExportarComponent,
     TablaBasicaComponent,
     TablaselectorComponent,
+    SelectorAddComponent,
   ]
 })
 export class HerramientasModule { }

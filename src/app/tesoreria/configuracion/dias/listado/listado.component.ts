@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { ActivatedRoute, Router } from "@angular/router";
 import { DiasService } from "../servicios/dias.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 
@@ -21,18 +22,20 @@ export class ListadoComponent implements OnInit {
   dataEdit = null;
   titulo: any = "Listado de Dias";
 
-  
+
 
   constructor(
     public DiasService: DiasService,
     private modalService: BsModalService,
-    private NotificacionService: NotificacionService
+    private NotificacionService: NotificacionService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     if (this.rel_prefix) this.DiasService.setPrefix(this.rel_prefix);
     this.formato = {
-      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"nombre":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Día","colsize":"12","filtrotipo":"text"}}
+      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"nombre":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"nombre","colsize":"12","filtrotipo":"text"}}
     };
 
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
@@ -46,10 +49,11 @@ export class ListadoComponent implements OnInit {
   }
 
   editar(data: any, template) {
-    this.dataEdit = data;
+    this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
+/*this.dataEdit = data;
     this.modalRef = this.modalService.show(template, {
       class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
-    });
+    });*/
   }
 
   habilitar(data: any, component) {

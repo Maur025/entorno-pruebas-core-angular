@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { HorariosService } from "../servicios/horarios.service";
-import { HorariodiaService } from '../servicios/horariodia.service';
+import { HorariosdiaService } from '../servicios/horariosdia.service';
 @Component({
   selector: "app-formulario-horarios",
   templateUrl: "./formulario.component.html",
@@ -17,11 +17,12 @@ export class FormularioComponent implements OnInit {
   @Output() alActualizar = new EventEmitter<any>();
 
   @Input() esModal:boolean = false;
+  @Input() show_rel:boolean = true;
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
 
-  horariodia:any = [];
+  horarios_dia:any = [];
   estados: any = [
     { value: "habilitado", name: "Habilitado" },
     { value: "deshabilitado", name: "Deshabilitado" },
@@ -33,11 +34,23 @@ export class FormularioComponent implements OnInit {
     private FormBuilder: FormBuilder,
     private notificacionService: NotificacionService,
     private HorariosService: HorariosService,
-    private HorariodiaService: HorariodiaService
+    private HorariosdiaService: HorariosdiaService
   ) {}
 
   get form() {
     return this.formGroup.controls;
+  }
+
+  getDataFromFormname(array, formName){
+    let element =  array.find( e => e.id == this.form[formName].value)
+    return element;
+  }
+  setDataFromFormname(array, formName, data:any){
+    let temp_value = this.form[formName].value;
+    let el = array[array.indexOf(array.find( e => e.id == this.form[formName].value))];
+    Object.keys(data.content).forEach( k => {
+        el[k] = data.content[k];
+    });
   }
 
   alCambiar(control){
@@ -45,10 +58,10 @@ export class FormularioComponent implements OnInit {
   }
 
   ngOnInit(): void {    
-    this.HorariodiaService.getAll(100, 1, 'horario_id', false, '').subscribe((res:any) => { this.horariodia = res.content; });
-    this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[Validators.required,Validators.minLength(2),Validators.maxLength(100)] ],horario:["",[] ]});
+    this.HorariosdiaService.getAll(100, 1, 'horario_id', false, '').subscribe((res:any) => { this.horarios_dia = res.content; });
+    this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[] ],horarios_dia:["",[] ]});
     if (this.dataEdit != null) {
-      this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,horario:this.dataEdit.horario});
+      this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,horarios_dia:this.dataEdit.horarios_dia});
       this.rel_prefix = "/horarios/"+this.dataEdit.id;
     }
     let id = this.route.snapshot.params['id'];
@@ -57,7 +70,7 @@ export class FormularioComponent implements OnInit {
       this.HorariosService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
         this.dataEdit= result.content[0];
-          this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,horario:this.dataEdit.horario});
+          this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,horarios_dia:this.dataEdit.horarios_dia});
           this.rel_prefix = "/horarios/"+id;
       });
     }
