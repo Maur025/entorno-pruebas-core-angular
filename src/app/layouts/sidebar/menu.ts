@@ -2,39 +2,57 @@ import { MenuItem } from "./menu.model";
 
 export const MENU: MenuItem[] = [
 {
+    id: 31,
+    label: 'Tipos de Datos',
+    link : 'parametros/tipodato',
+    icon: 'fas fa-hashtag',
+},
+{
+    id: 2,
+    label: 'actividadeconomica',
+    link : 'actividadeconomica',
+    icon: 'bx-home-circle',
+},
+
+{
+    id: 2,
+    label: 'tipodedato',
+    link : 'tipodedato',
+    icon: 'bx-home-circle',
+},
+
+
+{
+    id: 2,
+    label: 'Bancos',
+    link : 'banco',
+    icon: 'bx-home-circle',
+},
+{
     id: 2,
     label: 'Líneas de créditos',
     link : 'configuracion/lineacredito',
     icon: 'bx-home-circle',
 },
-
-
-  {
-      id: 2,
-      label: 'Bancos',
-      link : 'configuracion/banco',
-      icon: 'bx-home-circle',
-  },
-
-  {
-    id: 2,
-    label: "Créditos",
-    link: "configuracion/credito",
-    icon: "bx-home-circle",
-  },
-  {
-    id: 3,
-    label: "Procedimientos",
-    link: "procedimientos",
-    subItems: [
-      {
-        id: 31,
-        label: "Registro de línea de crédito",
-        link: "procedimientos/lineacredito",
-        icon: "bx-home-circle",
-      },
-    ],
-  },
+{
+  id: 2,
+  label: "Créditos",
+  link: "configuracion/credito",
+  icon: "bx-home-circle",
+},
+{
+  id: 3,
+  label: "Procedimientos",
+  link: "procedimientos",
+  subItems: [
+    {
+      id: 31,
+      label: "Registro de línea de crédito",
+      link: "procedimientos/lineacredito",
+      icon: "bx-home-circle",
+    },
+  ],
+},
   {
     id: 2,
     label: "Procesos Bancarios",
@@ -97,49 +115,12 @@ export const MENU: MenuItem[] = [
     ],
   },
 
-  /* {
-    id: 2,
-    label: 'Tipo Entidad- Entidad',
-    link : 'configuracion/entidadestipoentidad',
-    icon: 'bx-home-circle',
-}, */
-
   {
     id: 2,
     label: "Fondos",
     link: "configuracion/fondo",
     icon: "bx-home-circle",
   },
-
-  /* {
-    id: 2,
-    label: 'Fondo - Forma de Cobro',
-    link : 'configuracion/fondoformacobro',
-    icon: 'bx-home-circle',
-},
- */
-
-  /* {
-    id: 2,
-    label: 'Tipo Entidad - Entidades',
-    link : 'configuracion/tipoentidad',
-    icon: 'bx-home-circle',
-}, */
-
-  /* {
-    id: 2,
-    label: 'Entidad - Contactos',
-    link : 'configuracion/entidadcontactos',
-    icon: 'bx-home-circle',
-}, */
-
-  {
-    id: 2,
-    label: "Entidades",
-    link: "configuracion/entidades",
-    icon: "bx-home-circle",
-  },
-
   {
     id: 2,
     label: "Caja Chica",
@@ -153,55 +134,16 @@ export const MENU: MenuItem[] = [
     icon: "bx-home-circle",
     subItems: [
       {
+          id: 2,
+          label: 'Contactos',
+          link : 'entidadcontactos',
+          icon: 'bx-home-circle',
+      },
+      {
         id: 2,
-        label: 'Bancos',
-        link : 'configuracion/banco',
+        label: 'Tipos de pago',
+        link : 'tipopago',
         icon: 'bx-home-circle',
-      },
-      {
-        id: 2,
-        label: "Contactos",
-        link: "configuracion/contacto",
-        icon: "bx-home-circle",
-      },
-      {
-        id: 2,
-        label: "Usuarios",
-        link: "configuracion/usuarios",
-        icon: "bx-home-circle",
-      },
-      {
-        id: 2,
-        label: "Centro de Costos",
-        link: "configuracion/centrodecostos",
-        icon: "bx-home-circle",
-      },
-
-      {
-        id: 2,
-        label: "Horarios ",
-        link: "configuracion/horarios",
-        icon: "bx-home-circle",
-      },
-
-      {
-        id: 2,
-        label: "Fondos",
-        link: "configuracion/fondo",
-        icon: "bx-home-circle",
-      },
-      {
-        id: 2,
-        label: "Deudores",
-        link: "configuracion/deudor",
-        icon: "bx-home-circle",
-      },
-
-      {
-        id: 2,
-        label: "Acreedores",
-        link: "configuracion/acreedor",
-        icon: "bx-home-circle",
       },
     ],
   },
@@ -211,11 +153,25 @@ export const MENU: MenuItem[] = [
     icon: "bx-home-circle",
     subItems: [
       {
+          id: 2,
+          label: 'Medios de Transferencia',
+          link : 'mediotransferencia',
+          icon: 'bx-home-circle',
+      },
+      {
         id: 2,
         label: "Tipo de Interés",
         link: "configuracion/tipointeres",
         icon: "bx-home-circle",
       },
+
+      {
+          id: 2,
+          label: 'Entidades',
+          link : 'entidades',
+          icon: 'bx-home-circle',
+      },
+
       {
         id: 2,
         label: "Forma de Pago",
@@ -225,7 +181,7 @@ export const MENU: MenuItem[] = [
       {
         id: 2,
         label: "Monedas",
-        link: "configuracion/moneda",
+        link: "moneda",
         icon: "bx-home-circle",
       },
       {
@@ -236,14 +192,14 @@ export const MENU: MenuItem[] = [
       },
       {
         id: 2,
-        label: "Tipos de Identificación",
-        link: "configuracion/tipoidentificacion",
-        icon: "bx-home-circle",
-      },
+        label: 'Tipo de Identificacion',
+        link : 'tipoidentificacion',
+        icon: 'bx-home-circle',
+    },
       {
         id: 2,
         label: "Grupo de contactos",
-        link: "configuracion/grupo",
+        link: "grupo",
         icon: "bx-home-circle",
       },
 
@@ -256,7 +212,7 @@ export const MENU: MenuItem[] = [
       {
         id: 2,
         label: "Tipos de Entidades",
-        link: "configuracion/tipoentidad",
+        link: "tipoentidad",
         icon: "bx-home-circle",
       },
       {

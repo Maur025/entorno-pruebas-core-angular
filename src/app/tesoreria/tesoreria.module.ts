@@ -8,7 +8,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { UIModule } from 'src/app/shared/ui/ui.module';
 import { TesoreriaRoutingModule } from './tesoreria-routing.module';
-import { CargandoDirective } from '../core/directives/cargando.directive';
 import { PaneldecontrolComponent } from './paneldecontrol/paneldecontrol.component';
 import { DefaultComponent } from './default/default.component';
 import { WidgetModule } from '../shared/widget/widget.module';
@@ -17,7 +16,6 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 @NgModule({
   declarations: [
     DefaultComponent,
-    CargandoDirective,
     PaneldecontrolComponent
   ],
   imports: [
