@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">Tipo de Dato </label>
+                    <label for="nombre">Nombre </label>
                     <input type="text"  class="form-control uppercase" id="nombre" (click)="alCambiar(form)"  formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }">
                     <div *ngIf="submitted && form['nombre'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['nombre'].errors['required']">Es requerido</div>
@@ -41,6 +41,28 @@
                     <div *ngIf="form['descripcion'].errors['maxlength']">Debe tener menos de {{form['descripcion'].errors['maxlength']['requiredLength']}} caracteres</div>
                     <div *ngIf="form['descripcion'].errors['min']">Debe tener mayor o igual que {{form['descripcion'].errors['min']['min']}} </div>
                     <div *ngIf="form['descripcion'].errors['max']">Debe tener menor o igual que {{form['descripcion'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-12 ">
+                    <app-selector-add #tipo_datoSelector  label="Tipo de Dato" [campoNombre]="'nombre'" [campoValor]="'id'" [templateEditar]="tipo_datoTemplateEditar" [templateNuevo]="tipo_datoTemplateNuevo" name="tipoDatoId" [submitted]="submitted" [dataArray]="tipo_dato" formControlName="tipoDatoId"  ></app-selector-add>
+                    <ng-template #tipo_datoTemplateNuevo>
+                        <app-formulario-tipodato [esModal]="true" (alGuardar)="tipo_dato.push($event['content']);form['tipoDatoId'].setValue($event['content']['id']);tipo_datoSelector.close()" ></app-formulario-tipodato>
+                    </ng-template>
+                    <ng-template #tipo_datoTemplateEditar>
+                        <app-formulario-tipodato [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(tipo_dato, 'tipoDatoId')" (alActualizar)="tipo_datoSelector.close();setDataFromFormname(tipo_dato, 'tipoDatoId',$event)" ></app-formulario-tipodato>
+                    </ng-template>
+                </div>
+
+                <div class="mb-6 col-sm-12 ">
+                    <label for="nombre">Varlores </label>
+                    <input type="text"  class="form-control uppercase" id="valores" (click)="alCambiar(form)"  formControlName="valores" [ngClass]="{ 'is-invalid': submitted && form['valores'].errors }">
+                    <div *ngIf="submitted && form['valores'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['valores'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['valores'].errors['minlength']">Debe tener al menos {{form['valores'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['valores'].errors['maxlength']">Debe tener menos de {{form['valores'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['valores'].errors['min']">Debe tener mayor o igual que {{form['valores'].errors['min']['min']}} </div>
+                    <div *ngIf="form['valores'].errors['max']">Debe tener menor o igual que {{form['valores'].errors['max']['max']}} </div>
                     </div>
                 </div>
             

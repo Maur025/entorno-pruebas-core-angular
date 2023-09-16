@@ -2,11 +2,19 @@ import { MenuItem } from "./menu.model";
 
 export const MENU: MenuItem[] = [
 {
+    id: 1,
+    label: 'Variables de Configuración',
+    link : 'parametros/variablesconfiguracion',
+    icon: 'fas fa-list-ul',
+},
+
+{
     id: 31,
     label: 'Tipos de Datos',
     link : 'parametros/tipodato',
-    icon: 'fas fa-hashtag',
+    icon: 'fas fa-dice-d6',
 },
+
 {
     id: 2,
     label: 'actividadeconomica',

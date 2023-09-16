@@ -38,12 +38,12 @@ export class TipodatoService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Tipos de datos'] = 'habilitar';
+    datos['Variables de Configuración'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Tipos de datos'] = 'deshabilitar';
+    datos['Variables de Configuración'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

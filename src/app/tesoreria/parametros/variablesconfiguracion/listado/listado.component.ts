@@ -1,14 +1,14 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { TipodatoService } from "../servicios/tipodato.service";
+import { VariablesconfiguracionService } from "../servicios/variablesconfiguracion.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { ActivatedRoute, Router } from "@angular/router";
-
+import { TipodatoService } from '../servicios/tipodato.service';
 
 type NewType = NotificacionService;
 
 @Component({
-  selector: "app-listado-tipodato",
+  selector: "app-listado-variablesconfiguracion",
   templateUrl: "./listado.component.html",
   styleUrls: ["./listado.component.scss"],
 })
@@ -21,12 +21,12 @@ export class ListadoComponent implements OnInit {
 
   formato: any;
   dataEdit = null;
-  titulo: any = "Tipos de datos";
+  titulo: any = "Variables de Configuración";
 
-  
+  tipo_dato:any = [];
 
   constructor(
-    public TipodatoService: TipodatoService,
+    public VariablesconfiguracionService: VariablesconfiguracionService,
     private modalService: BsModalService,
     private NotificacionService: NotificacionService,
     private route: ActivatedRoute,
@@ -34,9 +34,9 @@ export class ListadoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.rel_prefix) this.TipodatoService.setPrefix(this.rel_prefix);
+    if (this.rel_prefix) this.VariablesconfiguracionService.setPrefix(this.rel_prefix);
     this.formato = {
-      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"text"},"nombre":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Tipo de Dato","colsize":"12","filtrotipo":"text"},"descripcion":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Descripción","colsize":"12","filtrotipo":"text"}}
+      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"text"},"nombre":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Nombre","colsize":"12","filtrotipo":"text"},"descripcion":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Descripción","colsize":"12","filtrotipo":"text"},"tipoDatoId":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Tipo de Dato","colsize":"12","filtrotipo":"number","mascara":{"campo":"tipoDato","valor":"nombre"}},"valores":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Varlores","colsize":"12","filtrotipo":"text"}}
     };
 
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
@@ -65,7 +65,7 @@ export class ListadoComponent implements OnInit {
   }
 
   habilitar(data: any, component) {
-    this.TipodatoService.habilitar(data, data.id).subscribe(
+    this.VariablesconfiguracionService.habilitar(data, data.id).subscribe(
       (data) => {
         component.obtenerDatos();
         this.NotificacionService.successStandar(
@@ -79,7 +79,7 @@ export class ListadoComponent implements OnInit {
   }
 
   deshabilitar(data: any, component) {
-    this.TipodatoService.deshabilitar(data, data.id).subscribe(
+    this.VariablesconfiguracionService.deshabilitar(data, data.id).subscribe(
       (data) => {
         component.obtenerDatos();
         this.NotificacionService.successStandar(
@@ -95,7 +95,7 @@ export class ListadoComponent implements OnInit {
   eliminar(data: any, component) {
     this.NotificacionService.alertaEliminacion(data.nombre, (response: any) => {
       if (response) {
-        this.TipodatoService.delete(data.id).subscribe(
+        this.VariablesconfiguracionService.delete(data.id).subscribe(
           (data) => {
             component.obtenerDatos();
             this.NotificacionService.successStandar(
