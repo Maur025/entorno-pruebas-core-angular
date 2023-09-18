@@ -59,7 +59,7 @@ dias:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.HorariosService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.horarios = res.content; });
 this.DiasService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.dias = res.content; });
     this.formGroup = this.FormBuilder.group({id:["",[] ],horario_id:["",[] ],dia_id:["",[] ],apertura:["",[] ],cierre:["",[] ]});
@@ -78,11 +78,19 @@ this.DiasService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { th
       });
     }
   }
+  arrayToSingle(posibleArray){
+    if (Array.isArray(posibleArray))
+      if (posibleArray.length>0)
+        return posibleArray[0];
+      else
+        return {}
+    return posibleArray;
+  }
   volver(){
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
       let sendData = this.formGroup.value;

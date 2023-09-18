@@ -59,7 +59,7 @@ medio_transferencia:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.TipopagoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.tipo_pago = res.content; });
 this.MediotransferenciaService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.medio_transferencia = res.content; });
     this.formGroup = this.FormBuilder.group({id:["",[] ],tipo_pago_id:["",[] ],medio_transferencia_id:["",[] ]});
@@ -78,11 +78,19 @@ this.MediotransferenciaService.getAll(100, 1, 'nombre', false, '').subscribe((re
       });
     }
   }
+  arrayToSingle(posibleArray){
+    if (Array.isArray(posibleArray))
+      if (posibleArray.length>0)
+        return posibleArray[0];
+      else
+        return {}
+    return posibleArray;
+  }
   volver(){
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
       let sendData = this.formGroup.value;

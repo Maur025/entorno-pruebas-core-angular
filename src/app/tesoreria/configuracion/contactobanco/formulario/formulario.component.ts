@@ -59,7 +59,7 @@ contacto:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.BancoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.banco = res.content; });
 this.ContactoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.contacto = res.content; });
     this.formGroup = this.FormBuilder.group({id:["",[] ],banco_id:["",[] ],contacto_id:["",[Validators.required] ]});
@@ -78,11 +78,19 @@ this.ContactoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => 
       });
     }
   }
+  arrayToSingle(posibleArray){
+    if (Array.isArray(posibleArray))
+      if (posibleArray.length>0)
+        return posibleArray[0];
+      else
+        return {}
+    return posibleArray;
+  }
   volver(){
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
       let sendData = this.formGroup.value;

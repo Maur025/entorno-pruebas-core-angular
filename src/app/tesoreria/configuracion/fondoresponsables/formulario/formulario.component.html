@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-body row">
 
-            
+
 
                 <div class="mb-6 col-sm-12 d-none">
                     <label for="nombre">id </label>
@@ -23,7 +23,7 @@
                 <div class="mb-6 col-sm-12 ">
                     <app-selector-add #usuariosSelector  label="Responsable" [templateEditar]="usuariosTemplateEditar" [templateNuevo]="usuariosTemplateNuevo" name="responsable_id" [submitted]="submitted" [dataArray]="usuarios" formControlName="responsable_id"  ></app-selector-add>
                     <ng-template #usuariosTemplateNuevo>
-                        <app-formulario-usuarios [esModal]="true" (alGuardar)="usuarios.push($event['content']);form['responsable_id'].setValue($event['content']['id']);usuariosSelector.close()" ></app-formulario-usuarios>
+                        <app-formulario-usuarios [esModal]="true" (alGuardar)="usuarios.push(arrayToSingle($event['content']));form['responsable_id'].setValue(arrayToSingle($event['content'])['id']);usuariosSelector.close()" ></app-formulario-usuarios>
                     </ng-template>
                     <ng-template #usuariosTemplateEditar>
                         <app-formulario-usuarios [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(usuarios, 'responsable_id')" (alActualizar)="usuariosSelector.close();setDataFromFormname(usuarios, 'responsable_id',$event)" ></app-formulario-usuarios>
@@ -55,7 +55,7 @@
                     <div *ngIf="form['estado'].errors['max']">Debe tener menor o igual que {{form['estado'].errors['max']['max']}} </div>
                     </div>
                 </div>
-            
+
             <hr>
             <div class="col-lg-6">
               <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>

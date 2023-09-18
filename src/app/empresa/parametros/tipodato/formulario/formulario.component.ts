@@ -23,7 +23,7 @@ export class FormularioComponent implements OnInit {
   @Input() rel_field: any = '';
   @Input() rel_id: any = '';
 
-  
+
   estados: any = [
     { value: "habilitado", name: "Habilitado" },
     { value: "deshabilitado", name: "Deshabilitado" },
@@ -35,7 +35,7 @@ export class FormularioComponent implements OnInit {
     private FormBuilder: FormBuilder,
     private notificacionService: NotificacionService,
     private TipodatoService: TipodatoService,
-    
+
   ) {}
 
   get form() {
@@ -58,8 +58,8 @@ export class FormularioComponent implements OnInit {
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
-    
+  ngOnInit(): void {
+
     this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[] ],descripcion:["",[] ]});
     if (this.dataEdit != null) {
       this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,descripcion:this.dataEdit.descripcion});
@@ -70,7 +70,7 @@ export class FormularioComponent implements OnInit {
     if (id != null && !this.esModal && id!="nuevo" ) {
       this.TipodatoService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
-        
+
         if (Array.isArray(result.content))
           this.dataEdit= result.content[0];
         else
@@ -82,11 +82,19 @@ export class FormularioComponent implements OnInit {
       });
     }
   }
+  arrayToSingle(posibleArray){
+    if (Array.isArray(posibleArray))
+      if (posibleArray.length>0)
+        return posibleArray[0];
+      else
+        return {}
+    return posibleArray;
+  }
   volver(){
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
 

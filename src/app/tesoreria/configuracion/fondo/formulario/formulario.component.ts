@@ -63,7 +63,7 @@ fondo_forma_cobro:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.FondotipoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.fondo_tipo = res.content; });
 this.FondoresponsablesService.getAll(100, 1, 'fondo_id', false, '').subscribe((res:any) => { this.fondo_responsables = res.content; });
 this.FondocentrodecostosService.getAll(100, 1, 'fondo_id', false, '').subscribe((res:any) => { this.fondo_centrodecostos = res.content; });
@@ -84,11 +84,19 @@ this.FondoformacobroService.getAll(100, 1, 'fondo_id', false, '').subscribe((res
       });
     }
   }
+  arrayToSingle(posibleArray){
+    if (Array.isArray(posibleArray))
+      if (posibleArray.length>0)
+        return posibleArray[0];
+      else
+        return {}
+    return posibleArray;
+  }
   volver(){
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
       let sendData = this.formGroup.value;

@@ -21,7 +21,7 @@ export class FormularioComponent implements OnInit {
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
 
-  
+
   estados: any = [
     { value: "habilitado", name: "Habilitado" },
     { value: "deshabilitado", name: "Deshabilitado" },
@@ -33,7 +33,7 @@ export class FormularioComponent implements OnInit {
     private FormBuilder: FormBuilder,
     private notificacionService: NotificacionService,
     private TipoidentificacionService: TipoidentificacionService,
-    
+
   ) {}
 
   get form() {
@@ -44,8 +44,8 @@ export class FormularioComponent implements OnInit {
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
-    
+  ngOnInit(): void {
+
     this.formGroup = this.FormBuilder.group({id:["",[] ],sigla:["",[Validators.required,Validators.minLength(2),Validators.maxLength(15)] ],nombre:["",[Validators.required,Validators.minLength(2),Validators.maxLength(100)] ]});
     if (this.dataEdit != null) {
       this.formGroup.setValue({id:this.dataEdit.id,sigla:this.dataEdit.sigla,nombre:this.dataEdit.nombre});
@@ -62,11 +62,19 @@ export class FormularioComponent implements OnInit {
       });
     }
   }
+  arrayToSingle(posibleArray){
+    if (Array.isArray(posibleArray))
+      if (posibleArray.length>0)
+        return posibleArray[0];
+      else
+        return {}
+    return posibleArray;
+  }
   volver(){
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
       let sendData = this.formGroup.value;

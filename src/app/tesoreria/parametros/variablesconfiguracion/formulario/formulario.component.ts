@@ -58,7 +58,7 @@ export class FormularioComponent implements OnInit {
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.TipodatoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.tipo_dato = res.content; });
     this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[] ],descripcion:["",[] ],tipoDatoId:["",[] ],valores:["",[] ]});
     if (this.dataEdit != null) {
@@ -70,7 +70,7 @@ export class FormularioComponent implements OnInit {
     if (id != null && !this.esModal && id!="nuevo" ) {
       this.VariablesconfiguracionService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
-        
+
         if (Array.isArray(result.content))
           this.dataEdit= result.content[0];
         else
@@ -82,11 +82,19 @@ export class FormularioComponent implements OnInit {
       });
     }
   }
+  arrayToSingle(posibleArray){
+    if (Array.isArray(posibleArray))
+      if (posibleArray.length>0)
+        return posibleArray[0];
+      else
+        return {}
+    return posibleArray;
+  }
   volver(){
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
 

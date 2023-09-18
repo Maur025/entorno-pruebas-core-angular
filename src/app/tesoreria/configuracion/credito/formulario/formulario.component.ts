@@ -60,7 +60,7 @@ credito_pagos:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.CuotastiempoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.cuotas_tiempo = res.content; });
 this.TiempointeresService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.tiempo_interes = res.content; });
 this.TipointeresService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.tipo_interes = res.content; });
@@ -86,11 +86,19 @@ this.CreditopagosService.getAll(100, 1, 'credito_id', false, '').subscribe((res:
       });
     }
   }
+  arrayToSingle(posibleArray){
+    if (Array.isArray(posibleArray))
+      if (posibleArray.length>0)
+        return posibleArray[0];
+      else
+        return {}
+    return posibleArray;
+  }
   volver(){
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
       let sendData = this.formGroup.value;

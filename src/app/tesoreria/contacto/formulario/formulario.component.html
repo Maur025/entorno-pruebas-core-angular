@@ -95,7 +95,7 @@
                 <div class="mb-6 col-sm-6 ">
                     <app-selector-add #tipo_identificacionSelector  label="Tipo de identificación" [campoNombre]="'nombre'" [campoValor]="'id'" [templateEditar]="tipo_identificacionTemplateEditar" [templateNuevo]="tipo_identificacionTemplateNuevo" name="tipo_identificacion_id" [submitted]="submitted" [dataArray]="tipo_identificacion" formControlName="tipo_identificacion_id"  ></app-selector-add>
                     <ng-template #tipo_identificacionTemplateNuevo>
-                        <app-formulario-tipoidentificacion [esModal]="true" (alGuardar)="tipo_identificacion.push($event['content']);form['tipo_identificacion_id'].setValue($event['content']['id']);tipo_identificacionSelector.close()" ></app-formulario-tipoidentificacion>
+                        <app-formulario-tipoidentificacion [esModal]="true" (alGuardar)="tipo_identificacion.push(arrayToSingle($event['content']));form['tipo_identificacion_id'].setValue(arrayToSingle($event['content'])['id']);tipo_identificacionSelector.close()" ></app-formulario-tipoidentificacion>
                     </ng-template>
                     <ng-template #tipo_identificacionTemplateEditar>
                         <app-formulario-tipoidentificacion [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(tipo_identificacion, 'tipo_identificacion_id')" (alActualizar)="tipo_identificacionSelector.close();setDataFromFormname(tipo_identificacion, 'tipo_identificacion_id',$event)" ></app-formulario-tipoidentificacion>

@@ -46,7 +46,7 @@ estado_credito:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.CreditoService.getAll(100, 1, 'id', false, '').subscribe((res:any) => { this.credito = res.content; });
 this.EstadocreditoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.estado_credito = res.content; });
     this.formGroup = this.FormBuilder.group({id:["",[] ],fecha:["",[] ],credito_id:["",[] ],estado_credito_id:["",[] ]});
@@ -65,11 +65,19 @@ this.EstadocreditoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any
       });
     }
   }
+  arrayToSingle(posibleArray){
+    if (Array.isArray(posibleArray))
+      if (posibleArray.length>0)
+        return posibleArray[0];
+      else
+        return {}
+    return posibleArray;
+  }
   volver(){
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
       let sendData = this.formGroup.value;

@@ -59,7 +59,7 @@ fondo:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.UsuariosService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.usuarios = res.content; });
 this.FondoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.fondo = res.content; });
     this.formGroup = this.FormBuilder.group({id:["",[] ],responsable_id:["",[] ],fondo_id:["",[] ],estado:["",[] ]});
@@ -78,11 +78,19 @@ this.FondoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { t
       });
     }
   }
+  arrayToSingle(posibleArray){
+    if (Array.isArray(posibleArray))
+      if (posibleArray.length>0)
+        return posibleArray[0];
+      else
+        return {}
+    return posibleArray;
+  }
   volver(){
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
       let sendData = this.formGroup.value;

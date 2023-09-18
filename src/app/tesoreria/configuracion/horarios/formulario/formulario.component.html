@@ -35,7 +35,7 @@
                 <div class="mb-6 col-sm-12 d-none">
                     <app-selector-add #horarios_diaSelector  label="Días de Horario" [templateEditar]="horarios_diaTemplateEditar" [templateNuevo]="horarios_diaTemplateNuevo" name="horarios_dia" [submitted]="submitted" [dataArray]="horarios_dia" formControlName="horarios_dia"  ></app-selector-add>
                     <ng-template #horarios_diaTemplateNuevo>
-                        <app-formulario-horariosdia [esModal]="true" (alGuardar)="horarios_dia.push($event['content']);form['horarios_dia'].setValue($event['content']['id']);horarios_diaSelector.close()" ></app-formulario-horariosdia>
+                        <app-formulario-horariosdia [esModal]="true" (alGuardar)="horarios_dia.push(arrayToSingle($event['content']));form['horarios_dia'].setValue(arrayToSingle($event['content'])['id']);horarios_diaSelector.close()" ></app-formulario-horariosdia>
                     </ng-template>
                     <ng-template #horarios_diaTemplateEditar>
                         <app-formulario-horariosdia [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(horarios_dia, 'horarios_dia')" (alActualizar)="horarios_diaSelector.close();setDataFromFormname(horarios_dia, 'horarios_dia',$event)" ></app-formulario-horariosdia>

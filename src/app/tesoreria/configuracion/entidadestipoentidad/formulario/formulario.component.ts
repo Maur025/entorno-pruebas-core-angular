@@ -46,7 +46,7 @@ entidades:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.TipoentidadService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.tipo_entidad = res.content; });
 this.EntidadesService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.entidades = res.content; });
     this.formGroup = this.FormBuilder.group({id:["",[] ],tipo_entidad_id:["",[] ],entidad_id:["",[] ]});
@@ -65,11 +65,19 @@ this.EntidadesService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) =>
       });
     }
   }
+  arrayToSingle(posibleArray){
+    if (Array.isArray(posibleArray))
+      if (posibleArray.length>0)
+        return posibleArray[0];
+      else
+        return {}
+    return posibleArray;
+  }
   volver(){
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
       let sendData = this.formGroup.value;

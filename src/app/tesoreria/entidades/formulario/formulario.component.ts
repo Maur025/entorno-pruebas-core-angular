@@ -59,7 +59,7 @@ entidad_contactos:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.EntidadestipoentidadService.getAll(100, 1, 'entidad_id', false, '').subscribe((res:any) => { this.entidades_tipo_entidad = res.content; });
 this.EntidadcontactosService.getAll(100, 1, 'entidad_id', false, '').subscribe((res:any) => { this.entidad_contactos = res.content; });
     this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[Validators.required,Validators.minLength(2),Validators.maxLength(255)] ],identificacion:["",[] ],entidades_tipo_entidad:["",[] ],entidad_contactos:["",[] ]});
@@ -78,11 +78,19 @@ this.EntidadcontactosService.getAll(100, 1, 'entidad_id', false, '').subscribe((
       });
     }
   }
+  arrayToSingle(posibleArray){
+    if (Array.isArray(posibleArray))
+      if (posibleArray.length>0)
+        return posibleArray[0];
+      else
+        return {}
+    return posibleArray;
+  }
   volver(){
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
       let sendData = this.formGroup.value;

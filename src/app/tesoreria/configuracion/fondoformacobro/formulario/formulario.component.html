@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-body row">
 
-            
+
 
                 <div class="mb-6 col-sm-12 d-none">
                     <label for="nombre">id </label>
@@ -37,13 +37,13 @@
                 <div class="mb-6 col-sm-12 ">
                     <app-selector-add #forma_cobroSelector  label="Forma de Cobro" [templateEditar]="forma_cobroTemplateEditar" [templateNuevo]="forma_cobroTemplateNuevo" name="forma_cobro_id" [submitted]="submitted" [dataArray]="forma_cobro" formControlName="forma_cobro_id"  ></app-selector-add>
                     <ng-template #forma_cobroTemplateNuevo>
-                        <app-formulario-formacobro [esModal]="true" (alGuardar)="forma_cobro.push($event['content']);form['forma_cobro_id'].setValue($event['content']['id']);forma_cobroSelector.close()" ></app-formulario-formacobro>
+                        <app-formulario-formacobro [esModal]="true" (alGuardar)="forma_cobro.push(arrayToSingle($event['content']));form['forma_cobro_id'].setValue(arrayToSingle($event['content'])['id']);forma_cobroSelector.close()" ></app-formulario-formacobro>
                     </ng-template>
                     <ng-template #forma_cobroTemplateEditar>
                         <app-formulario-formacobro [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(forma_cobro, 'forma_cobro_id')" (alActualizar)="forma_cobroSelector.close();setDataFromFormname(forma_cobro, 'forma_cobro_id',$event)" ></app-formulario-formacobro>
                     </ng-template>
                 </div>
-            
+
             <hr>
             <div class="col-lg-6">
               <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>

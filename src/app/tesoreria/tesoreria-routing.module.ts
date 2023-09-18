@@ -6,6 +6,11 @@ import { DefaultComponent } from './default/default.component';
 import { PaneldecontrolComponent } from './paneldecontrol/paneldecontrol.component';
 
 const routes: Routes = [
+
+{ path: 'tiempointeres', loadChildren: () => import('./tiempointeres/tiempointeres.module').then(m => m.TiempointeresModule  )},
+
+{ path: 'cuotastiempo', loadChildren: () => import('./cuotastiempo/cuotastiempo.module').then(m => m.CuotastiempoModule  )},
+
 { path: 'actividadeconomica', loadChildren: () => import('./actividadeconomica/actividadeconomica.module').then(m => m.ActividadeconomicaModule  )},
 
 { path: 'tipodedato', loadChildren: () => import('./tipodedato/tipodedato.module').then(m => m.TipodedatoModule  )},

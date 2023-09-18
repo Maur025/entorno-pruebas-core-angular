@@ -1,0 +1,44 @@
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-lg-12">
+      <form (ngSubmit)="guardar()" [formGroup]="formGroup">
+        <div class="card">
+          <div class="card-body row">
+
+
+
+                <div class="mb-6 col-sm-12 d-none">
+                    <label for="nombre">id </label>
+                    <input type="text"  class="form-control uppercase" id="id" (click)="alCambiar(form)"  formControlName="id" [ngClass]="{ 'is-invalid': submitted && form['id'].errors }">
+                    <div *ngIf="submitted && form['id'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['id'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['id'].errors['minlength']">Debe tener al menos {{form['id'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['id'].errors['maxlength']">Debe tener menos de {{form['id'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['id'].errors['min']">Debe tener mayor o igual que {{form['id'].errors['min']['min']}} </div>
+                    <div *ngIf="form['id'].errors['max']">Debe tener menor o igual que {{form['id'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-12 ">
+                    <app-selector-add #entidadesSelector  label="Entidad" [campoNombre]="'nombre'" [campoValor]="'id'" [templateEditar]="entidadesTemplateEditar" [templateNuevo]="entidadesTemplateNuevo" name="entidadId" [submitted]="submitted" [dataArray]="entidades" formControlName="entidadId"  ></app-selector-add>
+                    <ng-template #entidadesTemplateNuevo>
+                        <app-formulario-entidades [esModal]="true" (alGuardar)="entidades.push(arrayToSingle($event['content']));form['entidadId'].setValue(arrayToSingle($event['content'])['id']);entidadesSelector.close()" ></app-formulario-entidades>
+                    </ng-template>
+                    <ng-template #entidadesTemplateEditar>
+                        <app-formulario-entidades [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(entidades, 'entidadId')" (alActualizar)="entidadesSelector.close();setDataFromFormname(entidades, 'entidadId',$event)" ></app-formulario-entidades>
+                    </ng-template>
+                </div>
+
+            <hr>
+            <div class="col-lg-6">
+              <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>
+              <button *ngIf="dataEdit" type="submit" class="btn btn-primary w-md">Guardar</button>
+              <span *ngIf="!esModal" (click)="volver()"  class="btn btn-secondary w-md">Volver</span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

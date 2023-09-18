@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-body row">
 
-            
+
 
                 <div class="mb-6 col-sm-12 d-none">
                     <label for="nombre">id </label>
@@ -37,13 +37,13 @@
                 <div class="mb-6 col-sm-12 ">
                     <app-selector-add #centrodecostosSelector  label="Centro de Costos" [templateEditar]="centrodecostosTemplateEditar" [templateNuevo]="centrodecostosTemplateNuevo" name="centrodecostos_id" [submitted]="submitted" [dataArray]="centrodecostos" formControlName="centrodecostos_id"  ></app-selector-add>
                     <ng-template #centrodecostosTemplateNuevo>
-                        <app-formulario-centrodecostos [esModal]="true" (alGuardar)="centrodecostos.push($event['content']);form['centrodecostos_id'].setValue($event['content']['id']);centrodecostosSelector.close()" ></app-formulario-centrodecostos>
+                        <app-formulario-centrodecostos [esModal]="true" (alGuardar)="centrodecostos.push(arrayToSingle($event['content']));form['centrodecostos_id'].setValue(arrayToSingle($event['content'])['id']);centrodecostosSelector.close()" ></app-formulario-centrodecostos>
                     </ng-template>
                     <ng-template #centrodecostosTemplateEditar>
                         <app-formulario-centrodecostos [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(centrodecostos, 'centrodecostos_id')" (alActualizar)="centrodecostosSelector.close();setDataFromFormname(centrodecostos, 'centrodecostos_id',$event)" ></app-formulario-centrodecostos>
                     </ng-template>
                 </div>
-            
+
             <hr>
             <div class="col-lg-6">
               <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>

@@ -46,7 +46,7 @@ pagos:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.CreditoService.getAll(100, 1, 'id', false, '').subscribe((res:any) => { this.credito = res.content; });
 this.PagosService.getAll(100, 1, 'id', false, '').subscribe((res:any) => { this.pagos = res.content; });
     this.formGroup = this.FormBuilder.group({id:["",[] ],credito_id:["",[Validators.required] ],nrocuota:["",[Validators.required] ],interes:["",[Validators.required] ],capital:["",[Validators.required] ],saldo:["",[Validators.required] ],mora:["",[Validators.required] ],descuento:["",[Validators.required] ],recargo:["",[Validators.required] ],pagofecha:["",[Validators.required] ],plazo:["",[Validators.required] ],pago_id:["",[] ]});
@@ -65,11 +65,19 @@ this.PagosService.getAll(100, 1, 'id', false, '').subscribe((res:any) => { this.
       });
     }
   }
+  arrayToSingle(posibleArray){
+    if (Array.isArray(posibleArray))
+      if (posibleArray.length>0)
+        return posibleArray[0];
+      else
+        return {}
+    return posibleArray;
+  }
   volver(){
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
       let sendData = this.formGroup.value;

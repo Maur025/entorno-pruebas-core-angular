@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-body row">
 
-            
+
 
                 <div class="mb-6 col-sm-12 d-none">
                     <label for="nombre">id </label>
@@ -23,7 +23,7 @@
                 <div class="mb-6 col-sm-12 ">
                     <app-selector-add #contactoSelector  label="Contacto" [campoNombre]="'nombre'" [campoValor]="'id'" [templateEditar]="contactoTemplateEditar" [templateNuevo]="contactoTemplateNuevo" name="contacto_id" [submitted]="submitted" [dataArray]="contacto" formControlName="contacto_id"  ></app-selector-add>
                     <ng-template #contactoTemplateNuevo>
-                        <app-formulario-contacto [esModal]="true" (alGuardar)="contacto.push($event['content']);form['contacto_id'].setValue($event['content']['id']);contactoSelector.close()" ></app-formulario-contacto>
+                        <app-formulario-contacto [esModal]="true" (alGuardar)="contacto.push(arrayToSingle($event['content']));form['contacto_id'].setValue(arrayToSingle($event['content'])['id']);contactoSelector.close()" ></app-formulario-contacto>
                     </ng-template>
                     <ng-template #contactoTemplateEditar>
                         <app-formulario-contacto [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(contacto, 'contacto_id')" (alActualizar)="contactoSelector.close();setDataFromFormname(contacto, 'contacto_id',$event)" ></app-formulario-contacto>
@@ -43,7 +43,7 @@
                     <div *ngIf="form['entidad_id'].errors['max']">Debe tener menor o igual que {{form['entidad_id'].errors['max']['max']}} </div>
                     </div>
                 </div>
-            
+
             <hr>
             <div class="col-lg-6">
               <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>

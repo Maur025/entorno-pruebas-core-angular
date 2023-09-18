@@ -46,7 +46,7 @@ banco:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.MonedaService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.moneda = res.content; });
 this.BancoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.banco = res.content; });
     this.formGroup = this.FormBuilder.group({id:["",[] ],nrocuenta:["",[Validators.required,Validators.minLength(2)] ],moneda_id:["",[] ],banco_id:["",[] ]});
@@ -65,11 +65,19 @@ this.BancoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { t
       });
     }
   }
+  arrayToSingle(posibleArray){
+    if (Array.isArray(posibleArray))
+      if (posibleArray.length>0)
+        return posibleArray[0];
+      else
+        return {}
+    return posibleArray;
+  }
   volver(){
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
       let sendData = this.formGroup.value;

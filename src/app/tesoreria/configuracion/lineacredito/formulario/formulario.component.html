@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-body row">
 
-            
+
 
                 <div class="mb-6 col-sm-12 d-none">
                     <label for="nombre">id </label>
@@ -35,7 +35,7 @@
                 <div class="mb-6 col-sm-12 ">
                     <app-selector-add #monedaSelector  label="Monedas" [templateEditar]="monedaTemplateEditar" [templateNuevo]="monedaTemplateNuevo" name="moneda_id" [submitted]="submitted" [dataArray]="moneda" formControlName="moneda_id"  ></app-selector-add>
                     <ng-template #monedaTemplateNuevo>
-                        <app-formulario-moneda [esModal]="true" (alGuardar)="moneda.push($event['content']);form['moneda_id'].setValue($event['content']['id']);monedaSelector.close()" ></app-formulario-moneda>
+                        <app-formulario-moneda [esModal]="true" (alGuardar)="moneda.push(arrayToSingle($event['content']));form['moneda_id'].setValue(arrayToSingle($event['content'])['id']);monedaSelector.close()" ></app-formulario-moneda>
                     </ng-template>
                     <ng-template #monedaTemplateEditar>
                         <app-formulario-moneda [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(moneda, 'moneda_id')" (alActualizar)="monedaSelector.close();setDataFromFormname(moneda, 'moneda_id',$event)" ></app-formulario-moneda>
@@ -77,7 +77,7 @@
                     <div *ngIf="form['fechafin'].errors['max']">Debe tener menor o igual que {{form['fechafin'].errors['max']['max']}} </div>
                     </div>
                 </div>
-            
+
             <hr>
             <div class="col-lg-6">
               <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>

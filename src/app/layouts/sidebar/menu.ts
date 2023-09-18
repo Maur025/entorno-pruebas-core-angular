@@ -3,6 +3,169 @@ import { MenuItem } from "./menu.model";
 export const MENU: MenuItem[] = [
 {
     id: 1,
+    label: 'Pagos',
+    link : 'parametros/pagos',
+    icon: 'fas fa-hand-holding-usd',
+},
+
+{
+    id: 1,
+    label: 'Créditos',
+    link : 'parametros/credito',
+    icon: 'far fa-handshake',
+},
+
+{
+    id: 1,
+    label: 'Crédito - Pagos',
+    link : 'parametros/creditopagos',
+    icon: 'far fa-handshake',
+},
+
+{
+    id: 1,
+    label: 'Crédito - Estado',
+    link : 'parametros/creditoestado',
+    icon: 'fas fa-spell-check',
+},
+
+{
+    id: 1,
+    label: 'Tiempo-Interés',
+    link : 'parametros/tiempointeres',
+    icon: 'fas fa-clock',
+},
+{
+    id: 1,
+    label: 'Tipo de Interés',
+    link : 'parametros/tipointeres',
+    icon: 'fas fa-percentage',
+},
+
+{
+    id: 1,
+    label: 'Contacto - Grupo',
+    link : 'parametros/contactogrupo',
+    icon: 'fas fa-user-friends',
+},
+
+{
+    id: 1,
+    label: 'Contactos',
+    link : 'parametros/contacto',
+    icon: 'fas fa-address-card',
+},
+
+{
+    id: 1,
+    label: 'Grupo de Contactos',
+    link : 'parametros/grupo',
+    icon: 'fas fa-users',
+},
+
+{
+    id: 1,
+    label: 'Entidades',
+    link : 'parametros/entidades',
+    icon: 'fas fa-users-cog',
+},
+
+{
+    id: 1,
+    label: 'Deudores',
+    link : 'parametros/deudor',
+    icon: 'fas fa-user-tag',
+},
+
+{
+    id: 1,
+    label: 'Acreedores',
+    link : 'parametros/acreedor',
+    icon: 'fas fa-user-tag',
+},
+
+{
+    id: 1,
+    label: 'Tipos de Identificación',
+    link : 'parametros/tipoidentificacion',
+    icon: 'far fa-credit-card',
+},
+
+{
+    id: 1,
+    label: 'Tipos de Entidad',
+    link : 'parametros/entidadestipoentidad',
+    icon: 'fas fa-user-friends',
+},
+
+
+
+{
+    id: 1,
+    label: 'Tipo de Pago - Via',
+    link : 'parametros/tipopagovia',
+    icon: 'fas fa-money-bill',
+},
+
+{
+    id: 1,
+    label: 'Tipos de pago',
+    link : 'parametros/tipopago',
+    icon: 'fas fa-money-check-alt',
+},
+
+{
+    id: 1,
+    label: 'Pagos - Medios de transferencia',
+    link : 'parametros/tipopagomedios',
+    icon: 'fas fa-money-bill-wave',
+},
+
+{
+    id: 1,
+    label: 'Tipos de pago',
+    link : 'parametros/tipopago',
+    icon: 'far fa-dot-circle',
+},
+
+{
+    id: 1,
+    label: 'Vías de Pago',
+    link : 'parametros/vias',
+    icon: 'far fa-dot-circle',
+},
+
+{
+    id: 1,
+    label: 'Medios de transferencia',
+    link : 'parametros/mediotransferencia',
+    icon: 'fas fa-exchange-alt',
+},
+
+{
+    id: 1,
+    label: 'Formas de Pago',
+    link : 'parametros/formapago',
+    icon: 'fas fa-hand-holding-usd',
+},
+
+
+{
+    id: 1,
+    label: 'Cuotas Tiempo',
+    link : 'parametros/cuotastiempo',
+    icon: 'fas fa-wrench',
+},
+
+{
+    id: 1,
+    label: 'Monedas',
+    link : 'configuracion/moneda',
+    icon: 'fas fa-money-check-alt',
+},
+
+{
+    id: 1,
     label: 'Variables de Configuración',
     link : 'parametros/variablesconfiguracion',
     icon: 'fas fa-list-ul',
@@ -14,7 +177,7 @@ export const MENU: MenuItem[] = [
     link : 'parametros/tipodato',
     icon: 'fas fa-dice-d6',
 },
-
+/*
 {
     id: 2,
     label: 'actividadeconomica',
@@ -250,5 +413,5 @@ export const MENU: MenuItem[] = [
         icon: "bx-home-circle",
       },
     ],
-  },
+  },*/
 ];

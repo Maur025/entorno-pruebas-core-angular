@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-body row">
 
-            
+
 
                 <div class="mb-6 col-sm-12 d-none">
                     <label for="nombre">id </label>
@@ -23,7 +23,7 @@
                 <div class="mb-6 col-sm-12 ">
                     <app-selector-add #tipo_entidadSelector  label="Tipo de Entidad" [campoNombre]="'nombre'" [campoValor]="'id'" [templateEditar]="tipo_entidadTemplateEditar" [templateNuevo]="tipo_entidadTemplateNuevo" name="tipo_entidad_id" [submitted]="submitted" [dataArray]="tipo_entidad" formControlName="tipo_entidad_id"  ></app-selector-add>
                     <ng-template #tipo_entidadTemplateNuevo>
-                        <app-formulario-tipoentidad [esModal]="true" (alGuardar)="tipo_entidad.push($event['content']);form['tipo_entidad_id'].setValue($event['content']['id']);tipo_entidadSelector.close()" ></app-formulario-tipoentidad>
+                        <app-formulario-tipoentidad [esModal]="true" (alGuardar)="tipo_entidad.push(arrayToSingle($event['content']));form['tipo_entidad_id'].setValue(arrayToSingle($event['content'])['id']);tipo_entidadSelector.close()" ></app-formulario-tipoentidad>
                     </ng-template>
                     <ng-template #tipo_entidadTemplateEditar>
                         <app-formulario-tipoentidad [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(tipo_entidad, 'tipo_entidad_id')" (alActualizar)="tipo_entidadSelector.close();setDataFromFormname(tipo_entidad, 'tipo_entidad_id',$event)" ></app-formulario-tipoentidad>
@@ -43,7 +43,7 @@
                     <div *ngIf="form['entidad_id'].errors['max']">Debe tener menor o igual que {{form['entidad_id'].errors['max']['max']}} </div>
                     </div>
                 </div>
-            
+
             <hr>
             <div class="col-lg-6">
               <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>

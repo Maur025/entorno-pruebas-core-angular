@@ -57,7 +57,7 @@ export class FormularioComponent implements OnInit {
     console.log("control",control);
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.CuentatipoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.cuenta_tipo = res.content; });
     this.formGroup = this.FormBuilder.group({id:["",[] ],cuenta_tipo_id:["",[] ],codigo:["",[] ]});
     if (this.dataEdit != null) {
@@ -75,11 +75,19 @@ export class FormularioComponent implements OnInit {
       });
     }
   }
+  arrayToSingle(posibleArray){
+    if (Array.isArray(posibleArray))
+      if (posibleArray.length>0)
+        return posibleArray[0];
+      else
+        return {}
+    return posibleArray;
+  }
   volver(){
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;    
+    this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
       let sendData = this.formGroup.value;

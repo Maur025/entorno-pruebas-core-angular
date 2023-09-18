@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-body row">
 
-            
+
 
                 <div class="mb-6 col-sm-12 d-none">
                     <label for="nombre">id </label>
@@ -59,7 +59,7 @@
                 <div class="mb-6 col-sm-12 ">
                     <app-selector-add #fondo_tipoSelector  label="Tipo de Fondo" [templateEditar]="fondo_tipoTemplateEditar" [templateNuevo]="fondo_tipoTemplateNuevo" name="fondo_tipo_id" [submitted]="submitted" [dataArray]="fondo_tipo" formControlName="fondo_tipo_id"  ></app-selector-add>
                     <ng-template #fondo_tipoTemplateNuevo>
-                        <app-formulario-fondotipo [esModal]="true" (alGuardar)="fondo_tipo.push($event['content']);form['fondo_tipo_id'].setValue($event['content']['id']);fondo_tipoSelector.close()" ></app-formulario-fondotipo>
+                        <app-formulario-fondotipo [esModal]="true" (alGuardar)="fondo_tipo.push(arrayToSingle($event['content']));form['fondo_tipo_id'].setValue(arrayToSingle($event['content'])['id']);fondo_tipoSelector.close()" ></app-formulario-fondotipo>
                     </ng-template>
                     <ng-template #fondo_tipoTemplateEditar>
                         <app-formulario-fondotipo [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(fondo_tipo, 'fondo_tipo_id')" (alActualizar)="fondo_tipoSelector.close();setDataFromFormname(fondo_tipo, 'fondo_tipo_id',$event)" ></app-formulario-fondotipo>
@@ -119,11 +119,11 @@
                     <div *ngIf="form['fondo_forma_cobro'].errors['max']">Debe tener menor o igual que {{form['fondo_forma_cobro'].errors['max']['max']}} </div>
                     </div>
                 </div>
-            
+
                 <div class="mb-6 col-sm-12" *ngIf="dataEdit">
                     <hr>
-                    <ul class="nav nav-tabs nav-tabs-dark" role="tablist">                        
-                        
+                    <ul class="nav nav-tabs nav-tabs-dark" role="tablist">
+
                     <li class="nav-item" >
                         <a class="nav-link atabx active" data-bs-toggle="tab" data-bs-target="#tab-fondoresponsables" role="button" aria-current="page" href="#">Responsables</a>
                     </li>
@@ -137,7 +137,7 @@
                     </li>
                     </ul>
                     <div class="tab-content">
-                        
+
                     <div class="tab-pane border active" id="tab-fondoresponsables" >
                         <app-listado-fondoresponsables *ngIf="rel_prefix" [rel_prefix]="rel_prefix" [rel_field]="'fondo_id'" > </app-listado-fondoresponsables>
                     </div>
@@ -150,7 +150,7 @@
                         <app-listado-fondoformacobro *ngIf="rel_prefix" [rel_prefix]="rel_prefix" [rel_field]="'fondo_id'" > </app-listado-fondoformacobro>
                     </div>
                     </div>
-                </div> 
+                </div>
             <hr>
             <div class="col-lg-6">
               <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>
