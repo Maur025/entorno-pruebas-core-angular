@@ -16,6 +16,7 @@ type NewType = NotificacionService;
 export class ListadoComponent implements OnInit {
   @Input() rel_prefix:any;
   @Input() rel_field:any;
+  @Input() rel_id:any;
 
   modalRef?: BsModalRef;
 
@@ -37,7 +38,7 @@ medio_transferencia:any = [];
   ngOnInit(): void {
     if (this.rel_prefix) this.TipopagomediosService.setPrefix(this.rel_prefix);
     this.formato = {
-      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"tipo_pago_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Tipo de Pago","colsize":"12","filtrotipo":"number","mascara":{"campo":"tipo_pago","valor":"nombre"}},"medio_transferencia_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Medio de Transferencia","colsize":"12","filtrotipo":"number","mascara":{"campo":"medio_transferencia","valor":"nombre"}}}
+      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"tipoPagoId":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Tipo Pago","colsize":"12","filtrotipo":"number","mascara":{"campo":"tipoPago","valor":"nombre"}},"medioTransferenciaId":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Medios de Transferencia","colsize":"12","filtrotipo":"number","mascara":{"campo":"medioTransferencia","valor":"nombre"}}}
     };
 
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }

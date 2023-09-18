@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-body row">
 
-
+            
 
                 <div class="mb-6 col-sm-12 d-none">
                     <label for="nombre">id </label>
@@ -33,29 +33,33 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <app-selector-add #monedaSelector  label="Moneda" [campoNombre]="'nombre'" [campoValor]="'id'" [templateEditar]="monedaTemplateEditar" [templateNuevo]="monedaTemplateNuevo" name="moneda_id" [submitted]="submitted" [dataArray]="moneda" formControlName="moneda_id"  ></app-selector-add>
-                    <ng-template #monedaTemplateNuevo>
-                        <app-formulario-moneda [esModal]="true" (alGuardar)="moneda.push(arrayToSingle($event['content']));form['moneda_id'].setValue(arrayToSingle($event['content'])['id']);monedaSelector.close()" ></app-formulario-moneda>
-                    </ng-template>
-                    <ng-template #monedaTemplateEditar>
-                        <app-formulario-moneda [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(moneda, 'moneda_id')" (alActualizar)="monedaSelector.close();setDataFromFormname(moneda, 'moneda_id',$event)" ></app-formulario-moneda>
-                    </ng-template>
-                </div>
-
-                <div class="mb-6 col-sm-12 ">
-                    <label for="formrow-firstname-input ">Banco</label>
-                    <select class="form-control form-select" id="banco_id"  formControlName="banco_id" name="banco_id" [ngClass]="{ 'is-invalid': submitted && form['banco_id'].errors }">
-                    <option *ngFor="let t of banco" value="{{t.id}}"  >{{t.nombre}} </option>
+                    <label for="formrow-firstname-input ">monedaId</label>
+                    <select class="form-control form-select" id="monedaId"  formControlName="monedaId" name="monedaId" [ngClass]="{ 'is-invalid': submitted && form['monedaId'].errors }">
+                    <option *ngFor="let t of moneda" value="{{t.id}}"  >{{t.nombre}} </option>
                     </select>
-                    <div *ngIf="submitted && form['banco_id'].errors" class="invalid-feedback" align="left" >
-                    <div *ngIf="form['banco_id'].errors['required']">Es requerido</div>
-                    <div *ngIf="form['banco_id'].errors['minlength']">Debe tener al menos {{form['banco_id'].errors['minlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['banco_id'].errors['maxlength']">Debe tener menos de {{form['banco_id'].errors['maxlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['banco_id'].errors['min']">Debe tener mayor o igual que {{form['banco_id'].errors['min']['min']}} </div>
-                    <div *ngIf="form['banco_id'].errors['max']">Debe tener menor o igual que {{form['banco_id'].errors['max']['max']}} </div>
+                    <div *ngIf="submitted && form['monedaId'].errors" class="invalid-feedback" align="left" >
+                    <div *ngIf="form['monedaId'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['monedaId'].errors['minlength']">Debe tener al menos {{form['monedaId'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['monedaId'].errors['maxlength']">Debe tener menos de {{form['monedaId'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['monedaId'].errors['min']">Debe tener mayor o igual que {{form['monedaId'].errors['min']['min']}} </div>
+                    <div *ngIf="form['monedaId'].errors['max']">Debe tener menor o igual que {{form['monedaId'].errors['max']['max']}} </div>
                     </div>
                 </div>
 
+                <div class="mb-6 col-sm-12 ">
+                    <label for="formrow-firstname-input ">bancoId</label>
+                    <select class="form-control form-select" id="bancoId"  formControlName="bancoId" name="bancoId" [ngClass]="{ 'is-invalid': submitted && form['bancoId'].errors }">
+                    <option *ngFor="let t of banco" value="{{t.id}}"  >{{t.nombre}} </option>
+                    </select>
+                    <div *ngIf="submitted && form['bancoId'].errors" class="invalid-feedback" align="left" >
+                    <div *ngIf="form['bancoId'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['bancoId'].errors['minlength']">Debe tener al menos {{form['bancoId'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['bancoId'].errors['maxlength']">Debe tener menos de {{form['bancoId'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['bancoId'].errors['min']">Debe tener mayor o igual que {{form['bancoId'].errors['min']['min']}} </div>
+                    <div *ngIf="form['bancoId'].errors['max']">Debe tener menor o igual que {{form['bancoId'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+            
             <hr>
             <div class="col-lg-6">
               <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>

@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-body row">
 
-
+            
 
                 <div class="mb-6 col-sm-12 d-none">
                     <label for="nombre">id </label>
@@ -21,29 +21,33 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="formrow-firstname-input ">Tipo de Pago</label>
-                    <select class="form-control form-select" id="tipo_pago_id"  formControlName="tipo_pago_id" name="tipo_pago_id" [ngClass]="{ 'is-invalid': submitted && form['tipo_pago_id'].errors }">
+                    <label for="formrow-firstname-input ">Tipo Pago</label>
+                    <select class="form-control form-select" id="tipoPagoId"  formControlName="tipoPagoId" name="tipoPagoId" [ngClass]="{ 'is-invalid': submitted && form['tipoPagoId'].errors }">
                     <option *ngFor="let t of tipo_pago" value="{{t.id}}"  >{{t.nombre}} </option>
                     </select>
-                    <div *ngIf="submitted && form['tipo_pago_id'].errors" class="invalid-feedback" align="left" >
-                    <div *ngIf="form['tipo_pago_id'].errors['required']">Es requerido</div>
-                    <div *ngIf="form['tipo_pago_id'].errors['minlength']">Debe tener al menos {{form['tipo_pago_id'].errors['minlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['tipo_pago_id'].errors['maxlength']">Debe tener menos de {{form['tipo_pago_id'].errors['maxlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['tipo_pago_id'].errors['min']">Debe tener mayor o igual que {{form['tipo_pago_id'].errors['min']['min']}} </div>
-                    <div *ngIf="form['tipo_pago_id'].errors['max']">Debe tener menor o igual que {{form['tipo_pago_id'].errors['max']['max']}} </div>
+                    <div *ngIf="submitted && form['tipoPagoId'].errors" class="invalid-feedback" align="left" >
+                    <div *ngIf="form['tipoPagoId'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['tipoPagoId'].errors['minlength']">Debe tener al menos {{form['tipoPagoId'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['tipoPagoId'].errors['maxlength']">Debe tener menos de {{form['tipoPagoId'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['tipoPagoId'].errors['min']">Debe tener mayor o igual que {{form['tipoPagoId'].errors['min']['min']}} </div>
+                    <div *ngIf="form['tipoPagoId'].errors['max']">Debe tener menor o igual que {{form['tipoPagoId'].errors['max']['max']}} </div>
                     </div>
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <app-selector-add #medio_transferenciaSelector  label="Medio de Transferencia" [campoNombre]="'nombre'" [campoValor]="'id'" [templateEditar]="medio_transferenciaTemplateEditar" [templateNuevo]="medio_transferenciaTemplateNuevo" name="medio_transferencia_id" [submitted]="submitted" [dataArray]="medio_transferencia" formControlName="medio_transferencia_id"  ></app-selector-add>
-                    <ng-template #medio_transferenciaTemplateNuevo>
-                        <app-formulario-mediotransferencia [esModal]="true" (alGuardar)="medio_transferencia.push(arrayToSingle($event['content']));form['medio_transferencia_id'].setValue(arrayToSingle($event['content'])['id']);medio_transferenciaSelector.close()" ></app-formulario-mediotransferencia>
-                    </ng-template>
-                    <ng-template #medio_transferenciaTemplateEditar>
-                        <app-formulario-mediotransferencia [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(medio_transferencia, 'medio_transferencia_id')" (alActualizar)="medio_transferenciaSelector.close();setDataFromFormname(medio_transferencia, 'medio_transferencia_id',$event)" ></app-formulario-mediotransferencia>
-                    </ng-template>
+                    <label for="formrow-firstname-input ">Medios de Transferencia</label>
+                    <select class="form-control form-select" id="medioTransferenciaId"  formControlName="medioTransferenciaId" name="medioTransferenciaId" [ngClass]="{ 'is-invalid': submitted && form['medioTransferenciaId'].errors }">
+                    <option *ngFor="let t of medio_transferencia" value="{{t.id}}"  >{{t.nombre}} </option>
+                    </select>
+                    <div *ngIf="submitted && form['medioTransferenciaId'].errors" class="invalid-feedback" align="left" >
+                    <div *ngIf="form['medioTransferenciaId'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['medioTransferenciaId'].errors['minlength']">Debe tener al menos {{form['medioTransferenciaId'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['medioTransferenciaId'].errors['maxlength']">Debe tener menos de {{form['medioTransferenciaId'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['medioTransferenciaId'].errors['min']">Debe tener mayor o igual que {{form['medioTransferenciaId'].errors['min']['min']}} </div>
+                    <div *ngIf="form['medioTransferenciaId'].errors['max']">Debe tener menor o igual que {{form['medioTransferenciaId'].errors['max']['max']}} </div>
+                    </div>
                 </div>
-
+            
             <hr>
             <div class="col-lg-6">
               <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>

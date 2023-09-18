@@ -26,8 +26,8 @@
 
   <ng-template #modalNuevo role="document" let-modal>
     <div class="modal-header">
-      <!-- <h5 class="modal-title" id="exampleModalLabel"><a [routerLink]="['./nuevo']" (click)="modalRef.hide()">Nuevo Cuotastiempo</a></h5> -->
-      <h5 class="modal-title" id="exampleModalLabel">Nuevo Cuotastiempo</h5>
+      <!-- <h5 class="modal-title" id="exampleModalLabel"><a [routerLink]="['./nuevo']" (click)="modalRef.hide()">Tiempo-Cuotas (Nuevo)</a></h5> -->
+      <h5 class="modal-title" id="exampleModalLabel">Tiempo-Cuotas (Nuevo)</h5>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()" ></button>
     </div>
     <app-formulario-cuotastiempo [esModal]="true" [rel_prefix]="rel_prefix" [rel_field]="rel_field" [rel_id]="rel_id"  (alGuardar)="modalRef.hide(); tabla.obtenerDatos();"></app-formulario-cuotastiempo>
@@ -36,8 +36,8 @@
 
   <ng-template #modalEditar role="document" let-modal>
     <div class="modal-header">
-      <!-- <h5 class="modal-title" id="exampleModalLabel"> <a [routerLink]="['./'+dataEdit.id]" (click)="modalRef.hide()">Editar Cuotastiempo {{dataEdit.nombre}}</a></h5> -->
-      <h5 class="modal-title" id="exampleModalLabel"> Editar Cuotastiempo {{dataEdit.nombre}}</h5>
+      <!-- <h5 class="modal-title" id="exampleModalLabel"> <a [routerLink]="['./'+dataEdit.id]" (click)="modalRef.hide()">Tiempo-Cuotas (Editar) {{dataEdit.nombre}}</a></h5> -->
+      <h5 class="modal-title" id="exampleModalLabel"> Tiempo-Cuotas (Editar) {{dataEdit.nombre}}</h5>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()" ></button>
     </div>
     <app-formulario-cuotastiempo [esModal]="true" [rel_prefix]="rel_prefix" [rel_field]="rel_field" [rel_id]="rel_id" [dataEdit]="dataEdit" (alActualizar)="modalRef.hide(); tabla.obtenerDatos();"></app-formulario-cuotastiempo>

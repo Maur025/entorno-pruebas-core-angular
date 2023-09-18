@@ -16,12 +16,13 @@ type NewType = NotificacionService;
 export class ListadoComponent implements OnInit {
   @Input() rel_prefix:any;
   @Input() rel_field:any;
+  @Input() rel_id:any;
 
   modalRef?: BsModalRef;
 
   formato: any;
   dataEdit = null;
-  titulo: any = "Listado de Lineacreditobanco";
+  titulo: any = "Líneas de créditos - banco";
 
   lineacredito:any = [];
 banco:any = [];
@@ -37,7 +38,7 @@ banco:any = [];
   ngOnInit(): void {
     if (this.rel_prefix) this.LineacreditobancoService.setPrefix(this.rel_prefix);
     this.formato = {
-      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"lineacredito_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"lineacredito_id","colsize":"12","filtrotipo":"number","mascara":{"campo":"lineacredito","valor":"numero"}},"banco_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"banco_id","colsize":"12","filtrotipo":"number","mascara":{"campo":"banco","valor":"nombre"}}}
+      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"lineacreditoId":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Línea de Crédito","colsize":"12","filtrotipo":"number","mascara":{"campo":"lineacredito","valor":"numero"}},"bancoId":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Banco","colsize":"12","filtrotipo":"number","mascara":{"campo":"banco","valor":"nombre"}}}
     };
 
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }

@@ -5,10 +5,8 @@ import { ListadoComponent } from './listado/listado.component';
 import { HerramientasModule } from 'src/app/core/herramientas/herramientas.module';
 import { FormularioComponent } from './formulario/formulario.component';
 import { BancoRoutingModule } from './banco-routing.module';
-import { ContactobancoModule } from '../contactobanco/contactobanco.module';
 import { CuentabancoModule } from '../cuentabanco/cuentabanco.module';
 import { LineacreditobancoModule } from '../lineacreditobanco/lineacreditobanco.module';
-import { BancomediostransferenciaModule } from '../bancomediostransferencia/bancomediostransferencia.module';
 
 @NgModule({
   declarations: [
@@ -21,10 +19,8 @@ import { BancomediostransferenciaModule } from '../bancomediostransferencia/banc
     HerramientasModule,
     FormsModule,
     ReactiveFormsModule,
-    ContactobancoModule,
-CuentabancoModule,
-LineacreditobancoModule,
-BancomediostransferenciaModule
+    CuentabancoModule,
+LineacreditobancoModule
   ],
   exports: [
     ListadoComponent,

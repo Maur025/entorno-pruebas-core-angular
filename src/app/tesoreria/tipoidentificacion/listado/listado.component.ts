@@ -15,12 +15,13 @@ type NewType = NotificacionService;
 export class ListadoComponent implements OnInit {
   @Input() rel_prefix:any;
   @Input() rel_field:any;
+  @Input() rel_id:any;
 
   modalRef?: BsModalRef;
 
   formato: any;
   dataEdit = null;
-  titulo: any = "Listado de Tipoidentificacion";
+  titulo: any = "Tipos de Identificación";
 
   
 
@@ -35,7 +36,7 @@ export class ListadoComponent implements OnInit {
   ngOnInit(): void {
     if (this.rel_prefix) this.TipoidentificacionService.setPrefix(this.rel_prefix);
     this.formato = {
-      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"sigla":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"sigla","colsize":"12","filtrotipo":"text"},"nombre":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"nombre","colsize":"12","filtrotipo":"text"}}
+      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"sigla":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Sigla","colsize":"12","filtrotipo":"text"},"nombre":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Nombre","colsize":"12","filtrotipo":"text"}}
     };
 
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }

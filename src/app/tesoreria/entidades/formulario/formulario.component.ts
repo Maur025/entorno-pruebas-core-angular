@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { EntidadesService } from "../servicios/entidades.service";
 import { EntidadestipoentidadService } from '../servicios/entidadestipoentidad.service';
-import { EntidadcontactosService } from '../servicios/entidadcontactos.service';
 @Component({
   selector: "app-formulario-entidades",
   templateUrl: "./formulario.component.html",
@@ -22,9 +21,9 @@ export class FormularioComponent implements OnInit {
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
+  @Input() rel_id: any = '';
 
   entidades_tipo_entidad:any = [];
-entidad_contactos:any = [];
   estados: any = [
     { value: "habilitado", name: "Habilitado" },
     { value: "deshabilitado", name: "Deshabilitado" },
@@ -36,7 +35,7 @@ entidad_contactos:any = [];
     private FormBuilder: FormBuilder,
     private notificacionService: NotificacionService,
     private EntidadesService: EntidadesService,
-    private EntidadestipoentidadService: EntidadestipoentidadService,private EntidadcontactosService: EntidadcontactosService
+    private EntidadestipoentidadService: EntidadestipoentidadService
   ) {}
 
   get form() {
@@ -59,12 +58,16 @@ entidad_contactos:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {
-    this.EntidadestipoentidadService.getAll(100, 1, 'entidad_id', false, '').subscribe((res:any) => { this.entidades_tipo_entidad = res.content; });
-this.EntidadcontactosService.getAll(100, 1, 'entidad_id', false, '').subscribe((res:any) => { this.entidad_contactos = res.content; });
-    this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[Validators.required,Validators.minLength(2),Validators.maxLength(255)] ],identificacion:["",[] ],entidades_tipo_entidad:["",[] ],entidad_contactos:["",[] ]});
+  cargarArrays()
+  {
+    this.EntidadestipoentidadService.getAll(100, 1, 'entidadId', false, '').subscribe((res:any) => { this.entidades_tipo_entidad = res.content; });
+  }
+
+  ngOnInit(): void {    
+    this.cargarArrays();
+    this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[Validators.required,Validators.minLength(2),Validators.maxLength(255)] ],identificacion:["",[] ],entidadesTipoEntidad:["",[] ]});
     if (this.dataEdit != null) {
-      this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,identificacion:this.dataEdit.identificacion,entidades_tipo_entidad:this.dataEdit.entidades_tipo_entidad,entidad_contactos:this.dataEdit.entidad_contactos});
+      this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,identificacion:this.dataEdit.identificacion,entidadesTipoEntidad:this.dataEdit.entidadesTipoEntidad});
       this.rel_prefix = "/entidades/"+this.dataEdit.id;
     }
     let id = this.route.snapshot.params['id'];
@@ -72,9 +75,15 @@ this.EntidadcontactosService.getAll(100, 1, 'entidad_id', false, '').subscribe((
     if (id != null && !this.esModal && id!="nuevo" ) {
       this.EntidadesService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
-        this.dataEdit= result.content[0];
-          this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,identificacion:this.dataEdit.identificacion,entidades_tipo_entidad:this.dataEdit.entidades_tipo_entidad,entidad_contactos:this.dataEdit.entidad_contactos});
+        
+        if (Array.isArray(result.content))
+          this.dataEdit= result.content[0];
+        else
+          this.dataEdit= result.content;
+
+          this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,identificacion:this.dataEdit.identificacion,entidadesTipoEntidad:this.dataEdit.entidadesTipoEntidad});
           this.rel_prefix = "/entidades/"+id;
+          this.rel_id = id;
       });
     }
   }
@@ -90,9 +99,14 @@ this.EntidadcontactosService.getAll(100, 1, 'entidad_id', false, '').subscribe((
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;
+    this.submitted = true;    
     if (this.formGroup.valid) {
       this.submitted = false;
+
+      if (this.rel_prefix && this.rel_field) {
+        this.formGroup.enable();//*
+        this.formGroup.get(this.rel_field).setValue(this.rel_id);//*
+      }
       let sendData = this.formGroup.value;
       if (this.dataEdit == null) {
         this.EntidadesService.register(sendData).subscribe(

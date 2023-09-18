@@ -15,12 +15,13 @@ type NewType = NotificacionService;
 export class ListadoComponent implements OnInit {
   @Input() rel_prefix:any;
   @Input() rel_field:any;
+  @Input() rel_id:any;
 
   modalRef?: BsModalRef;
 
   formato: any;
   dataEdit = null;
-  titulo: any = "Listado de Cuenta";
+  titulo: any = "Cuentas";
 
   cuenta_tipo:any = [];
 
@@ -35,7 +36,7 @@ export class ListadoComponent implements OnInit {
   ngOnInit(): void {
     if (this.rel_prefix) this.CuentaService.setPrefix(this.rel_prefix);
     this.formato = {
-      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"cuenta_tipo_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Cuenta","colsize":"12","filtrotipo":"number","mascara":{"campo":"cuenta_tipo","valor":"nombre"}},"codigo":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"codigo","colsize":"12","filtrotipo":"text"}}
+      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"cuentaTipoId":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Tipo de Cuenta","colsize":"12","filtrotipo":"number","mascara":{"campo":"cuentaTipo","valor":"nombre"}},"codigo":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Código","colsize":"12","filtrotipo":"text"}}
     };
 
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }

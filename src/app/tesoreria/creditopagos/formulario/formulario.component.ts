@@ -60,9 +60,14 @@ pagos:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {
+  cargarArrays()
+  {
     this.CreditoService.getAll(100, 1, 'id', false, '').subscribe((res:any) => { this.credito = res.content; });
 this.PagosService.getAll(100, 1, 'id', false, '').subscribe((res:any) => { this.pagos = res.content; });
+  }
+
+  ngOnInit(): void {    
+    this.cargarArrays();
     this.formGroup = this.FormBuilder.group({id:["",[] ],creditoId:["",[Validators.required] ],nrocuota:["",[Validators.required] ],interes:["",[Validators.required] ],capital:["",[Validators.required] ],saldo:["",[Validators.required] ],mora:["",[Validators.required] ],descuento:["",[Validators.required] ],recargo:["",[Validators.required] ],pagofecha:["",[Validators.required] ],plazo:["",[] ],pagoId:["",[Validators.required] ]});
     if (this.dataEdit != null) {
       this.formGroup.setValue({id:this.dataEdit.id,creditoId:this.dataEdit.creditoId,nrocuota:this.dataEdit.nrocuota,interes:this.dataEdit.interes,capital:this.dataEdit.capital,saldo:this.dataEdit.saldo,mora:this.dataEdit.mora,descuento:this.dataEdit.descuento,recargo:this.dataEdit.recargo,pagofecha:this.dataEdit.pagofecha,plazo:this.dataEdit.plazo,pagoId:this.dataEdit.pagoId});
@@ -73,7 +78,7 @@ this.PagosService.getAll(100, 1, 'id', false, '').subscribe((res:any) => { this.
     if (id != null && !this.esModal && id!="nuevo" ) {
       this.CreditopagosService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
-
+        
         if (Array.isArray(result.content))
           this.dataEdit= result.content[0];
         else
@@ -97,7 +102,7 @@ this.PagosService.getAll(100, 1, 'id', false, '').subscribe((res:any) => { this.
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;
+    this.submitted = true;    
     if (this.formGroup.valid) {
       this.submitted = false;
 

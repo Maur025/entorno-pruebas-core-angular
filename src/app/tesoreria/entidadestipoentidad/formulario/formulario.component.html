@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-body row">
 
-
+            
 
                 <div class="mb-6 col-sm-12 d-none">
                     <label for="nombre">id </label>
@@ -21,29 +21,33 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <app-selector-add #tipo_entidadSelector  label="Tipo de Entidad" [campoNombre]="'nombre'" [campoValor]="'id'" [templateEditar]="tipo_entidadTemplateEditar" [templateNuevo]="tipo_entidadTemplateNuevo" name="tipo_entidad_id" [submitted]="submitted" [dataArray]="tipo_entidad" formControlName="tipo_entidad_id"  ></app-selector-add>
-                    <ng-template #tipo_entidadTemplateNuevo>
-                        <app-formulario-tipoentidad [esModal]="true" (alGuardar)="tipo_entidad.push(arrayToSingle($event['content']));form['tipo_entidad_id'].setValue(arrayToSingle($event['content'])['id']);tipo_entidadSelector.close()" ></app-formulario-tipoentidad>
-                    </ng-template>
-                    <ng-template #tipo_entidadTemplateEditar>
-                        <app-formulario-tipoentidad [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(tipo_entidad, 'tipo_entidad_id')" (alActualizar)="tipo_entidadSelector.close();setDataFromFormname(tipo_entidad, 'tipo_entidad_id',$event)" ></app-formulario-tipoentidad>
-                    </ng-template>
+                    <label for="formrow-firstname-input ">Tipo de entidad</label>
+                    <select class="form-control form-select" id="tipoEntidadId"  formControlName="tipoEntidadId" name="tipoEntidadId" [ngClass]="{ 'is-invalid': submitted && form['tipoEntidadId'].errors }">
+                    <option *ngFor="let t of tipo_entidad" value="{{t.id}}"  >{{t.nombre}} </option>
+                    </select>
+                    <div *ngIf="submitted && form['tipoEntidadId'].errors" class="invalid-feedback" align="left" >
+                    <div *ngIf="form['tipoEntidadId'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['tipoEntidadId'].errors['minlength']">Debe tener al menos {{form['tipoEntidadId'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['tipoEntidadId'].errors['maxlength']">Debe tener menos de {{form['tipoEntidadId'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['tipoEntidadId'].errors['min']">Debe tener mayor o igual que {{form['tipoEntidadId'].errors['min']['min']}} </div>
+                    <div *ngIf="form['tipoEntidadId'].errors['max']">Debe tener menor o igual que {{form['tipoEntidadId'].errors['max']['max']}} </div>
+                    </div>
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
                     <label for="formrow-firstname-input ">Entidad</label>
-                    <select class="form-control form-select" id="entidad_id"  formControlName="entidad_id" name="entidad_id" [ngClass]="{ 'is-invalid': submitted && form['entidad_id'].errors }">
+                    <select class="form-control form-select" id="entidadId"  formControlName="entidadId" name="entidadId" [ngClass]="{ 'is-invalid': submitted && form['entidadId'].errors }">
                     <option *ngFor="let t of entidades" value="{{t.id}}"  >{{t.nombre}} </option>
                     </select>
-                    <div *ngIf="submitted && form['entidad_id'].errors" class="invalid-feedback" align="left" >
-                    <div *ngIf="form['entidad_id'].errors['required']">Es requerido</div>
-                    <div *ngIf="form['entidad_id'].errors['minlength']">Debe tener al menos {{form['entidad_id'].errors['minlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['entidad_id'].errors['maxlength']">Debe tener menos de {{form['entidad_id'].errors['maxlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['entidad_id'].errors['min']">Debe tener mayor o igual que {{form['entidad_id'].errors['min']['min']}} </div>
-                    <div *ngIf="form['entidad_id'].errors['max']">Debe tener menor o igual que {{form['entidad_id'].errors['max']['max']}} </div>
+                    <div *ngIf="submitted && form['entidadId'].errors" class="invalid-feedback" align="left" >
+                    <div *ngIf="form['entidadId'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['entidadId'].errors['minlength']">Debe tener al menos {{form['entidadId'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['entidadId'].errors['maxlength']">Debe tener menos de {{form['entidadId'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['entidadId'].errors['min']">Debe tener mayor o igual que {{form['entidadId'].errors['min']['min']}} </div>
+                    <div *ngIf="form['entidadId'].errors['max']">Debe tener menor o igual que {{form['entidadId'].errors['max']['max']}} </div>
                     </div>
                 </div>
-
+            
             <hr>
             <div class="col-lg-6">
               <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>

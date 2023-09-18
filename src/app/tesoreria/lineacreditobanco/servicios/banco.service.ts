@@ -38,12 +38,12 @@ export class BancoService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Lineacreditobanco'] = 'habilitar';
+    datos['Líneas de créditos - banco'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Lineacreditobanco'] = 'deshabilitar';
+    datos['Líneas de créditos - banco'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

@@ -38,12 +38,12 @@ export class TiempointeresService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Tiempointeres'] = 'habilitar';
+    datos['Tiempo de Interés'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Tiempointeres'] = 'deshabilitar';
+    datos['Tiempo de Interés'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

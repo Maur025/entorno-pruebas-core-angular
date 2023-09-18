@@ -22,6 +22,7 @@ export class FormularioComponent implements OnInit {
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
+  @Input() rel_id: any = '';
 
   grupo:any = [];
 contacto:any = [];
@@ -59,22 +60,33 @@ contacto:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {
+  cargarArrays()
+  {
     this.GrupoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.grupo = res.content; });
 this.ContactoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.contacto = res.content; });
-    this.formGroup = this.FormBuilder.group({id:["",[] ],grupo_id:["",[] ],contacto_id:["",[] ]});
+  }
+
+  ngOnInit(): void {    
+    this.cargarArrays();
+    this.formGroup = this.FormBuilder.group({id:["",[] ],grupoId:["",[] ],contactoId:["",[] ]});
     if (this.dataEdit != null) {
-      this.formGroup.setValue({id:this.dataEdit.id,grupo_id:this.dataEdit.grupo_id,contacto_id:this.dataEdit.contacto_id});
-      this.rel_prefix = "/contactogrupo/"+this.dataEdit.id;
+      this.formGroup.setValue({id:this.dataEdit.id,grupoId:this.dataEdit.grupoId,contactoId:this.dataEdit.contactoId});
+      this.rel_prefix = "/contacto_grupo/"+this.dataEdit.id;
     }
     let id = this.route.snapshot.params['id'];
     if (this.rel_prefix && this.rel_field) this.formGroup.get(this.rel_field).disable();
     if (id != null && !this.esModal && id!="nuevo" ) {
       this.ContactogrupoService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
-        this.dataEdit= result.content[0];
-          this.formGroup.setValue({id:this.dataEdit.id,grupo_id:this.dataEdit.grupo_id,contacto_id:this.dataEdit.contacto_id});
-          this.rel_prefix = "/contactogrupo/"+id;
+        
+        if (Array.isArray(result.content))
+          this.dataEdit= result.content[0];
+        else
+          this.dataEdit= result.content;
+
+          this.formGroup.setValue({id:this.dataEdit.id,grupoId:this.dataEdit.grupoId,contactoId:this.dataEdit.contactoId});
+          this.rel_prefix = "/contacto_grupo/"+id;
+          this.rel_id = id;
       });
     }
   }
@@ -90,9 +102,14 @@ this.ContactoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => 
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;
+    this.submitted = true;    
     if (this.formGroup.valid) {
       this.submitted = false;
+
+      if (this.rel_prefix && this.rel_field) {
+        this.formGroup.enable();//*
+        this.formGroup.get(this.rel_field).setValue(this.rel_id);//*
+      }
       let sendData = this.formGroup.value;
       if (this.dataEdit == null) {
         this.ContactogrupoService.register(sendData).subscribe(

@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">nombre </label>
+                    <label for="nombre">Tipo de Entidad </label>
                     <input type="text"  class="form-control uppercase" id="nombre" (click)="alCambiar(form)"  formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }">
                     <div *ngIf="submitted && form['nombre'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['nombre'].errors['required']">Es requerido</div>

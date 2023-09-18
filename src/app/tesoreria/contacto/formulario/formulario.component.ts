@@ -22,6 +22,7 @@ export class FormularioComponent implements OnInit {
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
+  @Input() rel_id: any = '';
 
   tipo_identificacion:any = [];
 contacto_grupo:any = [];
@@ -59,12 +60,17 @@ contacto_grupo:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {
+  cargarArrays()
+  {
     this.TipoidentificacionService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.tipo_identificacion = res.content; });
-this.ContactogrupoService.getAll(100, 1, 'contacto_id', false, '').subscribe((res:any) => { this.contacto_grupo = res.content; });
-    this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[] ],telefono:["",[] ],correo:["",[] ],direccion:["",[] ],descripción:["",[] ],identificacion:["",[] ],tipo_identificacion_id:["",[] ],contacto_grupos:["",[] ]});
+this.ContactogrupoService.getAll(100, 1, 'contactoId', false, '').subscribe((res:any) => { this.contacto_grupo = res.content; });
+  }
+
+  ngOnInit(): void {    
+    this.cargarArrays();
+    this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[Validators.required,Validators.minLength(2),Validators.maxLength(255)] ],telefono:["",[Validators.max(255)] ],correo:["",[Validators.maxLength(255)] ],direccion:["",[Validators.maxLength(255)] ],descripcion:["",[Validators.maxLength(255)] ],identificacion:["",[Validators.required,Validators.minLength(2),Validators.maxLength(255)] ],tipoIdentificacionId:["",[Validators.required] ],contactoGrupos:["",[] ]});
     if (this.dataEdit != null) {
-      this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,telefono:this.dataEdit.telefono,correo:this.dataEdit.correo,direccion:this.dataEdit.direccion,descripción:this.dataEdit.descripción,identificacion:this.dataEdit.identificacion,tipo_identificacion_id:this.dataEdit.tipo_identificacion_id,contacto_grupos:this.dataEdit.contacto_grupos});
+      this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,telefono:this.dataEdit.telefono,correo:this.dataEdit.correo,direccion:this.dataEdit.direccion,descripcion:this.dataEdit.descripcion,identificacion:this.dataEdit.identificacion,tipoIdentificacionId:this.dataEdit.tipoIdentificacionId,contactoGrupos:this.dataEdit.contactoGrupos});
       this.rel_prefix = "/contacto/"+this.dataEdit.id;
     }
     let id = this.route.snapshot.params['id'];
@@ -72,9 +78,15 @@ this.ContactogrupoService.getAll(100, 1, 'contacto_id', false, '').subscribe((re
     if (id != null && !this.esModal && id!="nuevo" ) {
       this.ContactoService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
-        this.dataEdit= result.content[0];
-          this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,telefono:this.dataEdit.telefono,correo:this.dataEdit.correo,direccion:this.dataEdit.direccion,descripción:this.dataEdit.descripción,identificacion:this.dataEdit.identificacion,tipo_identificacion_id:this.dataEdit.tipo_identificacion_id,contacto_grupos:this.dataEdit.contacto_grupos});
+        
+        if (Array.isArray(result.content))
+          this.dataEdit= result.content[0];
+        else
+          this.dataEdit= result.content;
+
+          this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,telefono:this.dataEdit.telefono,correo:this.dataEdit.correo,direccion:this.dataEdit.direccion,descripcion:this.dataEdit.descripcion,identificacion:this.dataEdit.identificacion,tipoIdentificacionId:this.dataEdit.tipoIdentificacionId,contactoGrupos:this.dataEdit.contactoGrupos});
           this.rel_prefix = "/contacto/"+id;
+          this.rel_id = id;
       });
     }
   }
@@ -90,9 +102,14 @@ this.ContactogrupoService.getAll(100, 1, 'contacto_id', false, '').subscribe((re
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;
+    this.submitted = true;    
     if (this.formGroup.valid) {
       this.submitted = false;
+
+      if (this.rel_prefix && this.rel_field) {
+        this.formGroup.enable();//*
+        this.formGroup.get(this.rel_field).setValue(this.rel_id);//*
+      }
       let sendData = this.formGroup.value;
       if (this.dataEdit == null) {
         this.ContactoService.register(sendData).subscribe(

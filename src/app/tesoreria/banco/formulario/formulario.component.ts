@@ -4,10 +4,9 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { BancoService } from "../servicios/banco.service";
-import { ContactobancoService } from '../servicios/contactobanco.service';
+import { ViasService } from '../servicios/vias.service';
 import { CuentabancoService } from '../servicios/cuentabanco.service';
 import { LineacreditobancoService } from '../servicios/lineacreditobanco.service';
-import { BancomediostransferenciaService } from '../servicios/bancomediostransferencia.service';
 @Component({
   selector: "app-formulario-banco",
   templateUrl: "./formulario.component.html",
@@ -24,12 +23,11 @@ export class FormularioComponent implements OnInit {
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
-  @Input() rel_id: any = '' //*
+  @Input() rel_id: any = '';
 
-  contacto_banco:any = [];
+  vias:any = [];
 cuenta_banco:any = [];
 lineacredito_banco:any = [];
-banco_medios_transferencia:any = [];
   estados: any = [
     { value: "habilitado", name: "Habilitado" },
     { value: "deshabilitado", name: "Deshabilitado" },
@@ -41,7 +39,7 @@ banco_medios_transferencia:any = [];
     private FormBuilder: FormBuilder,
     private notificacionService: NotificacionService,
     private BancoService: BancoService,
-
+    private ViasService: ViasService,private CuentabancoService: CuentabancoService,private LineacreditobancoService: LineacreditobancoService
   ) {}
 
   get form() {
@@ -64,23 +62,34 @@ banco_medios_transferencia:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {
-    this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[Validators.required,Validators.minLength(2),Validators.maxLength(255)] ],descripcion:["",[] ],direccion:["",[] ],url:["",[] ]});
+  cargarArrays()
+  {
+    this.ViasService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.vias = res.content; });
+this.CuentabancoService.getAll(100, 1, 'banco_id', false, '').subscribe((res:any) => { this.cuenta_banco = res.content; });
+this.LineacreditobancoService.getAll(100, 1, 'banco_id', false, '').subscribe((res:any) => { this.lineacredito_banco = res.content; });
+  }
+
+  ngOnInit(): void {    
+    this.cargarArrays();
+    this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[Validators.required,Validators.minLength(2),Validators.maxLength(255)] ],descripcion:["",[] ],direccion:["",[] ],url:["",[] ],viaId:["",[] ],cuentas:["",[] ],lineasdecredito:["",[] ]});
     if (this.dataEdit != null) {
-      this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,descripcion:this.dataEdit.descripcion,direccion:this.dataEdit.direccion,url:this.dataEdit.url});
+      this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,descripcion:this.dataEdit.descripcion,direccion:this.dataEdit.direccion,url:this.dataEdit.url,viaId:this.dataEdit.viaId,cuentas:this.dataEdit.cuentas,lineasdecredito:this.dataEdit.lineasdecredito});
       this.rel_prefix = "/banco/"+this.dataEdit.id;
     }
     let id = this.route.snapshot.params['id'];
     if (this.rel_prefix && this.rel_field) this.formGroup.get(this.rel_field).disable();
     if (id != null && !this.esModal && id!="nuevo" ) {
       this.BancoService.find(id).subscribe((result:any) => {
-        console.log("result:",result);
-        //if (Array.isArray (result.content)) result.content= result.content[0];
-        this.dataEdit= Array.isArray (result.content)?result.content[0]:result.content;
-        console.log("this.dataEdit",this.dataEdit);
-          this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,descripcion:this.dataEdit.descripcion,direccion:this.dataEdit.direccion,url:this.dataEdit.url});
+        if (result.content.length == 0) return;
+        
+        if (Array.isArray(result.content))
+          this.dataEdit= result.content[0];
+        else
+          this.dataEdit= result.content;
+
+          this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,descripcion:this.dataEdit.descripcion,direccion:this.dataEdit.direccion,url:this.dataEdit.url,viaId:this.dataEdit.viaId,cuentas:this.dataEdit.cuentas,lineasdecredito:this.dataEdit.lineasdecredito});
           this.rel_prefix = "/banco/"+id;
-          this.rel_id = id;//*
+          this.rel_id = id;
       });
     }
   }
@@ -96,9 +105,14 @@ banco_medios_transferencia:any = [];
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;
+    this.submitted = true;    
     if (this.formGroup.valid) {
       this.submitted = false;
+
+      if (this.rel_prefix && this.rel_field) {
+        this.formGroup.enable();//*
+        this.formGroup.get(this.rel_field).setValue(this.rel_id);//*
+      }
       let sendData = this.formGroup.value;
       if (this.dataEdit == null) {
         this.BancoService.register(sendData).subscribe(

@@ -22,6 +22,7 @@ export class FormularioComponent implements OnInit {
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
+  @Input() rel_id: any = '';
 
   banco:any = [];
 contacto:any = [];
@@ -59,21 +60,33 @@ contacto:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {
+  cargarArrays()
+  {
+    this.BancoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.banco = res.content; });
+this.ContactoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.contacto = res.content; });
+  }
 
-    this.formGroup = this.FormBuilder.group({id:["",[] ],banco_id:["",[] ],contacto_id:["",[] ]});
+  ngOnInit(): void {    
+    this.cargarArrays();
+    this.formGroup = this.FormBuilder.group({id:["",[] ],bancoId:["",[Validators.required] ],contactoId:["",[] ]});
     if (this.dataEdit != null) {
-      this.formGroup.setValue({id:this.dataEdit.id,banco_id:this.dataEdit.banco_id,contacto_id:this.dataEdit.contacto_id});
-      this.rel_prefix = "/contactobanco/"+this.dataEdit.id;
+      this.formGroup.setValue({id:this.dataEdit.id,bancoId:this.dataEdit.bancoId,contactoId:this.dataEdit.contactoId});
+      this.rel_prefix = "/contacto_banco/"+this.dataEdit.id;
     }
     let id = this.route.snapshot.params['id'];
     if (this.rel_prefix && this.rel_field) this.formGroup.get(this.rel_field).disable();
     if (id != null && !this.esModal && id!="nuevo" ) {
       this.ContactobancoService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
-        this.dataEdit= result.content[0];
-          this.formGroup.setValue({id:this.dataEdit.id,banco_id:this.dataEdit.banco_id,contacto_id:this.dataEdit.contacto_id});
-          this.rel_prefix = "/contactobanco/"+id;
+        
+        if (Array.isArray(result.content))
+          this.dataEdit= result.content[0];
+        else
+          this.dataEdit= result.content;
+
+          this.formGroup.setValue({id:this.dataEdit.id,bancoId:this.dataEdit.bancoId,contactoId:this.dataEdit.contactoId});
+          this.rel_prefix = "/contacto_banco/"+id;
+          this.rel_id = id;
       });
     }
   }
@@ -89,9 +102,14 @@ contacto:any = [];
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;
+    this.submitted = true;    
     if (this.formGroup.valid) {
       this.submitted = false;
+
+      if (this.rel_prefix && this.rel_field) {
+        this.formGroup.enable();//*
+        this.formGroup.get(this.rel_field).setValue(this.rel_id);//*
+      }
       let sendData = this.formGroup.value;
       if (this.dataEdit == null) {
         this.ContactobancoService.register(sendData).subscribe(

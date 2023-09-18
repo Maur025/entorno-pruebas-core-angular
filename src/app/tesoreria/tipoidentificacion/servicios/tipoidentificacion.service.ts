@@ -38,12 +38,12 @@ export class TipoidentificacionService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Tipoidentificacion'] = 'habilitar';
+    datos['Tipos de Identificación'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Tipoidentificacion'] = 'deshabilitar';
+    datos['Tipos de Identificación'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

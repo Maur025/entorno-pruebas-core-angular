@@ -5,7 +5,7 @@ import { ListadoComponent } from './listado/listado.component';
 import { HerramientasModule } from 'src/app/core/herramientas/herramientas.module';
 import { FormularioComponent } from './formulario/formulario.component';
 import { CuentabancoRoutingModule } from './cuentabanco-routing.module';
-import { MonedaModule } from '../moneda/moneda.module';
+
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import { MonedaModule } from '../moneda/moneda.module';
     HerramientasModule,
     FormsModule,
     ReactiveFormsModule,
-    MonedaModule
+    
   ],
   exports: [
     ListadoComponent,

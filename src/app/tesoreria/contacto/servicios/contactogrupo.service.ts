@@ -38,12 +38,12 @@ export class ContactogrupoService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Contacto'] = 'habilitar';
+    datos['Contactos'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Contacto'] = 'deshabilitar';
+    datos['Contactos'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

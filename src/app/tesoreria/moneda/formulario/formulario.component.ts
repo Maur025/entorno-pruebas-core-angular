@@ -21,8 +21,9 @@ export class FormularioComponent implements OnInit {
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
+  @Input() rel_id: any = '';
 
-
+  
   estados: any = [
     { value: "habilitado", name: "Habilitado" },
     { value: "deshabilitado", name: "Deshabilitado" },
@@ -34,7 +35,7 @@ export class FormularioComponent implements OnInit {
     private FormBuilder: FormBuilder,
     private notificacionService: NotificacionService,
     private MonedaService: MonedaService,
-
+    
   ) {}
 
   get form() {
@@ -57,8 +58,13 @@ export class FormularioComponent implements OnInit {
     console.log("control",control);
   }
 
-  ngOnInit(): void {
+  cargarArrays()
+  {
+    
+  }
 
+  ngOnInit(): void {    
+    this.cargarArrays();
     this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[Validators.required,Validators.minLength(1),Validators.maxLength(255)] ],sigla:["",[Validators.required,Validators.minLength(1),Validators.maxLength(255)] ]});
     if (this.dataEdit != null) {
       this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,sigla:this.dataEdit.sigla});
@@ -69,9 +75,15 @@ export class FormularioComponent implements OnInit {
     if (id != null && !this.esModal && id!="nuevo" ) {
       this.MonedaService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
-        this.dataEdit= result.content[0];
+        
+        if (Array.isArray(result.content))
+          this.dataEdit= result.content[0];
+        else
+          this.dataEdit= result.content;
+
           this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,sigla:this.dataEdit.sigla});
           this.rel_prefix = "/moneda/"+id;
+          this.rel_id = id;
       });
     }
   }
@@ -87,9 +99,14 @@ export class FormularioComponent implements OnInit {
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;
+    this.submitted = true;    
     if (this.formGroup.valid) {
       this.submitted = false;
+
+      if (this.rel_prefix && this.rel_field) {
+        this.formGroup.enable();//*
+        this.formGroup.get(this.rel_field).setValue(this.rel_id);//*
+      }
       let sendData = this.formGroup.value;
       if (this.dataEdit == null) {
         this.MonedaService.register(sendData).subscribe(

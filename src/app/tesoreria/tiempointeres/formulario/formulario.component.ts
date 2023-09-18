@@ -23,7 +23,7 @@ export class FormularioComponent implements OnInit {
   @Input() rel_field: any = '';
   @Input() rel_id: any = '';
 
-
+  
   estados: any = [
     { value: "habilitado", name: "Habilitado" },
     { value: "deshabilitado", name: "Deshabilitado" },
@@ -35,7 +35,7 @@ export class FormularioComponent implements OnInit {
     private FormBuilder: FormBuilder,
     private notificacionService: NotificacionService,
     private TiempointeresService: TiempointeresService,
-
+    
   ) {}
 
   get form() {
@@ -58,26 +58,31 @@ export class FormularioComponent implements OnInit {
     console.log("control",control);
   }
 
-  ngOnInit(): void {
+  cargarArrays()
+  {
+    
+  }
 
+  ngOnInit(): void {    
+    this.cargarArrays();
     this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[Validators.minLength(2),Validators.maxLength(255)] ],descripcion:["",[] ],dias:["",[] ]});
     if (this.dataEdit != null) {
       this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,descripcion:this.dataEdit.descripcion,dias:this.dataEdit.dias});
-      this.rel_prefix = "/tiempointeres/"+this.dataEdit.id;
+      this.rel_prefix = "/tiempo_interes/"+this.dataEdit.id;
     }
     let id = this.route.snapshot.params['id'];
     if (this.rel_prefix && this.rel_field) this.formGroup.get(this.rel_field).disable();
     if (id != null && !this.esModal && id!="nuevo" ) {
       this.TiempointeresService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
-
+        
         if (Array.isArray(result.content))
           this.dataEdit= result.content[0];
         else
           this.dataEdit= result.content;
 
           this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre,descripcion:this.dataEdit.descripcion,dias:this.dataEdit.dias});
-          this.rel_prefix = "/tiempointeres/"+id;
+          this.rel_prefix = "/tiempo_interes/"+id;
           this.rel_id = id;
       });
     }
@@ -94,7 +99,7 @@ export class FormularioComponent implements OnInit {
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;
+    this.submitted = true;    
     if (this.formGroup.valid) {
       this.submitted = false;
 

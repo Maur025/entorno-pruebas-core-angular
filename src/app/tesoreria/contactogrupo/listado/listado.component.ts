@@ -16,14 +16,13 @@ type NewType = NotificacionService;
 export class ListadoComponent implements OnInit {
   @Input() rel_prefix:any;
   @Input() rel_field:any;
-  @Input() soloLectura:any = false;
+  @Input() rel_id:any;
 
   modalRef?: BsModalRef;
 
   formato: any;
   dataEdit = null;
-
-  titulo: any = "Listado de Contactogrupo";
+  titulo: any = "Contacto - Grupo";
 
   grupo:any = [];
 contacto:any = [];
@@ -39,7 +38,7 @@ contacto:any = [];
   ngOnInit(): void {
     if (this.rel_prefix) this.ContactogrupoService.setPrefix(this.rel_prefix);
     this.formato = {
-      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"grupo_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"grupo_id","colsize":"12","filtrotipo":"number","mascara":{"campo":"grupo","valor":"nombre"}},"contacto_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"contacto_id","colsize":"12","filtrotipo":"number","mascara":{"campo":"contacto","valor":"nombre"}}}
+      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"grupoId":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Grupo","colsize":"12","filtrotipo":"number","mascara":{"campo":"grupo","valor":"nombre"}},"contactoId":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Contacto","colsize":"12","filtrotipo":"number","mascara":{"campo":"contacto","valor":"nombre"}}}
     };
 
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
@@ -56,7 +55,7 @@ contacto:any = [];
     }
   }
 
-  editar(data: any, template) {
+  editar(data: any, template) {    
     if (this.rel_prefix == null)
       this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
     else{

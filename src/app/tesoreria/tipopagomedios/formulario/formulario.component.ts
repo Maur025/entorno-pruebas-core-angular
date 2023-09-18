@@ -22,6 +22,7 @@ export class FormularioComponent implements OnInit {
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
+  @Input() rel_id: any = '';
 
   tipo_pago:any = [];
 medio_transferencia:any = [];
@@ -59,22 +60,33 @@ medio_transferencia:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {
+  cargarArrays()
+  {
     this.TipopagoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.tipo_pago = res.content; });
 this.MediotransferenciaService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.medio_transferencia = res.content; });
-    this.formGroup = this.FormBuilder.group({id:["",[] ],tipo_pago_id:["",[] ],medio_transferencia_id:["",[] ]});
+  }
+
+  ngOnInit(): void {    
+    this.cargarArrays();
+    this.formGroup = this.FormBuilder.group({id:["",[] ],tipoPagoId:["",[] ],medioTransferenciaId:["",[] ]});
     if (this.dataEdit != null) {
-      this.formGroup.setValue({id:this.dataEdit.id,tipo_pago_id:this.dataEdit.tipo_pago_id,medio_transferencia_id:this.dataEdit.medio_transferencia_id});
-      this.rel_prefix = "/tipopagomedios/"+this.dataEdit.id;
+      this.formGroup.setValue({id:this.dataEdit.id,tipoPagoId:this.dataEdit.tipoPagoId,medioTransferenciaId:this.dataEdit.medioTransferenciaId});
+      this.rel_prefix = "/tipo_pago_medios/"+this.dataEdit.id;
     }
     let id = this.route.snapshot.params['id'];
     if (this.rel_prefix && this.rel_field) this.formGroup.get(this.rel_field).disable();
     if (id != null && !this.esModal && id!="nuevo" ) {
       this.TipopagomediosService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
-        this.dataEdit= result.content[0];
-          this.formGroup.setValue({id:this.dataEdit.id,tipo_pago_id:this.dataEdit.tipo_pago_id,medio_transferencia_id:this.dataEdit.medio_transferencia_id});
-          this.rel_prefix = "/tipopagomedios/"+id;
+        
+        if (Array.isArray(result.content))
+          this.dataEdit= result.content[0];
+        else
+          this.dataEdit= result.content;
+
+          this.formGroup.setValue({id:this.dataEdit.id,tipoPagoId:this.dataEdit.tipoPagoId,medioTransferenciaId:this.dataEdit.medioTransferenciaId});
+          this.rel_prefix = "/tipo_pago_medios/"+id;
+          this.rel_id = id;
       });
     }
   }
@@ -90,9 +102,14 @@ this.MediotransferenciaService.getAll(100, 1, 'nombre', false, '').subscribe((re
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;
+    this.submitted = true;    
     if (this.formGroup.valid) {
       this.submitted = false;
+
+      if (this.rel_prefix && this.rel_field) {
+        this.formGroup.enable();//*
+        this.formGroup.get(this.rel_field).setValue(this.rel_id);//*
+      }
       let sendData = this.formGroup.value;
       if (this.dataEdit == null) {
         this.TipopagomediosService.register(sendData).subscribe(

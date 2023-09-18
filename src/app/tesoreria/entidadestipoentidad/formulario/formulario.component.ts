@@ -22,6 +22,7 @@ export class FormularioComponent implements OnInit {
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
+  @Input() rel_id: any = '';
 
   tipo_entidad:any = [];
 entidades:any = [];
@@ -59,22 +60,33 @@ entidades:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {
+  cargarArrays()
+  {
     this.TipoentidadService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.tipo_entidad = res.content; });
 this.EntidadesService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.entidades = res.content; });
-    this.formGroup = this.FormBuilder.group({id:["",[] ],tipo_entidad_id:["",[] ],entidad_id:["",[] ]});
+  }
+
+  ngOnInit(): void {    
+    this.cargarArrays();
+    this.formGroup = this.FormBuilder.group({id:["",[] ],tipoEntidadId:["",[] ],entidadId:["",[] ]});
     if (this.dataEdit != null) {
-      this.formGroup.setValue({id:this.dataEdit.id,tipo_entidad_id:this.dataEdit.tipo_entidad_id,entidad_id:this.dataEdit.entidad_id});
-      this.rel_prefix = "/entidadestipoentidad/"+this.dataEdit.id;
+      this.formGroup.setValue({id:this.dataEdit.id,tipoEntidadId:this.dataEdit.tipoEntidadId,entidadId:this.dataEdit.entidadId});
+      this.rel_prefix = "/entidades_tipo_entidad/"+this.dataEdit.id;
     }
     let id = this.route.snapshot.params['id'];
     if (this.rel_prefix && this.rel_field) this.formGroup.get(this.rel_field).disable();
     if (id != null && !this.esModal && id!="nuevo" ) {
       this.EntidadestipoentidadService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
-        this.dataEdit= result.content[0];
-          this.formGroup.setValue({id:this.dataEdit.id,tipo_entidad_id:this.dataEdit.tipo_entidad_id,entidad_id:this.dataEdit.entidad_id});
-          this.rel_prefix = "/entidadestipoentidad/"+id;
+        
+        if (Array.isArray(result.content))
+          this.dataEdit= result.content[0];
+        else
+          this.dataEdit= result.content;
+
+          this.formGroup.setValue({id:this.dataEdit.id,tipoEntidadId:this.dataEdit.tipoEntidadId,entidadId:this.dataEdit.entidadId});
+          this.rel_prefix = "/entidades_tipo_entidad/"+id;
+          this.rel_id = id;
       });
     }
   }
@@ -90,9 +102,14 @@ this.EntidadesService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) =>
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;
+    this.submitted = true;    
     if (this.formGroup.valid) {
       this.submitted = false;
+
+      if (this.rel_prefix && this.rel_field) {
+        this.formGroup.enable();//*
+        this.formGroup.get(this.rel_field).setValue(this.rel_id);//*
+      }
       let sendData = this.formGroup.value;
       if (this.dataEdit == null) {
         this.EntidadestipoentidadService.register(sendData).subscribe(

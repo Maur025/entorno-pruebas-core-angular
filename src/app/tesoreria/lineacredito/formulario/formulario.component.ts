@@ -21,6 +21,7 @@ export class FormularioComponent implements OnInit {
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
+  @Input() rel_id: any = '';
 
   moneda:any = [];
   estados: any = [
@@ -57,11 +58,16 @@ export class FormularioComponent implements OnInit {
     console.log("control",control);
   }
 
-  ngOnInit(): void {
+  cargarArrays()
+  {
     this.MonedaService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.moneda = res.content; });
-    this.formGroup = this.FormBuilder.group({id:["",[] ],numero:["",[Validators.minLength(1)] ],moneda_id:["",[] ],importe:["",[] ],fechainicio:["",[] ],fechafin:["",[] ]});
+  }
+
+  ngOnInit(): void {    
+    this.cargarArrays();
+    this.formGroup = this.FormBuilder.group({id:["",[] ],numero:["",[Validators.required,Validators.minLength(1)] ],monedaId:["",[Validators.required] ],importe:["",[Validators.required] ],fechainicio:["",[Validators.required] ],fechafin:["",[Validators.required] ]});
     if (this.dataEdit != null) {
-      this.formGroup.setValue({id:this.dataEdit.id,numero:this.dataEdit.numero,moneda_id:this.dataEdit.moneda_id,importe:this.dataEdit.importe,fechainicio:this.dataEdit.fechainicio,fechafin:this.dataEdit.fechafin});
+      this.formGroup.setValue({id:this.dataEdit.id,numero:this.dataEdit.numero,monedaId:this.dataEdit.monedaId,importe:this.dataEdit.importe,fechainicio:this.dataEdit.fechainicio,fechafin:this.dataEdit.fechafin});
       this.rel_prefix = "/lineacredito/"+this.dataEdit.id;
     }
     let id = this.route.snapshot.params['id'];
@@ -69,9 +75,15 @@ export class FormularioComponent implements OnInit {
     if (id != null && !this.esModal && id!="nuevo" ) {
       this.LineacreditoService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
-        this.dataEdit= result.content[0];
-          this.formGroup.setValue({id:this.dataEdit.id,numero:this.dataEdit.numero,moneda_id:this.dataEdit.moneda_id,importe:this.dataEdit.importe,fechainicio:this.dataEdit.fechainicio,fechafin:this.dataEdit.fechafin});
+        
+        if (Array.isArray(result.content))
+          this.dataEdit= result.content[0];
+        else
+          this.dataEdit= result.content;
+
+          this.formGroup.setValue({id:this.dataEdit.id,numero:this.dataEdit.numero,monedaId:this.dataEdit.monedaId,importe:this.dataEdit.importe,fechainicio:this.dataEdit.fechainicio,fechafin:this.dataEdit.fechafin});
           this.rel_prefix = "/lineacredito/"+id;
+          this.rel_id = id;
       });
     }
   }
@@ -87,9 +99,14 @@ export class FormularioComponent implements OnInit {
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;
+    this.submitted = true;    
     if (this.formGroup.valid) {
       this.submitted = false;
+
+      if (this.rel_prefix && this.rel_field) {
+        this.formGroup.enable();//*
+        this.formGroup.get(this.rel_field).setValue(this.rel_id);//*
+      }
       let sendData = this.formGroup.value;
       if (this.dataEdit == null) {
         this.LineacreditoService.register(sendData).subscribe(

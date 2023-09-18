@@ -15,6 +15,7 @@ type NewType = NotificacionService;
 export class ListadoComponent implements OnInit {
   @Input() rel_prefix:any;
   @Input() rel_field:any;
+  @Input() rel_id:any;
 
   modalRef?: BsModalRef;
 

@@ -16,6 +16,7 @@ type NewType = NotificacionService;
 export class ListadoComponent implements OnInit {
   @Input() rel_prefix:any;
   @Input() rel_field:any;
+  @Input() rel_id:any;
 
   modalRef?: BsModalRef;
 
@@ -37,7 +38,7 @@ entidades:any = [];
   ngOnInit(): void {
     if (this.rel_prefix) this.EntidadestipoentidadService.setPrefix(this.rel_prefix);
     this.formato = {
-      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"tipo_entidad_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Tipo de Entidad","colsize":"12","filtrotipo":"number","mascara":{"campo":"tipo_entidad","valor":"nombre"}},"entidad_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Entidad","colsize":"12","filtrotipo":"number","mascara":{"campo":"entidad","valor":"nombre"}}}
+      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"tipoEntidadId":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Tipo de entidad","colsize":"12","filtrotipo":"number","mascara":{"campo":"tipoEntidad","valor":"nombre"}},"entidadId":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Entidad","colsize":"12","filtrotipo":"number","mascara":{"campo":"entidades","valor":"nombre"}}}
     };
 
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }

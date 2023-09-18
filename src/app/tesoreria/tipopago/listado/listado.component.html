@@ -19,6 +19,8 @@
   (alDeshabilitar)="deshabilitar($event,tabla)"
   (alEliminar)="eliminar($event,tabla)"
   [conOpciones]="true"
+  [botonExportar]="true"
+  [botonImportar]="false"
   ></krn-tabla>
 
 
@@ -28,7 +30,7 @@
       <h5 class="modal-title" id="exampleModalLabel">Tipos de pago (Nuevo)</h5>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()" ></button>
     </div>
-    <app-formulario-tipopago [esModal]="true" [rel_prefix]="rel_prefix" [rel_field]="rel_field" (alGuardar)="modalRef.hide(); tabla.obtenerDatos();"></app-formulario-tipopago>
+    <app-formulario-tipopago [esModal]="true" [rel_prefix]="rel_prefix" [rel_field]="rel_field" [rel_id]="rel_id"  (alGuardar)="modalRef.hide(); tabla.obtenerDatos();"></app-formulario-tipopago>
   </ng-template>
 
 
@@ -38,5 +40,5 @@
       <h5 class="modal-title" id="exampleModalLabel"> Tipos de pago (Editar) {{dataEdit.nombre}}</h5>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()" ></button>
     </div>
-    <app-formulario-tipopago [esModal]="true" [rel_prefix]="rel_prefix" [rel_field]="rel_field"[dataEdit]="dataEdit" (alActualizar)="modalRef.hide(); tabla.obtenerDatos();"></app-formulario-tipopago>
+    <app-formulario-tipopago [esModal]="true" [rel_prefix]="rel_prefix" [rel_field]="rel_field" [rel_id]="rel_id" [dataEdit]="dataEdit" (alActualizar)="modalRef.hide(); tabla.obtenerDatos();"></app-formulario-tipopago>
   </ng-template>

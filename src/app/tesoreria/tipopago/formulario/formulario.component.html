@@ -45,16 +45,16 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 d-none">
-                    <label for="formrow-firstname-input ">Medios de Pago</label>
-                    <select class="form-control form-select" id="tipo_pago_medios"  formControlName="tipo_pago_medios" name="tipo_pago_medios" [ngClass]="{ 'is-invalid': submitted && form['tipo_pago_medios'].errors }">
-                    <option *ngFor="let t of tipo_pago_medios" value="{{t.id}}"  >{{t.tipo_pago_id}} </option>
+                    <label for="formrow-firstname-input ">Pago - Medios</label>
+                    <select class="form-control form-select" id="tipoPagoMedios"  formControlName="tipoPagoMedios" name="tipoPagoMedios" [ngClass]="{ 'is-invalid': submitted && form['tipoPagoMedios'].errors }">
+                    <option *ngFor="let t of tipo_pago_medios" value="{{t.id}}"  >{{t.tipoPagoId}} </option>
                     </select>
-                    <div *ngIf="submitted && form['tipo_pago_medios'].errors" class="invalid-feedback" align="left" >
-                    <div *ngIf="form['tipo_pago_medios'].errors['required']">Es requerido</div>
-                    <div *ngIf="form['tipo_pago_medios'].errors['minlength']">Debe tener al menos {{form['tipo_pago_medios'].errors['minlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['tipo_pago_medios'].errors['maxlength']">Debe tener menos de {{form['tipo_pago_medios'].errors['maxlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['tipo_pago_medios'].errors['min']">Debe tener mayor o igual que {{form['tipo_pago_medios'].errors['min']['min']}} </div>
-                    <div *ngIf="form['tipo_pago_medios'].errors['max']">Debe tener menor o igual que {{form['tipo_pago_medios'].errors['max']['max']}} </div>
+                    <div *ngIf="submitted && form['tipoPagoMedios'].errors" class="invalid-feedback" align="left" >
+                    <div *ngIf="form['tipoPagoMedios'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['tipoPagoMedios'].errors['minlength']">Debe tener al menos {{form['tipoPagoMedios'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['tipoPagoMedios'].errors['maxlength']">Debe tener menos de {{form['tipoPagoMedios'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['tipoPagoMedios'].errors['min']">Debe tener mayor o igual que {{form['tipoPagoMedios'].errors['min']['min']}} </div>
+                    <div *ngIf="form['tipoPagoMedios'].errors['max']">Debe tener menor o igual que {{form['tipoPagoMedios'].errors['max']['max']}} </div>
                     </div>
                 </div>
             
@@ -63,13 +63,13 @@
                     <ul class="nav nav-tabs nav-tabs-dark" role="tablist">                        
                         
                     <li class="nav-item" >
-                        <a class="nav-link atabx active" data-bs-toggle="tab" data-bs-target="#tab-tipopagomedios" role="button" aria-current="page" href="#">Medios de Pago</a>
+                        <a class="nav-link atabx active" data-bs-toggle="tab" data-bs-target="#tab-tipopagomedios" role="button" aria-current="page" href="#">Pago - Medios</a>
                     </li>
                     </ul>
                     <div class="tab-content">
                         
                     <div class="tab-pane border active" id="tab-tipopagomedios" >
-                        <app-listado-tipopagomedios *ngIf="rel_prefix" [rel_prefix]="rel_prefix" [rel_field]="'tipo_pago_id'" > </app-listado-tipopagomedios>
+                        <app-listado-tipopagomedios *ngIf="rel_prefix" [rel_prefix]="rel_prefix" [rel_field]="'tipoPagoId'" > </app-listado-tipopagomedios>
                     </div>
                     </div>
                 </div> 

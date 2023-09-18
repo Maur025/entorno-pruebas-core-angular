@@ -19,24 +19,26 @@
   (alDeshabilitar)="deshabilitar($event,tabla)"
   (alEliminar)="eliminar($event,tabla)"
   [conOpciones]="true"
+  [botonExportar]="true"
+  [botonImportar]="false"
   ></krn-tabla>
 
 
   <ng-template #modalNuevo role="document" let-modal>
     <div class="modal-header">
-      <!-- <h5 class="modal-title" id="exampleModalLabel"><a [routerLink]="['./nuevo']" (click)="modalRef.hide()">Nuevo Lineacreditobanco</a></h5> -->
-      <h5 class="modal-title" id="exampleModalLabel">Nuevo Lineacreditobanco</h5>
+      <!-- <h5 class="modal-title" id="exampleModalLabel"><a [routerLink]="['./nuevo']" (click)="modalRef.hide()">Nueva línea de crédito - banco</a></h5> -->
+      <h5 class="modal-title" id="exampleModalLabel">Nueva línea de crédito - banco</h5>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()" ></button>
     </div>
-    <app-formulario-lineacreditobanco [esModal]="true" [rel_prefix]="rel_prefix" [rel_field]="rel_field" (alGuardar)="modalRef.hide(); tabla.obtenerDatos();"></app-formulario-lineacreditobanco>
+    <app-formulario-lineacreditobanco [esModal]="true" [rel_prefix]="rel_prefix" [rel_field]="rel_field" [rel_id]="rel_id"  (alGuardar)="modalRef.hide(); tabla.obtenerDatos();"></app-formulario-lineacreditobanco>
   </ng-template>
 
 
   <ng-template #modalEditar role="document" let-modal>
     <div class="modal-header">
-      <!-- <h5 class="modal-title" id="exampleModalLabel"> <a [routerLink]="['./'+dataEdit.id]" (click)="modalRef.hide()">Editar Lineacreditobanco {{dataEdit.nombre}}</a></h5> -->
-      <h5 class="modal-title" id="exampleModalLabel"> Editar Lineacreditobanco {{dataEdit.nombre}}</h5>
+      <!-- <h5 class="modal-title" id="exampleModalLabel"> <a [routerLink]="['./'+dataEdit.id]" (click)="modalRef.hide()">Editar línea de crédito - banco{{dataEdit.nombre}}</a></h5> -->
+      <h5 class="modal-title" id="exampleModalLabel"> Editar línea de crédito - banco{{dataEdit.nombre}}</h5>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()" ></button>
     </div>
-    <app-formulario-lineacreditobanco [esModal]="true" [rel_prefix]="rel_prefix" [rel_field]="rel_field"[dataEdit]="dataEdit" (alActualizar)="modalRef.hide(); tabla.obtenerDatos();"></app-formulario-lineacreditobanco>
+    <app-formulario-lineacreditobanco [esModal]="true" [rel_prefix]="rel_prefix" [rel_field]="rel_field" [rel_id]="rel_id" [dataEdit]="dataEdit" (alActualizar)="modalRef.hide(); tabla.obtenerDatos();"></app-formulario-lineacreditobanco>
   </ng-template>

@@ -38,12 +38,12 @@ export class CuotastiempoService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Cuotastiempo'] = 'habilitar';
+    datos['Tiempo-Cuotas'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Cuotastiempo'] = 'deshabilitar';
+    datos['Tiempo-Cuotas'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

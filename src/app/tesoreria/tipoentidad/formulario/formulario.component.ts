@@ -21,8 +21,9 @@ export class FormularioComponent implements OnInit {
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
+  @Input() rel_id: any = '';
 
-
+  
   estados: any = [
     { value: "habilitado", name: "Habilitado" },
     { value: "deshabilitado", name: "Deshabilitado" },
@@ -34,7 +35,7 @@ export class FormularioComponent implements OnInit {
     private FormBuilder: FormBuilder,
     private notificacionService: NotificacionService,
     private TipoentidadService: TipoentidadService,
-
+    
   ) {}
 
   get form() {
@@ -57,21 +58,32 @@ export class FormularioComponent implements OnInit {
     console.log("control",control);
   }
 
-  ngOnInit(): void {
+  cargarArrays()
+  {
+    
+  }
 
-    this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[] ]});
+  ngOnInit(): void {    
+    this.cargarArrays();
+    this.formGroup = this.FormBuilder.group({id:["",[] ],nombre:["",[Validators.minLength(2),Validators.maxLength(255)] ]});
     if (this.dataEdit != null) {
       this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre});
-      this.rel_prefix = "/tipoentidad/"+this.dataEdit.id;
+      this.rel_prefix = "/tipo_entidad/"+this.dataEdit.id;
     }
     let id = this.route.snapshot.params['id'];
     if (this.rel_prefix && this.rel_field) this.formGroup.get(this.rel_field).disable();
     if (id != null && !this.esModal && id!="nuevo" ) {
       this.TipoentidadService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
-        this.dataEdit= result.content[0];
+        
+        if (Array.isArray(result.content))
+          this.dataEdit= result.content[0];
+        else
+          this.dataEdit= result.content;
+
           this.formGroup.setValue({id:this.dataEdit.id,nombre:this.dataEdit.nombre});
-          this.rel_prefix = "/tipoentidad/"+id;
+          this.rel_prefix = "/tipo_entidad/"+id;
+          this.rel_id = id;
       });
     }
   }
@@ -87,9 +99,14 @@ export class FormularioComponent implements OnInit {
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;
+    this.submitted = true;    
     if (this.formGroup.valid) {
       this.submitted = false;
+
+      if (this.rel_prefix && this.rel_field) {
+        this.formGroup.enable();//*
+        this.formGroup.get(this.rel_field).setValue(this.rel_id);//*
+      }
       let sendData = this.formGroup.value;
       if (this.dataEdit == null) {
         this.TipoentidadService.register(sendData).subscribe(

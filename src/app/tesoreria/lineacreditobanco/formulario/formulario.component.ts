@@ -22,6 +22,7 @@ export class FormularioComponent implements OnInit {
   @Input() dataEdit: any;
   @Input() rel_prefix: any;
   @Input() rel_field: any = '';
+  @Input() rel_id: any = '';
 
   lineacredito:any = [];
 banco:any = [];
@@ -59,22 +60,33 @@ banco:any = [];
     console.log("control",control);
   }
 
-  ngOnInit(): void {
+  cargarArrays()
+  {
     this.LineacreditoService.getAll(100, 1, 'numero', false, '').subscribe((res:any) => { this.lineacredito = res.content; });
 this.BancoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { this.banco = res.content; });
-    this.formGroup = this.FormBuilder.group({id:["",[] ],lineacredito_id:["",[] ],banco_id:["",[] ]});
+  }
+
+  ngOnInit(): void {    
+    this.cargarArrays();
+    this.formGroup = this.FormBuilder.group({id:["",[] ],lineacreditoId:["",[] ],bancoId:["",[] ]});
     if (this.dataEdit != null) {
-      this.formGroup.setValue({id:this.dataEdit.id,lineacredito_id:this.dataEdit.lineacredito_id,banco_id:this.dataEdit.banco_id});
-      this.rel_prefix = "/lineacreditobanco/"+this.dataEdit.id;
+      this.formGroup.setValue({id:this.dataEdit.id,lineacreditoId:this.dataEdit.lineacreditoId,bancoId:this.dataEdit.bancoId});
+      this.rel_prefix = "/lineacredito_banco/"+this.dataEdit.id;
     }
     let id = this.route.snapshot.params['id'];
     if (this.rel_prefix && this.rel_field) this.formGroup.get(this.rel_field).disable();
     if (id != null && !this.esModal && id!="nuevo" ) {
       this.LineacreditobancoService.find(id).subscribe((result:any) => {
         if (result.content.length == 0) return;
-        this.dataEdit= result.content[0];
-          this.formGroup.setValue({id:this.dataEdit.id,lineacredito_id:this.dataEdit.lineacredito_id,banco_id:this.dataEdit.banco_id});
-          this.rel_prefix = "/lineacreditobanco/"+id;
+        
+        if (Array.isArray(result.content))
+          this.dataEdit= result.content[0];
+        else
+          this.dataEdit= result.content;
+
+          this.formGroup.setValue({id:this.dataEdit.id,lineacreditoId:this.dataEdit.lineacreditoId,bancoId:this.dataEdit.bancoId});
+          this.rel_prefix = "/lineacredito_banco/"+id;
+          this.rel_id = id;
       });
     }
   }
@@ -90,9 +102,14 @@ this.BancoService.getAll(100, 1, 'nombre', false, '').subscribe((res:any) => { t
     this.router.navigate(['..'], {relativeTo: this.route});
   }
   guardar() {
-    this.submitted = true;
+    this.submitted = true;    
     if (this.formGroup.valid) {
       this.submitted = false;
+
+      if (this.rel_prefix && this.rel_field) {
+        this.formGroup.enable();//*
+        this.formGroup.get(this.rel_field).setValue(this.rel_id);//*
+      }
       let sendData = this.formGroup.value;
       if (this.dataEdit == null) {
         this.LineacreditobancoService.register(sendData).subscribe(

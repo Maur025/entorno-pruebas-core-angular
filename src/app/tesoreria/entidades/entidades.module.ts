@@ -6,7 +6,6 @@ import { HerramientasModule } from 'src/app/core/herramientas/herramientas.modul
 import { FormularioComponent } from './formulario/formulario.component';
 import { EntidadesRoutingModule } from './entidades-routing.module';
 import { EntidadestipoentidadModule } from '../entidadestipoentidad/entidadestipoentidad.module';
-import { EntidadcontactosModule } from '../entidadcontactos/entidadcontactos.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +19,6 @@ import { EntidadcontactosModule } from '../entidadcontactos/entidadcontactos.mod
     FormsModule,
     ReactiveFormsModule,
     EntidadestipoentidadModule,
-EntidadcontactosModule
   ],
   exports: [
     ListadoComponent,

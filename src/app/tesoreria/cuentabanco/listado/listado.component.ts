@@ -16,6 +16,7 @@ type NewType = NotificacionService;
 export class ListadoComponent implements OnInit {
   @Input() rel_prefix:any;
   @Input() rel_field:any;
+  @Input() rel_id:any;
 
   modalRef?: BsModalRef;
 
@@ -37,7 +38,7 @@ banco:any = [];
   ngOnInit(): void {
     if (this.rel_prefix) this.CuentabancoService.setPrefix(this.rel_prefix);
     this.formato = {
-      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"nrocuenta":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Número de cuenta","colsize":"12","filtrotipo":"number"},"moneda_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Moneda","colsize":"12","filtrotipo":"number","mascara":{"campo":"moneda","valor":"nombre"}},"banco_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Banco","colsize":"12","filtrotipo":"number","mascara":{"campo":"banco","valor":"nombre"}}}
+      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"nrocuenta":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Número de cuenta","colsize":"12","filtrotipo":"number"},"monedaId":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"monedaId","colsize":"12","filtrotipo":"number","mascara":{"campo":"moneda","valor":"nombre"}},"bancoId":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"bancoId","colsize":"12","filtrotipo":"number","mascara":{"campo":"banco","valor":"nombre"}}}
     };
 
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }

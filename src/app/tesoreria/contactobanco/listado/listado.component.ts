@@ -16,6 +16,7 @@ type NewType = NotificacionService;
 export class ListadoComponent implements OnInit {
   @Input() rel_prefix:any;
   @Input() rel_field:any;
+  @Input() rel_id:any;
 
   modalRef?: BsModalRef;
 
@@ -37,7 +38,7 @@ contacto:any = [];
   ngOnInit(): void {
     if (this.rel_prefix) this.ContactobancoService.setPrefix(this.rel_prefix);
     this.formato = {
-      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"banco_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Banco","colsize":"12","filtrotipo":"number","mascara":{"campo":"banco","valor":"nombre"}},"contacto_id":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Contacto","colsize":"12","filtrotipo":"number","mascara":{"campo":"contacto","valor":"nombre"}}}
+      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"bancoId":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Banco","colsize":"12","filtrotipo":"number","mascara":{"campo":"banco","valor":"nombre"}},"contactoId":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Contactos","colsize":"12","filtrotipo":"number","mascara":{"campo":"contacto","valor":"nombre"}}}
     };
 
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
@@ -54,7 +55,7 @@ contacto:any = [];
     }
   }
 
-  editar(data: any, template) {
+  editar(data: any, template) {    
     if (this.rel_prefix == null)
       this.router.navigate(['./'+data.id, { }],{relativeTo: this.route});
     else{

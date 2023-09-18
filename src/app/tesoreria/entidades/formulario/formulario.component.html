@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-body row">
 
-            
+
 
                 <div class="mb-6 col-sm-12 d-none">
                     <label for="nombre">id </label>
@@ -45,56 +45,30 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 d-none">
-                    <label for="formrow-firstname-input ">Tipo de Entidad</label>
-                    <select class="form-control form-select" id="entidades_tipo_entidad"  formControlName="entidades_tipo_entidad" name="entidades_tipo_entidad" [ngClass]="{ 'is-invalid': submitted && form['entidades_tipo_entidad'].errors }">
-                    <option *ngFor="let t of entidades_tipo_entidad" value="{{t.id}}"  >{{t.entidad_id}} </option>
-                    </select>
-                    <div *ngIf="submitted && form['entidades_tipo_entidad'].errors" class="invalid-feedback" align="left" >
-                    <div *ngIf="form['entidades_tipo_entidad'].errors['required']">Es requerido</div>
-                    <div *ngIf="form['entidades_tipo_entidad'].errors['minlength']">Debe tener al menos {{form['entidades_tipo_entidad'].errors['minlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['entidades_tipo_entidad'].errors['maxlength']">Debe tener menos de {{form['entidades_tipo_entidad'].errors['maxlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['entidades_tipo_entidad'].errors['min']">Debe tener mayor o igual que {{form['entidades_tipo_entidad'].errors['min']['min']}} </div>
-                    <div *ngIf="form['entidades_tipo_entidad'].errors['max']">Debe tener menor o igual que {{form['entidades_tipo_entidad'].errors['max']['max']}} </div>
-                    </div>
+                    <app-selector-add #entidades_tipo_entidadSelector  label="Entidad - Tipo Entidad" [campoNombre]="'entidadId'" [campoValor]="'id'" [templateEditar]="entidades_tipo_entidadTemplateEditar" [templateNuevo]="entidades_tipo_entidadTemplateNuevo" name="entidadesTipoEntidad" [submitted]="submitted" [dataArray]="entidades_tipo_entidad" formControlName="entidadesTipoEntidad"  ></app-selector-add>
+                    <ng-template #entidades_tipo_entidadTemplateNuevo>
+                        <app-formulario-entidadestipoentidad [esModal]="true" (alGuardar)="cargarArrays();entidades_tipo_entidadSelector.close()" ></app-formulario-entidadestipoentidad>
+                    </ng-template>
+                    <ng-template #entidades_tipo_entidadTemplateEditar>
+                        <app-formulario-entidadestipoentidad [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(entidades_tipo_entidad, 'entidadesTipoEntidad')" (alActualizar)="entidades_tipo_entidadSelector.close();setDataFromFormname(entidades_tipo_entidad, 'entidadesTipoEntidad',$event)" ></app-formulario-entidadestipoentidad>
+                    </ng-template>
                 </div>
 
-                <div class="mb-6 col-sm-12 d-none">
-                    <label for="formrow-firstname-input ">Contactos</label>
-                    <select class="form-control form-select" id="entidad_contactos"  formControlName="entidad_contactos" name="entidad_contactos" [ngClass]="{ 'is-invalid': submitted && form['entidad_contactos'].errors }">
-                    <option *ngFor="let t of entidad_contactos" value="{{t.id}}"  >{{t.entidad_id}} </option>
-                    </select>
-                    <div *ngIf="submitted && form['entidad_contactos'].errors" class="invalid-feedback" align="left" >
-                    <div *ngIf="form['entidad_contactos'].errors['required']">Es requerido</div>
-                    <div *ngIf="form['entidad_contactos'].errors['minlength']">Debe tener al menos {{form['entidad_contactos'].errors['minlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['entidad_contactos'].errors['maxlength']">Debe tener menos de {{form['entidad_contactos'].errors['maxlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['entidad_contactos'].errors['min']">Debe tener mayor o igual que {{form['entidad_contactos'].errors['min']['min']}} </div>
-                    <div *ngIf="form['entidad_contactos'].errors['max']">Debe tener menor o igual que {{form['entidad_contactos'].errors['max']['max']}} </div>
-                    </div>
-                </div>
-            
                 <div class="mb-6 col-sm-12" *ngIf="dataEdit">
                     <hr>
-                    <ul class="nav nav-tabs nav-tabs-dark" role="tablist">                        
-                        
-                    <li class="nav-item" >
-                        <a class="nav-link atabx active" data-bs-toggle="tab" data-bs-target="#tab-entidadestipoentidad" role="button" aria-current="page" href="#">Tipo de Entidad</a>
-                    </li>
+                    <ul class="nav nav-tabs nav-tabs-dark" role="tablist">
 
                     <li class="nav-item" >
-                        <a class="nav-link atabx " data-bs-toggle="tab" data-bs-target="#tab-entidadcontactos" role="button" aria-current="page" href="#">Contactos</a>
+                        <a class="nav-link atabx active" data-bs-toggle="tab" data-bs-target="#tab-entidadestipoentidad" role="button" aria-current="page" href="#">Entidad - Tipo Entidad</a>
                     </li>
                     </ul>
                     <div class="tab-content">
-                        
-                    <div class="tab-pane border active" id="tab-entidadestipoentidad" >
-                        <app-listado-entidadestipoentidad *ngIf="rel_prefix" [rel_prefix]="rel_prefix" [rel_field]="'entidad_id'" > </app-listado-entidadestipoentidad>
-                    </div>
 
-                    <div class="tab-pane border " id="tab-entidadcontactos" >
-                        <app-listado-entidadcontactos *ngIf="rel_prefix" [rel_prefix]="rel_prefix" [rel_field]="'entidad_id'" > </app-listado-entidadcontactos>
+                    <div class="tab-pane border active" id="tab-entidadestipoentidad" >
+                        <app-listado-entidadestipoentidad *ngIf="rel_prefix" [rel_prefix]="rel_prefix" [rel_field]="'entidadId'" > </app-listado-entidadestipoentidad>
                     </div>
                     </div>
-                </div> 
+                </div>
             <hr>
             <div class="col-lg-6">
               <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>

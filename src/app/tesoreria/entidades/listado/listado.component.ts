@@ -4,7 +4,6 @@ import { EntidadesService } from "../servicios/entidades.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { EntidadestipoentidadService } from '../servicios/entidadestipoentidad.service';
-import { EntidadcontactosService } from '../servicios/entidadcontactos.service';
 
 type NewType = NotificacionService;
 
@@ -16,15 +15,15 @@ type NewType = NotificacionService;
 export class ListadoComponent implements OnInit {
   @Input() rel_prefix:any;
   @Input() rel_field:any;
+  @Input() rel_id:any;
 
   modalRef?: BsModalRef;
 
   formato: any;
   dataEdit = null;
-  titulo: any = "Listado de Entidades";
+  titulo: any = "Entidades";
 
   entidades_tipo_entidad:any = [];
-entidad_contactos:any = [];
 
   constructor(
     public EntidadesService: EntidadesService,
@@ -37,7 +36,7 @@ entidad_contactos:any = [];
   ngOnInit(): void {
     if (this.rel_prefix) this.EntidadesService.setPrefix(this.rel_prefix);
     this.formato = {
-      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"nombre":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Nombre","colsize":"12","filtrotipo":"text"},"identificacion":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Identificación","colsize":"12","filtrotipo":"text"},"entidades_tipo_entidad":{"texto":"Tipo de Entidad","colsize":"12","mascara":{"campo":"entidades_tipo_entidad","valor":"entidad_id"}},"entidad_contactos":{"texto":"Contactos","colsize":"12","mascara":{"campo":"entidad_contactos","valor":"entidad_id"}}}
+      cabeceras: {"id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"id","colsize":"12","filtrotipo":"number"},"nombre":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Nombre","colsize":"12","filtrotipo":"text"},"identificacion":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Identificación","colsize":"12","filtrotipo":"text"},"entidadesTipoEntidad":{"texto":"Entidad - Tipo Entidad","colsize":"12","mascara":{"campo":"entidadesTipoEntidad","valor":"entidadId"}}}
     };
 
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }

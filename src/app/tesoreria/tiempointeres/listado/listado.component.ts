@@ -21,7 +21,7 @@ export class ListadoComponent implements OnInit {
 
   formato: any;
   dataEdit = null;
-  titulo: any = "Listado de Tiempointeres";
+  titulo: any = "Tiempo de Interés";
 
   
 

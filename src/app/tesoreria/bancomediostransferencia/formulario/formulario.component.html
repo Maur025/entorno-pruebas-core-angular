@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-body row">
 
-
+            
 
                 <div class="mb-6 col-sm-12 d-none">
                     <label for="nombre">id </label>
@@ -22,28 +22,28 @@
 
                 <div class="mb-6 col-sm-12 ">
                     <label for="formrow-firstname-input ">Banco</label>
-                    <select class="form-control form-select" id="banco_id"  formControlName="banco_id" name="banco_id" [ngClass]="{ 'is-invalid': submitted && form['banco_id'].errors }">
+                    <select class="form-control form-select" id="bancoId"  formControlName="bancoId" name="bancoId" [ngClass]="{ 'is-invalid': submitted && form['bancoId'].errors }">
                     <option *ngFor="let t of banco" value="{{t.id}}"  >{{t.nombre}} </option>
                     </select>
-                    <div *ngIf="submitted && form['banco_id'].errors" class="invalid-feedback" align="left" >
-                    <div *ngIf="form['banco_id'].errors['required']">Es requerido</div>
-                    <div *ngIf="form['banco_id'].errors['minlength']">Debe tener al menos {{form['banco_id'].errors['minlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['banco_id'].errors['maxlength']">Debe tener menos de {{form['banco_id'].errors['maxlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['banco_id'].errors['min']">Debe tener mayor o igual que {{form['banco_id'].errors['min']['min']}} </div>
-                    <div *ngIf="form['banco_id'].errors['max']">Debe tener menor o igual que {{form['banco_id'].errors['max']['max']}} </div>
+                    <div *ngIf="submitted && form['bancoId'].errors" class="invalid-feedback" align="left" >
+                    <div *ngIf="form['bancoId'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['bancoId'].errors['minlength']">Debe tener al menos {{form['bancoId'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['bancoId'].errors['maxlength']">Debe tener menos de {{form['bancoId'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['bancoId'].errors['min']">Debe tener mayor o igual que {{form['bancoId'].errors['min']['min']}} </div>
+                    <div *ngIf="form['bancoId'].errors['max']">Debe tener menor o igual que {{form['bancoId'].errors['max']['max']}} </div>
                     </div>
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <app-selector-add #medio_transferenciaSelector  label="Medio de Transferencia" [campoNombre]="'nombre'" [campoValor]="'id'" [templateEditar]="medio_transferenciaTemplateEditar" [templateNuevo]="medio_transferenciaTemplateNuevo" name="medio_transferencia_id" [submitted]="submitted" [dataArray]="medio_transferencia" formControlName="medio_transferencia_id"  ></app-selector-add>
+                    <app-selector-add #medio_transferenciaSelector  label="Medio de Transferencia" [campoNombre]="'nombre'" [campoValor]="'id'" [templateEditar]="medio_transferenciaTemplateEditar" [templateNuevo]="medio_transferenciaTemplateNuevo" name="medioTransferenciaId" [submitted]="submitted" [dataArray]="medio_transferencia" formControlName="medioTransferenciaId"  ></app-selector-add>
                     <ng-template #medio_transferenciaTemplateNuevo>
-                        <app-formulario-mediotransferencia [esModal]="true" (alGuardar)="medio_transferencia.push(arrayToSingle($event['content']));form['medio_transferencia_id'].setValue(arrayToSingle($event['content'])['id']);medio_transferenciaSelector.close()" ></app-formulario-mediotransferencia>
+                        <app-formulario-mediotransferencia [esModal]="true" (alGuardar)="cargarArrays();medio_transferenciaSelector.close()" ></app-formulario-mediotransferencia>
                     </ng-template>
                     <ng-template #medio_transferenciaTemplateEditar>
-                        <app-formulario-mediotransferencia [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(medio_transferencia, 'medio_transferencia_id')" (alActualizar)="medio_transferenciaSelector.close();setDataFromFormname(medio_transferencia, 'medio_transferencia_id',$event)" ></app-formulario-mediotransferencia>
+                        <app-formulario-mediotransferencia [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(medio_transferencia, 'medioTransferenciaId')" (alActualizar)="medio_transferenciaSelector.close();setDataFromFormname(medio_transferencia, 'medioTransferenciaId',$event)" ></app-formulario-mediotransferencia>
                     </ng-template>
                 </div>
-
+            
             <hr>
             <div class="col-lg-6">
               <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>

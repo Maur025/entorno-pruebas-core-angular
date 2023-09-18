@@ -38,12 +38,12 @@ export class MediotransferenciaService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Medios de Transferencia'] = 'habilitar';
+    datos['Banco - Medios de Transferencia'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Medios de Transferencia'] = 'deshabilitar';
+    datos['Banco - Medios de Transferencia'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

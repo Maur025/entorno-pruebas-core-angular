@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-body row">
 
-
+            
 
                 <div class="mb-6 col-sm-12 d-none">
                     <label for="nombre">id </label>
@@ -21,8 +21,8 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">Número </label>
-                    <input type="text"  class="form-control uppercase" id="numero" (click)="alCambiar(form)"  formControlName="numero" [ngClass]="{ 'is-invalid': submitted && form['numero'].errors }">
+                    <label for="nombre">(*)Número </label>
+                    <input type="text"  class="form-control uppercase" id="numero" (click)="alCambiar(form)" required formControlName="numero" [ngClass]="{ 'is-invalid': submitted && form['numero'].errors }">
                     <div *ngIf="submitted && form['numero'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['numero'].errors['required']">Es requerido</div>
                     <div *ngIf="form['numero'].errors['minlength']">Debe tener al menos {{form['numero'].errors['minlength']['requiredLength']}} caracteres</div>
@@ -33,18 +33,22 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <app-selector-add #monedaSelector  label="Monedas" [campoNombre]="'nombre'" [campoValor]="'id'" [templateEditar]="monedaTemplateEditar" [templateNuevo]="monedaTemplateNuevo" name="moneda_id" [submitted]="submitted" [dataArray]="moneda" formControlName="moneda_id"  ></app-selector-add>
-                    <ng-template #monedaTemplateNuevo>
-                        <app-formulario-moneda [esModal]="true" (alGuardar)="moneda.push(arrayToSingle($event['content']));form['moneda_id'].setValue(arrayToSingle($event['content'])['id']);monedaSelector.close()" ></app-formulario-moneda>
-                    </ng-template>
-                    <ng-template #monedaTemplateEditar>
-                        <app-formulario-moneda [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(moneda, 'moneda_id')" (alActualizar)="monedaSelector.close();setDataFromFormname(moneda, 'moneda_id',$event)" ></app-formulario-moneda>
-                    </ng-template>
+                    <label for="formrow-firstname-input ">(*)Moneda</label>
+                    <select class="form-control form-select" id="monedaId" required formControlName="monedaId" name="monedaId" [ngClass]="{ 'is-invalid': submitted && form['monedaId'].errors }">
+                    <option *ngFor="let t of moneda" value="{{t.id}}"  >{{t.nombre}} </option>
+                    </select>
+                    <div *ngIf="submitted && form['monedaId'].errors" class="invalid-feedback" align="left" >
+                    <div *ngIf="form['monedaId'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['monedaId'].errors['minlength']">Debe tener al menos {{form['monedaId'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['monedaId'].errors['maxlength']">Debe tener menos de {{form['monedaId'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['monedaId'].errors['min']">Debe tener mayor o igual que {{form['monedaId'].errors['min']['min']}} </div>
+                    <div *ngIf="form['monedaId'].errors['max']">Debe tener menor o igual que {{form['monedaId'].errors['max']['max']}} </div>
+                    </div>
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">Importe </label>
-                    <input type="text"  class="form-control uppercase" id="importe" (click)="alCambiar(form)"  formControlName="importe" [ngClass]="{ 'is-invalid': submitted && form['importe'].errors }">
+                    <label for="nombre">(*)Importe </label>
+                    <input type="number"  class="form-control uppercase" id="importe" (click)="alCambiar(form)" required formControlName="importe" [ngClass]="{ 'is-invalid': submitted && form['importe'].errors }">
                     <div *ngIf="submitted && form['importe'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['importe'].errors['required']">Es requerido</div>
                     <div *ngIf="form['importe'].errors['minlength']">Debe tener al menos {{form['importe'].errors['minlength']['requiredLength']}} caracteres</div>
@@ -55,8 +59,8 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">Fecha de Inicio </label>
-                    <input type="date"  class="form-control uppercase" id="fechainicio" (click)="alCambiar(form)"  formControlName="fechainicio" [ngClass]="{ 'is-invalid': submitted && form['fechainicio'].errors }">
+                    <label for="nombre">(*)Fecha de Inicio </label>
+                    <input type="date"  class="form-control uppercase" id="fechainicio" (click)="alCambiar(form)" required formControlName="fechainicio" [ngClass]="{ 'is-invalid': submitted && form['fechainicio'].errors }">
                     <div *ngIf="submitted && form['fechainicio'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['fechainicio'].errors['required']">Es requerido</div>
                     <div *ngIf="form['fechainicio'].errors['minlength']">Debe tener al menos {{form['fechainicio'].errors['minlength']['requiredLength']}} caracteres</div>
@@ -67,8 +71,8 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">Fecha de fin </label>
-                    <input type="date"  class="form-control uppercase" id="fechafin" (click)="alCambiar(form)"  formControlName="fechafin" [ngClass]="{ 'is-invalid': submitted && form['fechafin'].errors }">
+                    <label for="nombre">(*)Fecha de fin </label>
+                    <input type="date"  class="form-control uppercase" id="fechafin" (click)="alCambiar(form)" required formControlName="fechafin" [ngClass]="{ 'is-invalid': submitted && form['fechafin'].errors }">
                     <div *ngIf="submitted && form['fechafin'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['fechafin'].errors['required']">Es requerido</div>
                     <div *ngIf="form['fechafin'].errors['minlength']">Debe tener al menos {{form['fechafin'].errors['minlength']['requiredLength']}} caracteres</div>
@@ -77,7 +81,7 @@
                     <div *ngIf="form['fechafin'].errors['max']">Debe tener menor o igual que {{form['fechafin'].errors['max']['max']}} </div>
                     </div>
                 </div>
-
+            
             <hr>
             <div class="col-lg-6">
               <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>

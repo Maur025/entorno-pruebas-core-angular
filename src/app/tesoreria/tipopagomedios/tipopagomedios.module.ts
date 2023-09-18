@@ -5,7 +5,7 @@ import { ListadoComponent } from './listado/listado.component';
 import { HerramientasModule } from 'src/app/core/herramientas/herramientas.module';
 import { FormularioComponent } from './formulario/formulario.component';
 import { TipopagomediosRoutingModule } from './tipopagomedios-routing.module';
-import { MediotransferenciaModule } from '../mediotransferencia/mediotransferencia.module';
+
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import { MediotransferenciaModule } from '../mediotransferencia/mediotransferenc
     HerramientasModule,
     FormsModule,
     ReactiveFormsModule,
-    MediotransferenciaModule
+    
   ],
   exports: [
     ListadoComponent,

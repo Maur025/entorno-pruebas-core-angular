@@ -38,12 +38,12 @@ export class CuentaService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Cuenta'] = 'habilitar';
+    datos['Cuentas'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Cuenta'] = 'deshabilitar';
+    datos['Cuentas'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

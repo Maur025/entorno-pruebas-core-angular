@@ -38,12 +38,12 @@ export class TipoentidadService {
   }
 
   habilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Tipoentidad'] = 'habilitar';
+    datos['Tipos de Entidad'] = 'habilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 
   deshabilitar(datos:any,id: string | number): Observable<any> {
-    datos['Listado de Tipoentidad'] = 'deshabilitar';
+    datos['Tipos de Entidad'] = 'deshabilitar';
     return this.http.put(this.apiUrl + this.prefix+ `/${this.apiName}/${datos.id}`, datos);
   }
 }

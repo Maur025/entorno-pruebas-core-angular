@@ -21,8 +21,8 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">sigla </label>
-                    <input type="text"  class="form-control uppercase" id="sigla" (click)="alCambiar(form)"  formControlName="sigla" [ngClass]="{ 'is-invalid': submitted && form['sigla'].errors }">
+                    <label for="nombre">(*)Sigla </label>
+                    <input type="text"  class="form-control uppercase" id="sigla" (click)="alCambiar(form)" required formControlName="sigla" [ngClass]="{ 'is-invalid': submitted && form['sigla'].errors }">
                     <div *ngIf="submitted && form['sigla'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['sigla'].errors['required']">Es requerido</div>
                     <div *ngIf="form['sigla'].errors['minlength']">Debe tener al menos {{form['sigla'].errors['minlength']['requiredLength']}} caracteres</div>
@@ -33,8 +33,8 @@
                 </div>
 
                 <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">nombre </label>
-                    <input type="text"  class="form-control uppercase" id="nombre" (click)="alCambiar(form)"  formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }">
+                    <label for="nombre">(*)Nombre </label>
+                    <input type="text"  class="form-control uppercase" id="nombre" (click)="alCambiar(form)" required formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }">
                     <div *ngIf="submitted && form['nombre'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['nombre'].errors['required']">Es requerido</div>
                     <div *ngIf="form['nombre'].errors['minlength']">Debe tener al menos {{form['nombre'].errors['minlength']['requiredLength']}} caracteres</div>
