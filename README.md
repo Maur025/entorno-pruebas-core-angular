@@ -21,4 +21,13 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 ### Plantilla: Skote -  Angular 13 Responsive Admin Dashboard Template
 
-#
+# Clone Proyect 
+```
+git clone git@github.com:KernoTec/kernobi_tesoreria_ui.git --recursive
+```
+
+# Submodulo
+```
+git submodule add git@referencia
+```
+
