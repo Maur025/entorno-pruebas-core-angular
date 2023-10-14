@@ -1,37 +1,38 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { ConsumoApiService } from './consumoApi.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TipoDocumentosService {
 
-  contabilidadApiUrl = environment.apiUrlContabilidad;
+  contabilidadApiUrl = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private apiService:ConsumoApiService) { }
 
   getAll(size=1, page=1){
-    return this.http.get(this.contabilidadApiUrl+ `/tipo_documentos?page=${page}&size=${size}`);
+    return this.apiService.tesoreria.get(this.contabilidadApiUrl+ `/tipo_documentos?page=${page}&size=${size}`);
   }
 
   register(documento){
-    return this.http.post(this.contabilidadApiUrl+ `/tipo_documentos`, documento);
+    return this.apiService.tesoreria.post(this.contabilidadApiUrl+ `/tipo_documentos`, documento);
   }
 
   update(documento){
-    return this.http.put(this.contabilidadApiUrl+`/tipo_documentos/`+documento.id, documento);
+    return this.apiService.tesoreria.put(this.contabilidadApiUrl+`/tipo_documentos/`+documento.id, documento);
   }
 
   delete(documento_id){
-    return this.http.delete(this.contabilidadApiUrl+`/tipo_documentos/`+documento_id);
+    return this.apiService.tesoreria.delete(this.contabilidadApiUrl+`/tipo_documentos/`+documento_id);
   }
 
   destroy(documento_id){
-    return this.http.delete(this.contabilidadApiUrl+`/tipo_documentos/`+documento_id);
+    return this.apiService.tesoreria.delete(this.contabilidadApiUrl+`/tipo_documentos/`+documento_id);
   }
 
   search(size=1, page=1, criterioBuscar: any){
-    return this.http.get(this.contabilidadApiUrl+ `/tipo_documentos?page=${page}&size=${size}&keyword=${criterioBuscar}`);
+    return this.apiService.tesoreria.get(this.contabilidadApiUrl+ `/tipo_documentos?page=${page}&size=${size}&keyword=${criterioBuscar}`);
   }
 }

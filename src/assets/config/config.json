@@ -1,0 +1,8 @@
+{
+    "production": false,
+    "comprasApiKerno": "http://localhost:8080/api/compras",
+    "contabilidadApiKerno": "http://localhost:8081/api/contabilidad",
+    "inventariosApiKerno": "http://localhost:8000/api/v1",
+    "tesoreriaApiKerno": "http://localhost:8082/api/tesoreria",
+    "accountApiKerno": "http://localhost:8083/api/config"
+  }
