@@ -6,6 +6,7 @@ steps:
   - name: compile
     image: node:14
     commands:
+      - echo "//registry.kernotec.com/repository/npm-central/:_authToken=Z2l0aHViOnRST0NBVkxQcmVzcDVmaVBoZXByCg==" > .npmrc
       - npm config set registry https://registry.kernotec.com/repository/npm-central/
       - cp src/environments/environment.prod.ts src/environments/environment.ts
       - rm -f package-lock.json
