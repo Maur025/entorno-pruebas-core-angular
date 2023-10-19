@@ -1,0 +1,73 @@
+kind: pipeline
+type: docker
+name: building
+
+steps:
+  - name: compile
+    image: node:14
+    commands:
+      - npm config set registry https://registry.kernotec.com/repository/npm-central/
+      - cp src/environments/environment.prod.ts src/environments/environment.ts
+      - rm -f package-lock.json
+      - rm -f yarn.lock
+      - npm install @angular/cli@14.2.10
+      - npm install
+      - rm -rf dist && npm run build --configuration=production
+    when:
+      repo:
+        - KernoTec/${DRONE_REPO_NAME}
+      event:
+        - push
+        - pull_request
+        - tag
+
+  - name: docker_pull_request
+    image: plugins/docker
+    settings:
+      dockerfile: docker/Dockerfile
+      registry: hub.kernotec.com
+      repo: hub.kernotec.com/kernotec/${DRONE_REPO_NAME}
+      tags: ${DRONE_PULL_REQUEST}
+      username:
+        from_secret: kernotec_username
+      password:
+        from_secret: kernotec_password
+    when:
+      repo:
+        - KernoTec/${DRONE_REPO_NAME}
+      event:
+        - pull_request
+
+  - name: docker_push
+    image: plugins/docker
+    settings:
+      dockerfile: docker/Dockerfile
+      registry: hub.kernotec.com
+      repo: hub.kernotec.com/kernotec/${DRONE_REPO_NAME}
+      tags: ${DRONE_BRANCH/\//_}
+      username:
+        from_secret: kernotec_username
+      password:
+        from_secret: kernotec_password
+    when:
+      repo:
+        - KernoTec/${DRONE_REPO_NAME}
+      event:
+        - push
+
+  - name: docker_tag
+    image: plugins/docker
+    settings:
+      dockerfile: docker/Dockerfile
+      registry: hub.kernotec.com
+      repo: hub.kernotec.com/kernotec/${DRONE_REPO_NAME}
+      tags: ${DRONE_TAG}
+      username:
+        from_secret: kernotec_username
+      password:
+        from_secret: kernotec_password
+    when:
+      repo:
+        - KernoTec/${DRONE_REPO_NAME}
+      event:
+        - tag
