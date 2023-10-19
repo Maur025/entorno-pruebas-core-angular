@@ -6,6 +6,9 @@ steps:
   - name: compile
     image: node:14
     commands:
+      - npm config set registry https://registry.kernotec.com/repository/npm-central/
+      - npm config set _auth=Z2l0aHViOnRST0NBVkxQcmVzcDVmaVBoZXBy
+      - npm config set always-auth=true
       - cp src/environments/environment.prod.ts src/environments/environment.ts
       - rm -f package-lock.json
       - rm -f yarn.lock
