@@ -1,3 +1,3 @@
-[submodule "src/app/core/herramientas"]
-	path = src/app/core/herramientas
-	url = git@github.com:jptord/angularherramientas.git
+#[submodule "src/app/core/herramientas"]
+#	path = src/app/core/herramientas
+#	url = git@github.com:jptord/angularherramientas.git
