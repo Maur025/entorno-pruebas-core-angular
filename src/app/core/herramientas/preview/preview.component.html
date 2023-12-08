@@ -1,0 +1,15 @@
+<div class="modal-header">
+  <h5 class="modal-title" >¿Está seguro de registrar la información? </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+<div class="modal-body">
+  <div class="mb-3">
+      <img class="imagen-confirm" *ngFor="let i of images" src="{{i}}" />
+  </div>
+</div>
+<div class="modal-footer">
+  <div class="hstack gap-2 justify-content-end">
+      <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="cerrarModal()">No, Cancelar</button>
+      <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="registrar()"><i class="mdi mdi-save"></i> Si, Registrar</button>
+  </div>
+</div>
