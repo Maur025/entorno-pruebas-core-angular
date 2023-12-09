@@ -76,32 +76,36 @@
           </div>
           <div class="table-responsive mt-2" *ngIf="datos"
             [class]="{'container-scroll': paginate == false && datos.length > 10}">
-            <table class="table mb-0 table-hover align-middle nowrap data-table table-condensed"
-              [ngClass]="{ 'table-sm': smallTable }">
+            <table [class]="classTable" [ngClass]="{ 'table-sm': smallTable }">
               <thead>
                 <tr>
-                  <ng-template ngFor let-campo [ngForOf]="this.cabeceras">
-                    <ng-template *ngIf="formato.cabeceras[campo].visibleCheck; then tempTH"></ng-template>
-                    <ng-template #tempTH>
-                      <th>
-                        <button
-                          *ngIf="formato.cabeceras[campo].sortable === undefined ? true : formato.cabeceras[campo].sortable "
-                          (click)="ordenar($event)" class="colCabecera" id="{{ campo }}"> {{
-                          formato.cabeceras[campo].texto }} </button>
-                        <button
-                          *ngIf="formato.cabeceras[campo].sortable === undefined? false: !formato.cabeceras[campo].sortable"
-                          class="colCabecera noCursor" style="cursor: default" id="{{ campo }}"> {{
-                          formato.cabeceras[campo].texto }} </button>
-                      </th>
-                    </ng-template>
-                  </ng-template>
-
+                  <!-- ETIQUETAS DE OPCIONES-->
                   <ng-template *ngIf="conOpciones; then tempOptionsTH"></ng-template>
                   <ng-template #tempOptionsTH>
                     <th>
                       <button class="colCabecera noCursor">Opciones</button>
                     </th>
                   </ng-template>
+                  <!-- FIN ETIQUETAS DE OPCIONES-->
+
+                  <!-- ETIQUETAS DE CABECERA-->
+                  <ng-template ngFor let-campo [ngForOf]="this.cabeceras">
+                    <ng-template *ngIf="formato.cabeceras[campo].visibleCheck; then tempTH"></ng-template>
+                    <ng-template #tempTH>
+                      <th>
+                        <button
+                          *ngIf="formato.cabeceras[campo].sortable === undefined ? true : formato.cabeceras[campo].sortable "
+                          (click)="ordenar($event)" class="colCabecera" id="{{ campo }}">
+                          {{ formato.cabeceras[campo].texto }} </button>
+                        <button
+                          *ngIf="formato.cabeceras[campo].sortable === undefined? false : !formato.cabeceras[campo].sortable"
+                          class="colCabecera noCursor" style="{cursor: default}" id="{{ campo }}">
+                          {{ formato.cabeceras[campo].texto }} </button>
+                      </th>
+                    </ng-template>
+                  </ng-template>
+                  <!-- FIN ETIQUETAS DE CABECERA-->
+
                 </tr>
               </thead>
               <tbody appCargandoTools [cargando]="estaCargando">
@@ -113,6 +117,47 @@
                 </ng-template>
                 <ng-template #noTemplatetbody>
                   <tr *ngFor="let data of datos">
+                    <!-- LLENADO DE BOTONES OPCIONES -->
+                    <ng-template *ngIf="conOpciones; then tempOptionsTD"></ng-template>
+                    <ng-template #tempOptionsTD>
+                      <td>
+                        <div class="btn-toolbar d-flex justify-content-center" role="toolbar">
+                          <div class="btn-group me-2" role="group">
+
+                            <button type="button" class="btn btn-sm btn-soft-info" (click)="alEditar.emit(data)">
+                              <i class="mdi mdi-pencil-outline"></i>
+                            </button>
+
+                            <ng-template [ngIf]="softDelete" [ngIfElse]="templateHard">
+                              <button *ngIf="data[campoEstado] == valueEstado" type="button"
+                                class="btn btn-sm btn-danger" (click)="alDeshabilitar.emit(data)">
+                                <i class="fas fa-power-off"></i>
+                              </button>
+
+                              <button *ngIf="data[campoEstado] != valueEstado" type="button"
+                                class="btn btn-sm btn-success" (click)="alHabilitar.emit(data)">
+                                <i class="fas fa-power-off"></i>
+                              </button>
+                            </ng-template>
+
+                            <ng-template #templateHard>
+                              <button type="button" class="btn btn-sm btn-soft-danger" (click)="alEliminar.emit(data)">
+                                <i class="fas fa-trash-alt"></i>
+                              </button>
+                            </ng-template>
+
+                          </div>
+                        </div>
+                      </td>
+                    </ng-template>
+                    <ng-template *ngIf="templateOptions !== undefined; then tempOptionsTD"></ng-template>
+                    <ng-template #tempOptionsTD>
+                      <ng-container [ngTemplateOutlet]="templateOptions"
+                        [ngTemplateOutletContext]="{fila: data,cabeceras: cabeceras}"></ng-container>
+                    </ng-template>
+                    <!-- FIN DE LLANADO DE BOTONES OPCIONES-->
+
+                    <!-- LLENADO DE DATOS -->
                     <ng-template [ngIf]="templateFila !== undefined" [ngIfElse]="sintemplate">
                       <ng-container [ngTemplateOutlet]="templateFila"
                         [ngTemplateOutletContext]="{fila: data, cabeceras: cabeceras}"></ng-container>
@@ -125,34 +170,8 @@
                         </ng-template>
                       </ng-template>
                     </ng-template>
-                    <ng-template *ngIf="conOpciones; then tempOptionsTD"></ng-template>
-                    <ng-template #tempOptionsTD>
-                      <td>
-                        <div class="btn-toolbar d-flex justify-content-center" role="toolbar">
-                          <div class="btn-group me-2" role="group">
-                            <button type="button" class="btn btn-sm btn-primary" (click)="alEditar.emit(data)"> <i
-                                class="fas fa-edit"></i> </button>
-                            <ng-template [ngIf]="softDelete" [ngIfElse]="templateHard">
-                              <button *ngIf="data[campoEstado] == valueEstado" type="button"
-                                class="btn btn-sm btn-danger" (click)="alDeshabilitar.emit(data)"> <i
-                                  class="fas fa-power-off"></i> </button>
-                              <button *ngIf="data[campoEstado] != valueEstado" type="button"
-                                class="btn btn-sm btn-success" (click)="alHabilitar.emit(data)"> <i
-                                  class="fas fa-power-off"></i> </button>
-                            </ng-template>
-                            <ng-template #templateHard>
-                              <button type="button" class="btn btn-sm btn-danger" (click)="alEliminar.emit(data)"> <i
-                                  class="fas fa-trash-alt"></i> </button>
-                            </ng-template>
-                          </div>
-                        </div>
-                      </td>
-                    </ng-template>
-                    <ng-template *ngIf="templateOptions !== undefined; then tempOptionsTD"></ng-template>
-                    <ng-template #tempOptionsTD>
-                      <ng-container [ngTemplateOutlet]="templateOptions"
-                        [ngTemplateOutletContext]="{fila: data,cabeceras: cabeceras}"></ng-container>
-                    </ng-template>
+                    <!-- FIN DE LLANDO DE DATOS-->
+
                   </tr>
                 </ng-template>
               </tbody>
@@ -160,8 +179,7 @@
               <ng-template #isTemplatetfooter>
                 <tfoot>
                   <tr>
-                    <ng-container [ngTemplateOutlet]="templateTfooter">
-                    </ng-container>
+                    <ng-container [ngTemplateOutlet]="templateTfooter"></ng-container>
                   </tr>
                 </tfoot>
               </ng-template>

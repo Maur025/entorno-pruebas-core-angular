@@ -75,6 +75,8 @@ export class TablaComponent implements OnInit {
 
   objectKeys = Object.keys;
 
+  classTable : string = 'table mb-0 table-hover align-middle nowrap data-table table-condensed';
+
   /*filtros */
 
   config_autoclose: any = false;

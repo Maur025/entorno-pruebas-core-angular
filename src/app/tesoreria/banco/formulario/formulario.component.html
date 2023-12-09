@@ -1,3 +1,4 @@
+<app-page-title [title]="breadCrumbTitle" [breadcrumbItems]="breadCrumbItems"></app-page-title>
 <div class="container-fluid">
 
   <div class="row">
@@ -20,7 +21,7 @@
                     </div>
                 </div>
 
-                <div class="mb-6 col-sm-12 ">
+                <div class="mb-6 col-sm-6">
                     <label for="nombre">(*)Nombre </label>
                     <input type="text"  class="form-control uppercase" id="nombre" (click)="alCambiar(form)" required formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }">
                     <div *ngIf="submitted && form['nombre'].errors" class="invalid-feedback" align="left">
@@ -29,6 +30,17 @@
                     <div *ngIf="form['nombre'].errors['maxlength']">Debe tener menos de {{form['nombre'].errors['maxlength']['requiredLength']}} caracteres</div>
                     <div *ngIf="form['nombre'].errors['min']">Debe tener mayor o igual que {{form['nombre'].errors['min']['min']}} </div>
                     <div *ngIf="form['nombre'].errors['max']">Debe tener menor o igual que {{form['nombre'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+                <div class="mb-6 col-sm-6 ">
+                    <label for="nombre">(*)Sigla </label>
+                    <input type="text"  class="form-control uppercase" id="sigla" (click)="alCambiar(form)" required formControlName="sigla" [ngClass]="{ 'is-invalid': submitted && form['sigla'].errors }">
+                    <div *ngIf="submitted && form['sigla'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['sigla'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['sigla'].errors['minlength']">Debe tener al menos {{form['sigla'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['sigla'].errors['maxlength']">Debe tener menos de {{form['sigla'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['sigla'].errors['min']">Debe tener mayor o igual que {{form['sigla'].errors['min']['min']}} </div>
+                    <div *ngIf="form['sigla'].errors['max']">Debe tener menor o igual que {{form['sigla'].errors['max']['max']}} </div>
                     </div>
                 </div>
 
@@ -56,8 +68,8 @@
                     </div>
                 </div>
 
-                <div class="mb-6 col-sm-12 ">
-                    <label for="nombre">URL </label>
+                <div class="mb-6 col-sm-6 ">
+                    <label for="nombre">PAGINA WEB DEL BANCO </label>
                     <input type="text"  class="form-control uppercase" id="url" (click)="alCambiar(form)"  formControlName="url" [ngClass]="{ 'is-invalid': submitted && form['url'].errors }">
                     <div *ngIf="submitted && form['url'].errors" class="invalid-feedback" align="left">
                     <div *ngIf="form['url'].errors['required']">Es requerido</div>
@@ -68,71 +80,19 @@
                     </div>
                 </div>
 
-                <!--div class="mb-6 col-sm-12 ">
-                    <label for="formrow-firstname-input ">viaId</label>
-                    <select class="form-control form-select" id="viaId"  formControlName="viaId" name="viaId" [ngClass]="{ 'is-invalid': submitted && form['viaId'].errors }">
-                    <option *ngFor="let t of vias" value="{{t.id}}"  >{{t.nombre}} </option>
-                    </select>
-                    <div *ngIf="submitted && form['viaId'].errors" class="invalid-feedback" align="left" >
-                    <div *ngIf="form['viaId'].errors['required']">Es requerido</div>
-                    <div *ngIf="form['viaId'].errors['minlength']">Debe tener al menos {{form['viaId'].errors['minlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['viaId'].errors['maxlength']">Debe tener menos de {{form['viaId'].errors['maxlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['viaId'].errors['min']">Debe tener mayor o igual que {{form['viaId'].errors['min']['min']}} </div>
-                    <div *ngIf="form['viaId'].errors['max']">Debe tener menor o igual que {{form['viaId'].errors['max']['max']}} </div>
+                <div class="mb-6 col-sm-6 ">
+                    <label for="nombre">TELEFONO BANCO </label>
+                    <input type="number"  class="form-control uppercase" id="url" (click)="alCambiar(form)"  formControlName="telefono" [ngClass]="{ 'is-invalid': submitted && form['telefono'].errors }">
+                    <div *ngIf="submitted && form['telefono'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['telefono'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['telefono'].errors['minlength']">Debe tener al menos {{form['url'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['telefono'].errors['maxlength']">Debe tener menos de {{form['url'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['telefono'].errors['min']">Debe tener mayor o igual que {{form['url'].errors['min']['min']}} </div>
+                    <div *ngIf="form['telefono'].errors['max']">Debe tener menor o igual que {{form['url'].errors['max']['max']}} </div>
                     </div>
                 </div>
 
-                <div class="mb-6 col-sm-12 d-none">
-                    <label for="formrow-firstname-input ">Cuentas</label>
-                    <select class="form-control form-select" id="cuentas"  formControlName="cuentas" name="cuentas" [ngClass]="{ 'is-invalid': submitted && form['cuentas'].errors }">
-                    <option *ngFor="let t of cuenta_banco" value="{{t.id}}"  >{{t.banco_id}} </option>
-                    </select>
-                    <div *ngIf="submitted && form['cuentas'].errors" class="invalid-feedback" align="left" >
-                    <div *ngIf="form['cuentas'].errors['required']">Es requerido</div>
-                    <div *ngIf="form['cuentas'].errors['minlength']">Debe tener al menos {{form['cuentas'].errors['minlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['cuentas'].errors['maxlength']">Debe tener menos de {{form['cuentas'].errors['maxlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['cuentas'].errors['min']">Debe tener mayor o igual que {{form['cuentas'].errors['min']['min']}} </div>
-                    <div *ngIf="form['cuentas'].errors['max']">Debe tener menor o igual que {{form['cuentas'].errors['max']['max']}} </div>
-                    </div>
-                </div>
-
-                <div class="mb-6 col-sm-12 d-none">
-                    <label for="formrow-firstname-input ">Líneas de Crédito</label>
-                    <select class="form-control form-select" id="lineasdecredito"  formControlName="lineasdecredito" name="lineasdecredito" [ngClass]="{ 'is-invalid': submitted && form['lineasdecredito'].errors }">
-                    <option *ngFor="let t of lineacredito_banco" value="{{t.id}}"  >{{t.banco_id}} </option>
-                    </select>
-                    <div *ngIf="submitted && form['lineasdecredito'].errors" class="invalid-feedback" align="left" >
-                    <div *ngIf="form['lineasdecredito'].errors['required']">Es requerido</div>
-                    <div *ngIf="form['lineasdecredito'].errors['minlength']">Debe tener al menos {{form['lineasdecredito'].errors['minlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['lineasdecredito'].errors['maxlength']">Debe tener menos de {{form['lineasdecredito'].errors['maxlength']['requiredLength']}} caracteres</div>
-                    <div *ngIf="form['lineasdecredito'].errors['min']">Debe tener mayor o igual que {{form['lineasdecredito'].errors['min']['min']}} </div>
-                    <div *ngIf="form['lineasdecredito'].errors['max']">Debe tener menor o igual que {{form['lineasdecredito'].errors['max']['max']}} </div>
-                    </div>
-                </div>
-            
-                <div class="mb-6 col-sm-12" *ngIf="dataEdit">
-                    <hr>
-                    <ul class="nav nav-tabs nav-tabs-dark" role="tablist">                        
-                        
-                    <li class="nav-item" >
-                        <a class="nav-link atabx active" data-bs-toggle="tab" data-bs-target="#tab-cuentabanco" role="button" aria-current="page" href="#">Cuentas</a>
-                    </li>
-
-                    <li class="nav-item" >
-                        <a class="nav-link atabx " data-bs-toggle="tab" data-bs-target="#tab-lineacreditobanco" role="button" aria-current="page" href="#">Líneas de Crédito</a>
-                    </li>
-                    </ul>
-                    <div class="tab-content">
-                        
-                    <div class="tab-pane border active" id="tab-cuentabanco" >
-                        <app-listado-cuentabanco *ngIf="rel_prefix" [rel_prefix]="rel_prefix" [rel_field]="'banco_id'" > </app-listado-cuentabanco>
-                    </div>
-
-                    <div class="tab-pane border " id="tab-lineacreditobanco" >
-                        <app-listado-lineacreditobanco *ngIf="rel_prefix" [rel_prefix]="rel_prefix" [rel_field]="'banco_id'" > </app-listado-lineacreditobanco>
-                    </div>
-                    </div>
-                </div--> 
+                
             <hr>
             <div class="col-lg-6">
               <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>

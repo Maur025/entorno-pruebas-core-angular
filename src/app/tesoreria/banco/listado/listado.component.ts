@@ -15,6 +15,10 @@ type NewType = NotificacionService;
   styleUrls: ["./listado.component.scss"],
 })
 export class ListadoComponent implements OnInit {
+  //migas de pan
+  breadCrumbItems: Array<{}>;
+  breadCrumbTitle: string = 'Gestion de Bancos';
+
   @Input() rel_prefix: any;
   @Input() rel_field: any;
   @Input() rel_id: any;
@@ -38,6 +42,8 @@ export class ListadoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true }];
+
     if (this.rel_prefix) this.BancoService.setPrefix(this.rel_prefix);
     this.formato = {
       cabeceras: {
@@ -97,7 +103,7 @@ export class ListadoComponent implements OnInit {
           "colsize": "12",
           "filtrotipo": "text"
         }
-        
+
       }
     };
 
@@ -119,8 +125,9 @@ export class ListadoComponent implements OnInit {
   }
 
   editar(data: any, template) {
-    if (this.rel_prefix == null)
+    if (this.rel_prefix == null) {
       this.router.navigate(['./' + data.id, {}], { relativeTo: this.route });
+    }
     else {
       this.dataEdit = data;
       this.modalRef = this.modalService.show(template, {

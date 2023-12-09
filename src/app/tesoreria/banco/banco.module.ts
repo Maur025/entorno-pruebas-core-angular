@@ -7,6 +7,9 @@ import { FormularioComponent } from './formulario/formulario.component';
 import { BancoRoutingModule } from './banco-routing.module';
 import { CuentabancoModule } from '../cuentabanco/cuentabanco.module';
 import { LineacreditobancoModule } from '../lineacreditobanco/lineacreditobanco.module';
+import { WidgetModule } from 'src/app/shared/widget/widget.module';
+import { UIModule } from 'src/app/shared/ui/ui.module';
+
 
 @NgModule({
   declarations: [
@@ -20,7 +23,10 @@ import { LineacreditobancoModule } from '../lineacreditobanco/lineacreditobanco.
     FormsModule,
     ReactiveFormsModule,
     CuentabancoModule,
-LineacreditobancoModule
+    LineacreditobancoModule,
+    WidgetModule,
+    UIModule
+
   ],
   exports: [
     ListadoComponent,

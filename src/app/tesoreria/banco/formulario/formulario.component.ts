@@ -13,6 +13,10 @@ import { LineacreditobancoService } from '../servicios/lineacreditobanco.service
   styleUrls: ["./formulario.component.scss"],
 })
 export class FormularioComponent implements OnInit {
+  breadCrumbItems: Array<{}>;
+  breadCrumbTitle: string = 'Registro de Banco';
+  titulo: any = 'Banco';
+
   formGroup: FormGroup;
   submitted = false;
   @Output() alGuardar = new EventEmitter<any>();
@@ -39,9 +43,7 @@ export class FormularioComponent implements OnInit {
     private FormBuilder: FormBuilder,
     private notificacionService: NotificacionService,
     private BancoService: BancoService,
-    //private ViasService: ViasService,
-    //private CuentabancoService: CuentabancoService,
-    //private LineacreditobancoService: LineacreditobancoService
+
   ) { }
 
   get form() {
@@ -61,45 +63,52 @@ export class FormularioComponent implements OnInit {
   }
 
   alCambiar(control) {
-    console.log("control", control);
+    //console.log("control", control);
   }
 
   cargarArrays() {
-    //this.ViasService.getAll(100, 1, 'nombre', false, '').subscribe((res: any) => { this.vias = res.content; });
-    //this.CuentabancoService.getAll(100, 1, 'banco_id', false, '').subscribe((res: any) => { this.cuenta_banco = res.content; });
-    //this.LineacreditobancoService.getAll(100, 1, 'banco_id', false, '').subscribe((res: any) => { this.lineacredito_banco = res.content; });
+
+  }
+
+  formularioBanco() {
+    return {
+      "id": ["", []],
+      "nombre": ["", [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
+      "sigla": ["", [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
+      "descripcion": ["", []],
+      "url": ["", []],
+      "api": ["", []],
+      "direccion": ["", []],
+      "telefono": ["", []]
+    }
+  }
+  setBanco(data) {
+    return {
+      "id": data.id, //obligatorio
+      "nombre": data.nombre,//obligatorio
+      "sigla": data.sigla,//obligatorio
+      "descripcion": data.descripcion != undefined ? data.descripcion : null,
+      "url": data.url != undefined ? data.url : null,
+      "api": data.api != undefined ? data.api : null,
+      "direccion": data.direccion != undefined ? data.direccion : null,
+      "telefono": data.telefono != undefined ? data.telefono : null
+    }
   }
 
   ngOnInit(): void {
+    this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true }];
     this.cargarArrays();
-    this.formGroup = this.FormBuilder.group(
-      {
-        id: ["", []],
-        nombre: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
-        descripcion: ["", []],
-        direccion: ["", []],
-        url: ["", []],
-        viaId: ["", []],
-        cuentas: ["", []],
-        lineasdecredito: ["", []]
-      });
+    this.formGroup = this.FormBuilder.group(this.formularioBanco());
+
     if (this.dataEdit != null) {
-      this.formGroup.setValue({
-        id: this.dataEdit.id,
-        nombre: this.dataEdit.nombre,
-        descripcion: this.dataEdit.descripcion,
-        direccion: this.dataEdit.direccion,
-        url: this.dataEdit.url,
-        //viaId: this.dataEdit.viaId,
-        //cuentas: this.dataEdit.cuentas,
-        //lineasdecredito: this.dataEdit.lineasdecredito
-      });
+      this.formGroup.setValue(this.setBanco(this.dataEdit));
       this.rel_prefix = "/banco/" + this.dataEdit.id;
     }
     let id = this.route.snapshot.params['id'];
     if (this.rel_prefix && this.rel_field) this.formGroup.get(this.rel_field).disable();
     if (id != null && !this.esModal && id != "nuevo") {
       this.BancoService.find(id).subscribe((result: any) => {
+
         if (result.content.length == 0) return;
 
         if (Array.isArray(result.content))
@@ -107,16 +116,7 @@ export class FormularioComponent implements OnInit {
         else
           this.dataEdit = result.content;
 
-        this.formGroup.setValue({
-          id: this.dataEdit.id,
-          nombre: this.dataEdit.nombre,
-          descripcion: this.dataEdit.descripcion,
-          direccion: this.dataEdit.direccion,
-          url: this.dataEdit.url,
-          // viaId: this.dataEdit.viaId,
-          // cuentas: this.dataEdit.cuentas,
-          // lineasdecredito: this.dataEdit.lineasdecredito
-        });
+        this.formGroup.setValue(this.setBanco(this.dataEdit));
         this.rel_prefix = "/banco/" + id;
         this.rel_id = id;
       });
@@ -133,6 +133,10 @@ export class FormularioComponent implements OnInit {
   volver() {
     this.router.navigate(['..'], { relativeTo: this.route });
   }
+  cleanForm(data: any) {
+    return Object.fromEntries(Object.entries(data).filter(value => value[1]));
+  }
+
   guardar() {
     this.submitted = true;
     if (this.formGroup.valid) {
@@ -142,7 +146,8 @@ export class FormularioComponent implements OnInit {
         this.formGroup.enable();//*
         this.formGroup.get(this.rel_field).setValue(this.rel_id);//*
       }
-      let sendData = this.formGroup.value;
+      let sendData = this.cleanForm(this.formGroup.value);
+
       if (this.dataEdit == null) {
         this.BancoService.register(sendData).subscribe(
           (res: any) => {
