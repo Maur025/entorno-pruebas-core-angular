@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { BancoService } from "../servicios/banco.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { ActivatedRoute, Router } from "@angular/router";
 
+import { BancoService } from "../servicios/banco.service";
 
 type NewType = NotificacionService;
 

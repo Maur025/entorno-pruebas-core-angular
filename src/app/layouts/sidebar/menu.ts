@@ -20,7 +20,7 @@ export const MENU: MenuItem[] = [
             {
                 id: 103,
                 label: 'Administrar Cuentas',
-                link: 'cuentaBanco',
+                link: 'banco/cuentaBanco',
 
             },
 

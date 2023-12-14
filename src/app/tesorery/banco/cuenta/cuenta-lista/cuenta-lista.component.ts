@@ -2,19 +2,19 @@ import { Component, Input, OnInit } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { ActivatedRoute, Router } from "@angular/router";
-/*mis importaciones*/
-import { BancoService } from "../../services/banco.service";
+import { CuentaBancoService } from "src/app/tesorery/services/cuenta-banco.service";
+/* mis importaciones*/
 
 @Component({
-  selector: 'app-lista',
-  templateUrl: './lista.component.html',
-  styleUrls: ['./lista.component.scss']
+  selector: 'app-cuenta-lista',
+  templateUrl: './cuenta-lista.component.html',
+  styleUrls: ['./cuenta-lista.component.scss']
 })
-export class ListaComponent {
+export class CuentaListaComponent {
 
   breadCrumbItems: Array<{}>;
-  breadCrumbTitle: string = 'Adminstrar Banco';
-  titulo:string = 'Bancos'
+  breadCrumbTitle: string = 'Adminstrar Cuentas de Banco';
+  titulo: string = 'Cuentas de Banco'
 
   @Input() rel_prefix: any;
   @Input() rel_field: any;
@@ -27,14 +27,14 @@ export class ListaComponent {
   servicio = null;
 
   constructor(
-    public BancoService: BancoService,
+    public CuentaBancoService: CuentaBancoService,
 
     private modalService: BsModalService,
     private NotificacionService: NotificacionService,
     private route: ActivatedRoute,
     private router: Router
   ) {
-    this.servicio = BancoService;
+    this.servicio = CuentaBancoService;
   }
 
   ngOnInit(): void {
@@ -133,30 +133,54 @@ export class ListaComponent {
     return;
   }
 
+  /**
+   * 
+   * @param data 
+   * @returns 
+   * {
+      "nroCuenta",
+      "descripcion",
+      "bancoId",
+      "monedaId"
+    }
+ */
   getCabecera() {
+    let jsonMoneda = this.getFielFilter('Moneda', 6);
+    jsonMoneda.mascara = {
+      campo:"moneda",
+      valor:"nombre"
+    };
+    let jsonBanco = this.getFielFilter('Banco', 6);
+    jsonBanco.mascara = {
+      campo:"banco",
+      valor: "nombre"
+    } 
+
+    
     return {
       cabeceras: {
         "id": this.getFielFilter('id', 12, 'number', false),
-        "nombre": this.getFielFilter('Nombre', 12),
+        "nroCuenta": this.getFielFilter('Nro de cuenta', 12),
         "descripcion": this.getFielFilter('Descripción', 6),
-        "direccion": this.getFielFilter('Dirección', 6),
-        "url": this.getFielFilter('Url', 6, 'true', true)
+        "bancoId": jsonBanco,
+        "monedaId": jsonMoneda
       }
     };
   }
-  
-  getFielFilter(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true) {
-    return {
-      "visible": visible,
-      "buscable": true,
-      "buscableCheck": true,
-      "visibleCheck": visible,
-      "sortable": true,
-      "filtrable": true,
-      "texto": texto,
-      "colsize": colsize,
-      "filtrotipo": filtrotipo
-    }
+
+  getFielFilter(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true): any {
+    let json = JSON.parse("{}");
+    json.visible=visible;
+    json.buscable= true;
+    json.buscableCheck= true;
+    json.visibleCheck= visible;
+    json.sortable= true;
+    json.filtrable= true;
+    json.texto= texto;
+    json.colsize= colsize;
+    json.filtrotipo= filtrotipo;
+    return json;
   }
+
 
 }
