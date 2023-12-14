@@ -8,6 +8,7 @@ import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 import { ApiServicio } from 'src/app/core/services/apiservicio';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ArchivosService } from 'src/app/core/services/archivos.service';
+import { bU } from '@fullcalendar/core/internal-common';
 @Component({
   selector: 'tabla-normal',
   templateUrl: './tabla.component.html',
@@ -103,30 +104,13 @@ export class TablaComponent implements OnInit {
   }
 
   buscarKeyDown(buscar) {
-    if (buscar.keyCode !== undefined)
-      if (buscar.keyCode == 13) {
-        this.buscar = true;
-        this.obtenerDatos();
-        return;
-      }
-    if (buscar.keyCode == 27) {
-      this.buscar = false;
+    if(buscar){
       this.obtenerDatos();
-      return;
     }
   }
 
   public obtenerDatos() {
     if (this.buscar) {
-      /*  this.datosService.search(this.porPagina, this.pagActual, this.inputBuscar).subscribe(
-          (data)=>{
-        this.datos = data['data']['data'];
-        this.pagActual = data['data']['current_page'];
-        this.total = data['data']['total'];
-        this.porPagina = data['data']['per_page'];
-      }, error=>{
-        this.notificacionService.alertError(error);
-      });*/
       this.datosService[this.getAll](this.pagination.size, this.pagination.page, this.pagination.sortBy, this.pagination.descending, this.inputBuscar).subscribe((result: any) => {
         this.datos = result.content;
         this.pagination.rowsNumber = result.pagination.rowsNumber;
@@ -137,7 +121,7 @@ export class TablaComponent implements OnInit {
         this.notificacionService.alertError(error);
       });
     } else {
-      this.datosService[this.getAll](this.pagination.size, this.pagination.page, this.pagination.sortBy, this.pagination.descending).subscribe((result: any) => {
+      this.datosService[this.getAll](this.pagination.size, this.pagination.page, this.pagination.sortBy, this.pagination.descending, this.inputBuscar).subscribe((result: any) => {
         this.datos = result.content;
         this.pagination.rowsNumber = result.pagination.rowsNumber;
         this.pagination.pages = result.pagination.pages;
@@ -150,7 +134,7 @@ export class TablaComponent implements OnInit {
   }
 
   resetButtons = (event) => {
-    let tableButtons: any = document.getElementsByClassName("colCabecera");;
+    let tableButtons: any = document.getElementsByClassName("colCabecera");
     [...tableButtons].map((button) => {
       if (button !== event.target) {
         button.removeAttribute("data-dir");
