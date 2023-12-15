@@ -90,7 +90,14 @@ export class AuthenticationService {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUserKNB');
     localStorage.removeItem('gestionActualKNB');
+    localStorage.clear();
     this.currentUserSubject.next(null);
     /* window.open(environment.authAppUrl, "_self"); */ //crear otro authAppUrl que sea con el keycloak
+  }
+
+  public reload(){
+
+    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUserKNB')));
+    this.currentUser = this.currentUserSubject.asObservable();
   }
 }

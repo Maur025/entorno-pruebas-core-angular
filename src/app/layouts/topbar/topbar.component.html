@@ -17,14 +17,19 @@
             <img src="assets/images/favicon.ico" alt="" height="22" />
           </span>
           <span class="logo-lg">
-            <img src="assets/images/logo-light.png" alt="" height="19" />
+            <img src="assets/images/logo-light.png" alt="" height="29" />
           </span>
         </a>
       </div>
 
-      <button type="button" class="btn btn-sm px-3 font-size-16 header-item" id="vertical-menu-btn" (click)="toggleMobileMenu($event)">
+      <button type="button" class="btn btn-sm px-3 font-size-16 header-item" id="vertical-menu-btn"
+        (click)="toggleMobileMenu($event)">
         <i class="fa fa-fw fa-bars"></i>
       </button>
+    </div>
+
+    <div class="d-flex">
+      <h5 class="m-0" >KERNOTEC</h5>
     </div>
     <div class="d-flex">
       <div class="dropdown d-none d-lg-inline-block ms-1">
@@ -44,16 +49,18 @@
         <div class="dropdown-menu dropdown-menu-end" *dropdownMenu>
           <a class="dropdown-item"><i class="bx bx-user font-size-16 align-middle me-1"></i> Perfil</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item text-danger" href="javascript: void(0);" (click)="logout()"><i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
+          <a class="dropdown-item text-danger" href="javascript: void(0);" (click)="logout()"><i
+              class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
             Cerrar Sesion</a>
         </div>
       </div>
-      <!-- Configuraciones -->
+      <!-- Configuraciones 
       <div class="dropdown d-inline-block">
         <button type="button" class="btn header-item noti-icon right-bar-toggle" (click)="toggleRightSidebar()">
           <i class="bx bx-cog bx-spin"></i>
         </button>
       </div>
+      -->
     </div>
   </div>
 </header>
