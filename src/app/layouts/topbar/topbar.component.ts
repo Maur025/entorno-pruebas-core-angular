@@ -55,7 +55,7 @@ export class TopbarComponent implements OnInit {
 
 
     let us: any = this.keycloak.getKeycloakInstance().idTokenParsed;
-    console.log("us",us);
+    //console.log("us",us);
     this.usuario_kc = us;
   }
 
