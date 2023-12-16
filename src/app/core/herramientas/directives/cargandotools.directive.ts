@@ -68,7 +68,6 @@ export class CargandotoolsDirective implements OnInit, OnChanges {
   }
 
   ngOnChanges(simpleChanges: SimpleChanges): void {
-    console.log("ngOnChanges");
     if (simpleChanges.cargando) {
       const container = this.targetEl.nativeElement;
       const div = container.querySelector("." + this.uid);

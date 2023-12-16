@@ -11,6 +11,7 @@ import { ListaComponent } from './lista/lista.component';
 import { FormularioComponent } from './formulario/formulario.component';
 import { CuentaListaComponent } from './cuenta/cuenta-lista/cuenta-lista.component';
 import { CuentaFormularioComponent } from './cuenta/cuenta-formulario/cuenta-formulario.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,7 @@ import { CuentaFormularioComponent } from './cuenta/cuenta-formulario/cuenta-for
   imports: [
     CommonModule,
     BancoRoutingModule,
-
+    NgSelectModule,
     HerramientasModule,
     FormsModule,
     ReactiveFormsModule,
