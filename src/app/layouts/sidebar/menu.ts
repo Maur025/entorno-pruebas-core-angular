@@ -25,6 +25,30 @@ export const MENU: MenuItem[] = [
             },
 
         ]
+    },
+    {
+        id: 120,
+        label: 'Anticipos',
+        icon: 'fas fa-kaaba',
+        subItems: [
+            {
+                id: 121,
+                label: 'Ant. Proveedor',
+                link: 'anticipo',
+            },
+            {
+                id: 122,
+                label: 'Aplicacion',
+                link: 'aplicacion',
+            },
+            {
+                id: 123,
+                label: 'Devolución',
+                link: 'devolicion',
+            },
+
+
+        ]
     }
 
 ]
