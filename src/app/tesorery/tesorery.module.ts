@@ -15,7 +15,6 @@ import { InicioComponent } from './inicio/inicio.component';
 
 @NgModule({
   declarations: [
-
     PaneldecontrolComponent,
     InicioComponent
   ],

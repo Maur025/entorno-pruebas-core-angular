@@ -10,7 +10,8 @@ const routes: Routes = [
   { path: 'dashboard', component: InicioComponent },
   { path: '', component: PaneldecontrolComponent },
   { path: "banco", loadChildren: () => import('./banco/banco.module').then(m => m.BancoModule) },
-  { path: "anticipo", loadChildren: () => import('./anticipo/anticipo.module').then(m => m.AnticipoModule) }
+  { path: "anticipo", loadChildren: () => import('./anticipo/anticipo.module').then(m => m.AnticipoModule) },
+  { path: 'entidad', loadChildren: () => import('./entidad/entidad.module').then(m => m.EntidadModule) }
 ];
 
 @NgModule({

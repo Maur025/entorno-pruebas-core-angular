@@ -2,27 +2,39 @@ import { MenuItem } from "./menu.model";
 
 export const MENU: MenuItem[] = [
 
-    {
-        id: 100,
-        label: 'TESORERIA',
-        isTitle: true
-    },
-    {
+  {
+    id: 1,
+    label: 'TESORERIA',
+    isTitle: true
+  },
+  {
+    id: 10,
+    label: 'Bancos',
+    icon: 'bx bxs-bank',
+    subItems: [
+      {
         id: 101,
-        label: 'Bancos',
-        icon: 'fas fa-kaaba',
-        subItems: [
-            {
-                id: 102,
-                label: 'Administrar Bancos',
-                link: 'banco',
-            },
-            {
-                id: 103,
-                label: 'Administrar Cuentas',
-                link: 'banco/cuentaBanco',
+        label: 'Administrar Bancos',
+        link: 'banco',
+      },
+      {
+        id: 102,
+        label: 'Administrar Cuentas',
+        link: 'banco/cuentaBanco',
+      },
 
-            },
+    ]
+  },
+  {
+    id: 20,
+    label: 'Entidades',
+    icon: 'mdi mdi-account-multiple',
+    subItems: [
+      {
+        id: 201,
+        label: 'Administrar Entidades',
+        link: 'entidad',
+      },
 
         ]
     },
@@ -47,9 +59,8 @@ export const MENU: MenuItem[] = [
                 link: 'devolicion',
             },
 
-
-        ]
-    }
+    ]
+  }
 
 ]
 

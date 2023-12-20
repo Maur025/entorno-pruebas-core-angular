@@ -14,7 +14,6 @@ const routes: Routes = [
   {path:'cuentaBanco', component: CuentaListaComponent},
   {path:'cuentaBanco/id/:id', component: CuentaFormularioComponent},
   {path:'cuentaBanco/nuevo', component: CuentaFormularioComponent},
-
 ];
 
 @NgModule({

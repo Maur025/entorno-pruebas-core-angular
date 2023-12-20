@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, Output, ViewChild, OnInit, } from "@ang
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
-import { CuentaBancoService } from "src/app/tesorery/services/cuenta-banco.service";
-import { BancoService } from "../../../services/banco.service";
-import { MonedaService } from "../../../services/monedas.service";
+import { CuentaBancoService } from "src/app/tesorery/services/tesoreria/cuenta-banco.service";
+import { BancoService } from "../../../services/tesoreria/banco.service";
+import { MonedaService } from "../../../services/tesoreria/monedas.service";
 
 @Component({
   selector: 'app-cuenta-formulario',

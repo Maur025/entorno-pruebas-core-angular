@@ -2,7 +2,7 @@ import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { CuentaBancoService } from "src/app/tesorery/services/cuenta-banco.service";
+import { CuentaBancoService } from "src/app/tesorery/services/tesoreria/cuenta-banco.service";
 import { CuentaFormularioComponent } from '../cuenta-formulario/cuenta-formulario.component';
 
 @Component({
