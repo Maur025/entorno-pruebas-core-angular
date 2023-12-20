@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, ViewChild, OnInit, } from "@ang
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
-import { BancoService } from "../../services/banco.service";
+import { BancoService } from "../../services/tesoreria/banco.service";
 
 @Component({
   selector: 'app-formulario-de-banco',

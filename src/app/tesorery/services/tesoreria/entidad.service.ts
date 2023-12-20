@@ -3,18 +3,18 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
 
+
 @Injectable({
-  providedIn: 'root'
-})
-export class CuentaBancoService {
-  apiName:string = 'cuentaBanco';
-  entitys:string = 'CuentaBanco';
+    providedIn: 'root'
+  })
+  export class EntidadService {
 
-  apiUrl:string = '' ;
-  prefix:string = '';
+    apiName:string = 'entidad';
+    entitys:string = 'Entidad';
 
-  constructor(private http: HttpClient, private apiService : ConsumoApiService) { }
-
+    apiUrl:string = '' ;
+    prefix:string = '';
+    constructor(private http: HttpClient, private apiService : ConsumoApiService) { }
 
     setPrefix(prefix: string){
       this.prefix = prefix;
@@ -22,6 +22,10 @@ export class CuentaBancoService {
 
     register(datos: any) {
       return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}`, datos);
+    }
+
+    registerTipoEntidad(datos: any) {
+      return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/${datos.entidadId}/tipoEntidad`, datos);
     }
 
     update(datos: any): Observable<any> {
@@ -37,7 +41,6 @@ export class CuentaBancoService {
       return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`);
     }
 
-
     delete(id: string | number): Observable<any> {
       return this.apiService.tesoreria.delete(`${this.apiUrl}${this.prefix}/${this.apiName}/${id}`);
     }
@@ -50,7 +53,19 @@ export class CuentaBancoService {
       datos[this.entitys] = 'deshabilitar';
       return this.apiService.tesoreria.put(`${this.apiUrl}${this.prefix}/${this.apiName}/${datos.id}`, datos);
     }
-    getCuentasBanco(size: number = 100, page: number = 1, sortBy:string = 'id', descending:false, keyword:any = '', id:any) {
-      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/banco/${id}?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`);
+
+    habilitados(){
+      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/listarHabilitados`);
     }
-}
+
+    getTipoEntidad (){
+      return this.apiService.tesoreria.get(`/tipoEntidad/listarHabilitados`);
+    }
+
+    getEntidadTipos(id:any){
+      return this.apiService.tesoreria.get(`/entidad/${id}/tipoEntidad`);
+    }
+    deleteEntidadTipo(data: any) {
+      return this.apiService.tesoreria.delete(`${this.apiUrl}${this.prefix}/${this.apiName}/${data.entidadId}/tipoEntidad/${data.tipoEntidadId}`);
+    }
+  }
