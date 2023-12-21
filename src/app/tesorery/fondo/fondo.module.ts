@@ -5,30 +5,38 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WidgetModule } from 'src/app/shared/widget/widget.module';
 import { UIModule } from 'src/app/shared/ui/ui.module';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { FechasimplePipe } from 'src/app/core/pipes/fechasimple.pipe';
 
-import { EntidadRoutingModule } from './entidad-routing.module';
+import { FondoRoutingModule } from './fondo-routing.module';
 
-import { ListaComponent } from 'src/app/tesorery/entidad/lista/lista.component';
-import { FormularioComponent } from 'src/app/tesorery/entidad/formulario/formulario.component';
+import { FondosOperativosComponent } from './fondos-operativos/fondos-operativos.component';
+import { FormularioComponent } from './fondos-operativos/formulario/formulario.component';
+import { ListaComponent } from './fondos-operativos/lista/lista.component';
+
 
 @NgModule({
   declarations: [
-    ListaComponent,
+    FondosOperativosComponent,
     FormularioComponent,
+    ListaComponent,
+    FechasimplePipe
   ],
   imports: [
     CommonModule,
+    FondoRoutingModule,
     NgSelectModule,
     HerramientasModule,
     FormsModule,
     ReactiveFormsModule,
-    EntidadRoutingModule,
     WidgetModule,
-    UIModule
+    UIModule,
+    BsDatepickerModule.forRoot(),
+
   ],
   exports: [
     ListaComponent,
     FormularioComponent
   ]
 })
-export class EntidadModule { }
+export class FondoModule { }

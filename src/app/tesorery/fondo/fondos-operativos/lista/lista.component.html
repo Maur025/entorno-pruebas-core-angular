@@ -1,0 +1,112 @@
+<krn-tabla
+  #tabla
+  [titulo]="titulo"
+  [datosService]="fondoOperativoService"
+  getAll="getAll"
+  [formato]="formato"
+  [textoBuscar]="textoBuscar"
+  [isSubtable]="rel_prefix ? true : false"
+  [templateFila]="undefined"
+  [smallTable]="false"
+  [softDelete]="false"
+  (crearNuevo)="(null)"
+  (alCrear)="crear(modalNuevo)"
+  (alActualizar)="(null)"
+  (alFiltrar)="(null)"
+  (alEditar)="editar($event, modalEditar)"
+  campoEstado="estado"
+  valueEstado="habilitado"
+  (alHabilitar)="habilitar($event, 'habilitar')"
+  (alDeshabilitar)="habilitar($event, 'inhabilitar')"
+  [botonExportar]="false"
+  [botonImportar]="false"
+  [conOpciones]="false"
+  [templateFila]="templateFila">
+</krn-tabla>
+
+<ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras" >
+  <ng-template ngFor let-campo [ngForOf]="cabeceras">
+    <ng-template *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"></ng-template>
+    <ng-template #tempTD>
+      <td [ngSwitch]="campo">
+        <div *ngSwitchCase="'acciones'">
+          <ul class="list-unstyled hstack gap-1 mb-0">
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
+              <button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila, modalEditar)"><i class="mdi mdi-pencil-outline"></i></button>
+            </li>
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Aperturar">
+              <button class="btn btn-sm btn-primary" (click)="aperturar(fila, modalAperturar)"><i class="bx bx-lock-open"></i></button>
+            </li>
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Habilitar" *ngIf="fila.deleted">
+              <a class="btn btn-sm btn-success" (click)="habilitar(fila,'habilitar')"><i class="mdi mdi-power"></i></a>
+            </li>
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Inhabilitar" *ngIf="!fila.deleted">
+              <a  data-bs-toggle="modal" class="btn btn-sm btn-danger" (click)="habilitar(fila,'inhabilitar')"><i class="mdi mdi-power"></i></a>
+            </li>
+          </ul>
+        </div>
+        <div *ngSwitchCase="'fechaSolicitud'">
+          {{fila.fechaSolicitud | fechaSimple}}
+        </div>
+        <div *ngSwitchCase="'aperturado'">
+          <span class="badge font-size-12" style="width: 30px;" [ngClass]="{'bg-success': fila.aperturado==true, 'bg-danger':fila.aperturado==false}">{{fila.aperturado==true ? 'SI' : 'NO'}}</span>
+        </div>
+        <div *ngSwitchCase="'estado'">
+          <span *ngIf="!fila.deleted" class="badge bg-success font-size-10"><i class="mdi mdi-lock-open me-1"></i> Habilitado</span>
+          <span *ngIf="fila.deleted" class="badge bg-danger font-size-10"><i class="mdi mdi-lock me-1"></i> Inhabilitado</span>
+        </div>
+        <div *ngSwitchDefault>
+          {{fila[campo]}}
+        </div>
+      </td>
+    </ng-template>
+  </ng-template>
+</ng-template>
+
+<ng-template #modalNuevo role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Nueva Fondo Operativo</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"aria-label="Close"id="close-modal" (click)="modalRef.hide()"></button>
+  </div>
+  <div class="modal-body">
+    <app-formulario-fondoOperativo #appFormFondoOp (alGuardar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-fondoOperativo>
+  </div>
+  <div class="modal-footer">
+    <div class="hstack gap-2 justify-content-end">
+      <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
+      <button type="button" class="btn btn-success" (click)="appFormFondoOp.guardar()" >Registrar</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalEditar role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Editar Fondo Operativo </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()"></button>
+  </div>
+  <div class="modal-body">
+    <app-formulario-fondoOperativo #appFormFondoOp [fondo]="fondo" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-fondoOperativo>
+  </div>
+  <div class="modal-footer">
+    <div class="hstack gap-2 justify-content-end">
+      <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
+      <button type="button" class="btn btn-warning" (click)="appFormFondoOp.guardar()">Guardar</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalAperturar role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Aperturar Fondo Operativo </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()"></button>
+  </div>
+  <div class="modal-body">
+    <app-formulario-fondoOperativo #appFormFondoOp [fondo]="fondo" [apertura]="true" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-fondoOperativo>
+  </div>
+  <div class="modal-footer">
+    <div class="hstack gap-2 justify-content-end">
+      <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
+      <button type="button" class="btn btn-success" (click)="appFormFondoOp.guardar()">Registrar</button>
+    </div>
+  </div>
+</ng-template>
