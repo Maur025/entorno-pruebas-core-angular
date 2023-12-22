@@ -38,19 +38,7 @@ export const MENU: MenuItem[] = [
 
     ]
   },
-  {
-    id: 20,
-    label: 'Anticipos',
-    icon: 'mdi mdi-cash-multiple',
-    subItems: [
-      {
-        id: 201,
-        label: 'Administrar Entidades',
-        link: 'entidad',
-      },
 
-    ]
-  },
   {
     id: 30,
     label: 'Anticipos',
@@ -61,16 +49,7 @@ export const MENU: MenuItem[] = [
         label: 'Ant. Proveedor',
         link: 'anticipo',
       },
-      {
-        id: 302,
-        label: 'Aplicacion',
-        link: 'aplicacion',
-      },
-      {
-        id: 303,
-        label: 'Devolución',
-        link: 'devolicion',
-      },
+    
     ]
   },
   {

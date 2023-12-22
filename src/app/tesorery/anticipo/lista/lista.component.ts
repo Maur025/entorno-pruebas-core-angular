@@ -1,9 +1,10 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormularioComponent } from '../formulario/formulario.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { AnticipoService } from '../../services/anticipo.service';
+
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AnticipoService } from '../../services/tesoreria/anticipo.service';
 
 @Component({
   selector: 'app-lista',

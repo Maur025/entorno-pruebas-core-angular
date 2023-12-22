@@ -2,9 +2,9 @@ import { Component, ComponentFactoryResolver, EventEmitter, Input, OnInit, Outpu
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
-import { CentrocostoService } from '../../services/centrocosto.service';
+import { CentrocostoService } from '../../services/tesoreria/centrocosto.service';
 import { EntidadService } from '../../services/entidad.service';
-import { AnticipoService } from '../../services/anticipo.service';
+import { AnticipoService } from '../../services/tesoreria/anticipo.service';
 import { TipoEntidadService } from '../../services/tipoentidad.service';
 
 @Component({

@@ -124,7 +124,7 @@
     <button type="button" class="btn-close"data-bs-dismiss="modal" aria-label="Close" id="close-modal"(click)="modalRef.hide()"></button>
   </div>
   <div class="modal-body"> <!-- app-aplicacion-formulario -->
-    <!-- <app-formulario #appFormAnticipo [idRuta]="id" (alGuardar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario> -->
+    
     <app-aplicacion-formulario #appFormAplicacion [idRuta]="id" (alGuardar)="modalRef.hide(); tabla.obtenerDatos()"></app-aplicacion-formulario>
   </div>
   <div class="modal-footer">
@@ -141,7 +141,7 @@
     <button type="button" class="btn-close"data-bs-dismiss="modal" aria-label="Close" id="close-modal"(click)="modalRef.hide()"></button>
   </div>
   <div class="modal-body">
-    <!--<app-formulario #appFormAnticipo [anticipo]="anticipo" [idRuta]="id" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario>-->
+    
     <app-aplicacion-formulario #appFormAplicacion [anticipo]="anticipo" [idRuta]="id" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-aplicacion-formulario>
   </div>
   <div class="modal-footer">
