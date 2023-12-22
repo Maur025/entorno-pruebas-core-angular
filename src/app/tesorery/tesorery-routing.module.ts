@@ -11,7 +11,8 @@ const routes: Routes = [
   { path: '', component: PaneldecontrolComponent },
   { path: "banco", loadChildren: () => import('./banco/banco.module').then(m => m.BancoModule) },
   { path: "anticipo", loadChildren: () => import('./anticipo/anticipo.module').then(m => m.AnticipoModule) },
-  { path: 'entidad', loadChildren: () => import('./entidad/entidad.module').then(m => m.EntidadModule) }
+  { path: "entidad", loadChildren: () => import('./entidad/entidad.module').then(m => m.EntidadModule) },
+  { path: "fondo", loadChildren: () => import('./fondo/fondo.module').then(m => m.FondoModule) }
 ];
 
 @NgModule({

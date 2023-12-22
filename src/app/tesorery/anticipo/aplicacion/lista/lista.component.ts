@@ -2,8 +2,8 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
-import { AnticipoService } from 'src/app/tesorery/services/anticipo.service';
-import { CentrocostoService } from 'src/app/tesorery/services/centrocosto.service';
+import { AnticipoService } from 'src/app/tesorery/services/tesoreria/anticipo.service';
+import { CentrocostoService } from 'src/app/tesorery/services/tesoreria/centrocosto.service';
 import { FormularioComponent} from '../formulario/formulario.component'
 @Component({
   selector: 'app-lista',
@@ -13,7 +13,7 @@ import { FormularioComponent} from '../formulario/formulario.component'
 export class ListaComponent implements OnInit {
 
 
-  
+
 
 
   @ViewChild('appFormAnticipo') appFormAnticipo: FormularioComponent;

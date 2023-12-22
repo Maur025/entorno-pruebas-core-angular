@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
-import { AnticipoService } from 'src/app/tesorery/services/anticipo.service';
-import { CentrocostoService } from 'src/app/tesorery/services/centrocosto.service';
+import { AnticipoService } from 'src/app/tesorery/services/tesoreria/anticipo.service';
+import { CentrocostoService } from 'src/app/tesorery/services/tesoreria/centrocosto.service';
 import { EntidadService } from 'src/app/tesorery/services/entidad.service';
 
 @Component({
@@ -52,14 +52,14 @@ export class FormularioComponent implements OnInit{
   ngOnInit(): void {
 
     this.maxDate = this.dateNow;
-  
+
     this.breadCrumbItems = [ { label: this.breadCrumbTitle },{ label: this.titulo, active: true },];
     this.formGroup = this.FormBuilder.group(this.fieldsFormValidation());
     if(this.idRuta) this.form['id'].disable();
     this.getEntidadReferencia();
     this.getCentroCostos();
     if (this.anticipo) {
-  
+
       this.formGroup.setValue({
         id: this.anticipo.id,
         entidadReferencialId: this.anticipo.entidadReferencialId,
@@ -74,7 +74,7 @@ export class FormularioComponent implements OnInit{
     }
   }
 
-  
+
   get form() {
     return this.formGroup.controls;
   }
@@ -90,7 +90,7 @@ export class FormularioComponent implements OnInit{
         },(err: any) => {
           this.notificacionService.alertError(err);
         });
-      
+
       } else {
         this.anticipoService.register(this.formGroup.value).subscribe((res: any) => {
           this.notificacionService.successStandar();
@@ -113,16 +113,16 @@ export class FormularioComponent implements OnInit{
       this.listaEntidades = data.content;
     });
   }
-  
+
   fieldsFormValidation() {
     return {
-      id: ["", []],     
+      id: ["", []],
       monto: [, [Validators.required]],
-      fecha: [, [Validators.required]],    
+      fecha: [, [Validators.required]],
       ingresoEgreso: [, [Validators.required]],
       nroReferencia: [, [Validators.required]],
       //aperturado:[,Validators.required],
-      //saldo:[,Validators.required],    
+      //saldo:[,Validators.required],
       centroCostoId: [, [Validators.required]],
       entidadReferencialId: [, [Validators.required]],
     };
