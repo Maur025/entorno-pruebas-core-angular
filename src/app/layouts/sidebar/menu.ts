@@ -36,31 +36,56 @@ export const MENU: MenuItem[] = [
         link: 'entidad',
       },
 
-        ]
-    },
-    {
-        id: 120,
-        label: 'Anticipos',
-        icon: 'fas fa-kaaba',
-        subItems: [
-            {
-                id: 121,
-                label: 'Ant. Proveedor',
-                link: 'anticipo',
-            },
-            {
-                id: 122,
-                label: 'Aplicacion',
-                link: 'aplicacion',
-            },
-            {
-                id: 123,
-                label: 'Devolución',
-                link: 'devolicion',
-            },
+    ]
+  },
+  {
+    id: 20,
+    label: 'Anticipos',
+    icon: 'mdi mdi-cash-multiple',
+    subItems: [
+      {
+        id: 201,
+        label: 'Administrar Entidades',
+        link: 'entidad',
+      },
 
     ]
-  }
+  },
+  {
+    id: 30,
+    label: 'Anticipos',
+    icon: 'mdi mdi-cash-multiple',
+    subItems: [
+      {
+        id: 301,
+        label: 'Ant. Proveedor',
+        link: 'anticipo',
+      },
+      {
+        id: 302,
+        label: 'Aplicacion',
+        link: 'aplicacion',
+      },
+      {
+        id: 303,
+        label: 'Devolución',
+        link: 'devolicion',
+      },
+    ]
+  },
+  {
+    id: 40,
+    label: 'Fondos',
+    icon: 'mdi mdi-safe',
+    subItems: [
+      {
+        id: 401,
+        label: 'Adm. Fondos Operativos',
+        link: 'fondo/operativos',
+      },
+
+    ]
+  },
 
 ]
 

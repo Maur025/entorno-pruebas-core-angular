@@ -2,8 +2,8 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
-import { AnticipoService } from 'src/app/tesorery/services/anticipo.service';
-import { CentrocostoService } from 'src/app/tesorery/services/centrocosto.service';
+import { AnticipoService } from 'src/app/tesorery/services/tesoreria/anticipo.service';
+import { CentrocostoService } from 'src/app/tesorery/services/tesoreria/centrocosto.service';
 import { FormularioComponent} from '../formulario/formulario.component'
 import { AplicacionAnticipoService } from 'src/app/tesorery/services/aplicacion-anticipo.service';
 import { UntypedFormGroup } from '@angular/forms';
@@ -19,9 +19,11 @@ import { Location } from '@angular/common';
 export class ListaComponent implements OnInit {
 
 
+
   breadCrumbTitle: string = 'Aplicación de Anticipos';
   titulo: string = 'Detalle de movimientos'
   @ViewChild('appFormAplicacion') appFormAplicacion: FormularioComponent;
+
 
   @Input() id;
   @Input() rel_prefix:any;
@@ -94,23 +96,7 @@ anticipo:any;
   ngOnInit(): void {
     console.log(this.route.snapshot.paramMap.get('id'));
     this.actualizarFiltros();
-   /* this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true }];
-    if (this.rel_prefix) this.servicio.setPrefix(this.rel_prefix);
-    this.formato = {
-      cabeceras:{
-        "acciones" : {"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Acciones","colsize":"12","filtrotipo":"number"},
-        "id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"ID","colsize":"12","filtrotipo":"text"},
-        "fecha":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Fecha","colsize":"12","filtrotipo":"fecha"},
-        "movimiento":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Movimiento","colsize":"12","filtrotipo":"text"},
-        "nroReferencia":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Referencia","colsize":"12","filtrotipo":"text"},
-        "monto":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Monto","colsize":"12","filtrotipo":"text"},
-        "saldo":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Saldo","colsize":"12","filtrotipo":"text"},
-        "estado":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Estado","colsize":"12","filtrotipo":"text"},
-      }
-    };
-    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
-  */
-    //this.breadCrumbItems = [{ label: 'Reportes'}, {label: 'Libro Diario', active:true}]
+
     this.getEstadoAnticipo();
     this.formato = {
       cabeceras:{
@@ -120,10 +106,10 @@ anticipo:any;
         "movimiento":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Movimiento","colsize":"12","filtrotipo":"number" },
         "nroReferencia":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Nro Referncia","colsize":"12","filtrotipo":"text"},
         "monto":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Monto","colsize":"12","filtrotipo":"text"},
-      //  "tipoTransaccion":{dataAsync:'ds',"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Tipo Transaccion","colsize":"12","filtrotipo":"number"},
+      
         "saldo":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Saldo","colsize":"12","filtrotipo":"number"},
         "estado":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Estado","colsize":"12","filtrotipo":"number"},
-        //"haber":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Haber","colsize":"12","filtrotipo":"number"},
+      
       }
     };
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }

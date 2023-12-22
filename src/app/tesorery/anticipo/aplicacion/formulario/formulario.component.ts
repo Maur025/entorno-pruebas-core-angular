@@ -2,9 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
+
 import { AnticipoService } from 'src/app/tesorery/services/anticipo.service';
 import { AplicacionAnticipoService } from 'src/app/tesorery/services/aplicacion-anticipo.service';
 import { CentrocostoService } from 'src/app/tesorery/services/centrocosto.service';
+
 import { EntidadService } from 'src/app/tesorery/services/entidad.service';
 import { EstadoAnticipoService } from 'src/app/tesorery/services/estadoanticipo.service';
 
@@ -57,17 +59,17 @@ export class FormularioComponent implements OnInit{
   ngOnInit(): void {
 
     this.maxDate = this.dateNow;
-  
+
     this.breadCrumbItems = [ { label: this.breadCrumbTitle },{ label: this.titulo, active: true },];
     this.formGroup = this.FormBuilder.group(this.fieldsFormValidation());
     if(this.idRuta) this.form['id'].disable();
     this.getEstadoAnticipo();
     this.getCentroCostos();
     if (this.anticipo) {
-  
+
       this.formGroup.setValue({
         id: this.anticipo.id,
-       // entidadReferencialId: this.anticipo.entidadReferencialId,
+       
         fecha: new Date(this.anticipo.fecha),
         monto: this.anticipo.monto,
         estado: this.anticipo.estado,
@@ -78,7 +80,7 @@ export class FormularioComponent implements OnInit{
     }
   }
 
-  
+
   get form() {
     return this.formGroup.controls;
   }
@@ -88,7 +90,7 @@ export class FormularioComponent implements OnInit{
     let data = this.formGroup.value;
     data.movimiento = "MOV-PROV";
     data.anticipoId = this.route.snapshot.paramMap.get('id');
-    console.log('<----->',data);
+    
     this.submitted = true;
     if (this.formGroup.valid) {
       if (this.anticipo) {
@@ -100,10 +102,10 @@ export class FormularioComponent implements OnInit{
         },(err: any) => {
           this.notificacionService.alertError(err);
         });
-      
+
       } else {
         data.saldo = data.monto;
-        console.log(data);
+        
         this.aplicacionAnticipoService.register(data).subscribe((res: any) => {
           this.notificacionService.successStandar();
           this.alGuardar.emit(res);
@@ -131,14 +133,16 @@ export class FormularioComponent implements OnInit{
       this.listaEntidades = data.content;
     });
   }
-  
+
   fieldsFormValidation() {
     return {
-      id: ["", []],     
+      id: ["", []],
       monto: [, [Validators.required]],
+
       fecha: [, [Validators.required]],    
       nroReferencia: [, [Validators.required]], 
       estado: [, [Validators.required]],
+
     };
   }
 }

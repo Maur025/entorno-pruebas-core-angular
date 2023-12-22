@@ -1,5 +1,5 @@
-holaa
 <form (ngSubmit)="guardar()" [formGroup]="formGroup">
+
   <label class="mb-3 col-12">Los campos marcados con asterisco (*) son obligatorios./ {{idRuta}}</label>
   <div class="nav col-12">
     <div class="col-6">
@@ -13,6 +13,7 @@ holaa
             <div *ngIf="form['fecha'].errors['required']">Fecha es obligatorio</div>
           </div>
         </div>
+
       </div>
     </div>
 
@@ -52,6 +53,7 @@ holaa
         </div>
       </div>
     </div>
+
   </div>
 
 
