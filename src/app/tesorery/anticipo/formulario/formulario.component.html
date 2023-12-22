@@ -1,0 +1,70 @@
+<form (ngSubmit)="guardar()" [formGroup]="formGroup">
+    <label class="mb-3 col-12">Los campos marcados con asterisco (*) son obligatorios./ {{idRuta}}</label>
+    <div class="nav col-12">
+        <div class="col-6">
+            <div class="mb-3" px-1>
+              <label for="formrow-password-input">(*) Fecha</label>
+              <div class="input-group">
+                <input type="text" placeholder="dd-mm-AA" class="form-control"  bsDatepicker required  formControlName="fecha" [ngClass]="{ 'is-invalid': submitted && form['fecha'].errors }">
+                <span class="input-group-text"><i class="mdi mdi-calendar-outline"></i></span>
+                <div *ngIf="submitted && form['fecha'].errors" class="invalid-feedback" align="left">
+                  <div *ngIf="form['fecha'].errors['required']">Fecha es obligatorio</div>
+                </div>
+              </div>
+            </div>
+          </div>
+    {{tipoEntidadId}}
+      <div class="col-6">
+            <div class="mb-3 px-1">
+            <label class="mb-2" for="entidadReferencialId">(*) Entidad Referencial </label>
+            <ng-select class="uppercase" formControlName="entidadReferencialId" placeholder="Seleccione Entidad Referencia" [items]="listaEntidades" bindLabel="entidad.nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['entidadReferencialId'].errors != null }">
+            </ng-select>
+            <div *ngIf="submitted && form['entidadReferencialId'].errors" >
+                <div class="text-danger mt-1 font-size-10" *ngIf="form['entidadReferencialId'].errors['required']">Seleccionar una Entidad de referencia</div>
+            </div>
+            </div>
+      </div>
+     
+      <div class="col-6">
+            <div class="mb-3 px-1">
+            <label class="mb-2" for="centroCostoId">(*) Centro Costos </label>
+            <ng-select class="uppercase" formControlName="centroCostoId" placeholder="Seleccione Centro de Costo" [items]="listaCentroCostos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['centroCostoId'].errors != null }">
+            </ng-select>
+            <div *ngIf="submitted && form['centroCostoId'].errors" >
+                <div class="text-danger mt-1 font-size-10" *ngIf="form['centroCostoId'].errors['required']">Seleccionar un Centro de Costo obligatoria</div>
+            </div>
+            </div>
+      </div>
+
+      <div class="col-6">
+        <div class="mb-3 px-1">
+        <label class="mb-2" for="ingresoEgreso">(*) Ingreso/Egreso </label>
+        <ng-select class="uppercase" formControlName="ingresoEgreso" placeholder="Seleccione Ingreso/Egreso" [items]="ingresoEgreso" bindLabel="name" bindValue="value" [ngClass]="{ 'ngselect-invalid': submitted && form['ingresoEgreso'].errors != null }">
+        </ng-select>
+        <div *ngIf="submitted && form['ingresoEgreso'].errors" >
+            <div class="text-danger mt-1 font-size-10" *ngIf="form['ingresoEgreso'].errors['required']">Seleccionar una opción obligatoria</div>
+        </div>
+        </div>
+  </div>
+
+      <div class="col-6">
+        <div class="mb-3 px-1">
+          <label class="mb-2" for="nroReferencia">(*) Nro de Documento </label>
+          <input type="text" class="form-control uppercase" formControlName="nroReferencia" [ngClass]="{ 'is-invalid': submitted && form['nroReferencia'].errors }" />
+          <div *ngIf="submitted && form['nroReferencia'].errors" class="invalid-feedback">
+            <div *ngIf="form['nroReferencia'].errors['required']">El nro de referencia es obligatorio</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="mb-3 px-1">
+          <label class="mb-2" for="monto">(*) Monto </label>
+          <input type="numeric" class="form-control uppercase" formControlName="monto" [ngClass]="{ 'is-invalid': submitted && form['monto'].errors }" />
+          <div *ngIf="submitted && form['monto'].errors" class="invalid-feedback">
+            <div *ngIf="form['monto'].errors['required']">El monto es obligatorio</div>
+          </div>
+        </div>
+      </div>
+    </div>
+</form>

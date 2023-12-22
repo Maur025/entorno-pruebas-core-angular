@@ -57,4 +57,7 @@ export class EntidadService {
     listaEntidadReferncial(){
       return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/entidadReferencial`);
     }
+    listaEntidadReferencialTipoEntidad(id:string = ''){
+      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/entidadReferencial/tipoEntidad/${id}`);
+    }
 }

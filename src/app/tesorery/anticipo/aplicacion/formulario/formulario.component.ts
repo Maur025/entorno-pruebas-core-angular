@@ -2,19 +2,24 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
-import { AnticipoService } from 'src/app/tesorery/services/tesoreria/anticipo.service';
-import { CentrocostoService } from 'src/app/tesorery/services/tesoreria/centrocosto.service';
+
+import { AnticipoService } from 'src/app/tesorery/services/anticipo.service';
+import { AplicacionAnticipoService } from 'src/app/tesorery/services/aplicacion-anticipo.service';
+import { CentrocostoService } from 'src/app/tesorery/services/centrocosto.service';
+
 import { EntidadService } from 'src/app/tesorery/services/entidad.service';
+import { EstadoAnticipoService } from 'src/app/tesorery/services/estadoanticipo.service';
 
 @Component({
-  selector: 'app-formulario',
+  selector: 'app-aplicacion-formulario',
   templateUrl: './formulario.component.html',
   styleUrls: ['./formulario.component.scss']
 })
 export class FormularioComponent implements OnInit{
   breadCrumbItems: Array<{}>;
   breadCrumbTitle: string = "Gestión de Anticipos";
-  titulo: any = "Anicipo";
+  titulo: any = "Movimiento";
+  
   routeApi = 'anticipo';
   levelNavigate = 2;
   service = null;
@@ -29,6 +34,7 @@ export class FormularioComponent implements OnInit{
   @Input() idRuta;
   listaEntidades: any;
   listaCentroCostos: any;
+  listaEstadoAnticipo: any;
 
   dateNow = new Date((new Date).setHours(23, 59, 59, 999));
 
@@ -44,7 +50,8 @@ export class FormularioComponent implements OnInit{
     private notificacionService: NotificacionService,
     private centroCostoService:CentrocostoService,
     private entidadService:EntidadService,
-    private anticipoService:AnticipoService
+    private aplicacionAnticipoService:AplicacionAnticipoService,
+    private estadoAnticipoService:EstadoAnticipoService
   ){
 
   }
@@ -56,17 +63,16 @@ export class FormularioComponent implements OnInit{
     this.breadCrumbItems = [ { label: this.breadCrumbTitle },{ label: this.titulo, active: true },];
     this.formGroup = this.FormBuilder.group(this.fieldsFormValidation());
     if(this.idRuta) this.form['id'].disable();
-    this.getEntidadReferencia();
+    this.getEstadoAnticipo();
     this.getCentroCostos();
     if (this.anticipo) {
 
       this.formGroup.setValue({
         id: this.anticipo.id,
-        entidadReferencialId: this.anticipo.entidadReferencialId,
+       
         fecha: new Date(this.anticipo.fecha),
         monto: this.anticipo.monto,
-        centroCostoId: this.anticipo.centroCostoId,
-        ingresoEgreso:  this.anticipo.ingresoEgreso,
+        estado: this.anticipo.estado,
         nroReferencia: this.anticipo.nroReferencia
       });
     } else {
@@ -80,11 +86,17 @@ export class FormularioComponent implements OnInit{
   }
 
   guardar() {
+   
+    let data = this.formGroup.value;
+    data.movimiento = "MOV-PROV";
+    data.anticipoId = this.route.snapshot.paramMap.get('id');
+    
     this.submitted = true;
     if (this.formGroup.valid) {
       if (this.anticipo) {
-        this.anticipoService.update(this.formGroup.value).subscribe((res: any) => {
-          console.log(res);
+        data.saldo = this.anticipo.monto;        
+        this.aplicacionAnticipoService.update(data).subscribe((res: any) => {
+        
           this.notificacionService.successStandar();
           this.alActualizar.emit(res);
         },(err: any) => {
@@ -92,7 +104,9 @@ export class FormularioComponent implements OnInit{
         });
 
       } else {
-        this.anticipoService.register(this.formGroup.value).subscribe((res: any) => {
+        data.saldo = data.monto;
+        
+        this.aplicacionAnticipoService.register(data).subscribe((res: any) => {
           this.notificacionService.successStandar();
           this.alGuardar.emit(res);
         },(err: any) => {
@@ -101,6 +115,12 @@ export class FormularioComponent implements OnInit{
       );
       }
     }
+  }
+
+  getEstadoAnticipo(){
+    this.estadoAnticipoService.habilitados().subscribe( data => {
+      this.listaEstadoAnticipo = data.content;
+    });
   }
 
   getCentroCostos(){
@@ -118,13 +138,11 @@ export class FormularioComponent implements OnInit{
     return {
       id: ["", []],
       monto: [, [Validators.required]],
-      fecha: [, [Validators.required]],
-      ingresoEgreso: [, [Validators.required]],
-      nroReferencia: [, [Validators.required]],
-      //aperturado:[,Validators.required],
-      //saldo:[,Validators.required],
-      centroCostoId: [, [Validators.required]],
-      entidadReferencialId: [, [Validators.required]],
+
+      fecha: [, [Validators.required]],    
+      nroReferencia: [, [Validators.required]], 
+      estado: [, [Validators.required]],
+
     };
   }
 }

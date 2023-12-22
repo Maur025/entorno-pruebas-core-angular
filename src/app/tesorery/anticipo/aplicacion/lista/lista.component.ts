@@ -5,8 +5,14 @@ import { NotificacionService } from 'src/app/core/services/notificacion.service'
 import { AnticipoService } from 'src/app/tesorery/services/tesoreria/anticipo.service';
 import { CentrocostoService } from 'src/app/tesorery/services/tesoreria/centrocosto.service';
 import { FormularioComponent} from '../formulario/formulario.component'
+import { AplicacionAnticipoService } from 'src/app/tesorery/services/aplicacion-anticipo.service';
+import { UntypedFormGroup } from '@angular/forms';
+import { TablaComponent } from 'src/app/core/herramientas/tabla/tabla.component';
+import { EstadoAnticipoService } from 'src/app/tesorery/services/estadoanticipo.service';
+import { Location } from '@angular/common';
+
 @Component({
-  selector: 'app-lista',
+  selector: 'app-aplicacion-lista',
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.scss']
 })
@@ -14,102 +20,145 @@ export class ListaComponent implements OnInit {
 
 
 
+  breadCrumbTitle: string = 'Aplicación de Anticipos';
+  titulo: string = 'Detalle de movimientos'
+  @ViewChild('appFormAplicacion') appFormAplicacion: FormularioComponent;
 
 
-  @ViewChild('appFormAnticipo') appFormAnticipo: FormularioComponent;
-
-  breadCrumbItems: Array<{}>;
-  breadCrumbTitle: string = 'Administración de Anticipos';
-  titulo: string = 'Anticipos Proveedor'
-  @Input() rel_prefix: any;
-  @Input() rel_field: any;
-  @Input() rel_id: any;
-  @Input() getAll = 'getAll';
   @Input() id;
-  @Input() direccion = true;
-
-
-
-  editCreateWithModal = false;
-  dataEdit = null;
+  @Input() rel_prefix:any;
+  @Input() rel_field:any;
+  @Input() rel_id:any;
+  @ViewChild('tabla') tabla: TablaComponent;
+anticipo:any;
+  public estructura;
+  breadCrumbItems: Array<{}>;
+  cargandoContenido = false;
+  cargandoDatos = false;
+  datos: any;
+  listaEstados:any;
   modalRef?: BsModalRef;
+  buscar = false;
+  textoBuscar = 'Ingrese criterio de búsqueda: movimiento y nro de referencia.'
+  inputBuscar ='';
+  value:any;
+  tabId:any;
+  pregrabadosId:any;
+  contabilizadosId: any;
   formato: any;
-  servicio = null;
-  anticipo:any;
+  filtrosData: any;
+  comprobante: any;
+  pagination = {
+    size : 10,
+    page : 1,
+    sortBy : 'id',
+    descending : false,
+    rowsNumber : 0,
+    pages : 0
+  };
+  filtroFecha:any;
+  filtroEstadoAnticipo:any;
+  filtroMonto:any;
+  filtroTipoTransaccion:any;
+  filtroNumero:any;
+  filtroOperador: any;
+  filtroDebeHaber:any;
+  listaEstadoAnticipo:any;
+  listaTipoTransacciones:any;
+  operadores = [
+    {id: "=", nombre: "Igual"},
+    {id: ">=", nombre: "Mayor Igual"},
+    {id: "<=", nombre: "Menor Igual"},
+  ];
+  tipos = [
+    {id: null, nombre: "Todos"},
+    {id: "saldo", nombre: "Saldo"},
+    {id: "monto", nombre: "Monto"},
+  ];
+  submittedRevision= false;
+  submittedEliminar= false;
+  formReversion: UntypedFormGroup;
+  formEliminar: UntypedFormGroup;
+
 
   constructor(
     public AnticipoService: AnticipoService,
     private modalService: BsModalService,
     private NotificacionService: NotificacionService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public AplicacionAnticipoService:AplicacionAnticipoService,
+    public centroCostoService:CentrocostoService,
+    public estadoAnticipoService:EstadoAnticipoService,
+    private location: Location,
   ){}
 
   ngOnInit(): void {
-    this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true }];
-    if (this.rel_prefix) this.servicio.setPrefix(this.rel_prefix);
+    console.log(this.route.snapshot.paramMap.get('id'));
+    this.actualizarFiltros();
+
+    this.getEstadoAnticipo();
     this.formato = {
       cabeceras:{
         "acciones" : {"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Acciones","colsize":"12","filtrotipo":"number"},
         "id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"ID","colsize":"12","filtrotipo":"text"},
-        "enfidadReferencial":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Proveedor","colsize":"12","filtrotipo":"number"},
-        "fecha":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Fecha","colsize":"12","filtrotipo":"fecha"},
+        "fecha":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Fecha","colsize":"12","filtrotipo":"number"},
+        "movimiento":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Movimiento","colsize":"12","filtrotipo":"number" },
+        "nroReferencia":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Nro Referncia","colsize":"12","filtrotipo":"text"},
         "monto":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Monto","colsize":"12","filtrotipo":"text"},
-        "saldo":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Saldo","colsize":"12","filtrotipo":"text"},
-        "estado":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Estado","colsize":"12","filtrotipo":"text"},
+      
+        "saldo":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Saldo","colsize":"12","filtrotipo":"number"},
+        "estado":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Estado","colsize":"12","filtrotipo":"number"},
+      
       }
     };
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
+
   }
 
   crear(template: any) {
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
-
   editar(data: any, template: any) {
 
-    //console.log(data);
+    console.log(data);
     this.anticipo = data;
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
- /* habilitar(data: any, component, texto) {
-    this.NotificacionService.inhabilitarAlerta(texto, (response: any) => {
-      if (response) {
-        this.CuentaBancoService.habilitar(data.id).subscribe(
-          (data) => {
-            let estado='';
-            component.obtenerDatos();
-            texto == 'habilitar'? estado='habilitado' : estado='inhabilitado';
-            this.NotificacionService.successStandar('Registro '+estado+' exitosamente.');
-          },
-          (error) => {
-            this.NotificacionService.alertError(error);
-          }
-        );
-      }
-    });
-  }*/
+  actualizarFiltros(){
+    let filtro = {};
+    filtro['anticipoId'] = this.route.snapshot.paramMap.get('id');
 
-  eliminar(data: any, component) {
-    this.NotificacionService.alertaEliminacion(data.nombre, (response: any) => {
-      if (response) {
-        this.servicio.delete(data.id).subscribe(
-          (data) => {
-            component.obtenerDatos();
-            this.NotificacionService.successStandar(
-              "Registro eliminado exitosamente."
-            );
-          },
-          (error) => {
-            this.NotificacionService.alertError(error);
-          }
-        );
-      }
-    });
+    if (this.filtroFecha != undefined){
+      filtro['fechaDesde'] = this.filtroFecha[0];
+      filtro['fechaHasta'] = this.filtroFecha[1];
+    }
+    if (this.filtroEstadoAnticipo != undefined) filtro['estadoAnticipoId'] = this.filtroEstadoAnticipo;
+    if (this.filtroOperador != undefined) filtro['operador'] = this.filtroOperador;
+    if (this.filtroDebeHaber != undefined) filtro['montoSaldo'] = this.filtroDebeHaber;
+    if (this.filtroTipoTransaccion != undefined) filtro['tipoTransaccionId'] = this.filtroTipoTransaccion;
+    (this.filtroMonto != undefined && this.filtroMonto > 0) ? filtro['monto'] = Number(this.filtroMonto): delete filtro['monto'];
+    (this.filtroNumero != undefined && this.filtroNumero > 0) ? filtro['numero'] = Number(this.filtroNumero): delete filtro['numero'];
+    this.filtrosData = filtro;
   }
 
+  cambioFecha(e){
+    this.filtroFecha = e;
+    this.actualizarFiltros();
+  }
+
+  getEstadoAnticipo(){
+    this.estadoAnticipoService.habilitados().subscribe( data=>{
+      this.listaEstadoAnticipo = data['content'];
+    }, error=> this.NotificacionService.alertError(error));
+  }
+
+  regresar(){
+    this.location.back();
+  }
   cerrarModal(){
     this.modalService.hide();
   }
+
 }
