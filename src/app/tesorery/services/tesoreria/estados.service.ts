@@ -5,10 +5,10 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
 @Injectable({
   providedIn: 'root'
 })
-export class EstadoAnticipoService {
+export class EstadosService {
 
-  apiName:string = 'estadoAnticipo';
-  entitys:string = 'Estado Anticipo';
+  apiName:string = 'estados';
+  entitys:string = 'Estado';
 
   apiUrl:string = '' ;
   prefix:string = '';
@@ -19,7 +19,7 @@ export class EstadoAnticipoService {
     this.prefix = prefix;
   }
 
-  habilitados() {
-    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/listarHabilitados`);
+  habilitadosFondos() {
+    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/fondos`);
   }
 }

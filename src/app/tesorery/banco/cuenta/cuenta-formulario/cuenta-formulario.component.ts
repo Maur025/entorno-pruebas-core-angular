@@ -82,7 +82,7 @@ export class CuentaFormularioComponent implements OnInit {
     this.submitted = true;
     if (this.formGroup.valid) {
       if (this.cuenta) {
-        this.cuentaBancoService.update(this.formGroup.value).subscribe((res: any) => {
+        this.cuentaBancoService.update(this.formGroup.getRawValue()).subscribe((res: any) => {
           this.notificacionService.successStandar();
           this.alActualizar.emit(res);
         },(err: any) => {
@@ -90,7 +90,7 @@ export class CuentaFormularioComponent implements OnInit {
         }
       );
       } else {
-        this.cuentaBancoService.register(this.formGroup.value).subscribe((res: any) => {
+        this.cuentaBancoService.register(this.formGroup.getRawValue()).subscribe((res: any) => {
           this.notificacionService.successStandar();
           this.alGuardar.emit(res);
         },(err: any) => {

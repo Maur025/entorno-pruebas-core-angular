@@ -57,9 +57,6 @@ export class ListaComponent {
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
   }
 
-
-
-
   crear(template: any) {
     this.modalRef = this.modalService.show(template, {class: `modal-xl modal-scrollable`});
   }
@@ -67,7 +64,6 @@ export class ListaComponent {
   editar(data: any, template: any) {
     this.banco = data;
     this.router.navigate(['./id/' + data.id, {}], { relativeTo: this.route });
-
     //this.modalRef = this.modalService.show(template, {class: `modal-xl modal-scrollable`});
   }
 
@@ -88,21 +84,6 @@ export class ListaComponent {
       }
     });
   }
-
-  deshabilitar(data: any, component) {
-    this.servicio.deshabilitar(data, data.id).subscribe(
-      (data) => {
-        component.obtenerDatos();
-        this.NotificacionService.successStandar(
-          "Registro deshabilitado exitosamente."
-        );
-      },
-      (error) => {
-        this.NotificacionService.alertError(error);
-      }
-    );
-  }
-
   eliminar(data: any, component) {
     this.NotificacionService.alertaEliminacion(data.nombre, (response: any) => {
       if (response) {

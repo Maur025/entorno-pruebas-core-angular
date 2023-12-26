@@ -13,6 +13,7 @@ import { FondoRoutingModule } from './fondo-routing.module';
 import { FondosOperativosComponent } from './fondos-operativos/fondos-operativos.component';
 import { FormularioComponent } from './fondos-operativos/formulario/formulario.component';
 import { ListaComponent } from './fondos-operativos/lista/lista.component';
+import { DetalleFondoComponent } from './fondos-operativos/detalle-fondo/detalle-fondo.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { ListaComponent } from './fondos-operativos/lista/lista.component';
     FondosOperativosComponent,
     FormularioComponent,
     ListaComponent,
-    FechasimplePipe
+    FechasimplePipe,
+    DetalleFondoComponent
   ],
   imports: [
     CommonModule,

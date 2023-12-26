@@ -41,14 +41,13 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
       return this.apiService.tesoreria.delete(`${this.apiUrl}${this.prefix}/${this.apiName}/${id}`);
     }
 
-    habilitar(datos:any,id: string | number): Observable<any> {
-      datos[this.entitys] = 'habilitar';
-      return this.apiService.tesoreria.put(`${this.apiUrl}${this.prefix}/${this.apiName}/${datos.id}`, datos);
+    habilitar(id: string | number): Observable<any> {
+      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/${id}/habilita`);
     }
 
     deshabilitar(datos:any,id: string | number): Observable<any> {
       datos[this.entitys] = 'deshabilitar';
-      return this.apiService.tesoreria.put(`${this.apiUrl}${this.prefix}/${this.apiName}/${datos.id}`, datos);
+      return this.apiService.tesoreria.put(`${this.apiUrl}${this.prefix}/${this.apiName}/${datos.id}/habilita`, datos);
     }
 
     habilitados(){
