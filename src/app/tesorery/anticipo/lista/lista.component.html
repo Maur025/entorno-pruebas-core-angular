@@ -31,8 +31,8 @@
       <td [ngSwitch]="campo">
         <div *ngSwitchCase="'acciones'">
             <ul class="list-unstyled hstack gap-1 mb-0">
-              <li data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
-                <button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila, modalEditar)"><i class="mdi mdi-pencil-outline"></i></button>
+              <li data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" *ngIf="!fila.anticipo">
+                <!--<button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila, modalEditar)"><i class="mdi mdi-pencil-outline"></i></button>-->
               </li>
               <li data-bs-toggle="tooltip" data-bs-placement="top" title="Aplicacion">
                 <button class="btn btn-sm btn-info" style="transform: scale(0.8);" (click)="verDetalleAnticipo(fila.id)"><i class="mdi mdi-eye"></i></button>
@@ -58,6 +58,9 @@
           </div>
           <div *ngSwitchCase="'monto'" class="text-end">
             {{fila.monto }}  
+          </div>
+          <div *ngSwitchCase="'saldo'" class="text-end">
+            {{fila.saldo }}  
           </div>
         <div *ngSwitchDefault>
             <td>{{fila[campo]}}</td>

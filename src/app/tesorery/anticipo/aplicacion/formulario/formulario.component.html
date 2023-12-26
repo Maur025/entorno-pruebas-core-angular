@@ -7,6 +7,7 @@
         <label for="formrow-password-input">(*) Fecha</label>
         <div class="input-group">
           <input type="text" placeholder="dd-mm-AA" class="form-control" bsDatepicker required formControlName="fecha"
+          [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY' }"
             [ngClass]="{ 'is-invalid': submitted && form['fecha'].errors }">
           <span class="input-group-text"><i class="mdi mdi-calendar-outline"></i></span>
           <div *ngIf="submitted && form['fecha'].errors" class="invalid-feedback" align="left">
