@@ -36,3 +36,7 @@
 ng-select.ngselect-invalid .ng-select-container {
   border-color: #f46a6a;
 }
+
+input.uppercase, textarea.uppercase {
+  text-transform: uppercase;
+}

@@ -6,6 +6,7 @@
       <input type="text" class="form-control" formControlName="nroSolicitud" [ngClass]="{ 'is-invalid': submitted && form['nroSolicitud'].errors}">
       <div *ngIf="submitted && form['nroSolicitud'].errors" class="col-sm-12">
         <div *ngIf="form['nroSolicitud'].errors['required']" class="text-danger mt-1 font-size-10">El nro de solicitud es obligatorio</div>
+        <div *ngIf="form['nroSolicitud'].errors['pattern']" class="text-danger mt-1 font-size-10">El nro de solicitud solo acepta carácteres númericos</div>
       </div>
     </div>
     <div class="col-6 mb-3 px-1">
@@ -30,6 +31,7 @@
         <input type="text" class="form-control text-end" formControlName="importe" placeholder="Bs." [ngClass]="{ 'is-invalid': submitted && form['importe'].errors}">
         <div *ngIf="submitted && form['importe'].errors" class="col-sm-12">
           <div *ngIf="form['importe'].errors['required']" class="text-danger mt-1 font-size-10">El monto es obligatorio</div>
+          <div *ngIf="form['importe'].errors['pattern']" class="text-danger mt-1 font-size-10">El importe solo acepta carácteres númericos</div>
         </div>
       </div>
     </div>
@@ -75,6 +77,15 @@
         <ng-select class="uppercase" formControlName="medioTransferenciaId" placeholder="Seleccione un medio de transferencia" [items]="listaMedioTransferencias" bindLabel="medio" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['medioTransferenciaId'].errors != null }"></ng-select>
         <div *ngIf="submitted && form['medioTransferenciaId'].errors" class="col-sm-12">
           <div *ngIf="form['medioTransferenciaId'].errors['required']" class="text-danger mt-1 font-size-10">El medio de transferencia es obligatoria</div>
+        </div>
+      </div>
+    </div>
+    <div class="mb-3 nav col-12 px-1" *ngIf="apertura">
+      <label class="col-3 col-form-label">(*) Estado</label>
+      <div class="col-9">
+        <ng-select class="uppercase" formControlName="estado" placeholder="Seleccione un estado" [items]="listaEstados" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['estado'].errors != null }"></ng-select>
+        <div *ngIf="submitted && form['estado'].errors" class="col-sm-12">
+          <div *ngIf="form['estado'].errors['required']" class="text-danger mt-1 font-size-10">El estado es obligatorio</div>
         </div>
       </div>
     </div>
