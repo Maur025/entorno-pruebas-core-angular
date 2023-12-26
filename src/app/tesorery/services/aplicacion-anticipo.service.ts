@@ -57,4 +57,9 @@ export class AplicacionAnticipoService {
   filter(size: number = 100, page: number = 1, sortBy:string = 'id', descending:false, keyword:any, filtros:any){
     return this.apiService.tesoreria.post(`/${this.apiName}/filter?page=${page}&size=${size}&sortBy=${sortBy}&descending=${descending}`, filtros);
   }
+
+  deleteUpdate(id: string | number){
+    console.log('AQUUUU----')
+    return this.apiService.tesoreria.delete(`${this.apiUrl}${this.prefix}/${this.apiName}/${id}/actualizarSaldo`);
+  }
 }

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BsLocaleService } from "ngx-bootstrap/datepicker";
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { AnticipoService } from 'src/app/tesorery/services/tesoreria/anticipo.service';
 import { AplicacionAnticipoService } from 'src/app/tesorery/services/aplicacion-anticipo.service';
@@ -49,9 +50,10 @@ export class FormularioComponent implements OnInit{
     private centroCostoService:CentrocostoService,
     private entidadService:EntidadService,
     private aplicacionAnticipoService:AplicacionAnticipoService,
-    private estadoAnticipoService:EstadoAnticipoService
+    private estadoAnticipoService:EstadoAnticipoService,
+    private _localeService: BsLocaleService,
   ){
-
+    this._localeService.use('es');
   }
 
   ngOnInit(): void {
