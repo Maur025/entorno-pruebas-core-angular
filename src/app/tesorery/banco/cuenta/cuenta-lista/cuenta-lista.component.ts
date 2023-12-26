@@ -44,17 +44,35 @@ export class CuentaListaComponent {
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true }];
     if (this.rel_prefix) this.servicio.setPrefix(this.rel_prefix);
-    this.formato = {
-      cabeceras:{
-        "acciones" : {"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Acciones","colsize":"12","filtrotipo":"number"},
-        "id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"ID","colsize":"12","filtrotipo":"text"},
-        "nroCuenta":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Nro Cuenta","colsize":"12","filtrotipo":"number"},
-        "banco":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Banco","colsize":"12","filtrotipo":"text"},
-        "moneda":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Moneda","colsize":"12","filtrotipo":"text"},
-        "estado":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Estado","colsize":"12","filtrotipo":"text"},
+    this.formato = this.getCabeceras();
+    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
+  }
+
+  getCabeceras() {
+    return {
+      cabeceras: {
+        "acciones": this.getOpcionesCabecera('Acciones', 12),
+        "id": this.getOpcionesCabecera('id', 12, 'number', false),
+        "nroCuenta": this.getOpcionesCabecera('Nro Cuenta', 12),
+        "banco": this.getOpcionesCabecera('Banco', 12),
+        "moneda": this.getOpcionesCabecera('Moneda', 12),
+        "estado": this.getOpcionesCabecera('Estado', 6),
       }
     };
-    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
+  }
+
+  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true) {
+    return {
+      "visible": visible,
+      "buscable": true,
+      "buscableCheck": true,
+      "visibleCheck": visible,
+      "sortable": true,
+      "filtrable": true,
+      "texto": texto,
+      "colsize": colsize,
+      "filtrotipo": filtrotipo
+    }
   }
 
   crear(template: any) {

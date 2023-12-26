@@ -22,7 +22,7 @@ import { DetalleFondoComponent } from './fondos-operativos/detalle-fondo/detalle
     FormularioComponent,
     ListaComponent,
     FechasimplePipe,
-    DetalleFondoComponent
+    DetalleFondoComponent,
   ],
   imports: [
     CommonModule,

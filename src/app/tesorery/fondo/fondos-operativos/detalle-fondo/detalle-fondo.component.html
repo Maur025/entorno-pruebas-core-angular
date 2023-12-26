@@ -1,35 +1,35 @@
 <div class="container-fluid">
   <div class="card card-body">
     <h5 class="card-title mb-3 pb-3 border-bottom">Detalle de Fondo Operativo : <span *ngIf="nombre"> {{nombre}}</span></h5>
-    <div class="nav col-12 border-bottom">
+    <div class="nav col-12 border-bottom" *ngIf="fondo">
       <div class="col-4 mb-2 px-1">
         <p class="ps-2">
           <span class="fw-semibold semi" >Nombre:</span>
-          <span class="text-primary"> {{nombre}}</span>
+          <span class="text-primary"> {{fondo.nombre}}</span>
         </p>
       </div>
       <div class="col-4 mb-3 px-1">
         <p class="ps-2">
           <span class="fw-semibold semi" >Nro de Solicitud:</span>
-          <span class="text-primary"> {{nroSolicitud}}</span>
+          <span class="text-primary"> {{fondo.nroSolicitud}}</span>
         </p>
       </div>
       <div class="col-4 mb-3 px-1">
         <p class="ps-2">
-          <span class="fw-semibold semi" >Fecha:</span>
-          <span class="text-primary" *ngIf="fechaSolicitud"> {{fechaSolicitud | fechaSimple}}</span>
+          <span class="fw-semibold semi" >Fecha de Solicitud:</span>
+          <span class="text-primary"> {{fondo.fechaSolicitud | fechaSimple}}</span>
         </p>
       </div>
       <div class="col-4 mb-3 px-1">
         <p class="ps-2">
           <span class="fw-semibold semi" >Monto:</span>
-          <span class="text-primary"> {{importe}}</span>
+          <span class="text-primary"> {{fondo.importe}}</span>
         </p>
       </div>
       <div class="col-8 mb-3 px-1">
         <p class="ps-2">
           <span class="fw-semibold semi" >Descripción:</span>
-          <span class="text-primary"> {{descripcion}}</span>
+          <span class="text-primary"> {{fondo.descripcion}}</span>
         </p>
       </div>
     </div>
@@ -97,8 +97,8 @@
                 {{fila.estadoFondo.nombre}}
               </div>
               <div *ngSwitchCase="'estado'">
-                  <div *ngIf="!fila.deleted" class="badge bg-success font-size-10"><i class="mdi mdi-lock-open me-1"></i> Habilitado</div>
-                  <div *ngIf="fila.deleted" class="badge bg-danger font-size-10"><i class="mdi mdi-lock me-1"></i> Inhabilitado</div>
+                <div *ngIf="!fila.deleted" class="badge bg-success font-size-10"><i class="mdi mdi-lock-open me-1"></i> Habilitado</div>
+                <div *ngIf="fila.deleted" class="badge bg-danger font-size-10"><i class="mdi mdi-lock me-1"></i> Inhabilitado</div>
               </div>
               <div *ngSwitchDefault>
                 {{fila[campo]}}
