@@ -28,14 +28,13 @@ export const MENU: MenuItem[] = [
   {
     id: 20,
     label: 'Entidades',
-    icon: 'mdi mdi-account-multiple',
+    icon: 'mdi mdi-account-group',
     subItems: [
       {
         id: 201,
         label: 'Administrar Entidades',
         link: 'entidad',
       },
-
     ]
   },
 
@@ -49,7 +48,6 @@ export const MENU: MenuItem[] = [
         label: 'Ant. Proveedor',
         link: 'anticipo',
       },
-    
     ]
   },
   {
@@ -62,9 +60,20 @@ export const MENU: MenuItem[] = [
         label: 'Adm. Fondos Operativos',
         link: 'fondo/operativos',
       },
-
     ]
   },
+  /* {
+    id: 50,
+    label: 'Rendiciones',
+    icon: 'mdi mdi-book-sync-outline',
+    subItems: [
+      {
+        id: 501,
+        label: 'Administrar Rendiciones',
+        link: 'rendicion',
+      },
+    ]
+  }, */
 
 ]
 

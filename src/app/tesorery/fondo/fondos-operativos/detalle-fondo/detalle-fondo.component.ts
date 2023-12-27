@@ -13,7 +13,7 @@ export class DetalleFondoComponent implements OnInit{
 
   breadCrumbItems: Array<{}>;
   breadCrumbTitle: string = 'Adminstrar Cuentas de Banco';
-  titulo: string = 'Lista del Detalle Fondo Operativo'
+  titulo: string = 'Lista de Movimientos del Fondo Operativo'
   textoBuscar = 'Ingrese criterio de búsqueda: nro referencia';
   @Input() rel_prefix: any;
   @Input() rel_field: any;
@@ -25,6 +25,7 @@ export class DetalleFondoComponent implements OnInit{
   descripcion: any;
   id: any;
   formato: any;
+  fondo:any;
 
   constructor(
     private fondoOperativoService: FondoOperativoService,
@@ -74,11 +75,7 @@ export class DetalleFondoComponent implements OnInit{
 
   setFondo(){
     this.fondoOperativoService.find(this.id).subscribe(data =>{
-      this.nroSolicitud = data.content.nroSolicitud;
-      this.fechaSolicitud = data.content.fechaSolicitud;
-      this.nombre = data.content.nombre;
-      this.importe = data.content.importe;
-      this.descripcion = data.content.descripcion;
+      this.fondo = data.content
     })
   }
 

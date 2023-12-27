@@ -11,8 +11,6 @@ import { MedioTransferenciaService } from "src/app/tesorery/services/tesoreria/m
 import { DetalleFontoOperativoService } from "src/app/tesorery/services/tesoreria/detalle-fondo-operativo.service";
 import { EstadosService } from "src/app/tesorery/services/tesoreria/estados.service";
 import { forkJoin } from 'rxjs';
-import { concatMap, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'app-formulario-fondoOperativo',
@@ -23,6 +21,7 @@ export class FormularioComponent implements OnInit{
 
   @Input() fondo;
   @Input() apertura;
+  @Input() descargo;
   @Output() alGuardar = new EventEmitter<any>();
   @Output() alActualizar = new EventEmitter<any>();
   formGroup: FormGroup;
@@ -60,6 +59,15 @@ export class FormularioComponent implements OnInit{
         this.getEstados();
         this.formGroup.disable();
         this.addFormApertura();
+        this.form.estado.disable();
+      }
+      if (this.descargo) {
+        this.formGroup.disable();
+        this.getEstados();
+        this.getCentroCostos();
+        this.addFormDescargo();
+        this.form.importe.setValue(null);
+        this.form.importe.enable();
       }
     }
   }
@@ -82,6 +90,14 @@ export class FormularioComponent implements OnInit{
     this.formGroup.addControl('cuentaBancoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('medioTransferenciaId', new FormControl(null, Validators.required));
     this.formGroup.addControl('estado', new FormControl(null, Validators.required));
+  }
+
+  addFormDescargo(){
+    this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
+    this.formGroup.addControl('estado', new FormControl(null, Validators.required));
+    this.formGroup.addControl('fechaMovimiento', new FormControl(null, Validators.required));
+    this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
+
   }
 
   getCentroCostos(){
@@ -111,7 +127,10 @@ export class FormularioComponent implements OnInit{
   getEstados(){
     this.estadosService.habilitadosFondos().subscribe(data =>{
       this.listaEstados = data.content;
-      this.form.estado.setValue(this.listaEstados.filter((data: { nombre: any; }) => data.nombre == 'APERTURADO')[0].id);
+      if(this.apertura) this.form.estado.setValue(this.listaEstados.filter((data: { nombre: any; }) => data.nombre == 'APERTURADO')[0].id);
+      if(this.descargo) {
+        this.listaEstados.splice(this.listaEstados.map(estado => estado.nombre).indexOf('APERTURADO'), 1);
+      }
     },(error) => {
       this.notificacionService.alertError(error);
     });
@@ -148,8 +167,22 @@ export class FormularioComponent implements OnInit{
 
   public guardar(){
     this.submitted = true;
+    console.log(this.formGroup.value)
     if (this.formGroup.valid) {
-      if (this.apertura) {
+      if (this.descargo) {
+        let data = this.formGroup.getRawValue();
+        data.monto = data.importe;
+        data.nroReferencia = data.nroSolicitud;
+        data.refId = null;
+        data.fondoOperativoId = data.id;
+        console.log(data)
+        this.detalleFontoOperativoService.register(data).subscribe(data =>{
+          this.notificacionService.successStandar();
+          this.alActualizar.emit();
+        },(error) => {
+          this.notificacionService.alertError(error);
+        });
+      } else if (this.apertura) {
         let data = this.formGroup.getRawValue();
         data.monto = data.importe;
         data.saldo = data.importe;
