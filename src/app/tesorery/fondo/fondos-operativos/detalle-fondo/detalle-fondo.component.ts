@@ -3,6 +3,7 @@ import { NotificacionService } from "src/app/core/services/notificacion.service"
 import { ActivatedRoute, Router } from "@angular/router";
 import { FondoOperativoService } from "src/app/tesorery/services/tesoreria/fondo-operativo.service";
 import { DetalleFontoOperativoService } from "src/app/tesorery/services/tesoreria/detalle-fondo-operativo.service";
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-detalle-fondo',
@@ -33,6 +34,7 @@ export class DetalleFondoComponent implements OnInit{
     private router: Router,
     private route: ActivatedRoute,
     private notificacionService: NotificacionService,
+    private location: Location,
   ) { }
 
   ngOnInit(): void {
@@ -79,4 +81,7 @@ export class DetalleFondoComponent implements OnInit{
     })
   }
 
+  regresar() {
+    this.location.back();
+  }
 }
