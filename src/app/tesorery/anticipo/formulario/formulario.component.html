@@ -66,5 +66,42 @@
           </div>
         </div>
       </div>
+
+      <div class="mb-3 nav col-12 px-1">
+        <label class="col-3 col-form-label">Descripción</label>
+        <div class="col-9">
+          <textarea class="form-control uppercase" formControlName="descripcion" rows="3" [ngClass]="{ 'is-invalid': submitted && form['descripcion'].errors}"></textarea>
+          <div *ngIf="submitted && form['descripcion'].errors" class="col-sm-12">
+            <div *ngIf="form['descripcion'].errors['required']" class="text-danger mt-1 font-size-10">La descripción es obligatorio</div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 nav col-12 px-1" >
+        <label class="col-3 col-form-label">(*) Banco</label>
+        <div class="col-9">
+          <ng-select class="uppercase" formControlName="bancoId" placeholder="Seleccione un banco" (change)="cambioBanco()" [items]="listaBancos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['bancoId'].errors != null }"></ng-select>
+          <div *ngIf="submitted && form['bancoId'].errors" class="col-sm-12">
+            <div *ngIf="form['bancoId'].errors['required']" class="text-danger mt-1 font-size-10">El banco es obligatorio</div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 nav col-12 px-1" >
+        <label class="col-3 col-form-label">(*) Cuenta</label>
+        <div class="col-9">
+          <ng-select class="uppercase" formControlName="cuentaBancoId" placeholder="Seleccione una cuenta" [items]="listaCuentasBanco" bindLabel="nroCuenta" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['cuentaBancoId'].errors != null }"></ng-select>
+          <div *ngIf="submitted && form['cuentaBancoId'].errors" class="col-sm-12">
+            <div *ngIf="form['cuentaBancoId'].errors['required']" class="text-danger mt-1 font-size-10">La cuenta es obligatoria</div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 nav col-12 px-1" >
+        <label class="col-3 col-form-label">(*) Medio Transferencia</label>
+        <div class="col-9">
+          <ng-select class="uppercase" formControlName="medioTransferenciaId" placeholder="Seleccione un medio de transferencia" [items]="listaMedioTransferencias" bindLabel="medio" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['medioTransferenciaId'].errors != null }"></ng-select>
+          <div *ngIf="submitted && form['medioTransferenciaId'].errors" class="col-sm-12">
+            <div *ngIf="form['medioTransferenciaId'].errors['required']" class="text-danger mt-1 font-size-10">El medio de transferencia es obligatoria</div>
+          </div>
+        </div>
+      </div>
     </div>
 </form>

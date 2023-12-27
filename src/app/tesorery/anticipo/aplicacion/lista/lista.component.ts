@@ -20,7 +20,7 @@ export class ListaComponent implements OnInit {
 
 
   breadCrumbTitle: string = 'Aplicación de Anticipos';
-  titulo: string = 'Detalle de movimientos'
+  titulo: string = 'Lista de Movimientos de Anticipo'
   @ViewChild('appFormAplicacion') appFormAplicacion: FormularioComponent;
 
   @Input() id;
@@ -29,6 +29,7 @@ export class ListaComponent implements OnInit {
   @Input() rel_id: any;
   @ViewChild('tabla') tabla: TablaComponent;
   anticipo: any;
+  anticipoData:any;
   public estructura;
   breadCrumbItems: Array<{}>;
   cargandoContenido = false;
@@ -80,7 +81,7 @@ export class ListaComponent implements OnInit {
 
 
   constructor(
-    public AnticipoService: AnticipoService,
+    public  anticipoService: AnticipoService,
     private modalService: BsModalService,
     private NotificacionService: NotificacionService,
     private route: ActivatedRoute,
@@ -92,24 +93,27 @@ export class ListaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.route.snapshot.paramMap.get('id'));
+    this.getAnticipo(this.route.snapshot.paramMap.get('id'));
+    //this.id = this.route.snapshot.paramMap.get('id');
     this.actualizarFiltros();
-    //this.breadCrumbItems = [{ label: 'Reportes'}, {label: 'Libro Diario', active:true}]
+   
     this.getEstadoAnticipo();
+    
+
     this.formato = {
       cabeceras: {
         "acciones": { "visible": true, "buscable": true, "buscableCheck": true, "visibleCheck": true, "sortable": true, "filtrable": true, "texto": "Acciones", "colsize": "12", "filtrotipo": "number" },
         "id": { "visible": false, "buscable": true, "buscableCheck": true, "visibleCheck": false, "sortable": true, "filtrable": true, "texto": "ID", "colsize": "12", "filtrotipo": "text" },
         "fecha": { "visible": true, "buscable": true, "buscableCheck": true, "visibleCheck": true, "sortable": true, "filtrable": true, "texto": "Fecha", "colsize": "12", "filtrotipo": "number" },
         "movimiento": { "visible": true, "buscable": true, "buscableCheck": true, "visibleCheck": true, "sortable": true, "filtrable": true, "texto": "Movimiento", "colsize": "12", "filtrotipo": "number" },
-        "nroReferencia": { "visible": true, "buscable": true, "buscableCheck": true, "visibleCheck": true, "sortable": true, "filtrable": true, "texto": "Nro Referncia", "colsize": "12", "filtrotipo": "text" },
+        "nroReferencia": { "visible": true, "buscable": true, "buscableCheck": true, "visibleCheck": true, "sortable": true, "filtrable": true, "texto": "Nro Referencia", "colsize": "12", "filtrotipo": "text" },
         "monto": { "visible": true, "buscable": true, "buscableCheck": true, "visibleCheck": true, "sortable": true, "filtrable": true, "texto": "Monto", "colsize": "12", "filtrotipo": "text" },
         "saldo": { "visible": true, "buscable": true, "buscableCheck": true, "visibleCheck": true, "sortable": true, "filtrable": true, "texto": "Saldo", "colsize": "12", "filtrotipo": "number" },
         "estado": { "visible": true, "buscable": true, "buscableCheck": true, "visibleCheck": true, "sortable": true, "filtrable": true, "texto": "Estado", "colsize": "12", "filtrotipo": "number" },
       }
     };
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false; this.formato.cabeceras[this.rel_field].visibleCheck = false }
-
+   
   }
 
   crear(template: any) {
@@ -117,7 +121,6 @@ export class ListaComponent implements OnInit {
   }
   editar(data: any, template: any) {
 
-    console.log(data);
     this.anticipo = data;
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
@@ -173,6 +176,12 @@ export class ListaComponent implements OnInit {
         );
       }
     });
+  }
+
+  getAnticipo(id:string){
+    this.anticipoService.find(id).subscribe(data => {
+      this.anticipoData = data.content
+    })
   }
 
 }

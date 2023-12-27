@@ -14,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WidgetModule } from 'src/app/shared/widget/widget.module';
 import { UIModule } from 'src/app/shared/ui/ui.module';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+//import { FechasimplePipe } from 'src/app/core/pipes/fechasimple.pipe';
 
 
 @NgModule({
@@ -21,7 +22,9 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     ListaComponent,
     FormularioComponent,
     ListaAplicacionComponent,
-FormularioAplicacionComponent
+    FormularioAplicacionComponent,
+//    FechasimplePipe,
+
   ],
   imports: [
     CommonModule,
