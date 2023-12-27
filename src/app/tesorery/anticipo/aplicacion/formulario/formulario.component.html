@@ -35,7 +35,7 @@
 
     <div class="col-6">
       <div class="mb-3 px-1">
-        <label class="mb-2" for="nroReferencia">(*) Nro de Documento </label>
+        <label class="mb-2" for="nroReferencia">(*) Nro de Referencia </label>
         <input type="text" class="form-control uppercase" formControlName="nroReferencia"
           [ngClass]="{ 'is-invalid': submitted && form['nroReferencia'].errors }" />
         <div *ngIf="submitted && form['nroReferencia'].errors" class="invalid-feedback">

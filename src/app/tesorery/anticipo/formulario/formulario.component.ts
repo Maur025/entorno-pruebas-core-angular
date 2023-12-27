@@ -6,7 +6,9 @@ import { CentrocostoService } from '../../services/tesoreria/centrocosto.service
 import { EntidadService } from '../../services/entidad.service';
 import { AnticipoService } from '../../services/tesoreria/anticipo.service';
 import { TipoEntidadService } from '../../services/tipoentidad.service';
-
+import { CuentaBancoService } from "src/app/tesorery/services/tesoreria/cuenta-banco.service";
+import { BancoService } from "src/app/tesorery/services/tesoreria/banco.service";
+import { MedioTransferenciaService } from "src/app/tesorery/services/tesoreria/medio-transferencia.service";
 @Component({
   selector: 'app-formulario',
   templateUrl: './formulario.component.html',
@@ -28,13 +30,22 @@ export class FormularioComponent {
   @Output() alActualizar = new EventEmitter<any>();
   @Input() anticipo;
   @Input() idRuta;
+  @Input() apertura;
   listaEntidades: any;
   listaTipoEntidad: any;
   listaCentroCostos: any;
   tipoEntidadId: any = null;
 
+
+  listaBancos: any;
+  listaCuentasBanco: any;
+  listaMedioTransferencias: any;
+
   dateNow = new Date((new Date).setHours(23, 59, 59, 999));
 
+  fondo:any = {
+    nombre:'a'
+  };
   ingresoEgreso: any = [
     { value: "IN", name: "INGRESO" },
     { value: "OUT", name: "EGRESO" },
@@ -48,7 +59,10 @@ export class FormularioComponent {
     private centroCostoService: CentrocostoService,
     private entidadService: EntidadService,
     private anticipoService: AnticipoService,
-    public tipoEntidadService: TipoEntidadService
+    public tipoEntidadService: TipoEntidadService,
+    private cuentaBancoService: CuentaBancoService,
+    private bancoService: BancoService,
+    private medioTransferenciaService: MedioTransferenciaService,
   ) {
 
   }
@@ -61,6 +75,8 @@ export class FormularioComponent {
     this.formGroup = this.FormBuilder.group(this.fieldsFormValidation());
     if (this.idRuta) this.form['id'].disable();
     this.getCentroCostos();
+    this.getBancos();
+    this.getMedioTransferencias();
 
     this.getTipoEntidadId("PROVEEDOR").then(uuid=>{
       this.getEntidadReferencialTipoEntidad(uuid);
@@ -107,6 +123,7 @@ export class FormularioComponent {
 
         let data = this.formGroup.value;
         data.saldo = data.monto;
+        data.origen = 'ANTICIPO';
 
         this.anticipoService.register(data).subscribe((res: any) => {
           this.notificacionService.successStandar();
@@ -145,6 +162,35 @@ export class FormularioComponent {
     });
   }
 
+  getBancos(){
+    this.bancoService.habilitados().subscribe(data =>{
+      this.listaBancos = data.content;
+    },(error) => {
+      this.notificacionService.alertError(error);
+    });
+  }
+
+  getMedioTransferencias(){
+    this.medioTransferenciaService.habilitados().subscribe(data =>{
+      this.listaMedioTransferencias = data.content;
+    },(error) => {
+      this.notificacionService.alertError(error);
+    });
+  }
+
+  cambioBanco(){
+    if (this.form.bancoId.value != null) {
+      this.cuentaBancoService.getCuentasBanco(1000, 1, 'id', false,'', this.form.bancoId.value).subscribe(data =>{
+        this.listaCuentasBanco = data.content;
+      },(error) => {
+        this.notificacionService.alertError(error);
+      });
+    } else {
+      this.listaCuentasBanco = [];
+      this.form.cuentaBancoId.setValue(null);
+    }
+  }
+
   fieldsFormValidation() {
     return {
       id: ["", []],
@@ -154,6 +200,10 @@ export class FormularioComponent {
       nroReferencia: [, [Validators.required]],
       centroCostoId: [, [Validators.required]],
       entidadReferencialId: [, [Validators.required]],
+      descripcion: [, [Validators.required]],
+      bancoId: [, [Validators.required]],
+      cuentaBancoId: [, [Validators.required]],
+      medioTransferenciaId: [, [Validators.required]],
     };
   }
 }
