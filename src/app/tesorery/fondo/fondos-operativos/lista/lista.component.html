@@ -31,17 +31,17 @@
       <td [ngSwitch]="campo">
         <div *ngSwitchCase="'acciones'">
           <ul class="list-unstyled hstack gap-1 mb-0">
-            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" *ngIf="!fila.aperturado">
               <button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila, modalGeneral)"><i class="mdi mdi-pencil-outline"></i></button>
             </li>
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Aperturar" *ngIf="!fila.aperturado">
               <button class="btn btn-sm btn-primary" [disabled]="fila.deleted" (click)="aperturar(fila, modalGeneral)"><i class="bx bx-lock-open"></i></button>
             </li>
-            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Detalle fondo" *ngIf="fila.aperturado">
-              <button class="btn btn-sm btn-info" (click)="detalleFondo(fila)"><i class="mdi mdi-eye"></i></button>
-            </li>
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Descargos" *ngIf="fila.aperturado">
               <button class="btn btn-sm btn-light" [disabled]="fila.deleted" (click)="descargos(fila, modalDescargos)"><i class="mdi mdi-transfer-down"></i></button>
+            </li>
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Detalle fondo" *ngIf="fila.aperturado">
+              <button class="btn btn-sm btn-info" (click)="detalleFondo(fila)"><i class="mdi mdi-eye"></i></button>
             </li>
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Habilitar" *ngIf="fila.deleted">
               <a class="btn btn-sm btn-success" (click)="habilitar(fila, tabla, 'habilitar')"><i class="mdi mdi-power"></i></a>

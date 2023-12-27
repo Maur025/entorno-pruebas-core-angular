@@ -11,6 +11,7 @@ import { MedioTransferenciaService } from "src/app/tesorery/services/tesoreria/m
 import { DetalleFontoOperativoService } from "src/app/tesorery/services/tesoreria/detalle-fondo-operativo.service";
 import { EstadosService } from "src/app/tesorery/services/tesoreria/estados.service";
 import { forkJoin } from 'rxjs';
+import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'app-formulario-fondoOperativo',
@@ -31,7 +32,8 @@ export class FormularioComponent implements OnInit{
   listaCuentasBanco: any;
   listaMedioTransferencias: any;
   listaEstados: any;
-
+  fechaActual: any;
+  fechaMaxima: any;
   constructor(
     private FormBuilder: FormBuilder,
     private fondoOperativoService: FondoOperativoService,
@@ -66,10 +68,10 @@ export class FormularioComponent implements OnInit{
         this.getEstados();
         this.getCentroCostos();
         this.addFormDescargo();
-        this.form.importe.setValue(null);
-        this.form.importe.enable();
       }
     }
+    this.fechaActual = new Date(new Date().setHours(0));
+    console.log(this.fechaActual)
   }
 
   fieldsFormValidation() {
@@ -95,9 +97,9 @@ export class FormularioComponent implements OnInit{
   addFormDescargo(){
     this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('estado', new FormControl(null, Validators.required));
-    this.formGroup.addControl('fechaMovimiento', new FormControl(null, Validators.required));
+    this.formGroup.addControl('fechaMovimiento', new FormControl(null, [Validators.required, this.validatorFecha()]));
     this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
-
+    this.formGroup.addControl('monto', new FormControl(null, Validators.required));
   }
 
   getCentroCostos(){
@@ -171,11 +173,9 @@ export class FormularioComponent implements OnInit{
     if (this.formGroup.valid) {
       if (this.descargo) {
         let data = this.formGroup.getRawValue();
-        data.monto = data.importe;
         data.nroReferencia = data.nroSolicitud;
         data.refId = null;
         data.fondoOperativoId = data.id;
-        console.log(data)
         this.detalleFontoOperativoService.register(data).subscribe(data =>{
           this.notificacionService.successStandar();
           this.alActualizar.emit();
@@ -221,6 +221,16 @@ export class FormularioComponent implements OnInit{
           });
         }
       }
+    }
+  }
+
+  public validatorFecha() {
+    return (control: AbstractControl): any =>{
+      let errores= 'invalido';
+      let diaActual = new Date(new Date().setHours(0));;
+      if (control.value >= diaActual) errores = 'valido';
+      if( errores == 'invalido') return { fechaInvalida: "INVALID" }
+      else return null;
     }
   }
 }

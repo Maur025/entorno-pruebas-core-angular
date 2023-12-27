@@ -22,14 +22,20 @@
       </div>
       <div class="col-4 mb-3 px-1">
         <p class="ps-2">
-          <span class="fw-semibold semi" >Monto:</span>
+          <span class="fw-semibold semi" >Monto de Solicitud:</span>
           <span class="text-primary"> {{fondo.importe}}</span>
         </p>
       </div>
-      <div class="col-8 mb-3 px-1">
+      <div class="col-4 mb-3 px-1">
         <p class="ps-2">
           <span class="fw-semibold semi" >Descripción:</span>
           <span class="text-primary"> {{fondo.descripcion}}</span>
+        </p>
+      </div>
+      <div class="col-4 mb-3 px-1">
+        <p class="ps-2">
+          <span class="fw-semibold semi" >Saldo:</span>
+          <span class="text-primary"> {{fondo.saldo}}</span>
         </p>
       </div>
     </div>
@@ -107,6 +113,12 @@
           </ng-template>
         </ng-template>
       </ng-template>
+
+      <div class="row">
+        <div class="nav justify-content-end">
+          <button type="button" class="btn btn-light" (click)="regresar()">Regresar</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
