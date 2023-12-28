@@ -30,7 +30,7 @@ export class ListaComponent implements OnInit{
   constructor(
     public fondoOperativoService: FondoOperativoService,
     private modalService: BsModalService,
-    private NotificacionService: NotificacionService,
+    private notificacion: NotificacionService,
     private router: Router,
   ) {}
 
@@ -48,9 +48,11 @@ export class ListaComponent implements OnInit{
         "nombre": this.getOpcionesCabecera('Nombre', 12),
         "nroSolicitud": this.getOpcionesCabecera('Nro Solicitud', 12),
         "fechaSolicitud": this.getOpcionesCabecera('Fecha Solicitud', 12),
-        "importe": this.getOpcionesCabecera('Importe', 12),
         "descripcion": this.getOpcionesCabecera('Descripción', 6),
+        "importe": this.getOpcionesCabecera('Monto Solicitud', 12),
+        "saldo": this.getOpcionesCabecera('Saldo', 12),
         "aperturado": this.getOpcionesCabecera('Aperturado', 12),
+        "cierre": this.getOpcionesCabecera('Cerrado', 12),
         "estado": this.getOpcionesCabecera('Estado', 6),
       }
     };
@@ -104,22 +106,34 @@ export class ListaComponent implements OnInit{
     //this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
+  cerrar(data, tabla){
+    this.notificacion.alertaSimpleConfirmacionBoton("Esta seguro que desea cerrar el fondo operativo: '"+data.nombre+"'.","Sí, cerrar",(response: any) => {
+      if (response) {
+        this.fondoOperativoService.cerrarFondo(data.id).subscribe(data =>{
+          tabla.obtenerDatos();
+          this.notificacion.successStandar('Registro cerrado exitosamente.');
+        },(error) => {
+          this.notificacion.alertError(error);
+        });
+      }
+    })
+  }
+
   cerrarModal(){
     this.modalService.hide();
   }
 
   habilitar(data: any, component, texto) {
-    this.NotificacionService.inhabilitarAlerta(texto, (response: any) => {
+    this.notificacion.inhabilitarAlerta(texto, (response: any) => {
       if (response) {
         this.fondoOperativoService.habilitar(data.id).subscribe(
           (data) => {
             let estado='';
             component.obtenerDatos();
             texto == 'habilitar'? estado='habilitado' : estado='inhabilitado';
-            this.NotificacionService.successStandar('Registro '+estado+' exitosamente.');
-          },
-          (error) => {
-            this.NotificacionService.alertError(error);
+            this.notificacion.successStandar('Registro '+estado+' exitosamente.');
+          },(error) => {
+            this.notificacion.alertError(error);
           }
         );
       }

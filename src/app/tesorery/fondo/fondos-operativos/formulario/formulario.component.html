@@ -45,12 +45,29 @@
       </div>
     </div>
     <div class="mb-3 nav col-12 px-1" *ngIf="descargo">
+      <label class="col-3 col-form-label">(*) Saldo</label>
+      <div class="col-9">
+        <input type="text" class="form-control text-end" [(ngModel)]="saldo" [disabled]=true [ngModelOptions]="{standalone: true}" placeholder="Bs.">
+      </div>
+    </div>
+    <div class="mb-3 nav col-12 px-1" *ngIf="apertura || descargo">
+      <label class="col-3 col-form-label">(*) Estado</label>
+      <div class="col-9">
+        <ng-select class="uppercase" formControlName="estado" placeholder="Seleccione un estado" (change)="cambioEstado()" [items]="listaEstados" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['estado'].errors != null }"></ng-select>
+        <div *ngIf="submitted && form['estado'].errors" class="col-sm-12">
+          <div *ngIf="form['estado'].errors['required']" class="text-danger mt-1 font-size-10">El estado es obligatorio</div>
+        </div>
+      </div>
+    </div>
+    <div class="mb-3 nav col-12 px-1" *ngIf="descargo">
       <label class="col-3 col-form-label">(*) Monto de Descargo</label>
       <div class="col-9">
         <input type="text" class="form-control text-end" formControlName="monto" placeholder="Bs." [ngClass]="{ 'is-invalid': submitted && form['monto'].errors}">
         <div *ngIf="submitted && form['monto'].errors" class="col-sm-12">
-          <div *ngIf="form['monto'].errors['required']" class="text-danger mt-1 font-size-10">El monto es obligatorio</div>
-          <div *ngIf="form['monto'].errors['pattern']" class="text-danger mt-1 font-size-10">El importe solo acepta carácteres númericos</div>
+          <div *ngIf="form['monto'].errors['required']" class="text-danger mt-1 font-size-10">El monto de descargo es obligatorio</div>
+          <div *ngIf="form['monto'].errors['pattern']" class="text-danger mt-1 font-size-10">El monto de descargo solo deben ser carácteres númericos</div>
+          <div *ngIf="form['monto'].errors['max']" class="text-danger font-size-10 mt-1" >El monto de descargo de devolución no debe superar al saldo actual de {{saldo}}</div>
+          <div *ngIf="form['monto'].errors['montoReposicion']" class="text-danger font-size-10 mt-1" >El monto de descargo de reposición no debe superar {{fondo.importe-fondo.saldo}}</div>
         </div>
       </div>
     </div>
@@ -66,10 +83,10 @@
     <div class="mb-3 nav col-12 px-1" *ngIf="descargo">
       <label class="col-3 col-form-label">(*) Fecha del Movimiento</label>
       <div class="col-9">
-        <input type="text" placeholder="dd-mm-AA" formControlName="fechaMovimiento" [minDate]="fechaActual" class="form-control" bsDatepicker [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY' }" [ngClass]="{ 'is-invalid': submitted && form['fechaMovimiento'].errors}">
+        <input type="text" placeholder="dd-mm-AA" formControlName="fechaMovimiento" [minDate]="fechaActual" class="form-control" bsDatepicker [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY'}" [ngClass]="{ 'is-invalid': submitted && form['fechaMovimiento'].errors}">
         <div *ngIf="submitted && form['fechaMovimiento'].errors" class="col-sm-12">
           <div *ngIf="form['fechaMovimiento'].errors['required']" class="text-danger mt-1 font-size-10">La fecha es obligatoria</div>
-          <div *ngIf="form['fechaMovimiento'].errors['fechaInvalida']" class="text-danger font-size-10 mt-1" >la fecha debe ser mayor o igual a la fecha actual</div>
+          <div *ngIf="form['fechaMovimiento'].errors['fechaInvalida']" class="text-danger font-size-10 mt-1" >La fecha debe ser igual o mayor a la fecha actual</div>
         </div>
       </div>
     </div>
@@ -100,15 +117,7 @@
         </div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="apertura || descargo">
-      <label class="col-3 col-form-label">(*) Estado</label>
-      <div class="col-9">
-        <ng-select class="uppercase" formControlName="estado" placeholder="Seleccione un estado" [items]="listaEstados" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['estado'].errors != null }"></ng-select>
-        <div *ngIf="submitted && form['estado'].errors" class="col-sm-12">
-          <div *ngIf="form['estado'].errors['required']" class="text-danger mt-1 font-size-10">El estado es obligatorio</div>
-        </div>
-      </div>
-    </div>
+
   </div>
 </form>
 
