@@ -37,7 +37,10 @@
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Aperturar" *ngIf="!fila.aperturado">
               <button class="btn btn-sm btn-primary" [disabled]="fila.deleted" (click)="aperturar(fila, modalGeneral)"><i class="bx bx-lock-open"></i></button>
             </li>
-            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Descargos" *ngIf="fila.aperturado">
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar" *ngIf="fila.saldo == 0 && fila.cierre == false">
+              <button class="btn btn-sm btn-soft-danger" (click)="cerrar(fila, tabla)"><i class="mdi mdi-lock"></i></button>
+            </li>
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Descargos" *ngIf="fila.aperturado && fila.saldo != 0">
               <button class="btn btn-sm btn-light" [disabled]="fila.deleted" (click)="descargos(fila, modalDescargos)"><i class="mdi mdi-transfer-down"></i></button>
             </li>
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Detalle fondo" *ngIf="fila.aperturado">
@@ -54,11 +57,17 @@
         <div *ngSwitchCase="'importe'" class="text-end">
           {{fila.importe}}
         </div>
+        <div *ngSwitchCase="'saldo'" class="text-end">
+          {{fila.saldo}}
+        </div>
         <div *ngSwitchCase="'fechaSolicitud'">
           {{fila.fechaSolicitud | fechaSimple}}
         </div>
-        <div *ngSwitchCase="'aperturado'">
-          <span class="badge font-size-12" style="width: 30px;" [ngClass]="{'bg-success': fila.aperturado==true, 'bg-danger':fila.aperturado==false}">{{fila.aperturado==true ? 'SI' : 'NO'}}</span>
+        <div *ngSwitchCase="'aperturado'" class="text-center">
+          <span class="badge font-size-12" style="width: 30px;" [ngClass]="{'bg-success': fila.aperturado, 'bg-danger': !fila.aperturado}">{{fila.aperturado==true ? 'SI' : 'NO'}}</span>
+        </div>
+        <div *ngSwitchCase="'cierre'" class="text-center">
+          <span class="badge font-size-12" style="width: 30px;" [ngClass]="{'bg-success': fila.cierre, 'bg-secondary': !fila.cierre}">{{fila.cierre==true ? 'SI' : 'NO'}}</span>
         </div>
         <div *ngSwitchCase="'estado'">
           <span *ngIf="!fila.deleted" class="badge bg-success font-size-10"><i class="mdi mdi-lock-open me-1"></i> Habilitado</span>

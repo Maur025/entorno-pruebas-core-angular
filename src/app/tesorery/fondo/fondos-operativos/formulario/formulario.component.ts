@@ -34,6 +34,8 @@ export class FormularioComponent implements OnInit{
   listaEstados: any;
   fechaActual: any;
   fechaMaxima: any;
+  saldo: any;
+
   constructor(
     private FormBuilder: FormBuilder,
     private fondoOperativoService: FondoOperativoService,
@@ -68,10 +70,10 @@ export class FormularioComponent implements OnInit{
         this.getEstados();
         this.getCentroCostos();
         this.addFormDescargo();
+        this.saldo = this.fondo.saldo;
       }
     }
-    this.fechaActual = new Date(new Date().setHours(0));
-    console.log(this.fechaActual)
+    this.fechaActual = new Date();
   }
 
   fieldsFormValidation() {
@@ -95,11 +97,10 @@ export class FormularioComponent implements OnInit{
   }
 
   addFormDescargo(){
+    this.formGroup.addControl('monto', new FormControl(null, [Validators.required]));
     this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
-    this.formGroup.addControl('estado', new FormControl(null, Validators.required));
     this.formGroup.addControl('fechaMovimiento', new FormControl(null, [Validators.required, this.validatorFecha()]));
-    this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
-    this.formGroup.addControl('monto', new FormControl(null, Validators.required));
+    this.formGroup.addControl('estado', new FormControl(null, Validators.required));
   }
 
   getCentroCostos(){
@@ -151,6 +152,27 @@ export class FormularioComponent implements OnInit{
     }
   }
 
+  cambioEstado(){
+    if (this.form.monto == undefined) {
+      this.form.monto.setValidators([Validators.required]);
+    } else {
+      let estado = this.listaEstados.find(({id}) => id === this.form.estado.value);
+      switch (estado.nombre) {
+        case "RENDIDO":
+          this.form.monto.setValidators([Validators.required]);
+          break;
+        case "REPOSICIÓN":
+          this.form.monto.setValidators([Validators.required, this.validatorMontoReposicion(this.fondo.importe - this.fondo.saldo)]);
+          break;
+        case "DEVOLUCIÓN":
+          this.form.monto.setValidators([Validators.required, Validators.max(this.fondo.saldo)]);
+          break;
+      }
+    }
+    this.form.monto.updateValueAndValidity()
+  }
+
+
   get form() {
     return this.formGroup.controls;
   }
@@ -169,7 +191,6 @@ export class FormularioComponent implements OnInit{
 
   public guardar(){
     this.submitted = true;
-    console.log(this.formGroup.value)
     if (this.formGroup.valid) {
       if (this.descargo) {
         let data = this.formGroup.getRawValue();
@@ -227,10 +248,22 @@ export class FormularioComponent implements OnInit{
   public validatorFecha() {
     return (control: AbstractControl): any =>{
       let errores= 'invalido';
-      let diaActual = new Date(new Date().setHours(0));;
-      if (control.value >= diaActual) errores = 'valido';
-      if( errores == 'invalido') return { fechaInvalida: "INVALID" }
+      let diaActual = (new Date());
+      diaActual.setHours(0,0,0,0);
+      if (control.value && control.value > diaActual || JSON.stringify(control.value) == JSON.stringify(diaActual)) errores = 'valido';
+      if (control.value && errores == 'invalido') return { fechaInvalida: "INVALID" }
       else return null;
     }
   }
+
+  validatorMontoReposicion(monto) {
+    return (control: AbstractControl): any =>{
+      let errores= 'invalido';
+      if (control.value && control.value <= monto) errores = 'valido';
+      if (control.value && errores == 'invalido') return { montoReposicion: "INVALID" }
+      else return null;
+    }
+  }
+
+
 }
