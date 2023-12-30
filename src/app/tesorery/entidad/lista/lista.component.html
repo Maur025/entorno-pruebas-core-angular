@@ -11,10 +11,10 @@
   [smallTable]="false"
   [softDelete]="false"
   (crearNuevo)="(null)"
-  (alCrear)="crear(modalNuevo)"
+  (alCrear)="crear(modalGeneral)"
   (alActualizar)="(null)"
   (alFiltrar)="(null)"
-  (alEditar)="editar($event, modalEditar)"
+  (alEditar)="editar($event, modalGeneral)"
   campoEstado="estado"
   valueEstado="habilitado"
   (alHabilitar)="habilitar($event, tabla, 'habilitar')"
@@ -33,7 +33,7 @@
         <div *ngSwitchCase="'acciones'">
           <ul class="list-unstyled hstack gap-1 mb-0">
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
-              <button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila, modalEditar)"><i class="mdi mdi-pencil-outline"></i></button>
+              <button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila, modalGeneral)"><i class="mdi mdi-pencil-outline"></i></button>
             </li>
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Habilitar" *ngIf="fila.deleted">
               <a class="btn btn-sm btn-success" (click)="habilitar(fila, tabla,'habilitar')"><i class="mdi mdi-power"></i></a>
@@ -58,25 +58,9 @@
   </ng-template>
 </ng-template>
 
-<ng-template #modalNuevo role="document" let-modal>
+<ng-template #modalGeneral role="document" let-modal>
   <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">Nueva Entidad</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal"aria-label="Close"id="close-modal" (click)="modalRef.hide()"></button>
-  </div>
-  <div class="modal-body">
-    <app-formulario-entidad #appFormEntidad (alGuardar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-entidad>
-  </div>
-  <div class="modal-footer">
-    <div class="hstack gap-2 justify-content-end">
-      <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
-      <button type="button" class="btn btn-success" (click)="appFormEntidad.guardar()">Registrar</button>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #modalEditar role="document" let-modal>
-  <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">Editar Entidad </h5>
+    <h5 class="modal-title" id="exampleModalLabel">{{titleModal}} Entidad </h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()"></button>
   </div>
   <div class="modal-body">

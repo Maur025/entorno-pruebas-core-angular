@@ -172,7 +172,7 @@ export class FormularioComponent implements OnInit {
             datos['tipoEntidadId'] = data.tipoId;
             this.entidadService.registerTipoEntidad(datos).subscribe(result =>{
               this.notificacionService.successStandar();
-              this.alGuardar.emit(res);
+              this.alActualizar.emit();
             })
           },
           (err: any) => {

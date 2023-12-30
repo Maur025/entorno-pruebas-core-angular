@@ -1,7 +1,7 @@
 <krn-tabla
   #tabla
   [titulo]="titulo"
-  [datosService]="fondoOperativoService"
+  [datosService]="fondoCajaService"
   getAll="getAll"
   [formato]="formato"
   [textoBuscar]="textoBuscar"
@@ -34,18 +34,9 @@
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" *ngIf="!fila.aperturado">
               <button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila, modalGeneral)"><i class="mdi mdi-pencil-outline"></i></button>
             </li>
-            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Aperturar" *ngIf="!fila.aperturado">
-              <button class="btn btn-sm btn-primary" [disabled]="fila.deleted" (click)="aperturar(fila, modalGeneral)"><i class="bx bx-lock-open"></i></button>
-            </li>
-            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar" *ngIf="fila.saldo == 0 && fila.cierre == false">
-              <button class="btn btn-sm btn-soft-danger" (click)="cerrar(fila, tabla)"><i class="mdi mdi-lock"></i></button>
-            </li>
-            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Descargos" *ngIf="fila.aperturado && fila.saldo != 0">
+           <!--  <li data-bs-toggle="tooltip" data-bs-placement="top" title="Descargos">
               <button class="btn btn-sm btn-light" [disabled]="fila.deleted" (click)="descargos(fila, modalGeneral)"><i class="mdi mdi-transfer-down"></i></button>
-            </li>
-            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Detalle fondo" *ngIf="fila.aperturado">
-              <button class="btn btn-sm btn-info" (click)="detalleFondo(fila)"><i class="mdi mdi-eye"></i></button>
-            </li>
+            </li> -->
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Habilitar" *ngIf="fila.deleted">
               <a class="btn btn-sm btn-success" (click)="habilitar(fila, tabla, 'habilitar')"><i class="mdi mdi-power"></i></a>
             </li>
@@ -53,21 +44,6 @@
               <a  data-bs-toggle="modal" class="btn btn-sm btn-danger" (click)="habilitar(fila, tabla, 'inhabilitar')"><i class="mdi mdi-power"></i></a>
             </li>
           </ul>
-        </div>
-        <div *ngSwitchCase="'importe'" class="text-end">
-          {{fila.importe}}
-        </div>
-        <div *ngSwitchCase="'saldo'" class="text-end">
-          {{fila.saldo}}
-        </div>
-        <div *ngSwitchCase="'fechaSolicitud'">
-          {{fila.fechaSolicitud | fechaSimple}}
-        </div>
-        <div *ngSwitchCase="'aperturado'" class="text-center">
-          <span class="badge font-size-12" style="width: 30px;" [ngClass]="{'bg-success': fila.aperturado, 'bg-danger': !fila.aperturado}">{{fila.aperturado==true ? 'SI' : 'NO'}}</span>
-        </div>
-        <div *ngSwitchCase="'cierre'" class="text-center">
-          <span class="badge font-size-12" style="width: 30px;" [ngClass]="{'bg-success': fila.cierre, 'bg-secondary': !fila.cierre}">{{fila.cierre==true ? 'SI' : 'NO'}}</span>
         </div>
         <div *ngSwitchCase="'estado'">
           <span *ngIf="!fila.deleted" class="badge bg-success font-size-10"><i class="mdi mdi-lock-open me-1"></i> Habilitado</span>
@@ -83,17 +59,16 @@
 
 <ng-template #modalGeneral role="document" let-modal>
   <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">{{titleModal}} Fondo Operativo</h5>
+    <h5 class="modal-title" id="exampleModalLabel">{{titleModal}} Fondo Caja</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal"aria-label="Close"id="close-modal" (click)="modalRef.hide()"></button>
   </div>
   <div class="modal-body">
-    <app-formulario-fondoOperativo #appFormFondoOp [fondo]="fondo" [apertura]="apertura" [descargo]="descargo" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-fondoOperativo>
+    <app-formulario-caja #appFormCaja [fondo]="fondo" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-caja>
   </div>
   <div class="modal-footer">
     <div class="hstack gap-2 justify-content-end">
       <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
-      <button type="button" class="btn" [class]="{ 'btn-warning': titleModal == 'Editar', 'btn-success': titleModal != 'Editar'}" (click)="appFormFondoOp.guardar()" >{{titleModal == 'Editar' ? 'Guardar' : 'Registrar' }}</button>
+      <button type="button" class="btn" [class]="{ 'btn-warning': titleModal == 'Editar', 'btn-success': titleModal != 'Editar'}" (click)="appFormCaja.guardar()" >{{titleModal == 'Editar' ? 'Guardar' : 'Registrar' }}</button>
     </div>
   </div>
 </ng-template>
-

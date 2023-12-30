@@ -1,34 +1,36 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { EntidadService } from "../../services/tesoreria/entidad.service";
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { FondoCajaService } from "src/app/tesorery/services/tesoreria/fondo-caja.service";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
-import { FormularioComponent } from '../formulario/formulario.component';
+import { FormularioCajaComponent } from '../formulario/formulario.component';
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: 'app-lista',
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.scss']
 })
-export class ListaComponent implements OnInit {
+export class ListaCajaComponent implements OnInit{
 
-  @ViewChild('appFormEntidad') appFormEntidad: FormularioComponent;
+  @ViewChild('appFormCaja') appFormCaja: FormularioCajaComponent;
 
   breadCrumbItems: Array<{}>;
-  breadCrumbTitle: string = 'Adminstrar Entidades';
-  textoBuscar = 'Ingrese criterio de busqueda: nombre y nit/ci'
+  breadCrumbTitle: string = 'Adminstrar Fondos de Caja';
+  textoBuscar = 'Ingrese criterio de busqueda: nombre, sigla y descripción'
   @Input() rel_prefix: any;
   @Input() rel_field: any;
   @Input() rel_id: any;
-  titulo:string = 'Lista de Entidades';
+  titulo:string = 'Lista de Fondos de Caja';
   formato: any;
   modalRef?: BsModalRef;
-  entidad: any;
+  fondo: any;
   titleModal: any;
 
   constructor(
-    public entidadService: EntidadService,
+    public fondoCajaService: FondoCajaService,
     private modalService: BsModalService,
-    private NotificacionService: NotificacionService,
+    private notificacion: NotificacionService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -43,8 +45,8 @@ export class ListaComponent implements OnInit {
         "acciones": this.getOpcionesCabecera('Acciones', 12),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
         "nombre": this.getOpcionesCabecera('Nombre', 12),
-        "nitCi": this.getOpcionesCabecera('NIT / CI', 12),
-        "tipo": this.getOpcionesCabecera('Tipo', 12),
+        "sigla": this.getOpcionesCabecera('Sigla', 12),
+        "descripcion": this.getOpcionesCabecera('Descripción', 6),
         "estado": this.getOpcionesCabecera('Estado', 6),
       }
     };
@@ -65,15 +67,21 @@ export class ListaComponent implements OnInit {
   }
 
   crear(template: any) {
-    this.entidad = undefined;
+    this.fondo = undefined;
     this.titleModal = 'Nuevo';
-    this.modalRef = this.modalService.show(template, {class: `modal-dialog modal-scrollable`});
+    this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
   editar(data: any, template: any) {
-    this.entidad = data;
+    this.fondo = data;
     this.titleModal = 'Editar';
-    this.modalRef = this.modalService.show(template, {class: `modal-dialog modal-scrollable`});
+    this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
+  }
+
+  descargos(data: any, template: any){
+    this.fondo = data;
+    this.titleModal = 'Descargo de ';
+    this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
   cerrarModal(){
@@ -81,17 +89,16 @@ export class ListaComponent implements OnInit {
   }
 
   habilitar(data: any, component, texto) {
-    this.NotificacionService.inhabilitarAlerta(texto, (response: any) => {
+    this.notificacion.inhabilitarAlerta(texto, (response: any) => {
       if (response) {
-        this.entidadService.habilitar(data.id).subscribe(
+        this.fondoCajaService.habilitar(data.id).subscribe(
           (data) => {
             let estado='';
             component.obtenerDatos();
             texto == 'habilitar'? estado='habilitado' : estado='inhabilitado';
-            this.NotificacionService.successStandar('Registro '+estado+' exitosamente.');
-          },
-          (error) => {
-            this.NotificacionService.alertError(error);
+            this.notificacion.successStandar('Registro '+estado+' exitosamente.');
+          },(error) => {
+            this.notificacion.alertError(error);
           }
         );
       }

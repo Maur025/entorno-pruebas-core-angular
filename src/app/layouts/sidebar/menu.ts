@@ -60,6 +60,11 @@ export const MENU: MenuItem[] = [
         label: 'Adm. Fondos Operativos',
         link: 'fondo/operativos',
       },
+      {
+        id: 402,
+        label: 'Adm. Fondos de Caja',
+        link: 'fondo/caja',
+      },
     ]
   },
   /* {
