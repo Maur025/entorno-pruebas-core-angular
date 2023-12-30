@@ -1,0 +1,26 @@
+<form [formGroup]="formGroup">
+  <label class="mb-3 col-12">Los campos marcados con asterisco (*) son obligatorios.</label>
+  <div class="nav col-12">
+    <div class="col-8 mb-3 px-1">
+      <label class="mb-2" for="nombre">(*) Nombre</label>
+      <input type="text" class="form-control uppercase" formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors}">
+      <div *ngIf="submitted && form['nombre'].errors" class="col-sm-12">
+        <div *ngIf="form['nombre'].errors['required']" class="text-danger mt-1 font-size-10">El nombre es obligatorio</div>
+      </div>
+    </div>
+    <div class="col-4 mb-3 px-1">
+      <label class="mb-2" for="sigla">(*) Sigla</label>
+      <input type="text" class="form-control uppercase" formControlName="sigla" [ngClass]="{ 'is-invalid': submitted && form['sigla'].errors}">
+      <div *ngIf="submitted && form['sigla'].errors" class="col-sm-12">
+        <div *ngIf="form['sigla'].errors['required']" class="text-danger mt-1 font-size-10">La sigla es obligatoria</div>
+      </div>
+    </div>
+    <div class="col-12 mb-3 px-1">
+      <label class="mb-2" for="sigla"> Descripción</label>
+      <textarea class="form-control uppercase" formControlName="descripcion" rows="1" [ngClass]="{ 'is-invalid': submitted && form['descripcion'].errors}"></textarea>
+      <div *ngIf="submitted && form['descripcion'].errors" class="col-sm-12">
+        <div *ngIf="form['descripcion'].errors['required']" class="text-danger mt-1 font-size-10">La descripcion es obligatoria</div>
+      </div>
+    </div>
+  </div>
+</form>

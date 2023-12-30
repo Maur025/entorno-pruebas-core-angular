@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FondoOperativoService } from "src/app/tesorery/services/tesoreria/fondo-operativo.service";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
@@ -26,6 +26,7 @@ export class ListaComponent implements OnInit{
   fondo: any;
   titleModal: any;
   apertura = false;
+  descargo = false;
 
   constructor(
     public fondoOperativoService: FondoOperativoService,
@@ -82,6 +83,7 @@ export class ListaComponent implements OnInit{
   editar(data: any, template: any) {
     this.fondo = data;
     this.apertura = false;
+    this.descargo = false;
     this.titleModal = 'Editar';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
@@ -89,12 +91,14 @@ export class ListaComponent implements OnInit{
   aperturar(data: any, template: any){
     this.fondo = data;
     this.apertura = true;
+    this.descargo = false;
     this.titleModal = 'Aperturar';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
   descargos(data: any, template: any){
     this.fondo = data;
+    this.descargo = true;
     this.apertura = false;
     this.titleModal = 'Descargo de ';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});

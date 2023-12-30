@@ -28,6 +28,8 @@ export class ListaComponent {
   servicio = null;
   banco: any;
   modalForm: any;
+  esModal: any;
+  titleModal: any;
 
   constructor(
     public BancoService: BancoService,
@@ -76,13 +78,13 @@ export class ListaComponent {
   }
 
   crear(template: any) {
+    this.titleModal = 'Nuevo';
+    this.esModal = true;
     this.modalRef = this.modalService.show(template, {class: `modal-xl modal-scrollable`});
   }
 
-  editar(data: any, template: any) {
-    this.banco = data;
+  editar(data: any) {
     this.router.navigate(['./id/' + data.id, {}], { relativeTo: this.route });
-    //this.modalRef = this.modalService.show(template, {class: `modal-xl modal-scrollable`});
   }
 
   habilitar(data: any, component, texto) {

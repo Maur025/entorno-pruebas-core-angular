@@ -131,9 +131,7 @@ export class FormularioComponent implements OnInit{
     this.estadosService.habilitadosFondos().subscribe(data =>{
       this.listaEstados = data.content;
       if(this.apertura) this.form.estado.setValue(this.listaEstados.filter((data: { nombre: any; }) => data.nombre == 'APERTURADO')[0].id);
-      if(this.descargo) {
-        this.listaEstados.splice(this.listaEstados.map(estado => estado.nombre).indexOf('APERTURADO'), 1);
-      }
+      if(this.descargo) this.listaEstados.splice(this.listaEstados.map(estado => estado.nombre).indexOf('APERTURADO'), 1);
     },(error) => {
       this.notificacionService.alertError(error);
     });
@@ -171,7 +169,6 @@ export class FormularioComponent implements OnInit{
     }
     this.form.monto.updateValueAndValidity()
   }
-
 
   get form() {
     return this.formGroup.controls;
@@ -221,8 +218,7 @@ export class FormularioComponent implements OnInit{
         ]).subscribe((responses) => {
           this.notificacionService.successStandar();
           this.alActualizar.emit();
-        },
-        (error) => {
+        },(error) => {
           this.notificacionService.alertError(error);
         });
       } else {
@@ -264,6 +260,5 @@ export class FormularioComponent implements OnInit{
       else return null;
     }
   }
-
 
 }
