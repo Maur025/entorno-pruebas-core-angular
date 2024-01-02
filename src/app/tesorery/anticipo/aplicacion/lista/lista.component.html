@@ -40,9 +40,9 @@
     <div class="col-12">
       <krn-tabla #tabla [titulo]="titulo" [datosService]="AplicacionAnticipoService" getAll="filter" [formato]="formato"
         [textoBuscar]="textoBuscar" [isSubtable]="rel_prefix?true:false" [smallTable]="false" [softDelete]="false"
-        (crearNuevo)="(null)" (alCrear)="crear(modalNuevo)" (alActualizar)="(null)" (alFiltrar)="(null)"
+        (crearNuevo)="(null)" (alCrear)="crear(null)" (alActualizar)="(null)" (alFiltrar)="(null)"
         (alEditar)="editar($event, modalEditar)" campoEstado="estado" valueEstado="habilitado"
-        [templateFila]="templateFila" [templateFiltrar]="templateFiltrar" [conOpciones]="false" [botonExportar]="false" [botonNuevo]="anticipoData?.saldo > 0 ? true: false"
+        [templateFila]="templateFila" [templateFiltrar]="templateFiltrar" [conOpciones]="false" [botonExportar]="false" [botonNuevo]="false"
         [filtros]="true" [filtrosData]="filtrosData">
       </krn-tabla>
     
@@ -102,6 +102,7 @@
                   <a data-bs-toggle="modal" class="btn btn-sm btn-danger" (click)="eliminar(fila, tabla,'eliminar')"><i
                       class="mdi mdi-power"></i></a>
                 </li>
+               
               </ul>
             </div>
             <div *ngSwitchCase="'id'">
@@ -137,14 +138,14 @@
 
 
 </div>
-
+<!---->
 <ng-template #modalNuevo role="document" let-modal>
   <div class="modal-header">
     <h5 class="modal-title" id="exampleModalLabel">Registar Movimiento de Anticipo</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
       (click)="modalRef.hide()"></button>
   </div>
-  <div class="modal-body"> <!-- app-aplicacion-formulario -->
+  <div class="modal-body">
 
     <app-aplicacion-formulario #appFormAplicacion [idRuta]="id"
       (alGuardar)="modalRef.hide(); tabla.obtenerDatos()"></app-aplicacion-formulario>

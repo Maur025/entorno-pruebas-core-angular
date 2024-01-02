@@ -28,7 +28,7 @@ export class ListaComponent implements OnInit {
   @Input() getAll = 'getAll';
   @Input() id;
   @Input() direccion = true;
-
+  titleModal: any;
 
 
   editCreateWithModal = false;
@@ -37,6 +37,7 @@ export class ListaComponent implements OnInit {
   formato: any;
   servicio = null;
   anticipo:any;
+  anticipoData:any;
 
   constructor(
     public AnticipoService: AnticipoService,
@@ -64,16 +65,12 @@ export class ListaComponent implements OnInit {
   }
 
   crear(template: any) {
+    this.anticipo = false;
+    this.anticipoData = undefined;
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
-  editar(data: any, template: any) {
-
-    //console.log(data);
-    this.anticipo = data;
-    this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
-  }
-
+ 
  /* habilitar(data: any, component, texto) {
     this.NotificacionService.inhabilitarAlerta(texto, (response: any) => {
       if (response) {
@@ -117,5 +114,19 @@ export class ListaComponent implements OnInit {
 
   cerrarModal(){
     this.modalService.hide();
+    this.titleModal = '';
+
   }
+
+
+
+  aplicacionAnticipo(data: any, template: any){
+    //this.fondo = data;
+    this.anticipo = true;
+    this.anticipoData = data;
+    this.titleModal = 'Movimiento';
+    this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
+  
+  }
+
 }

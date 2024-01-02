@@ -78,7 +78,7 @@ export class FormularioComponent implements OnInit{
 
   fieldsFormValidation() {
     return {
-      id: ["", []],
+      id: [, []],
       nombre: [, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
       fechaSolicitud: [, [Validators.required]],
       nroSolicitud: [, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
