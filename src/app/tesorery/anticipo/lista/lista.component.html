@@ -10,10 +10,10 @@
   [smallTable]="false"
   [softDelete]="false"
   (crearNuevo)="(null)"
-  (alCrear)="crear(modalNuevo)"
+  (alCrear)="crear(modalGeneral)"
   (alActualizar)="(null)"
   (alFiltrar)="(null)"
-  (alEditar)="editar($event, modalEditar)"
+  (alEditar)="(null)"
   campoEstado="estado"
   valueEstado="habilitado"
   [conOpciones]="false"
@@ -31,18 +31,15 @@
       <td [ngSwitch]="campo">
         <div *ngSwitchCase="'acciones'">
             <ul class="list-unstyled hstack gap-1 mb-0">
-              <li data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" *ngIf="!fila.anticipo">
+              <li data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" *ngIf="!fila.anticipo" >
                 <!--<button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila, modalEditar)"><i class="mdi mdi-pencil-outline"></i></button>-->
+              </li>
+              <li data-bs-toggle="tooltip" data-bs-placement="top" title="Movimientos Anticipo" *ngIf="fila.saldo > 0">
+                <button class="btn btn-sm btn-light" [disabled]="fila.deleted" (click)="aplicacionAnticipo(fila, modalGeneral)"><i class="mdi mdi-transfer-down"></i></button>
               </li>
               <li data-bs-toggle="tooltip" data-bs-placement="top" title="Aplicacion">
                 <button class="btn btn-sm btn-info" style="transform: scale(0.8);" (click)="verDetalleAnticipo(fila.id)"><i class="mdi mdi-eye"></i></button>
-              </li>
-              <li data-bs-toggle="tooltip" data-bs-placement="top" title="Habilitar" *ngIf="fila.deleted">
-              
-              </li>
-              <li data-bs-toggle="tooltip" data-bs-placement="top" title="Inhabilitar" *ngIf="!fila.deleted">
-               
-              </li>
+              </li>             
             </ul>
         </div>
         
@@ -70,34 +67,21 @@
   </ng-template>
 </ng-template>
 
-<ng-template #modalNuevo role="document" let-modal>
+
+<ng-template #modalGeneral role="document" let-modal>
   <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">Registar Anticipo</h5>
-    <button type="button" class="btn-close"data-bs-dismiss="modal" aria-label="Close" id="close-modal"(click)="modalRef.hide()"></button>
+    <h5 class="modal-title" id="exampleModalLabel">Registrar {{titleModal}} Anticipo</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"aria-label="Close"id="close-modal" (click)="cerrarModal()" ></button>
   </div>
   <div class="modal-body">
-    <app-formulario #appFormAnticipo [idRuta]="id" (alGuardar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario>
+   <!-- <app-formulario-fondoOperativo #appFormFondoOp [fondo]="fondo" [apertura]="apertura" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-fondoOperativo> -->
+    <app-formulario #appFormAnticipo  [anticipoData]="anticipoData" [anticipo]="anticipo" (alGuardar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario>
   </div>
   <div class="modal-footer">
     <div class="hstack gap-2 justify-content-end">
       <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
-      <button type="button" class="btn btn-success" (click)="appFormAnticipo.guardar()">Registrar</button>
+      <button type="button" class="btn btn-success" (click)="appFormAnticipo.guardar()" >Registrar</button>
     </div>
   </div>
 </ng-template>
 
-<ng-template #modalEditar role="document" let-modal>
-  <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">Editar Anticipo</h5>
-    <button type="button" class="btn-close"data-bs-dismiss="modal" aria-label="Close" id="close-modal"(click)="modalRef.hide()"></button>
-  </div>
-  <div class="modal-body">
-    <app-formulario #appFormAnticipo [anticipo]="anticipo" [idRuta]="id" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario>
-  </div>
-  <div class="modal-footer">
-    <div class="hstack gap-2 justify-content-end">
-      <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
-      <button type="button" class="btn btn-success" (click)="appFormAnticipo.guardar()">Guardar</button>
-    </div>
-  </div>
-</ng-template>

@@ -30,6 +30,8 @@ export class ListaComponent implements OnInit {
   @ViewChild('tabla') tabla: TablaComponent;
   anticipo: any;
   anticipoData:any;
+  titleModal: any;
+
   public estructura;
   breadCrumbItems: Array<{}>;
   cargandoContenido = false;
@@ -102,7 +104,7 @@ export class ListaComponent implements OnInit {
 
     this.formato = {
       cabeceras: {
-        "acciones": { "visible": true, "buscable": true, "buscableCheck": true, "visibleCheck": true, "sortable": true, "filtrable": true, "texto": "Acciones", "colsize": "12", "filtrotipo": "number" },
+       // "acciones": { "visible": true, "buscable": true, "buscableCheck": true, "visibleCheck": true, "sortable": true, "filtrable": true, "texto": "Acciones", "colsize": "12", "filtrotipo": "number" },
         "id": { "visible": false, "buscable": true, "buscableCheck": true, "visibleCheck": false, "sortable": true, "filtrable": true, "texto": "ID", "colsize": "12", "filtrotipo": "text" },
         "fecha": { "visible": true, "buscable": true, "buscableCheck": true, "visibleCheck": true, "sortable": true, "filtrable": true, "texto": "Fecha", "colsize": "12", "filtrotipo": "number" },
         "movimiento": { "visible": true, "buscable": true, "buscableCheck": true, "visibleCheck": true, "sortable": true, "filtrable": true, "texto": "Movimiento", "colsize": "12", "filtrotipo": "number" },
