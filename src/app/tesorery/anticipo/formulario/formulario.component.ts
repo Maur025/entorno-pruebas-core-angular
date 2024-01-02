@@ -125,13 +125,9 @@ export class FormularioComponent implements OnInit {
         data.saldo = this.anticipo.monto
         data.movimiento = "MOVIMIENTO DE PROVEEDOR";
         data.anticipoId = this.anticipoData.id;
-        if(this.inout == 1 ){
-          //devolucion
-
+        if(this.inout == 1 ){          //devolucion
         }
-        else{
-          //compensacion
-
+        else{          //compensacion
         }
 
         //console.log(this.anticipoData)
@@ -142,19 +138,6 @@ export class FormularioComponent implements OnInit {
           this.notificacionService.alertError(err);
         }
         );
-        //agregando datos de movimiento datos y enviar
-       // let data = this.formGroup.value;
-        /*data.saldo = this.anticipo.monto;
-
-        this.anticipoService.update(data).subscribe((res: any) => {
-          this.notificacionService.successStandar();
-
-          this.alActualizar.emit(res);
-        }, (err: any) => {
-          this.notificacionService.alertError(err);
-        });*/
-
-        console.log('Insert Plicacion');
 
       } else {
 
@@ -298,8 +281,8 @@ export class FormularioComponent implements OnInit {
 
       }
       else {
-        this.formGroup.removeControl('ingresoEgreso');
-
+        //this.formGroup.removeControl('ingresoEgreso');
+        this.removeFormMovimientoCuenta()
         this.inout = 0;
       }
 
