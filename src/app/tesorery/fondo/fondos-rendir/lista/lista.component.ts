@@ -1,8 +1,8 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FondoOperativoService } from "src/app/tesorery/services/tesoreria/fondo-operativo.service";
+import { FondoRendirService } from "src/app/tesorery/services/tesoreria/fondo-rendir.service";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
-import { FormularioOperativoComponent } from '../formulario/formulario.component';
+import { FormularioRendirComponent } from '../formulario/formulario.component';
 import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
@@ -10,17 +10,15 @@ import { ActivatedRoute, Router } from "@angular/router";
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.scss']
 })
-export class ListaOperativoComponent implements OnInit{
-
-  @ViewChild('appFormFondoOp') appFormFondoOp: FormularioOperativoComponent;
+export class ListaRendirComponent implements OnInit{
 
   breadCrumbItems: Array<{}>;
-  breadCrumbTitle: string = 'Adminstrar Fondos Operativos';
+  breadCrumbTitle: string = 'Administrar Fondos a Rendir';
   textoBuscar = 'Ingrese criterio de busqueda: nombre, nro solicitud y descripción'
   @Input() rel_prefix: any;
   @Input() rel_field: any;
   @Input() rel_id: any;
-  titulo:string = 'Lista de Fondos Operativos';
+  titulo:string = 'Lista de Fondos a Rendir';
   formato: any;
   modalRef?: BsModalRef;
   fondo: any;
@@ -31,7 +29,7 @@ export class ListaOperativoComponent implements OnInit{
   tipoTexto: any;
 
   constructor(
-    public fondoOperativoService: FondoOperativoService,
+    public fondoRendirService: FondoRendirService,
     private modalService: BsModalService,
     private notificacion: NotificacionService,
     private router: Router,
@@ -46,28 +44,28 @@ export class ListaOperativoComponent implements OnInit{
   getCabeceras() {
     return {
       cabeceras: {
-        "acciones": this.getOpcionesCabecera('Acciones', 12,'text', true, false),
+        "acciones": this.getOpcionesCabecera('Acciones', 12),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
         "nombre": this.getOpcionesCabecera('Nombre', 12),
         "nroSolicitud": this.getOpcionesCabecera('Nro Solicitud', 12),
         "fechaSolicitud": this.getOpcionesCabecera('Fecha Solicitud', 12),
         "descripcion": this.getOpcionesCabecera('Descripción', 6),
         "importe": this.getOpcionesCabecera('Monto de Apertura', 12),
-        "saldo": this.getOpcionesCabecera('Saldo', 12),
+        "reponsable": this.getOpcionesCabecera('Responsable', 12),
         "aperturado": this.getOpcionesCabecera('Aperturado', 12),
         "cierre": this.getOpcionesCabecera('Cerrado', 12),
-        "deleted": this.getOpcionesCabecera('Estado', 6),
+        "estado": this.getOpcionesCabecera('Estado', 6),
       }
     };
   }
 
-  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true, sorteable: boolean =true) {
+  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true) {
     return {
       "visible": visible,
       "buscable": true,
       "buscableCheck": true,
       "visibleCheck": visible,
-      "sortable": sorteable,
+      "sortable": true,
       "filtrable": true,
       "texto": texto,
       "colsize": colsize,
@@ -80,7 +78,7 @@ export class ListaOperativoComponent implements OnInit{
     this.apertura = false;
     this.descargo = false;
     this.tipoDescargo = undefined;
-    this.titleModal = 'Nuevo Fondo Operativo';
+    this.titleModal = 'Nuevo Fondo a Rendir ';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
@@ -98,7 +96,7 @@ export class ListaOperativoComponent implements OnInit{
     this.apertura = true;
     this.descargo = false;
     this.tipoDescargo = 'APERTURADO';
-    this.titleModal = 'Apertura de Fondo Operativo ';
+    this.titleModal = 'Apertura de Fondo a Rendir ';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
@@ -108,20 +106,19 @@ export class ListaOperativoComponent implements OnInit{
     this.apertura = false;
     this.tipoDescargo = tipo;
     tipo == 'RENDIDO' ? this.tipoTexto = 'RENDICIÓN' : this.tipoTexto = tipo;
-    this.titleModal = ' de Fondo Operativo';
+    this.titleModal = ' de a Rendir ';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
   detalleFondo(data: any){
     this.fondo = data;
-    this.router.navigate(['fondo/operativos/detalleFondo', data.id]);
-    //this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
+    this.router.navigate(['fondo/rendir/detalleFondo', data.id]);
   }
 
   cerrar(data, tabla){
     this.notificacion.alertaSimpleConfirmacionBoton("Esta seguro que desea cerrar el fondo operativo: '"+data.nombre+"'.","Sí, cerrar",(response: any) => {
       if (response) {
-        this.fondoOperativoService.cerrarFondo(data.id).subscribe(data =>{
+        this.fondoRendirService.cerrarFondo(data.id).subscribe(data =>{
           tabla.obtenerDatos();
           this.notificacion.successStandar('Registro cerrado exitosamente.');
         },(error) => {
@@ -138,7 +135,7 @@ export class ListaOperativoComponent implements OnInit{
   habilitar(data: any, component, texto) {
     this.notificacion.inhabilitarAlerta(texto, (response: any) => {
       if (response) {
-        this.fondoOperativoService.habilitar(data.id).subscribe(
+        this.fondoRendirService.habilitar(data.id).subscribe(
           (data) => {
             let estado='';
             component.obtenerDatos();
