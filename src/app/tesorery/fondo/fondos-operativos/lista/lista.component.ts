@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FondoOperativoService } from "src/app/tesorery/services/tesoreria/fondo-operativo.service";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
-import { FormularioComponent } from '../formulario/formulario.component';
+import { FormularioOperativoComponent } from '../formulario/formulario.component';
 import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
@@ -10,9 +10,9 @@ import { ActivatedRoute, Router } from "@angular/router";
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.scss']
 })
-export class ListaComponent implements OnInit{
+export class ListaOperativoComponent implements OnInit{
 
-  @ViewChild('appFormFondoOp') appFormFondoOp: FormularioComponent;
+  @ViewChild('appFormFondoOp') appFormFondoOp: FormularioOperativoComponent;
 
   breadCrumbItems: Array<{}>;
   breadCrumbTitle: string = 'Adminstrar Fondos Operativos';

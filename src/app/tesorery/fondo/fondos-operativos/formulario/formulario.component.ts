@@ -14,11 +14,11 @@ import { forkJoin } from 'rxjs';
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 
 @Component({
-  selector: 'app-formulario-fondoOperativo',
+  selector: 'app-formulario-operativo',
   templateUrl: './formulario.component.html',
   styleUrls: ['./formulario.component.scss']
 })
-export class FormularioComponent implements OnInit{
+export class FormularioOperativoComponent implements OnInit{
 
   @Input() fondo;
   @Input() apertura;

@@ -97,7 +97,7 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal"aria-label="Close"id="close-modal" (click)="modalRef.hide()"></button>
   </div>
   <div class="modal-body">
-    <app-formulario-fondoOperativo #appFormFondoOp [fondo]="fondo" [apertura]="apertura" [descargo]="descargo" [tipoDescargo]="tipoDescargo" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-fondoOperativo>
+    <app-formulario-operativo #appFormFondoOp [fondo]="fondo" [apertura]="apertura" [descargo]="descargo" [tipoDescargo]="tipoDescargo" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-operativo>
   </div>
   <div class="modal-footer">
     <div class="hstack gap-2 justify-content-end">
