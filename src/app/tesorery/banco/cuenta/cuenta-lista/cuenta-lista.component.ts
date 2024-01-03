@@ -16,22 +16,19 @@ export class CuentaListaComponent {
 
   breadCrumbItems: Array<{}>;
   breadCrumbTitle: string = 'Adminstrar Cuentas de Banco';
-  titulo: string = 'Cuentas de Banco'
+  @Input() titulo = 'Cuentas de Banco'
   @Input() rel_prefix: any;
   @Input() rel_field: any;
   @Input() rel_id: any;
   @Input() getAll = 'getAll';
   @Input() id;
   @Input() direccion = true;
-
-
-
   editCreateWithModal = false;
   dataEdit = null;
   modalRef?: BsModalRef;
   formato: any;
   servicio = null;
-  cuenta:any;
+  cuenta: any;
 
   constructor(
     public CuentaBancoService: CuentaBancoService,
@@ -39,13 +36,13 @@ export class CuentaListaComponent {
     private NotificacionService: NotificacionService,
     private route: ActivatedRoute,
     private router: Router
-  ){}
+  ) { }
 
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true }];
     if (this.rel_prefix) this.servicio.setPrefix(this.rel_prefix);
     this.formato = this.getCabeceras();
-    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
+    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false; this.formato.cabeceras[this.rel_field].visibleCheck = false }
   }
 
   getCabeceras() {
@@ -54,7 +51,7 @@ export class CuentaListaComponent {
         "acciones": this.getOpcionesCabecera('Acciones', 12),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
         "nroCuenta": this.getOpcionesCabecera('Nro Cuenta', 12),
-        "banco": this.getOpcionesCabecera('Banco', 12),
+        /* "banco": this.getOpcionesCabecera('Banco', 12), */
         "moneda": this.getOpcionesCabecera('Moneda', 12),
         "estado": this.getOpcionesCabecera('Estado', 6),
       }
@@ -76,12 +73,12 @@ export class CuentaListaComponent {
   }
 
   crear(template: any) {
-    this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
+    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 
   editar(data: any, template: any) {
     this.cuenta = data;
-    this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
+    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 
   habilitar(data: any, component, texto) {
@@ -89,12 +86,11 @@ export class CuentaListaComponent {
       if (response) {
         this.CuentaBancoService.habilitar(data.id).subscribe(
           (data) => {
-            let estado='';
+            let estado = '';
             component.obtenerDatos();
-            texto == 'habilitar'? estado='habilitado' : estado='inhabilitado';
-            this.NotificacionService.successStandar('Registro '+estado+' exitosamente.');
-          },
-          (error) => {
+            texto == 'habilitar' ? estado = 'habilitado' : estado = 'inhabilitado';
+            this.NotificacionService.successStandar('Registro ' + estado + ' exitosamente.');
+          }, (error) => {
             this.NotificacionService.alertError(error);
           }
         );
@@ -120,7 +116,7 @@ export class CuentaListaComponent {
     });
   }
 
-  cerrarModal(){
+  cerrarModal() {
     this.modalService.hide();
   }
 

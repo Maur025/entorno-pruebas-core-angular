@@ -40,23 +40,23 @@ export class ListaComponent implements OnInit {
   getCabeceras() {
     return {
       cabeceras: {
-        "acciones": this.getOpcionesCabecera('Acciones', 12),
+        "acciones": this.getOpcionesCabecera('Acciones', 12,'text', true, false),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
         "nombre": this.getOpcionesCabecera('Nombre', 12),
         "nitCi": this.getOpcionesCabecera('NIT / CI', 12),
-        "tipo": this.getOpcionesCabecera('Tipo', 12),
-        "estado": this.getOpcionesCabecera('Estado', 6),
+        "tipo": this.getOpcionesCabecera('Tipo', 12,'text', true, false),
+        "deleted": this.getOpcionesCabecera('Estado', 6),
       }
     };
   }
 
-  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true) {
+  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true, sorteable: boolean =true) {
     return {
       "visible": visible,
       "buscable": true,
       "buscableCheck": true,
       "visibleCheck": visible,
-      "sortable": true,
+      "sortable": sorteable,
       "filtrable": true,
       "texto": texto,
       "colsize": colsize,

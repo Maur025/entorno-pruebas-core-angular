@@ -1,8 +1,8 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FondoCajaService } from "src/app/tesorery/services/tesoreria/fondo-caja.service";
+import { FondoRendirService } from "src/app/tesorery/services/tesoreria/fondo-rendir.service";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
-import { FormularioCajaComponent } from '../formulario/formulario.component';
+import { FormularioRendirComponent } from '../formulario/formulario.component';
 import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
@@ -10,26 +10,26 @@ import { ActivatedRoute, Router } from "@angular/router";
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.scss']
 })
-export class ListaCajaComponent implements OnInit{
-
-  @ViewChild('appFormCaja') appFormCaja: FormularioCajaComponent;
+export class ListaRendirComponent implements OnInit{
 
   breadCrumbItems: Array<{}>;
-  breadCrumbTitle: string = 'Adminstrar Fondos de Caja';
-  textoBuscar = 'Ingrese criterio de busqueda: nombre, sigla y descripción'
+  breadCrumbTitle: string = 'Administrar Fondos a Rendir';
+  textoBuscar = 'Ingrese criterio de busqueda: nombre, nro solicitud y descripción'
   @Input() rel_prefix: any;
   @Input() rel_field: any;
   @Input() rel_id: any;
-  titulo:string = 'Lista de Fondos de Caja';
+  titulo:string = 'Lista de Fondos a Rendir';
   formato: any;
   modalRef?: BsModalRef;
   fondo: any;
   titleModal: any;
   apertura = false;
   descargo = false;
+  tipoDescargo: any;
+  tipoTexto: any;
 
   constructor(
-    public fondoCajaService: FondoCajaService,
+    public fondoRendirService: FondoRendirService,
     private modalService: BsModalService,
     private notificacion: NotificacionService,
     private router: Router,
@@ -47,8 +47,13 @@ export class ListaCajaComponent implements OnInit{
         "acciones": this.getOpcionesCabecera('Acciones', 12),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
         "nombre": this.getOpcionesCabecera('Nombre', 12),
-        "sigla": this.getOpcionesCabecera('Sigla', 12),
+        "nroSolicitud": this.getOpcionesCabecera('Nro Solicitud', 12),
+        "fechaSolicitud": this.getOpcionesCabecera('Fecha Solicitud', 12),
         "descripcion": this.getOpcionesCabecera('Descripción', 6),
+        "importe": this.getOpcionesCabecera('Monto de Apertura', 12),
+        "reponsable": this.getOpcionesCabecera('Responsable', 12),
+        "aperturado": this.getOpcionesCabecera('Aperturado', 12),
+        "cierre": this.getOpcionesCabecera('Cerrado', 12),
         "estado": this.getOpcionesCabecera('Estado', 6),
       }
     };
@@ -72,7 +77,8 @@ export class ListaCajaComponent implements OnInit{
     this.fondo = undefined;
     this.apertura = false;
     this.descargo = false;
-    this.titleModal = 'Nuevo';
+    this.tipoDescargo = undefined;
+    this.titleModal = 'Nuevo Fondo a Rendir ';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
@@ -80,7 +86,8 @@ export class ListaCajaComponent implements OnInit{
     this.fondo = data;
     this.apertura = false;
     this.descargo = false;
-    this.titleModal = 'Editar';
+    this.tipoDescargo = undefined;
+    this.titleModal = 'Editar Fondo Operativo';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
@@ -88,16 +95,37 @@ export class ListaCajaComponent implements OnInit{
     this.fondo = data;
     this.apertura = true;
     this.descargo = false;
-    this.titleModal = 'Aperturar';
+    this.tipoDescargo = 'APERTURADO';
+    this.titleModal = 'Apertura de Fondo a Rendir ';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
-  descargos(data: any, template: any){
+  descargos(data: any, template: any, tipo){
     this.fondo = data;
     this.descargo = true;
     this.apertura = false;
-    this.titleModal = 'Descargo de ';
+    this.tipoDescargo = tipo;
+    tipo == 'RENDIDO' ? this.tipoTexto = 'RENDICIÓN' : this.tipoTexto = tipo;
+    this.titleModal = ' de a Rendir ';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
+  }
+
+  detalleFondo(data: any){
+    this.fondo = data;
+    this.router.navigate(['fondo/rendir/detalleFondo', data.id]);
+  }
+
+  cerrar(data, tabla){
+    this.notificacion.alertaSimpleConfirmacionBoton("Esta seguro que desea cerrar el fondo operativo: '"+data.nombre+"'.","Sí, cerrar",(response: any) => {
+      if (response) {
+        this.fondoRendirService.cerrarFondo(data.id).subscribe(data =>{
+          tabla.obtenerDatos();
+          this.notificacion.successStandar('Registro cerrado exitosamente.');
+        },(error) => {
+          this.notificacion.alertError(error);
+        });
+      }
+    })
   }
 
   cerrarModal(){
@@ -107,7 +135,7 @@ export class ListaCajaComponent implements OnInit{
   habilitar(data: any, component, texto) {
     this.notificacion.inhabilitarAlerta(texto, (response: any) => {
       if (response) {
-        this.fondoCajaService.habilitar(data.id).subscribe(
+        this.fondoRendirService.habilitar(data.id).subscribe(
           (data) => {
             let estado='';
             component.obtenerDatos();

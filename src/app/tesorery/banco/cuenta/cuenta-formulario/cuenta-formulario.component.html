@@ -3,7 +3,7 @@
   <div class="nav col-12">
     <div class="col-6">
       <div class="mb-3 px-1">
-        <label class="mb-2" for="nombre">(*) Nro de Cuenta </label>
+        <label class="mb-2">(*) Nro de Cuenta </label>
         <input type="text" class="form-control uppercase" formControlName="nroCuenta" [ngClass]="{ 'is-invalid': submitted && form['nroCuenta'].errors }" />
         <div *ngIf="submitted && form['nroCuenta'].errors" class="invalid-feedback">
           <div *ngIf="form['nroCuenta'].errors['required']">El nro de cuenta es obligatorio</div>
@@ -14,7 +14,7 @@
     </div>
     <div class="col-6">
       <div class="mb-3 px-1">
-        <label class="mb-2" for="descripcion">Descripción </label>
+        <label class="mb-2">Descripción </label>
         <textarea class="form-control uppercase" rows="1" placeholder="Descripción de la cuenta" formControlName="descripcion" [ngClass]="{'is-invalid': submitted && form['descripcion'].errors}"></textarea>
         <div *ngIf="submitted && form['descripcion'].errors" class="invalid-feedback" >
           <div *ngIf="form['descripcion'].errors['maxlength']">Debe tener menos de {{ form["descripcion"].errors["maxlength"]["requiredLength"] }}carácteres</div>
@@ -23,7 +23,7 @@
     </div>
     <div class="col-6">
       <div class="mb-3 px-1">
-        <label class="mb-2" for="bancoId">(*) Banco </label>
+        <label class="mb-2">(*) Banco </label>
         <ng-select class="uppercase" formControlName="bancoId" placeholder="Seleccione un banco" [items]="listaBancos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['bancoId'].errors != null }">
         </ng-select>
         <div *ngIf="submitted && form['bancoId'].errors" >
@@ -33,7 +33,7 @@
     </div>
     <div class="col-6">
       <div class="mb-3 px-1">
-        <label class="mb-2" for="nombre">(*) Moneda </label>
+        <label class="mb-2">(*) Moneda </label>
         <ng-select class="uppercase" formControlName="monedaId" placeholder="Seleccione una moneda" [items]="listaMonedas" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['monedaId'].errors != null }">
         </ng-select>
         <div *ngIf="submitted && form['monedaId'].errors" >

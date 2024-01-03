@@ -1,7 +1,7 @@
 <div class="container-fluid">
-  <div class="card card-body"  *ngIf="fondo">
-    <h5 class="card-title mb-3 pb-3 border-bottom">Detalle de Fondo Operativo</h5>
-    <div class="nav col-12 border-bottom">
+  <div class="card card-body" *ngIf="fondo">
+    <h5 class="card-title mb-3 pb-3 border-bottom">Detalle de Fondo a Rendir</h5>
+    <div class="nav col-12 border-bottom" >
       <div class="col-4 mb-2 px-1">
         <p class="ps-2">
           <span class="fw-semibold semi" >Nombre:</span>
@@ -34,8 +34,8 @@
       </div>
       <div class="col-4 mb-3 px-1">
         <p class="ps-2">
-          <span class="fw-semibold semi" >Saldo:</span>
-          <span class="text-primary"> {{fondo.saldo}}</span>
+          <span class="fw-semibold semi" >Responsable:</span>
+          <span class="text-primary"> {{fondo.reponsable}}</span>
         </p>
       </div>
     </div>
@@ -43,7 +43,7 @@
       <krn-tabla
         #tabla
         [titulo]="titulo"
-        [datosService]="detalleFontoOperativoService"
+        [datosService]="detalleFondoRendirService"
         getAll="getDetalleFondo"
         [formato]="formato"
         [textoBuscar]="textoBuscar"

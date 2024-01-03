@@ -12,13 +12,15 @@ import { CuentaListaComponent } from './cuenta/cuenta-lista/cuenta-lista.compone
 import { CuentaFormularioComponent } from './cuenta/cuenta-formulario/cuenta-formulario.component';
 
 import { BancoRoutingModule } from './banco-routing.module';
+import { CuentasBancoComponent } from './cuentas-banco/cuentas-banco.component';
 
 @NgModule({
   declarations: [
     ListaComponent,
     FormularioComponent,
     CuentaListaComponent,
-    CuentaFormularioComponent
+    CuentaFormularioComponent,
+    CuentasBancoComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,8 @@ import { BancoRoutingModule } from './banco-routing.module';
     ListaComponent,
     FormularioComponent,
     CuentaListaComponent,
-    CuentaFormularioComponent
+    CuentaFormularioComponent,
+    CuentasBancoComponent
   ]
 })
 export class BancoModule { }

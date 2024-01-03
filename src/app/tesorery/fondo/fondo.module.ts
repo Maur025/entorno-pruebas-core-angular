@@ -11,12 +11,17 @@ import { HerramientasModule } from 'src/app/core/herramientas/herramientas.modul
 import { FondoRoutingModule } from './fondo-routing.module';
 
 import { FondosOperativosComponent } from './fondos-operativos/fondos-operativos.component';
-import { FormularioComponent as FormularioOperativoComponent} from './fondos-operativos/formulario/formulario.component';
-import { ListaComponent as ListaOperativoComponent} from './fondos-operativos/lista/lista.component';
+import { FormularioOperativoComponent } from './fondos-operativos/formulario/formulario.component';
+import { ListaOperativoComponent } from './fondos-operativos/lista/lista.component';
 import { DetalleFondoComponent } from './fondos-operativos/detalle-fondo/detalle-fondo.component';
 import { FondosCajaComponent } from './fondos-caja/fondos-caja.component';
 import { FormularioCajaComponent } from './fondos-caja/formulario/formulario.component';
 import { ListaCajaComponent} from './fondos-caja/lista/lista.component';
+import { FondosRendirComponent } from './fondos-rendir/fondos-rendir.component';
+import { ListaRendirComponent } from './fondos-rendir/lista/lista.component';
+import { FormularioRendirComponent } from './fondos-rendir/formulario/formulario.component';
+import { DetalleFondoRendirComponent } from './fondos-rendir/detalle-fondo/detalle-fondo.component';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
   declarations: [
@@ -28,6 +33,10 @@ import { ListaCajaComponent} from './fondos-caja/lista/lista.component';
     FondosCajaComponent,
     FormularioCajaComponent,
     ListaCajaComponent,
+    FondosRendirComponent,
+    ListaRendirComponent,
+    FormularioRendirComponent,
+    DetalleFondoRendirComponent
   ],
   imports: [
     CommonModule,
@@ -38,6 +47,7 @@ import { ListaCajaComponent} from './fondos-caja/lista/lista.component';
     WidgetModule,
     UIModule,
     BsDatepickerModule.forRoot(),
+    BsDropdownModule.forRoot(),
     HerramientasModule,
   ],
   exports: [
@@ -49,6 +59,10 @@ import { ListaCajaComponent} from './fondos-caja/lista/lista.component';
     FondosCajaComponent,
     FormularioCajaComponent,
     ListaCajaComponent,
+    FondosRendirComponent,
+    ListaRendirComponent,
+    FormularioRendirComponent,
+    DetalleFondoRendirComponent
   ]
 })
 export class FondoModule { }

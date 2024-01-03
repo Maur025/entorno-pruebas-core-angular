@@ -7,11 +7,10 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
 @Injectable({
     providedIn: 'root'
   })
-  export class EntidadService {
+  export class DetalleFondoRendirService {
 
-    apiName:string = 'entidad';
-    entitys:string = 'Entidad';
-
+    apiName:string = 'detalleFondoRendir';
+    entitys:string = 'Detalle Fondo Rendir';
     apiUrl:string = '' ;
     prefix:string = '';
     constructor(private http: HttpClient, private apiService : ConsumoApiService) { }
@@ -22,10 +21,6 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
 
     register(datos: any) {
       return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}`, datos);
-    }
-
-    registerTipoEntidad(datos: any) {
-      return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/${datos.entidadId}/tipoEntidad`, datos);
     }
 
     update(datos: any): Observable<any> {
@@ -45,8 +40,9 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
       return this.apiService.tesoreria.delete(`${this.apiUrl}${this.prefix}/${this.apiName}/${id}`);
     }
 
-    habilitar(id: string | number): Observable<any> {
-      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/${id}/habilita`);
+    habilitar(datos:any,id: string | number): Observable<any> {
+      datos[this.entitys] = 'habilitar';
+      return this.apiService.tesoreria.put(`${this.apiUrl}${this.prefix}/${this.apiName}/${datos.id}`, datos);
     }
 
     deshabilitar(datos:any,id: string | number): Observable<any> {
@@ -57,18 +53,9 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
     habilitados(){
       return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/listarHabilitados`);
     }
-    getEntidadesTipoEntidad(entidadId: any){
-      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/entidadReferencial/tipoEntidad/${entidadId}`);
 
-    }
-    getTipoEntidad (){
-      return this.apiService.tesoreria.get(`/tipoEntidad/listarHabilitados`);
+    getDetalleFondo(size: number = 100, page: number = 1, sortBy:string = 'id', descending:false, keyword:any = '', id:any) {
+      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/fondoRendir/${id}?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`);
     }
 
-    getEntidadTipos(id:any){
-      return this.apiService.tesoreria.get(`/entidad/${id}/tipoEntidad`);
-    }
-    deleteEntidadTipo(data: any) {
-      return this.apiService.tesoreria.delete(`${this.apiUrl}${this.prefix}/${this.apiName}/${data.entidadId}/tipoEntidad/${data.tipoEntidadId}`);
-    }
   }

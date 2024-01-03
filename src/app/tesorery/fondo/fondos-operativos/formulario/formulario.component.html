@@ -1,8 +1,8 @@
 <form [formGroup]="formGroup">
-  <label class="mb-3 col-12">Los campos marcados con asterisco (*) son obligatorios.</label>
+  <label class="mb-3 col-12">Los campos marcados con asterisco (*) son obligatorios.{{tipoDescargo}}</label>
   <div class="nav col-12">
     <div class="col-6 mb-3 px-1">
-      <label class="mb-2" for="nombre">(*) Nro de Solicitud </label>
+      <label class="mb-2">(*) Nro de Solicitud </label>
       <input type="text" class="form-control" formControlName="nroSolicitud" [ngClass]="{ 'is-invalid': submitted && form['nroSolicitud'].errors}">
       <div *ngIf="submitted && form['nroSolicitud'].errors" class="col-sm-12">
         <div *ngIf="form['nroSolicitud'].errors['required']" class="text-danger mt-1 font-size-10">El nro de solicitud es obligatorio</div>
@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="col-6 mb-3 px-1">
-      <label class="mb-2" for="nombre">(*) Fecha de Solicitud</label>
+      <label class="mb-2">(*) Fecha de Solicitud</label>
       <input type="text" placeholder="dd-mm-AA" formControlName="fechaSolicitud" class="form-control" bsDatepicker [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY' }" [ngClass]="{ 'is-invalid': submitted && form['fechaSolicitud'].errors}">
       <div *ngIf="submitted && form['fechaSolicitud'].errors" class="col-sm-12">
         <div *ngIf="form['fechaSolicitud'].errors['required']" class="text-danger mt-1 font-size-10">La fecha es obligatoria</div>
@@ -35,12 +35,12 @@
       </div>
     </div>
     <div class="mb-3 nav col-12 px-1">
-      <label class="col-3 col-form-label">(*) Monto de Solicitud</label>
+      <label class="col-3 col-form-label">(*) Monto de Apertura</label>
       <div class="col-9">
         <input type="text" class="form-control text-end" formControlName="importe" placeholder="Bs." [ngClass]="{ 'is-invalid': submitted && form['importe'].errors}">
         <div *ngIf="submitted && form['importe'].errors" class="col-sm-12">
-          <div *ngIf="form['monto'].errors['required']" class="text-danger mt-1 font-size-10">El monto es obligatorio</div>
-          <div *ngIf="form['importe'].errors['pattern']" class="text-danger mt-1 font-size-10">El importe solo acepta carácteres númericos</div>
+          <div *ngIf="form['importe'].errors['required']" class="text-danger mt-1 font-size-10">El monto de apertura es obligatorio</div>
+          <div *ngIf="form['importe'].errors['pattern']" class="text-danger mt-1 font-size-10">El monto de apertura solo acepta carácteres númericos</div>
         </div>
       </div>
     </div>
@@ -50,24 +50,24 @@
         <input type="text" class="form-control text-end" [(ngModel)]="saldo" [disabled]=true [ngModelOptions]="{standalone: true}" placeholder="Bs.">
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="apertura || descargo">
+    <!-- <div class="mb-3 nav col-12 px-1" *ngIf="apertura || descargo">
       <label class="col-3 col-form-label">(*) Estado</label>
       <div class="col-9">
-        <ng-select class="uppercase" formControlName="estado" placeholder="Seleccione un estado" (change)="cambioEstado()" [items]="listaEstados" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['estado'].errors != null }"></ng-select>
+        <ng-select class="uppercase" formControlName="estado" placeholder="Seleccione un estado" [items]="listaEstados" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['estado'].errors != null }"></ng-select>
         <div *ngIf="submitted && form['estado'].errors" class="col-sm-12">
           <div *ngIf="form['estado'].errors['required']" class="text-danger mt-1 font-size-10">El estado es obligatorio</div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="mb-3 nav col-12 px-1" *ngIf="descargo">
-      <label class="col-3 col-form-label">(*) Monto de Descargo</label>
+      <label class="col-3 col-form-label">(*) Monto de movimiento</label>
       <div class="col-9">
         <input type="text" class="form-control text-end" formControlName="monto" placeholder="Bs." [ngClass]="{ 'is-invalid': submitted && form['monto'].errors}">
         <div *ngIf="submitted && form['monto'].errors" class="col-sm-12">
-          <div *ngIf="form['monto'].errors['required']" class="text-danger mt-1 font-size-10">El monto de descargo es obligatorio</div>
-          <div *ngIf="form['monto'].errors['pattern']" class="text-danger mt-1 font-size-10">El monto de descargo solo deben ser carácteres númericos</div>
-          <div *ngIf="form['monto'].errors['max']" class="text-danger font-size-10 mt-1" >El monto de descargo de devolución no debe superar al saldo de {{saldo}}</div>
-          <div *ngIf="form['monto'].errors['montoReposicion']" class="text-danger font-size-10 mt-1" >El monto de descargo de reposición no debe superar {{fondo.importe-fondo.saldo}}</div>
+          <div *ngIf="form['monto'].errors['required']" class="text-danger mt-1 font-size-10">El monto de movimiento es obligatorio</div>
+          <div *ngIf="form['monto'].errors['pattern']" class="text-danger mt-1 font-size-10">El monto de movimiento solo deben ser carácteres númericos</div>
+          <div *ngIf="form['monto'].errors['max']" class="text-danger font-size-10 mt-1" >El monto de movimiento de devolución no debe superar al saldo de {{saldo}}</div>
+          <div *ngIf="form['monto'].errors['montoReposicion']" class="text-danger font-size-10 mt-1" >El monto de movimiento de reposición no debe superar {{fondo.importe-fondo.saldo}}</div>
         </div>
       </div>
     </div>
@@ -117,7 +117,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </form>
 

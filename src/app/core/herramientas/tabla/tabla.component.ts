@@ -28,12 +28,12 @@ export class TablaComponent implements OnInit {
   @Input() botonPlantilla = false;
   @Input() soloLectura = false;
   @Input() buscador = true;
-  @Input() campoEstado:any = 'estado';
-  @Input() valueEstado:any = 'habilitado';
+  @Input() campoEstado: any = 'estado';
+  @Input() valueEstado: any = 'habilitado';
   @Input() textoBuscar: string = 'Ingrese criterio de búsqueda';
   @Input() filtros = false;
-  @Input() filtrosData :any;
-  @Input() idRuta :any;
+  @Input() filtrosData: any;
+  @Input() idRuta: any;
   @Output() alCargar: EventEmitter<any> = new EventEmitter();
   @Output() alCrear: EventEmitter<any> = new EventEmitter();
   @Output() alFiltrar: EventEmitter<any> = new EventEmitter();
@@ -77,7 +77,7 @@ export class TablaComponent implements OnInit {
   buscar = false;
   objectKeys = Object.keys;
 
-  classTable : string = 'table mb-0 table-hover align-middle nowrap data-table table-condensed';
+  classTable: string = 'table mb-0 table-hover align-middle nowrap data-table table-condensed';
 
   /*filtros */
 
@@ -98,27 +98,27 @@ export class TablaComponent implements OnInit {
     public notificacionService: NotificacionService,
     public archivosService: ArchivosService,
     private modalService: BsModalService
-  ){}
+  ) { }
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     //if(this.idRuta) console.log(this.idRuta)
-   /*  if (buscar.keyCode!==undefined)
-      if (buscar.keyCode == 13){
-        this.buscar = true;
-        this.obtenerDatos();
-        return;
-      }
-      if (buscar.keyCode == 27){
-        this.buscar = false;
-        this.obtenerDatos();
-        return;
-      } */
+    /*  if (buscar.keyCode!==undefined)
+       if (buscar.keyCode == 13){
+         this.buscar = true;
+         this.obtenerDatos();
+         return;
+       }
+       if (buscar.keyCode == 27){
+         this.buscar = false;
+         this.obtenerDatos();
+         return;
+       } */
   }
 
   ngOnChanges() {
     this.filtros;
     this.filtrosData;
-    if(this.filtros){
+    if (this.filtros) {
       if (this.filtrosData != undefined) {
         this.cabeceras = this.objectKeys(this.formato.cabeceras);
         this.filtrosData;
@@ -131,7 +131,7 @@ export class TablaComponent implements OnInit {
     }
   }
 
-  buscarKeyDown(buscar){
+  buscarKeyDown(buscar) {
     if (!this.inputBuscar || this.inputBuscar == '' || buscar) {
       this.buscar = true;
       if (this.filtros && (this.inputBuscar || this.inputBuscar != '')) this.filtrosData.keyword = this.inputBuscar;
@@ -139,49 +139,49 @@ export class TablaComponent implements OnInit {
     }
   }
 
-  public obtenerDatos(){
+  public obtenerDatos() {
     if (this.paginate) {
-      if(this.filtros == false){
+      if (this.filtros == false) {
         if (this.idRuta) {
-          this.datosService[this.getAll](this.pagination.size, this.pagination.page, this.pagination.sortBy, this.pagination.descending,this.inputBuscar, this.idRuta).subscribe((result:any)=>{
+          this.datosService[this.getAll](this.pagination.size, this.pagination.page, this.pagination.sortBy, this.pagination.descending, this.inputBuscar, this.idRuta).subscribe((result: any) => {
             this.datos = result.content;
             this.pagination.rowsNumber = result.pagination.rowsNumber;
             this.pagination.pages = result.pagination.pages;
             this.estaCargando = false;
             this.alCargar.emit(this.datos);
-          }, error=>{
+          }, error => {
             this.notificacionService.alertError(error);
           });
         } else {
-          this.datosService[this.getAll](this.pagination.size, this.pagination.page, this.pagination.sortBy, this.pagination.descending, this.inputBuscar).subscribe((result:any)=>{
+          this.datosService[this.getAll](this.pagination.size, this.pagination.page, this.pagination.sortBy, this.pagination.descending, this.inputBuscar).subscribe((result: any) => {
             this.datos = result.content;
-            this.pagination.rowsNumber = result.pagination ? result.pagination.rowsNumber :result.content.length;
+            this.pagination.rowsNumber = result.pagination ? result.pagination.rowsNumber : result.content.length;
             this.pagination.pages = result.pagination ? result.pagination.pages : 1;
             this.estaCargando = false;
             this.alCargar.emit(this.datos);
-          }, error=>{
+          }, error => {
             this.notificacionService.alertError(error);
           });
         }
-      }else{
-          this.datosService[this.getAll](this.pagination.size, this.pagination.page, this.pagination.sortBy, this.pagination.descending, this.inputBuscar, this.filtrosData).subscribe((result:any)=>{
-            this.datos = result.content;
-            this.pagination.rowsNumber = result.pagination ? result.pagination.rowsNumber :result.content.length;
-            this.pagination.pages = result.pagination ? result.pagination.pages : 1;
-            this.estaCargando = false;
-            this.alCargar.emit(this.datos);
-          }, error=>{
-            this.notificacionService.alertError(error);
-          });
+      } else {
+        this.datosService[this.getAll](this.pagination.size, this.pagination.page, this.pagination.sortBy, this.pagination.descending, this.inputBuscar, this.filtrosData).subscribe((result: any) => {
+          this.datos = result.content;
+          this.pagination.rowsNumber = result.pagination ? result.pagination.rowsNumber : result.content.length;
+          this.pagination.pages = result.pagination ? result.pagination.pages : 1;
+          this.estaCargando = false;
+          this.alCargar.emit(this.datos);
+        }, error => {
+          this.notificacionService.alertError(error);
+        });
       }
     } else {
-      this.datosService[this.getAll](this.inputBuscar, this.filtrosData).subscribe((result:any)=>{
+      this.datosService[this.getAll](this.inputBuscar, this.filtrosData).subscribe((result: any) => {
         this.datos = result.content;
-        this.pagination.rowsNumber = result.pagination ? result.pagination.rowsNumber :result.content.length;
+        this.pagination.rowsNumber = result.pagination ? result.pagination.rowsNumber : result.content.length;
         this.pagination.pages = result.pagination ? result.pagination.pages : 1;
         this.estaCargando = false;
         this.alCargar.emit(this.datos);
-      }, error=>{
+      }, error => {
         this.notificacionService.alertError(error);
       });
     }
@@ -194,8 +194,8 @@ export class TablaComponent implements OnInit {
         button.removeAttribute("data-dir");
       }
     });
-
   };
+
   ordenar(e) {
     this.resetButtons(e);
     if (e.target.getAttribute("data-dir") == "desc") {
@@ -231,38 +231,42 @@ export class TablaComponent implements OnInit {
 
   exportar(tipo) {
     if (!this.exportReport) {
-      this.datosService.exportReporte(tipo, this.filtrosData).subscribe(response =>{
-        if(tipo == 'XLSX') this.archivosService.generar64aExcel(response['content'].content, response['content'].name);
-        if(tipo == 'PDF') this.archivosService.generar64aPDF(response['content'].content, response['content'].name);
-      },error => {
+      this.datosService.exportReporte(tipo, this.filtrosData).subscribe(response => {
+        if (tipo == 'XLSX') this.archivosService.generar64aExcel(response['content'].content, response['content'].name);
+        if (tipo == 'PDF') this.archivosService.generar64aPDF(response['content'].content, response['content'].name);
+      }, error => {
         this.notificacionService.alertError(error);
       });
-    }else{
-      this.datosService[this.exportReport](tipo, this.filtrosData).subscribe(response =>{
-        if(tipo == 'XLSX') this.archivosService.generar64aExcel(response['content'].content, response['content'].name);
-        if(tipo == 'PDF') this.archivosService.generar64aPDF(response['content'].content, response['content'].name);
-      },error => {
+    } else {
+      this.datosService[this.exportReport](tipo, this.filtrosData).subscribe(response => {
+        if (tipo == 'XLSX') this.archivosService.generar64aExcel(response['content'].content, response['content'].name);
+        if (tipo == 'PDF') this.archivosService.generar64aPDF(response['content'].content, response['content'].name);
+      }, error => {
         this.notificacionService.alertError(error);
       });
     }
   }
 
-  /* exportar(template) {
-    this.modalRef = this.modalService.show(template, {
-      class: `modal-xl modal-fullscreen-xl-down modal-dialog-centered`,
+  resetButtonsCabecera() {
+    let tableButtons: any = document.getElementsByClassName("colCabecera");
+    [...tableButtons].map((button) => {
+      button.removeAttribute("data-dir");
     });
-  } */
+  };
 
-  refrescar(){
+  refrescar() {
     this.filtrosData = {};
     this.inputBuscar = '';
+    this.resetButtonsCabecera();
+    this.pagination.sortBy = 'id';
     this.pagination.page = 1;
+    this.pagination.descending = false,
     this.obtenerDatos();
   }
 
-  exportarPlantilla(){
+  exportarPlantilla() {
     this.datosService.exportarPlantilla().subscribe(response => {
       this.archivosService.generar64aExcel(response['content'].content, response['content'].name);
-    },error => this.notificacionService.alertError(error));
+    }, error => this.notificacionService.alertError(error));
   }
 }

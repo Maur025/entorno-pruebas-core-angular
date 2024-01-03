@@ -46,7 +46,7 @@
         <div *ngSwitchCase="'tipo'">
           <span *ngFor="let tipo of fila.entidadReferencial" class="badge bg-secondary font-size-11 mx-1"> {{tipo.tipoEntidad.tipo}}</span>
         </div>
-        <div *ngSwitchCase="'estado'">
+        <div *ngSwitchCase="'deleted'">
           <span *ngIf="!fila.deleted" class="badge bg-success font-size-10"><i class="mdi mdi-lock-open me-1"></i> Habilitado</span>
           <span *ngIf="fila.deleted" class="badge bg-danger font-size-10"><i class="mdi mdi-lock me-1"></i> Inhabilitado</span>
         </div>

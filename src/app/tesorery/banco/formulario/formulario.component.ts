@@ -19,7 +19,7 @@ export class FormularioComponent {
   formato: any;
   formGroup: FormGroup;
   submitted = false;
-  @Input() banco: any;
+  @Input() banco;
   @Output() alGuardar = new EventEmitter<any>();
   @Output() alActualizar = new EventEmitter<any>();
   @Input() esModal;
@@ -38,7 +38,7 @@ export class FormularioComponent {
     private FormBuilder: FormBuilder,
     private notificacionService: NotificacionService,
     private bancoService: BancoService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.formGroup = this.FormBuilder.group(this.fieldsFormValidation());
@@ -55,10 +55,38 @@ export class FormularioComponent {
         "estado": { "visible": true, "buscable": true, "buscableCheck": true, "visibleCheck": true, "sortable": true, "filtrable": true, "texto": "Estado", "colsize": "12", "filtrotipo": "text" },
       }
     };
-    if (this.route.snapshot.params["id"]) {
+    /* if (this.route.snapshot.params["id"]) {
       this.id = this.route.snapshot.params["id"];
       this.setBanco();
+    } */
+    if (this.banco) {
+      this.setBanco();
     }
+  }
+
+  fieldsEntity(data) {
+    return {
+      id: data.id,
+      nombre: data.nombre,
+      sigla: data.sigla,
+      descripcion: data.descripcion != undefined ? data.descripcion : null,
+      url: data.url != undefined ? data.url : null,
+      api: data.api != undefined ? data.api : null,
+      direccion: data.direccion != undefined ? data.direccion : null,
+      telefono: data.telefono != undefined ? data.telefono : null,
+    };
+  }
+
+  fieldsFormValidation() {
+    return {
+      id: ["", []],
+      nombre: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
+      sigla: ["", [Validators.minLength(2), Validators.maxLength(255)]],
+      descripcion: ["", []],
+      url: ["", []],
+      direccion: ["", []],
+      telefono: ["", []],
+    };
   }
 
   get form() {
@@ -66,66 +94,26 @@ export class FormularioComponent {
   }
 
   setBanco() {
-    this.bancoService.find(this.id).subscribe(data => {
+    /* this.bancoService.find(this.id).subscribe(data => { */
       this.formGroup.setValue({
-        id: data.content.id,
-        nombre: data.content.nombre,
-        sigla: data.content.sigla,
-        descripcion: data.content.descripcion,
-        telefono: data.content.telefono,
-        direccion: data.content.direccion,
-        url: data.content.url,
-      });
+        id: this.banco.id,
+        nombre: this.banco.nombre,
+        sigla: this.banco.sigla,
+        descripcion: this.banco.descripcion,
+        telefono: this.banco.telefono,
+        direccion: this.banco.direccion,
+        url: this.banco.url,
+      });/*
     }, (err: any) => {
       this.notificacionService.alertError(err);
-    });
-  }
-
-  getDataFromFormname(array, formName) {
-    let element = array.find((e) => e.id == this.form[formName].value);
-    return element;
-  }
-  setDataFromFormname(array, formName, data: any) {
-    let temp_value = this.form[formName].value;
-    let el =
-      array[
-      array.indexOf(array.find((e) => e.id == this.form[formName].value))
-      ];
-    Object.keys(data.content).forEach((k) => {
-      el[k] = data.content[k];
-    });
-  }
-
-  alCambiar(control) {
-    //console.log("control", control);
-  }
-
-  arrayToSingle(posibleArray) {
-    if (Array.isArray(posibleArray))
-      if (posibleArray.length > 0) return posibleArray[0];
-      else return {};
-    return posibleArray;
-  }
-  volver(level: number = 1) {
-    this.router.navigate([this.subLevelNro(level)], { relativeTo: this.route });
-  }
-
-  subLevelNro(level: number = 1): string {
-    let filelevel = "..";
-    for (let index = 1; index < level; index++) {
-      filelevel += "/..";
-    }
-    return filelevel;
-  }
-  cleanForm(data: any) {
-    return Object.fromEntries(Object.entries(data).filter((value) => value[1]));
+    }); */
   }
 
   guardar() {
     this.submitted = true;
     if (this.formGroup.valid) {
       this.submitted = false;
-      if (this.id) {
+      if (this.banco) {
         this.bancoService.update(this.formGroup.value).subscribe(
           (res: any) => {
             this.notificacionService.successStandar();
@@ -139,7 +127,7 @@ export class FormularioComponent {
         this.bancoService.register(this.formGroup.value).subscribe(
           (res: any) => {
             this.notificacionService.successStandar();
-            this.alGuardar.emit(res);
+            this.alActualizar.emit(res);
           },
           (err: any) => {
             this.notificacionService.alertError(err);
@@ -150,30 +138,7 @@ export class FormularioComponent {
   }
 
 
-  fieldsEntity(data) {
-    return {
-      id: data.id, //obligatorio
-      nombre: data.nombre, //obligatorio
-      sigla: data.sigla, //obligatorio
-      descripcion: data.descripcion != undefined ? data.descripcion : null,
-      url: data.url != undefined ? data.url : null,
-      api: data.api != undefined ? data.api : null,
-      direccion: data.direccion != undefined ? data.direccion : null,
-      telefono: data.telefono != undefined ? data.telefono : null,
-    };
-  }
 
-  fieldsFormValidation() {
-    return {
-      id: ["", []],
-      nombre: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
-      sigla: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
-      descripcion: ["", []],
-      url: ["", []],
-      direccion: ["", []],
-      telefono: ["", []],
-    };
-  }
 
   regresar(){
     this.router.navigate(['../..'], {relativeTo: this.route});

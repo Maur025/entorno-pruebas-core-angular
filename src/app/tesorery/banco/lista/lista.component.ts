@@ -4,6 +4,7 @@ import { NotificacionService } from "src/app/core/services/notificacion.service"
 import { ActivatedRoute, Router } from "@angular/router";
 import { BancoService } from "../../services/tesoreria/banco.service";
 import { FormularioComponent } from '../formulario/formulario.component';
+import { CuentaFormularioComponent } from '../cuenta/cuenta-formulario/cuenta-formulario.component';
 
 @Component({
   selector: 'app-lista',
@@ -13,7 +14,7 @@ import { FormularioComponent } from '../formulario/formulario.component';
 export class ListaComponent {
 
   @ViewChild('appFormBanco') appFormBanco: FormularioComponent;
-
+  @ViewChild('appFormCuenta') appFormCuenta: CuentaFormularioComponent;
   breadCrumbItems: Array<{}>;
   breadCrumbTitle: string = 'Adminstrar Banco';
   titulo:string = 'Lista de Bancos';
@@ -50,7 +51,7 @@ export class ListaComponent {
   getCabeceras() {
     return {
       cabeceras: {
-        "acciones": this.getOpcionesCabecera('Acciones', 12),
+        "acciones": this.getOpcionesCabecera('Acciones', 12,'text', true, false),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
         "nombre": this.getOpcionesCabecera('Nombre', 12),
         "sigla": this.getOpcionesCabecera('Sigla', 12),
@@ -58,18 +59,18 @@ export class ListaComponent {
         "telefono": this.getOpcionesCabecera('Teléfono', 6),
         "direccion": this.getOpcionesCabecera('Dirección', 6),
         "url": this.getOpcionesCabecera('Correo Electrónico', 12),
-        "estado": this.getOpcionesCabecera('Estado', 6),
+        "deleted": this.getOpcionesCabecera('Estado', 6),
       }
     };
   }
 
-  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true) {
+  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true, sorteable: boolean =true) {
     return {
       "visible": visible,
       "buscable": true,
       "buscableCheck": true,
       "visibleCheck": visible,
-      "sortable": true,
+      "sortable": sorteable,
       "filtrable": true,
       "texto": texto,
       "colsize": colsize,
@@ -79,12 +80,24 @@ export class ListaComponent {
 
   crear(template: any) {
     this.titleModal = 'Nuevo';
-    this.esModal = true;
+    this.banco = undefined;
     this.modalRef = this.modalService.show(template, {class: `modal-xl modal-scrollable`});
   }
 
-  editar(data: any) {
-    this.router.navigate(['./id/' + data.id, {}], { relativeTo: this.route });
+  editar(template: any, data: any) {
+    this.titleModal = 'Editar';
+    this.banco = data;
+    this.modalRef = this.modalService.show(template, {class: `modal-xl modal-scrollable`});
+    //this.router.navigate(['./id/' + data.id, {}], { relativeTo: this.route });
+  }
+
+  crearCuenta(template: any, data: any){
+    this.banco = data;
+    this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
+  }
+
+  verCuentas(data: any){
+    this.router.navigate(['./cuentas/' + data.id, {}], { relativeTo: this.route });
   }
 
   habilitar(data: any, component, texto) {

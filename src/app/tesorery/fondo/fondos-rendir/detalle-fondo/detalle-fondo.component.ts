@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { FondoOperativoService } from "src/app/tesorery/services/tesoreria/fondo-operativo.service";
-import { DetalleFondoOperativoService } from "src/app/tesorery/services/tesoreria/detalle-fondo-operativo.service";
+import { FondoRendirService } from "src/app/tesorery/services/tesoreria/fondo-rendir.service";
+import { DetalleFondoRendirService } from "src/app/tesorery/services/tesoreria/detalle-fondo-rendir.service";
 import { Location } from '@angular/common';
 
 @Component({
@@ -10,27 +10,22 @@ import { Location } from '@angular/common';
   templateUrl: './detalle-fondo.component.html',
   styleUrls: ['./detalle-fondo.component.scss']
 })
-export class DetalleFondoComponent implements OnInit{
+export class DetalleFondoRendirComponent implements OnInit{
 
   breadCrumbItems: Array<{}>;
   breadCrumbTitle: string = 'Adminstrar Cuentas de Banco';
-  titulo: string = 'Lista de Movimientos del Fondo Operativo'
+  titulo: string = 'Lista de Movimientos del Fondo Rendir'
   textoBuscar = 'Ingrese criterio de búsqueda: nro referencia';
   @Input() rel_prefix: any;
   @Input() rel_field: any;
   @Input() rel_id: any;
-  nroSolicitud: any;
-  fechaSolicitud: any;
-  nombre: any;
-  importe: any;
-  descripcion: any;
   id: any;
   formato: any;
   fondo:any;
 
   constructor(
-    private fondoOperativoService: FondoOperativoService,
-    public detalleFontoOperativoService: DetalleFondoOperativoService,
+    private fondoRendirService: FondoRendirService,
+    public detalleFondoRendirService: DetalleFondoRendirService,
     private router: Router,
     private route: ActivatedRoute,
     private notificacionService: NotificacionService,
@@ -76,7 +71,7 @@ export class DetalleFondoComponent implements OnInit{
   }
 
   setFondo(){
-    this.fondoOperativoService.find(this.id).subscribe(data =>{
+    this.fondoRendirService.find(this.id).subscribe(data =>{
       this.fondo = data.content
     })
   }

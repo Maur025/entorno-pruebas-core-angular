@@ -7,7 +7,7 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
 @Injectable({
     providedIn: 'root'
   })
-  export class DetalleFontoOperativoService {
+  export class DetalleFondoOperativoService {
 
     apiName:string = 'detalleFondoOperativo';
     entitys:string = 'Detalle Fondo Operativo';

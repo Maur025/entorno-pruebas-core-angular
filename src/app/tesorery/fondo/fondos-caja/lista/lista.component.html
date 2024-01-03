@@ -34,9 +34,12 @@
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" *ngIf="!fila.aperturado">
               <button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila, modalGeneral)"><i class="mdi mdi-pencil-outline"></i></button>
             </li>
-           <!--  <li data-bs-toggle="tooltip" data-bs-placement="top" title="Descargos">
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Aperturar" *ngIf="!fila.aperturado">
+              <button class="btn btn-sm btn-primary" [disabled]="fila.deleted" (click)="aperturar(fila, modalGeneral)"><i class="bx bx-lock-open"></i></button>
+            </li>
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Descargos" *ngIf="fila.aperturado">
               <button class="btn btn-sm btn-light" [disabled]="fila.deleted" (click)="descargos(fila, modalGeneral)"><i class="mdi mdi-transfer-down"></i></button>
-            </li> -->
+            </li>
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Habilitar" *ngIf="fila.deleted">
               <a class="btn btn-sm btn-success" (click)="habilitar(fila, tabla, 'habilitar')"><i class="mdi mdi-power"></i></a>
             </li>
@@ -59,11 +62,11 @@
 
 <ng-template #modalGeneral role="document" let-modal>
   <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">{{titleModal}} Fondo Caja</h5>
+    <h5 class="modal-title" id="exampleModalLabel">{{titleModal}} Fondo de Caja</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal"aria-label="Close"id="close-modal" (click)="modalRef.hide()"></button>
   </div>
   <div class="modal-body">
-    <app-formulario-caja #appFormCaja [fondo]="fondo" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-caja>
+    <app-formulario-caja #appFormCaja [fondo]="fondo" [apertura]="apertura" [descargo]="descargo" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-caja>
   </div>
   <div class="modal-footer">
     <div class="hstack gap-2 justify-content-end">

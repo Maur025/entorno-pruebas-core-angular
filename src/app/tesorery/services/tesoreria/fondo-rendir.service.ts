@@ -7,10 +7,10 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
 @Injectable({
     providedIn: 'root'
   })
-  export class EntidadService {
+  export class FondoRendirService {
 
-    apiName:string = 'entidad';
-    entitys:string = 'Entidad';
+    apiName:string = 'fondoRendir';
+    entitys:string = 'Fondo Rendir';
 
     apiUrl:string = '' ;
     prefix:string = '';
@@ -22,10 +22,6 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
 
     register(datos: any) {
       return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}`, datos);
-    }
-
-    registerTipoEntidad(datos: any) {
-      return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/${datos.entidadId}/tipoEntidad`, datos);
     }
 
     update(datos: any): Observable<any> {
@@ -51,24 +47,15 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
 
     deshabilitar(datos:any,id: string | number): Observable<any> {
       datos[this.entitys] = 'deshabilitar';
-      return this.apiService.tesoreria.put(`${this.apiUrl}${this.prefix}/${this.apiName}/${datos.id}`, datos);
+      return this.apiService.tesoreria.put(`${this.apiUrl}${this.prefix}/${this.apiName}/${datos.id}/habilita`, datos);
     }
 
     habilitados(){
       return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/listarHabilitados`);
     }
-    getEntidadesTipoEntidad(entidadId: any){
-      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/entidadReferencial/tipoEntidad/${entidadId}`);
 
-    }
-    getTipoEntidad (){
-      return this.apiService.tesoreria.get(`/tipoEntidad/listarHabilitados`);
+    cerrarFondo(fondoId:any){
+      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/${fondoId}/cierre`);
     }
 
-    getEntidadTipos(id:any){
-      return this.apiService.tesoreria.get(`/entidad/${id}/tipoEntidad`);
-    }
-    deleteEntidadTipo(data: any) {
-      return this.apiService.tesoreria.delete(`${this.apiUrl}${this.prefix}/${this.apiName}/${data.entidadId}/tipoEntidad/${data.tipoEntidadId}`);
-    }
   }
