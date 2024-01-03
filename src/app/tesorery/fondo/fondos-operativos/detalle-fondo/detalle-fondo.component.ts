@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FondoOperativoService } from "src/app/tesorery/services/tesoreria/fondo-operativo.service";
-import { DetalleFontoOperativoService } from "src/app/tesorery/services/tesoreria/detalle-fondo-operativo.service";
+import { DetalleFondoOperativoService } from "src/app/tesorery/services/tesoreria/detalle-fondo-operativo.service";
 import { Location } from '@angular/common';
 
 @Component({
@@ -30,7 +30,7 @@ export class DetalleFondoComponent implements OnInit{
 
   constructor(
     private fondoOperativoService: FondoOperativoService,
-    public detalleFontoOperativoService: DetalleFontoOperativoService,
+    public detalleFontoOperativoService: DetalleFondoOperativoService,
     private router: Router,
     private route: ActivatedRoute,
     private notificacionService: NotificacionService,

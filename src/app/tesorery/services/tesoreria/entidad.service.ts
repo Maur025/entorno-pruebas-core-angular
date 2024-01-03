@@ -57,7 +57,10 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
     habilitados(){
       return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/listarHabilitados`);
     }
+    getEntidadesTipoEntidad(entidadId: any){
+      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/entidadReferencial/tipoEntidad/${entidadId}`);
 
+    }
     getTipoEntidad (){
       return this.apiService.tesoreria.get(`/tipoEntidad/listarHabilitados`);
     }

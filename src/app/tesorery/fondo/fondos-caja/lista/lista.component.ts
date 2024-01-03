@@ -25,6 +25,8 @@ export class ListaCajaComponent implements OnInit{
   modalRef?: BsModalRef;
   fondo: any;
   titleModal: any;
+  apertura = false;
+  descargo = false;
 
   constructor(
     public fondoCajaService: FondoCajaService,
@@ -68,18 +70,32 @@ export class ListaCajaComponent implements OnInit{
 
   crear(template: any) {
     this.fondo = undefined;
+    this.apertura = false;
+    this.descargo = false;
     this.titleModal = 'Nuevo';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
   editar(data: any, template: any) {
     this.fondo = data;
+    this.apertura = false;
+    this.descargo = false;
     this.titleModal = 'Editar';
+    this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
+  }
+
+  aperturar(data: any, template: any){
+    this.fondo = data;
+    this.apertura = true;
+    this.descargo = false;
+    this.titleModal = 'Aperturar';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
   descargos(data: any, template: any){
     this.fondo = data;
+    this.descargo = true;
+    this.apertura = false;
     this.titleModal = 'Descargo de ';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }

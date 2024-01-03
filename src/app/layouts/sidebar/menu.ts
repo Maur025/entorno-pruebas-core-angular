@@ -17,12 +17,11 @@ export const MENU: MenuItem[] = [
         label: 'Administrar Bancos',
         link: 'banco',
       },
-      {
+      /* {
         id: 102,
         label: 'Administrar Cuentas',
         link: 'banco/cuentaBanco',
-      },
-
+      }, */
     ]
   },
   {
@@ -64,6 +63,11 @@ export const MENU: MenuItem[] = [
         id: 402,
         label: 'Adm. Fondos de Caja',
         link: 'fondo/caja',
+      },
+      {
+        id: 403,
+        label: 'Adm. Fondos a Rendir',
+        link: 'fondo/rendir',
       },
     ]
   },

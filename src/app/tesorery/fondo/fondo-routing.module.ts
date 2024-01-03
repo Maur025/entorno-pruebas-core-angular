@@ -9,6 +9,10 @@ import { FondosCajaComponent } from './fondos-caja/fondos-caja.component';
 import { FormularioCajaComponent } from './fondos-caja/formulario/formulario.component';
 import { ListaCajaComponent} from './fondos-caja/lista/lista.component';
 
+import { FondosRendirComponent } from './fondos-rendir/fondos-rendir.component';
+import { ListaRendirComponent } from './fondos-rendir/lista/lista.component';
+import { FormularioRendirComponent } from './fondos-rendir/formulario/formulario.component';
+import { DetalleFondoRendirComponent } from './fondos-rendir/detalle-fondo/detalle-fondo.component';
 
 const routes: Routes = [
   { path: 'operativos', component: FondosOperativosComponent, children:[
@@ -19,6 +23,11 @@ const routes: Routes = [
   { path: 'caja', component: FondosCajaComponent, children:[
     {path: '', component: ListaCajaComponent},
     {path: 'editar/:id', component: FormularioCajaComponent},
+  ]},
+  { path: 'rendir', component: FondosRendirComponent, children:[
+    {path: '', component: ListaRendirComponent},
+    {path: 'editar/:id', component: FormularioRendirComponent},
+    {path: 'detalleFondo/:id', component: DetalleFondoRendirComponent},
   ]},
 ];
 

@@ -27,6 +27,8 @@ export class ListaComponent implements OnInit{
   titleModal: any;
   apertura = false;
   descargo = false;
+  tipoDescargo: any;
+  tipoTexto: any;
 
   constructor(
     public fondoOperativoService: FondoOperativoService,
@@ -44,28 +46,28 @@ export class ListaComponent implements OnInit{
   getCabeceras() {
     return {
       cabeceras: {
-        "acciones": this.getOpcionesCabecera('Acciones', 12),
+        "acciones": this.getOpcionesCabecera('Acciones', 12,'text', true, false),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
         "nombre": this.getOpcionesCabecera('Nombre', 12),
         "nroSolicitud": this.getOpcionesCabecera('Nro Solicitud', 12),
         "fechaSolicitud": this.getOpcionesCabecera('Fecha Solicitud', 12),
         "descripcion": this.getOpcionesCabecera('Descripción', 6),
-        "importe": this.getOpcionesCabecera('Monto Solicitud', 12),
+        "importe": this.getOpcionesCabecera('Monto de Apertura', 12),
         "saldo": this.getOpcionesCabecera('Saldo', 12),
         "aperturado": this.getOpcionesCabecera('Aperturado', 12),
         "cierre": this.getOpcionesCabecera('Cerrado', 12),
-        "estado": this.getOpcionesCabecera('Estado', 6),
+        "deleted": this.getOpcionesCabecera('Estado', 6),
       }
     };
   }
 
-  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true) {
+  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true, sorteable: boolean =true) {
     return {
       "visible": visible,
       "buscable": true,
       "buscableCheck": true,
       "visibleCheck": visible,
-      "sortable": true,
+      "sortable": sorteable,
       "filtrable": true,
       "texto": texto,
       "colsize": colsize,
@@ -76,7 +78,9 @@ export class ListaComponent implements OnInit{
   crear(template: any) {
     this.fondo = undefined;
     this.apertura = false;
-    this.titleModal = 'Nuevo';
+    this.descargo = false;
+    this.tipoDescargo = undefined;
+    this.titleModal = 'Nuevo Fondo Operativo';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
@@ -84,7 +88,8 @@ export class ListaComponent implements OnInit{
     this.fondo = data;
     this.apertura = false;
     this.descargo = false;
-    this.titleModal = 'Editar';
+    this.tipoDescargo = undefined;
+    this.titleModal = 'Editar Fondo Operativo';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
@@ -92,15 +97,18 @@ export class ListaComponent implements OnInit{
     this.fondo = data;
     this.apertura = true;
     this.descargo = false;
-    this.titleModal = 'Aperturar';
+    this.tipoDescargo = 'APERTURADO';
+    this.titleModal = 'Apertura de Fondo Operativo ';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
-  descargos(data: any, template: any){
+  descargos(data: any, template: any, tipo){
     this.fondo = data;
     this.descargo = true;
     this.apertura = false;
-    this.titleModal = 'Descargo de ';
+    this.tipoDescargo = tipo;
+    tipo == 'RENDIDO' ? this.tipoTexto = 'RENDICIÓN' : this.tipoTexto = tipo;
+    this.titleModal = ' de Fondo Operativo';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 

@@ -8,7 +8,7 @@ import { BancoService } from "src/app/tesorery/services/tesoreria/banco.service"
 import { CuentaBancoService } from "src/app/tesorery/services/tesoreria/cuenta-banco.service";
 import { MovimientoCuentaBancoService } from "src/app/tesorery/services/tesoreria/movientos-cuenta-banco.service";
 import { MedioTransferenciaService } from "src/app/tesorery/services/tesoreria/medio-transferencia.service";
-import { DetalleFontoOperativoService } from "src/app/tesorery/services/tesoreria/detalle-fondo-operativo.service";
+import { DetalleFondoOperativoService } from "src/app/tesorery/services/tesoreria/detalle-fondo-operativo.service";
 import { EstadosService } from "src/app/tesorery/services/tesoreria/estados.service";
 import { forkJoin } from 'rxjs';
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
@@ -23,6 +23,7 @@ export class FormularioComponent implements OnInit{
   @Input() fondo;
   @Input() apertura;
   @Input() descargo;
+  @Input() tipoDescargo;
   @Output() alGuardar = new EventEmitter<any>();
   @Output() alActualizar = new EventEmitter<any>();
   formGroup: FormGroup;
@@ -33,7 +34,6 @@ export class FormularioComponent implements OnInit{
   listaMedioTransferencias: any;
   listaEstados: any;
   fechaActual: any;
-  fechaMaxima: any;
   saldo: any;
 
   constructor(
@@ -43,7 +43,7 @@ export class FormularioComponent implements OnInit{
     private estadosService: EstadosService,
     private movimientoCuentaBancoService: MovimientoCuentaBancoService,
     private medioTransferenciaService: MedioTransferenciaService,
-    private detalleFontoOperativoService: DetalleFontoOperativoService,
+    private detalleFontoOperativoService: DetalleFondoOperativoService,
     private centroCostosService: CentrocostoService,
     private cuentaBancoService: CuentaBancoService,
     private notificacionService: NotificacionService,
@@ -56,19 +56,16 @@ export class FormularioComponent implements OnInit{
     this.formGroup = this.FormBuilder.group(this.fieldsFormValidation());
     if (this.fondo) {
       this.setFondo();
+      this.getEstados();
+      this.getCentroCostos();
       if (this.apertura) {
-        this.getCentroCostos();
         this.getBancos();
         this.getMedioTransferencias();
-        this.getEstados();
         this.formGroup.disable();
         this.addFormApertura();
-        this.form.estado.disable();
       }
       if (this.descargo) {
         this.formGroup.disable();
-        this.getEstados();
-        this.getCentroCostos();
         this.addFormDescargo();
         this.saldo = this.fondo.saldo;
       }
@@ -130,14 +127,15 @@ export class FormularioComponent implements OnInit{
   getEstados(){
     this.estadosService.habilitadosFondos().subscribe(data =>{
       this.listaEstados = data.content;
-      if(this.apertura) this.form.estado.setValue(this.listaEstados.filter((data: { nombre: any; }) => data.nombre == 'APERTURADO')[0].id);
-      if(this.descargo) this.listaEstados.splice(this.listaEstados.map(estado => estado.nombre).indexOf('APERTURADO'), 1);
+      if(this.apertura || this.descargo) this.form.estado.setValue(this.listaEstados.find(e => e.nombre == this.tipoDescargo).id);      ;
     },(error) => {
       this.notificacionService.alertError(error);
     });
   }
 
   cambioBanco(){
+    this.listaCuentasBanco = [];
+    this.form.cuentaBancoId.setValue(null);
     if (this.form.bancoId.value != null) {
       this.cuentaBancoService.getCuentasBanco(1000, 1, 'id', false,'', this.form.bancoId.value).subscribe(data =>{
         this.listaCuentasBanco = data.content;

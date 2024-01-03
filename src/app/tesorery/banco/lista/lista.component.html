@@ -11,10 +11,10 @@
   [smallTable]="false"
   [softDelete]="false"
   (crearNuevo)="(null)"
-  (alCrear)="crear(modalNuevo)"
+  (alCrear)="crear(modalGeneral)"
   (alActualizar)="(null)"
   (alFiltrar)="(null)"
-  (alEditar)="editar($event)"
+  (alEditar)="editar(modalGeneral, $event)"
   campoEstado="estado"
   valueEstado="habilitado"
   (alHabilitar)="habilitar($event, tabla, 'habilitar')"
@@ -35,7 +35,13 @@
           <td>
             <ul class="list-unstyled hstack gap-1 mb-0">
               <li data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
-                <button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila)"><i class="mdi mdi-pencil-outline"></i></button>
+                <button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(modalGeneral, fila)"><i class="mdi mdi-pencil-outline"></i></button>
+              </li>
+              <li data-bs-toggle="tooltip" data-bs-placement="top" title="Agregar Cuenta">
+                <button class="btn btn-sm btn-success" [disabled]="fila.deleted" (click)="crearCuenta(modalCuentaNueva, fila)"><i class="mdi mdi-credit-card-plus-outline"></i></button>
+              </li>
+              <li data-bs-toggle="tooltip" data-bs-placement="top" title="Agregar Cuenta">
+                <button class="btn btn-sm btn-info" [disabled]="fila.deleted" (click)="verCuentas(fila)"><i class="mdi mdi-credit-card-multiple-outline"></i></button>
               </li>
               <li data-bs-toggle="tooltip" data-bs-placement="top" title="Habilitar" *ngIf="fila.deleted">
                 <a class="btn btn-sm btn-success" (click)="habilitar(fila, tabla,'habilitar')"><i class="mdi mdi-power"></i></a>
@@ -46,7 +52,7 @@
             </ul>
           </td>
         </span>
-        <span *ngSwitchCase="'estado'">
+        <span *ngSwitchCase="'deleted'">
           <td>
             <span *ngIf="!fila.deleted" class="badge bg-success font-size-10"><i class="mdi mdi-lock-open me-1"></i> Habilitado</span>
             <span *ngIf="fila.deleted" class="badge bg-danger font-size-10"><i class="mdi mdi-lock me-1"></i> Inhabilitado</span>
@@ -60,18 +66,35 @@
   </ng-template>
 </ng-template>
 
-<ng-template #modalNuevo role="document" let-modal>
+<ng-template #modalGeneral role="document" let-modal>
   <div class="modal-header">
     <h5 class="modal-title" id="exampleModalLabel">{{titleModal}} Banco</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal"aria-label="Close"id="close-modal" (click)="modalRef.hide()"></button>
   </div>
   <div class="modal-body">
-    <app-formulario-de-banco #appFormBanco [esModal]="esModal" (alGuardar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-de-banco>
+    <app-formulario-de-banco #appFormBanco [banco]="banco" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-de-banco>
   </div>
   <div class="modal-footer">
     <div class="hstack gap-2 justify-content-end">
       <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
-      <button type="button" class="btn btn-success" (click)="appFormBanco.guardar()">Registrar</button>
+      <button type="button" class="btn" [class]="{ 'btn-warning': titleModal == 'Editar', 'btn-success': titleModal != 'Editar'}" (click)="appFormBanco.guardar()" >{{titleModal == 'Editar' ? 'Guardar' : 'Registrar' }}</button>
+
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalCuentaNueva role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Crear Cuenta Nueva</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"aria-label="Close"id="close-modal" (click)="modalRef.hide()"></button>
+  </div>
+  <div class="modal-body">
+    <app-cuenta-formulario #appFormCuenta [idRuta]="banco.id" (alGuardar)="modalRef.hide(); tabla.obtenerDatos()"></app-cuenta-formulario>
+  </div>
+  <div class="modal-footer">
+    <div class="hstack gap-2 justify-content-end">
+      <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
+      <button type="button" class="btn btn-success" (click)="appFormCuenta.guardar()">Registrar</button>
     </div>
   </div>
 </ng-template>
