@@ -71,6 +71,18 @@ export const MENU: MenuItem[] = [
       },
     ]
   },
+  {
+    id: 50,
+    label: 'Devengados',
+    icon: 'mdi mdi-book-sync-outline',
+    subItems: [
+      {
+        id: 501,
+        label: 'Dev-Proveedor',
+        link: 'devengado',
+      },
+    ]
+  }
   /* {
     id: 50,
     label: 'Rendiciones',
