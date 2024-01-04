@@ -47,7 +47,7 @@
             <div *ngIf="!fila.deleted" class="badge bg-success font-size-10"><i class="mdi mdi-lock-open me-1"></i> Habilitado</div>
             <div *ngIf="fila.deleted" class="badge bg-danger font-size-10"><i class="mdi mdi-lock me-1"></i> Inhabilitado</div>
         </div>
-        <div *ngSwitchCase="'enfidadReferencial'">
+        <div *ngSwitchCase="'entidadReferencial'">
             {{fila.entidadReferencial.entidad.nombre}}
           </div>
           <div *ngSwitchCase="'fecha'">

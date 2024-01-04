@@ -51,7 +51,7 @@ export class ListaComponent implements OnInit {
         "acciones" : {"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Acciones","colsize":"12","filtrotipo":"number"},
         "id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"ID","colsize":"12","filtrotipo":"text"},
         "centroCosto":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Centro Costo","colsize":"12","filtrotipo":"text"},
-        "enfidadReferencial":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":false,"filtrable":true,"texto":"Proveedor","colsize":"12","filtrotipo":"text"},
+        "entidadReferencial":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Proveedor","colsize":"12","filtrotipo":"text"},
         "nroReferencia": this.getOpcionesCabecera('Nro Referencia', 12),       
         "fecha":this.getOpcionesCabecera('Fecha', 12),
         "monto":this.getOpcionesCabecera('Monto', 12),

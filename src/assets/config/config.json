@@ -1,8 +1,8 @@
 {
   "production": false,
   "comprasApiKerno": "https://sandbox-kbi-compras-api.kernotec.com/api/compras",
-  "contabilidadApiKerno": "http://localhost:8081/api/contabilidad",
-  "inventariosApiKerno": "http://localhost:8000/api/v1",
-  "tesoreriaApiKerno": "http://localhost:8082/api/tesoreria",
+  "contabilidadApiKerno": "http://172.20.50.24:8081/api/contabilidad",
+  "inventariosApiKerno": "https://sandbox-kbi-inventarios-api.kernotec.com/api/v1",
+  "tesoreriaApiKerno": "http://172.20.50.24:8082/api/tesoreria",
   "accountApiKerno": "https://sandbox-kbi-config-api.kernotec.com/api/config"
 }
