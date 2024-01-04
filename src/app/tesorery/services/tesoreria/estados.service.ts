@@ -19,7 +19,15 @@ export class EstadosService {
     this.prefix = prefix;
   }
 
+  habilitadosAnticipos() {
+    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/anticipos`);
+  }
+
   habilitadosFondos() {
     return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/fondos`);
+  }
+
+  habilitadosDevengados() {
+    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/devengados`);
   }
 }
