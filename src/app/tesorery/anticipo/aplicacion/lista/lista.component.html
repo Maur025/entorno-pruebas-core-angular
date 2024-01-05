@@ -4,10 +4,16 @@
     <h5 class="card-title mb-3 pb-3 border-bottom">Detalle de Anticipo : <span></span></h5>
 
     <div class="nav col-12 border-bottom">
+      <div class="col-4 mb-2 px-1">
+        <p class="ps-2">
+          <span class="fw-semibold semi">Centro de Costo:</span>
+          <span class="text-primary">{{ anticipoData?.centroCosto.nombre }}</span>
+        </p>
+      </div>
 
       <div class="col-4 mb-2 px-1">
         <p class="ps-2">
-          <span class="fw-semibold semi">Entidad Referncial:</span>
+          <span class="fw-semibold semi">Proveedor:</span>
           <span class="text-primary">{{ anticipoData?.entidadReferencial.entidad.nombre }}</span>
         </p>
       </div>
@@ -29,12 +35,12 @@
           <span class="text-primary">{{ anticipoData?.monto }}</span>
         </p>
       </div>
-     <!-- <div class="col-8 mb-3 px-1">
+      <div class="col-4 mb-3 px-1">
         <p class="ps-2">
           <span class="fw-semibold semi">Saldo:</span>
           <span class="text-primary"> {{ anticipoData?.saldo }}</span>
         </p>
-      </div> -->
+      </div>
     </div>
     <!-- *ngIf="anticipoData?.saldo > 0"-->
     <div class="col-12">

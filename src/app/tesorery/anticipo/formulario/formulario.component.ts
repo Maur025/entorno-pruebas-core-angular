@@ -11,6 +11,7 @@ import { BancoService } from "src/app/tesorery/services/tesoreria/banco.service"
 import { MedioTransferenciaService } from "src/app/tesorery/services/tesoreria/medio-transferencia.service";
 import { EstadoAnticipoService } from '../../services/tesoreria/estadoanticipo.service';
 import { AplicacionAnticipoService } from '../../services/aplicacion-anticipo.service';
+import { FondoOperativoService } from '../../services/tesoreria/fondo-operativo.service';
 @Component({
   selector: 'app-formulario',
   templateUrl: './formulario.component.html',
@@ -39,7 +40,7 @@ export class FormularioComponent implements OnInit {
   listaCentroCostos: any;
   tipoEntidadId: any = null;
   listaEstadoAnticipo: any;
-
+  listaFondoAperturados:any;
 
   listaBancos: any;
   listaCuentasBanco: any;
@@ -49,10 +50,20 @@ export class FormularioComponent implements OnInit {
 
 
   inout: number = 0;
+  operacion:any;
+
   ingresoEgreso: any = [
     { value: "IN", name: "INGRESO" },
     { value: "OUT", name: "EGRESO" },
   ];
+  
+
+  tipoOperacion: any = [
+    { value: "BN", name: "BANCO" },
+    { value: "FNDO", name: "FONDO OPERATIVO" },
+    //{ value: "FNDR", name: "FONDO A RENDIR" },
+  ];
+  
 
   constructor(
     private readonly router: Router,
@@ -68,6 +79,7 @@ export class FormularioComponent implements OnInit {
     private medioTransferenciaService: MedioTransferenciaService,
     private estadoAnticipoService: EstadoAnticipoService,
     private aplicacionAnticipoService: AplicacionAnticipoService,
+    private fondoOperativoService:FondoOperativoService
   ) {
 
   }
@@ -100,12 +112,16 @@ export class FormularioComponent implements OnInit {
       this.formGroup.removeControl('cuentaBancoId');
       this.formGroup.removeControl('medioTransferenciaId');
       this.formGroup.removeControl('descripcion');
+      this.formGroup.removeControl('tipoOperacion');
 
 
     }
     else {
       console.log('anticipo');
+      this.formGroup.addControl('tipoOperacion', new FormControl(null, Validators.required));
       this.formGroup.removeControl('estado');
+      this.formGroup.removeControl('ingresoEgreso');
+      this.getFondoApertudados();
     }
   }
 
@@ -144,6 +160,7 @@ export class FormularioComponent implements OnInit {
         let data = this.formGroup.value;
         data.saldo = data.monto;
         data.origen = 'ANTICIPO';
+        data.ingresoEgreso = 'OUT';
 
         this.anticipoService.register(data).subscribe((res: any) => {
           this.notificacionService.successStandar();
@@ -177,6 +194,7 @@ export class FormularioComponent implements OnInit {
 
         let data = this.formGroup.value;
         data.saldo = data.monto;
+        data.ingresoEgreso='OUT';
         data.origen = 'ANTICIPO';
 
         this.anticipoService.register(data).subscribe((res: any) => {
@@ -250,6 +268,11 @@ export class FormularioComponent implements OnInit {
       this.listaEstadoAnticipo = data.content;
     });
   }
+  getFondoApertudados(){
+    this.fondoOperativoService.aperturados().subscribe( fondo =>{
+      this.listaFondoAperturados = fondo.content
+    })
+  }
 
   fieldsFormValidation() {
     return {
@@ -265,6 +288,9 @@ export class FormularioComponent implements OnInit {
       cuentaBancoId: [, [Validators.required]],
       medioTransferenciaId: [, [Validators.required]],
       estado: [, []],
+      tipoOperacion: [, []],
+      //nombre: [, []],
+      fondoOperativoId: [, []],
     };
   }
 
@@ -281,13 +307,39 @@ export class FormularioComponent implements OnInit {
 
       }
       else {
-        //this.formGroup.removeControl('ingresoEgreso');
+       // this.formGroup.removeControl('ingresoEgreso');
         this.removeFormMovimientoCuenta()
         this.inout = 0;
       }
 
     }
   }
+
+
+
+  cambioOperacion(event: any) {
+    console.log(event.value);
+    this.operacion=event.value;
+
+    switch (event.value) {
+      case 'BN':
+        this.addFormMovimientoCuentaOperacion();
+        this.inout = 1;        
+        break;
+      case 'FNDO':
+        this.inout = 0;  
+        this.removeFormMovimientoCuentaOperacion();
+        break;
+    /*  case 'FNDR':
+        this.inout = 0;  
+        this.removeFormMovimientoCuentaOperacion();
+        break; */
+     
+    }
+    
+    
+  }
+
   addFormMovimientoCuenta() {
     this.formGroup.addControl('descripcion', new FormControl(null, Validators.required));
     this.formGroup.addControl('bancoId', new FormControl(null, Validators.required));
@@ -303,6 +355,26 @@ export class FormularioComponent implements OnInit {
     this.formGroup.removeControl('cuentaBancoId');
     this.formGroup.removeControl('medioTransferenciaId');
     this.formGroup.removeControl('descripcion');
+    this.formGroup.removeControl('tipoOperacion');
   }
+
+  removeFormMovimientoCuentaOperacion() {
+
+    this.formGroup.removeControl('bancoId');
+    this.formGroup.removeControl('cuentaBancoId');
+    this.formGroup.removeControl('medioTransferenciaId');
+    this.formGroup.removeControl('descripcion');
+    this.formGroup.addControl('fondoOperativoId', new FormControl(null, Validators.required));
+
+  }
+  addFormMovimientoCuentaOperacion() {
+    this.formGroup.addControl('descripcion', new FormControl(null, Validators.required));
+    this.formGroup.addControl('bancoId', new FormControl(null, Validators.required));
+    this.formGroup.addControl('cuentaBancoId', new FormControl(null, Validators.required));
+    this.formGroup.addControl('medioTransferenciaId', new FormControl(null, Validators.required));
+    this.formGroup.removeControl('ingresoEgreso');
+  }
+  
+  
 
 }
