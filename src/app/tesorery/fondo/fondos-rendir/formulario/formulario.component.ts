@@ -121,7 +121,7 @@ export class FormularioRendirComponent implements OnInit {
       entidadEmpleado = entidadEmpleado.find(e => e.tipo == 'EMPLEADO');
       this.entidadService.getEntidadesTipoEntidad(entidadEmpleado.id).subscribe(res => {
         this.listaResponsables = res.content;
-      })
+      });
     }, (error) => {
       this.notificacionService.alertError(error);
     });

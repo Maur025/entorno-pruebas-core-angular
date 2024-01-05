@@ -31,11 +31,13 @@ import { FormularioComponent as SubFormularioComponent } from './subtabla/formul
 import { FormularioComponent } from './tabla/formulario/formulario.component';
 import { TablaBasicaComponent } from './tabla-basica/tabla-basica.component';
 import { TablaselectorComponent } from './tablaselector/tablaselector.component';
+import { UiSwitchModule } from 'ngx-ui-switch';
 
 import { ExportarComponent } from './exportar/exportar.component';
 import { ImportarComponent } from './importar/importar.component';
 import { SelectorAddComponent } from './selector-add/selector-add.component';
 import { SelectorImageComponent } from './selector-image/selector-image.component';
+import { FechasimplePipe } from 'src/app/core/pipes/fechasimple.pipe';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,7 @@ import { SelectorImageComponent } from './selector-image/selector-image.componen
     TablaBasicaComponent,
     SelectorAddComponent,
     SelectorImageComponent,
+    FechasimplePipe
   ],
   imports: [
     CommonModule,
@@ -64,6 +67,7 @@ import { SelectorImageComponent } from './selector-image/selector-image.componen
     LightboxModule,
     SimplebarAngularModule,
     NgSelectModule,
+    UiSwitchModule,
 
     TabsModule.forRoot(),
     BsDropdownModule.forRoot(),
@@ -83,6 +87,7 @@ import { SelectorImageComponent } from './selector-image/selector-image.componen
     TablaselectorComponent,
     SelectorAddComponent,
     SelectorImageComponent,
+    FechasimplePipe
   ]
 })
 export class HerramientasModule { }

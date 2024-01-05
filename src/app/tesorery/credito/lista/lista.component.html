@@ -1,0 +1,57 @@
+<app-page-title [title]="breadCrumbTitle" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+<krn-tabla
+  #tabla
+  [titulo]="titulo"
+  [datosService]="creditoService"
+  getAll="getAll"
+  [formato]="formato"
+  [textoBuscar]="textoBuscar"
+  [isSubtable]="rel_prefix ? true : false"
+  [templateFila]="undefined"
+  [smallTable]="false"
+  [softDelete]="false"
+  (crearNuevo)="(null)"
+  (alCrear)="(null)"
+  (alActualizar)="(null)"
+  (alFiltrar)="(null)"
+  (alEditar)="(null)"
+  campoEstado="estado"
+  valueEstado="habilitado"
+  (alHabilitar)="habilitar($event, tabla, 'habilitar')"
+  (alDeshabilitar)="habilitar($event, tabla, 'inhabilitar')"
+  [botonExportar]="false"
+  [botonImportar]="false"
+  [botonNuevo]="false"
+  [conOpciones]="false"
+  [templateFila]="templateFila">
+</krn-tabla>
+
+<ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras" >
+  <ng-template ngFor let-campo [ngForOf]="cabeceras">
+    <ng-template *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"></ng-template>
+    <ng-template #tempTD>
+      <td [ngSwitch]="campo">
+        <div *ngSwitchCase="'acciones'">
+          <ul class="list-unstyled hstack gap-1 mb-0">
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Ver Detalle">
+              <button class="btn btn-sm btn-info" [disabled]="fila.deleted" (click)="verDetalle(fila)"><i class="mdi mdi-eye"></i></button>
+            </li>
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Habilitar" *ngIf="fila.deleted">
+              <a class="btn btn-sm btn-success" (click)="habilitar(fila, tabla,'habilitar')"><i class="mdi mdi-power"></i></a>
+            </li>
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Inhabilitar" *ngIf="!fila.deleted">
+              <a  data-bs-toggle="modal" class="btn btn-sm btn-danger" (click)="habilitar(fila, tabla,'inhabilitar')"><i class="mdi mdi-power"></i></a>
+            </li>
+          </ul>
+        </div>
+        <div *ngSwitchCase="'deleted'">
+          <span *ngIf="!fila.deleted" class="badge bg-success font-size-10"><i class="mdi mdi-lock-open me-1"></i> Habilitado</span>
+          <span *ngIf="fila.deleted" class="badge bg-danger font-size-10"><i class="mdi mdi-lock me-1"></i> Inhabilitado</span>
+        </div>
+        <div *ngSwitchDefault>
+          {{fila[campo]}}
+        </div>
+      </td>
+    </ng-template>
+  </ng-template>
+</ng-template>

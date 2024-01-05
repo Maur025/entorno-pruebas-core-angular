@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="listaResponsables">
+    <div class="mb-3 nav col-12 px-1">
       <label class="col-3 col-form-label">(*) Responsable</label>
       <div class="col-9">
         <ng-select class="uppercase" formControlName="responsableId" placeholder="Seleccione un responsable" [ngClass]="{ 'ngselect-invalid': submitted && form['responsableId'].errors != null }">
