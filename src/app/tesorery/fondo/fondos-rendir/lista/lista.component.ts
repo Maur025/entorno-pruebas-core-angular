@@ -44,7 +44,7 @@ export class ListaRendirComponent implements OnInit{
   getCabeceras() {
     return {
       cabeceras: {
-        "acciones": this.getOpcionesCabecera('Acciones', 12),
+        "acciones": this.getOpcionesCabecera('Acciones', 12,'text', true, false),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
         "nombre": this.getOpcionesCabecera('Nombre', 12),
         "nroSolicitud": this.getOpcionesCabecera('Nro Solicitud', 12),
@@ -54,18 +54,18 @@ export class ListaRendirComponent implements OnInit{
         "reponsable": this.getOpcionesCabecera('Responsable', 12),
         "aperturado": this.getOpcionesCabecera('Aperturado', 12),
         "cierre": this.getOpcionesCabecera('Cerrado', 12),
-        "estado": this.getOpcionesCabecera('Estado', 6),
+        "deleted": this.getOpcionesCabecera('Estado', 6),
       }
     };
   }
 
-  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true) {
+  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true, sorteable: boolean =true) {
     return {
       "visible": visible,
       "buscable": true,
       "buscableCheck": true,
       "visibleCheck": visible,
-      "sortable": true,
+      "sortable": sorteable,
       "filtrable": true,
       "texto": texto,
       "colsize": colsize,

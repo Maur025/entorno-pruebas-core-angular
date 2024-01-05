@@ -36,7 +36,6 @@ export const MENU: MenuItem[] = [
       },
     ]
   },
-
   {
     id: 30,
     label: 'Anticipos',
@@ -59,11 +58,11 @@ export const MENU: MenuItem[] = [
         label: 'Adm. Fondos Operativos',
         link: 'fondo/operativos',
       },
-      {
+      /* {
         id: 402,
         label: 'Adm. Fondos de Caja',
         link: 'fondo/caja',
-      },
+      }, */
       {
         id: 403,
         label: 'Adm. Fondos a Rendir',
@@ -82,7 +81,31 @@ export const MENU: MenuItem[] = [
         link: 'devengado',
       },
     ]
-  }
+  },
+  {
+    id: 60,
+    label: 'Créditos',
+    icon: 'fa-hand-holding-usd fas',
+    subItems: [
+      {
+        id: 601,
+        label: 'Administrar creditos',
+        link: 'credito',
+      },
+    ]
+  },
+  {
+    id: 70,
+    label: 'Configuración',
+    icon: 'mdi mdi-cog',
+    subItems: [
+      {
+        id: 701,
+        label: 'Pagos al Contado',
+        link: 'configuracion/pagoContado',
+      },
+    ]
+  },
   /* {
     id: 50,
     label: 'Rendiciones',

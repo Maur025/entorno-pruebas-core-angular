@@ -40,7 +40,7 @@
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar" *ngIf="fila.saldo == 0 && fila.cierre == false">
               <button class="btn btn-sm btn-soft-danger" (click)="cerrar(fila, tabla)"><i class="mdi mdi-lock"></i></button>
             </li>
-            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Descargos" *ngIf="fila.aperturado && fila.saldo != 0">
+            <!-- <li data-bs-toggle="tooltip" data-bs-placement="top" title="Descargos" *ngIf="fila.aperturado && fila.saldo != 0">
               <div class="btn-group" dropdown container="body" [isDisabled]="fila.deleted">
                 <button id="button-basic" dropdownToggle type="button" class="btn btn-sm btn-light dropdown-toggle" aria-controls="dropdown-basic">
                   <i class="mdi mdi-cogs"></i><span class="mdi mdi-chevron-down"></span>
@@ -49,12 +49,8 @@
                   <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'RENDIDO')">Rendición <i class="mdi mdi-transfer-down"></i></button></li>
                   <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'REPOSICIÓN')">Reposición <i class="mdi mdi-restore-alert"></i></button></li>
                   <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'DEVOLUCIÓN')">Devolución <i class="mdi mdi-sync"></i></button></li>
-                  <!-- <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'DEVOLUCIÓN')">Cierre <i class="mdi mdi-close"></i></button></li> -->
                 </ul>
               </div>
-            </li>
-            <!-- <li data-bs-toggle="tooltip" data-bs-placement="top" title="Descargos" *ngIf="fila.aperturado && fila.saldo != 0">
-              <button class="btn btn-sm btn-light" [disabled]="fila.deleted" (click)="descargos(fila, modalGeneral)"><i class="mdi mdi-transfer-down"></i></button>
             </li> -->
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Detalle fondo" *ngIf="fila.aperturado">
               <button class="btn btn-sm btn-info" (click)="detalleFondo(fila)"><i class="mdi mdi-eye"></i></button>
@@ -82,7 +78,7 @@
         <div *ngSwitchCase="'cierre'" class="text-center">
           <span class="badge font-size-12" style="width: 30px;" [ngClass]="{'bg-success': fila.cierre, 'bg-secondary': !fila.cierre}">{{fila.cierre==true ? 'SI' : 'NO'}}</span>
         </div>
-        <div *ngSwitchCase="'estado'">
+        <div *ngSwitchCase="'deleted'">
           <span *ngIf="!fila.deleted" class="badge bg-success font-size-10"><i class="mdi mdi-lock-open me-1"></i> Habilitado</span>
           <span *ngIf="fila.deleted" class="badge bg-danger font-size-10"><i class="mdi mdi-lock me-1"></i> Inhabilitado</span>
         </div>

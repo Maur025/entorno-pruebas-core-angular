@@ -5,7 +5,6 @@ import { WidgetModule } from 'src/app/shared/widget/widget.module';
 import { UIModule } from 'src/app/shared/ui/ui.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { FechasimplePipe } from 'src/app/core/pipes/fechasimple.pipe';
 import { HerramientasModule } from 'src/app/core/herramientas/herramientas.module';
 
 import { FondoRoutingModule } from './fondo-routing.module';
@@ -28,7 +27,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     FondosOperativosComponent,
     FormularioOperativoComponent,
     ListaOperativoComponent,
-    FechasimplePipe,
     DetalleFondoComponent,
     FondosCajaComponent,
     FormularioCajaComponent,
@@ -54,7 +52,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     FondosOperativosComponent,
     FormularioOperativoComponent,
     ListaOperativoComponent,
-    FechasimplePipe,
     DetalleFondoComponent,
     FondosCajaComponent,
     FormularioCajaComponent,

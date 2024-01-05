@@ -40,7 +40,7 @@
               <li data-bs-toggle="tooltip" data-bs-placement="top" title="Agregar Cuenta">
                 <button class="btn btn-sm btn-success" [disabled]="fila.deleted" (click)="crearCuenta(modalCuentaNueva, fila)"><i class="mdi mdi-credit-card-plus-outline"></i></button>
               </li>
-              <li data-bs-toggle="tooltip" data-bs-placement="top" title="Agregar Cuenta">
+              <li data-bs-toggle="tooltip" data-bs-placement="top" title="Ver Cuentas">
                 <button class="btn btn-sm btn-info" [disabled]="fila.deleted" (click)="verCuentas(fila)"><i class="mdi mdi-credit-card-multiple-outline"></i></button>
               </li>
               <li data-bs-toggle="tooltip" data-bs-placement="top" title="Habilitar" *ngIf="fila.deleted">
@@ -78,7 +78,6 @@
     <div class="hstack gap-2 justify-content-end">
       <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
       <button type="button" class="btn" [class]="{ 'btn-warning': titleModal == 'Editar', 'btn-success': titleModal != 'Editar'}" (click)="appFormBanco.guardar()" >{{titleModal == 'Editar' ? 'Guardar' : 'Registrar' }}</button>
-
     </div>
   </div>
 </ng-template>
