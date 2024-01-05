@@ -58,4 +58,8 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
       return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/${fondoId}/cierre`);
     }
 
+    aperturados(){
+      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/listarApertutados`);
+    }
+
   }
