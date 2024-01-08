@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { CreditoService } from "../../services/tesoreria/credito.service";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: 'app-lista',
@@ -19,11 +20,14 @@ export class ListaComponent implements OnInit {
   titulo:string = 'Lista de Créditos';
   formato: any;
   modalRef?: BsModalRef;
+  credito: any;
 
   constructor(
     public creditoService: CreditoService,
     private modalService: BsModalService,
     private NotificacionService: NotificacionService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -37,11 +41,11 @@ export class ListaComponent implements OnInit {
       cabeceras: {
         "acciones": this.getOpcionesCabecera('Acciones', 12,'text', true, false),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
+        "nroReferencia": this.getOpcionesCabecera('Nro Referencia', 12),
         "centroCosto": this.getOpcionesCabecera('Centro de Costos', 12),
         "fecha": this.getOpcionesCabecera('Fecha', 12),
         "estadoCredito": this.getOpcionesCabecera('Estado Credito', 12),
         "entidadReferencial": this.getOpcionesCabecera('Entidad Referencial', 12),
-        "nroReferencia": this.getOpcionesCabecera('Nro Referencia', 12),
         "monto": this.getOpcionesCabecera('Monto', 12),
         "saldo": this.getOpcionesCabecera('Saldo', 12),
         "deleted": this.getOpcionesCabecera('Estado', 6),
@@ -67,8 +71,10 @@ export class ListaComponent implements OnInit {
     this.modalService.hide();
   }
 
-  verDetalle(data:any){
-
+  verDetalle(data:any, template: any){
+    this.modalRef = this.modalService.show(template, {class: `modal-xl modal-scrollable`});
+    this.credito = data;
+    //this.router.navigate(['./detalle/' + data.id, {}], { relativeTo: this.route });
   }
 
   habilitar(data: any, component, texto) {

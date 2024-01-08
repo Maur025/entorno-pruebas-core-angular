@@ -1,1 +1,76 @@
-<p>detalle works!</p>
+<div class="container-fluid" *ngIf="credito">
+  <div class="nav col-12">
+    <div class="nav col-12 border-bottom">
+      <div class="col-4 mb-2 px-1">
+        <p class="ps-2">
+          <span class="fw-semibold semi" >Nro de Referencia:</span>
+          <span class="text-primary"> {{credito.nroReferencia}}</span>
+        </p>
+      </div>
+      <div class="col-4 mb-2 px-1">
+        <p class="ps-2">
+          <span class="fw-semibold semi" >Centro de Costos:</span>
+          <span class="text-primary"> {{credito.centroCosto.nombre}}</span>
+        </p>
+      </div>
+      <div class="col-4 mb-2 px-1">
+        <p class="ps-2">
+          <span class="fw-semibold semi" >Fecha:</span>
+          <span class="text-primary"> {{credito.fecha | fechaSimple}}</span>
+        </p>
+      </div>
+      <div class="col-4 mb-2 px-1">
+        <p class="ps-2">
+          <span class="fw-semibold semi" >Entidad Referencial:</span>
+          <span class="text-primary">{{credito.entidadReferencial.entidad.nombre}} ({{credito.entidadReferencial.tipoEntidad.tipo}})</span>
+        </p>
+      </div>
+      <div class="col-4 mb-2 px-1">
+        <p class="ps-2">
+          <span class="fw-semibold semi" >Monto:</span>
+          <span class="text-primary"> {{credito.monto}}</span>
+        </p>
+      </div>
+      <div class="col-4 mb-2 px-1">
+        <p class="ps-2">
+          <span class="fw-semibold semi" >Saldo</span>
+          <span class="text-primary"> {{credito.saldo}}</span>
+        </p>
+      </div>
+      <div class="col-4 mb-2 px-1">
+        <p class="ps-2">
+          <span class="fw-semibold semi" >Estado :</span>
+          <span class="text-primary"> {{credito.estadoCredito.nombre}}</span>
+        </p>
+      </div>
+    </div>
+    <div class="nav col-12 pt-3">
+      <div class="table-responsive w-100">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Descripción</th>
+              <th>Descripcion Pagado</th>
+              <th>Fecha a Pagar</th>
+              <th>Fecha Pagado</th>
+              <th>Estado</th>
+              <th>Monto</th>
+              <th>Monto Pagado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let detalle of credito.detalleCredito">
+              <td>{{detalle.descripcion}}</td>
+              <td>{{detalle.descripcionPagado}}</td>
+              <td>{{detalle.fechaPagar | fechaSimple}}</td>
+              <td>{{detalle.fechaPagado | fechaSimple}}</td>
+              <td>{{detalle.estadoCredito.nombre}}</td>
+              <td class="text-end">{{detalle.monto}}</td>
+              <td class="text-end">{{detalle.montoPagado}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
