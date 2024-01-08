@@ -34,7 +34,7 @@
         <div *ngSwitchCase="'acciones'">
           <ul class="list-unstyled hstack gap-1 mb-0">
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Ver Detalle">
-              <button class="btn btn-sm btn-info" [disabled]="fila.deleted" (click)="verDetalle(fila)"><i class="mdi mdi-eye"></i></button>
+              <button class="btn btn-sm btn-info" (click)="verDetalle(fila, modalDetalle)"><i class="mdi mdi-eye"></i></button>
             </li>
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Habilitar" *ngIf="fila.deleted">
               <a class="btn btn-sm btn-success" (click)="habilitar(fila, tabla,'habilitar')"><i class="mdi mdi-power"></i></a>
@@ -43,6 +43,18 @@
               <a  data-bs-toggle="modal" class="btn btn-sm btn-danger" (click)="habilitar(fila, tabla,'inhabilitar')"><i class="mdi mdi-power"></i></a>
             </li>
           </ul>
+        </div>
+        <div *ngSwitchCase="'centroCosto'">
+          {{fila.centroCosto.nombre}}
+        </div>
+        <div *ngSwitchCase="'fecha'">
+          {{fila.fecha | fechaSimple}}
+        </div>
+        <div *ngSwitchCase="'estadoCredito'">
+          {{fila.estadoCredito.nombre}}
+        </div>
+        <div *ngSwitchCase="'entidadReferencial'">
+          {{fila.entidadReferencial.entidad.nombre}} ({{fila.entidadReferencial.tipoEntidad.tipo}})
         </div>
         <div *ngSwitchCase="'deleted'">
           <span *ngIf="!fila.deleted" class="badge bg-success font-size-10"><i class="mdi mdi-lock-open me-1"></i> Habilitado</span>
@@ -54,4 +66,21 @@
       </td>
     </ng-template>
   </ng-template>
+</ng-template>
+
+<ng-template #modalDetalle role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Detalle de Crédito</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()"></button>
+  </div>
+  <div class="modal-body">
+    <!-- <app-formulario-entidad #appFormEntidad [entidad]="entidad" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-entidad> -->
+    <app-detalle [credito]="credito"></app-detalle>
+  </div>
+  <div class="modal-footer">
+    <div class="hstack gap-2 justify-content-end">
+      <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
+      <!-- <button type="button" class="btn btn-warning" (click)="appFormEntidad.guardar()">Guardar</button> -->
+    </div>
+  </div>
 </ng-template>
