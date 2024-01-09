@@ -56,10 +56,10 @@
           <div *ngSwitchCase="'fecha'">
             {{fila.fecha | date:"dd-MM-yyyy" }}  <!--  fechasimple (pipe) -->
           </div>
-          <div *ngSwitchCase="'monto'" class="text-end">
+          <div *ngSwitchCase="'monto'">
             {{fila.monto }}  
           </div>
-          <div *ngSwitchCase="'saldo'" class="text-end">
+          <div *ngSwitchCase="'saldo'">
             {{fila.saldo }}  
           </div>
         <div *ngSwitchDefault>

@@ -12,6 +12,7 @@ import { MedioTransferenciaService } from "src/app/tesorery/services/tesoreria/m
 import { EstadoAnticipoService } from '../../services/tesoreria/estadoanticipo.service';
 import { AplicacionAnticipoService } from '../../services/aplicacion-anticipo.service';
 import { FondoOperativoService } from '../../services/tesoreria/fondo-operativo.service';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 @Component({
   selector: 'app-formulario',
   templateUrl: './formulario.component.html',
@@ -79,9 +80,10 @@ export class FormularioComponent implements OnInit {
     private medioTransferenciaService: MedioTransferenciaService,
     private estadoAnticipoService: EstadoAnticipoService,
     private aplicacionAnticipoService: AplicacionAnticipoService,
-    private fondoOperativoService:FondoOperativoService
+    private fondoOperativoService:FondoOperativoService,
+    private _localeService: BsLocaleService
   ) {
-
+    this._localeService.use('es');
   }
 
   ngOnInit(): void {
@@ -101,10 +103,8 @@ export class FormularioComponent implements OnInit {
 
    
     if (this.anticipo) {
-      this.formGroup.addControl('estado', new FormControl(null, Validators.required));
-
       this.getEstadoAnticipo();
-
+      this.formGroup.removeControl('estado');
       this.formGroup.removeControl('centroCostoId');
       this.formGroup.removeControl('entidadReferencialId');
       this.formGroup.removeControl('ingresoEgreso');
@@ -114,13 +114,14 @@ export class FormularioComponent implements OnInit {
       this.formGroup.removeControl('descripcion');
       this.formGroup.removeControl('tipoOperacion');
 
-
+      this.formGroup.addControl('estado', new FormControl(null, Validators.required));
     }
     else {
       console.log('anticipo');
-      this.formGroup.addControl('tipoOperacion', new FormControl(null, Validators.required));
+      this.formGroup.removeControl('tipoOperacion');
       this.formGroup.removeControl('estado');
       this.formGroup.removeControl('ingresoEgreso');
+      this.formGroup.addControl('tipoOperacion', new FormControl(null, Validators.required));
       this.getFondoApertudados();
     }
   }
@@ -359,12 +360,15 @@ export class FormularioComponent implements OnInit {
   }
 
   removeFormMovimientoCuentaOperacion() {
-
+    
+    
     this.formGroup.removeControl('bancoId');
     this.formGroup.removeControl('cuentaBancoId');
     this.formGroup.removeControl('medioTransferenciaId');
     this.formGroup.removeControl('descripcion');
+    
     this.formGroup.addControl('fondoOperativoId', new FormControl(null, Validators.required));
+    
 
   }
   addFormMovimientoCuentaOperacion() {
@@ -373,6 +377,7 @@ export class FormularioComponent implements OnInit {
     this.formGroup.addControl('cuentaBancoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('medioTransferenciaId', new FormControl(null, Validators.required));
     this.formGroup.removeControl('ingresoEgreso');
+    this.formGroup.removeControl('fondoOperativoId');
   }
   
   

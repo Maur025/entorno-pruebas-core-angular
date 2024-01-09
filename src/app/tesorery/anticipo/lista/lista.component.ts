@@ -5,13 +5,15 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnticipoService } from '../../services/tesoreria/anticipo.service';
+import { FuncionesComponent } from '../../funciones.component';
+
 
 @Component({
   selector: 'app-lista',
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.scss']
 })
-export class ListaComponent implements OnInit {
+export class ListaComponent extends FuncionesComponent implements OnInit  {
 
 
   
@@ -38,31 +40,21 @@ export class ListaComponent implements OnInit {
   servicio = null;
   anticipo:any;
   anticipoData:any;
-
+  
   constructor(
     public AnticipoService: AnticipoService,
-    private modalService: BsModalService,
+    public modalService: BsModalService,
     private NotificacionService: NotificacionService,
     private route: ActivatedRoute,
     private router: Router
-  ){}
+  ){
+    super();
+  }
 
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true }];
     if (this.rel_prefix) this.servicio.setPrefix(this.rel_prefix);
-    this.formato = {
-      cabeceras:{
-        "acciones" : {"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Acciones","colsize":"12","filtrotipo":"number"},
-        "id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"ID","colsize":"12","filtrotipo":"text"},
-        "centroCosto":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Centro Costo","colsize":"12","filtrotipo":"text"},
-        "entidadReferencial":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Proveedor","colsize":"12","filtrotipo":"number"},
-        "fecha":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Fecha","colsize":"6","filtrotipo":"fecha"},
-        "nroReferencia":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Nro Referencia","colsize":"12","filtrotipo":"text"},
-        "monto":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Monto","colsize":"12","filtrotipo":"text"},
-        "saldo":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Saldo","colsize":"12","filtrotipo":"text"},
-        "estado":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":false,"filtrable":true,"texto":"Estado","colsize":"12","filtrotipo":"text"},
-      }
-    };
+    this.formato = this.cabecera();
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
   }
 
@@ -72,24 +64,23 @@ export class ListaComponent implements OnInit {
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
+ cabecera = () =>  {
+  return {
+    cabeceras: {
+      "acciones": this.getOpcionesCabecera('Acciones', 12,'text', true, false),
+      "id" : this.getOpcionesCabecera('ID',0,'text',false) ,
+      "centroCosto": this.getOpcionesCabecera('Centro Costo', 12,'text', true, true),
+      "entidadReferencial": this.getOpcionesCabecera('Proveedor', 12,'text', true, true),
+      "nroReferencia": this.getOpcionesCabecera('Nro Referencia', 12,'text', true, true),
+      "monto": this.getOpcionesCabecera('Monto', 12,'text', true, true),
+      "saldo": this.getOpcionesCabecera('Saldo', 12,'text', true, true),
+      "estado": this.getOpcionesCabecera('Estado', 12,'text', true, false)
+    }
+  }
+ } 
+
  
- /* habilitar(data: any, component, texto) {
-    this.NotificacionService.inhabilitarAlerta(texto, (response: any) => {
-      if (response) {
-        this.CuentaBancoService.habilitar(data.id).subscribe(
-          (data) => {
-            let estado='';
-            component.obtenerDatos();
-            texto == 'habilitar'? estado='habilitado' : estado='inhabilitado';
-            this.NotificacionService.successStandar('Registro '+estado+' exitosamente.');
-          },
-          (error) => {
-            this.NotificacionService.alertError(error);
-          }
-        );
-      }
-    });
-  }*/
+
   verDetalleAnticipo(id){
     this.router.navigate(['anticipo', id,'aplicacion']);
   }
@@ -114,11 +105,7 @@ export class ListaComponent implements OnInit {
     });
   }
 
-  cerrarModal(){
-    this.modalService.hide();
-    this.titleModal = '';
-
-  }
+ 
 
 
 
@@ -130,5 +117,11 @@ export class ListaComponent implements OnInit {
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   
   }
+
+  cerrarModal(){
+    this.modalService.hide();
+    this.titleModal = '';
+  }
+  
 
 }
