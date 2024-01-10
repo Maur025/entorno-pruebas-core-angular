@@ -229,24 +229,20 @@ export class NotificacionService {
         msg.push(`Se ha producido un inconveniente y el servidor ha respondido con el(los) siguiente(s) error(es):`);
         break;
       case 401:
-
         msg.push(`Usuario no autorizado, por favor inicie su sesión nuevamente.`);
         llamado_accion = () => window.location.reload();
         break;
       case 403:
         msg.push(`Usuario no tiene los permisos necesarios `);
         break;
-
       case 404:
         msg.push(`No se puedo encontrar el contenido solicitado `);
         break;
       case 500:
-        console.log('New');
         msg.push(`Error interno en servidor, no puede Intepretar, o el servicio no se encuentra disponible  `);
         break;
       case 505:
         msg.push(`La versión de HTTP usada en la petición no está soportada por el servidor. `);
-        console.log('New');
         break;
 
       default:

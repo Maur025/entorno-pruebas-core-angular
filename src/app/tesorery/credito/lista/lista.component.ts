@@ -13,11 +13,11 @@ export class ListaComponent implements OnInit {
 
   breadCrumbItems: Array<{}>;
   breadCrumbTitle: string = 'Adminstrar Créditos';
-  textoBuscar = 'Ingrese criterio de busqueda: nombre y nit/ci'
+  textoBuscar = 'Ingrese criterio de busqueda: nro de referecia'
   @Input() rel_prefix: any;
   @Input() rel_field: any;
   @Input() rel_id: any;
-  titulo:string = 'Lista de Créditos';
+  titulo: string = 'Lista de Créditos';
   formato: any;
   modalRef?: BsModalRef;
   credito: any;
@@ -28,18 +28,18 @@ export class ListaComponent implements OnInit {
     private NotificacionService: NotificacionService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true }];
     this.formato = this.getCabeceras();
-    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
+    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false; this.formato.cabeceras[this.rel_field].visibleCheck = false }
   }
 
   getCabeceras() {
     return {
       cabeceras: {
-        "acciones": this.getOpcionesCabecera('Acciones', 12,'text', true, false),
+        "acciones": this.getOpcionesCabecera('Acciones', 12, 'text', true, false),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
         "nroReferencia": this.getOpcionesCabecera('Nro Referencia', 12),
         "centroCosto": this.getOpcionesCabecera('Centro de Costos', 12),
@@ -53,7 +53,7 @@ export class ListaComponent implements OnInit {
     };
   }
 
-  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true, sorteable: boolean =true) {
+  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true, sorteable: boolean = true) {
     return {
       "visible": visible,
       "buscable": true,
@@ -67,12 +67,12 @@ export class ListaComponent implements OnInit {
     }
   }
 
-  cerrarModal(){
+  cerrarModal() {
     this.modalService.hide();
   }
 
-  verDetalle(data:any, template: any){
-    this.modalRef = this.modalService.show(template, {class: `modal-xl modal-scrollable`});
+  verDetalle(data: any, template: any) {
+    this.modalRef = this.modalService.show(template, { class: `modal-xl modal-scrollable` });
     this.credito = data;
     //this.router.navigate(['./detalle/' + data.id, {}], { relativeTo: this.route });
   }
@@ -80,17 +80,14 @@ export class ListaComponent implements OnInit {
   habilitar(data: any, component, texto) {
     this.NotificacionService.inhabilitarAlerta(texto, (response: any) => {
       if (response) {
-        this.creditoService.habilitar(data.id).subscribe(
-          (data) => {
-            let estado='';
-            component.obtenerDatos();
-            texto == 'habilitar'? estado='habilitado' : estado='inhabilitado';
-            this.NotificacionService.successStandar('Registro '+estado+' exitosamente.');
-          },
-          (error) => {
-            this.NotificacionService.alertError(error);
-          }
-        );
+        this.creditoService.habilitar(data.id).subscribe((data) => {
+          let estado = '';
+          component.obtenerDatos();
+          texto == 'habilitar' ? estado = 'habilitado' : estado = 'inhabilitado';
+          this.NotificacionService.successStandar('Registro ' + estado + ' exitosamente.');
+        }, (error) => {
+          this.NotificacionService.alertError(error);
+        });
       }
     });
   }
