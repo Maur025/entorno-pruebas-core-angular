@@ -30,4 +30,8 @@ export class EstadosService {
   habilitadosDevengados() {
     return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/devengados`);
   }
+
+  habilitadosSagas() {
+    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/sagas`);
+  }
 }

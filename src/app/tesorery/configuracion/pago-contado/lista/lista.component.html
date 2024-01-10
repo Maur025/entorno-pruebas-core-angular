@@ -49,8 +49,7 @@
           <span *ngFor="let medio of fila.medioTransferencias" class="badge bg-secondary font-size-12 mx-1">{{medio.medio}}</span>
         </div>
         <div *ngSwitchCase="'deleted'">
-          <span *ngIf="!fila.deleted" class="badge bg-success font-size-10"><i class="mdi mdi-lock-open me-1"></i> Habilitado</span>
-          <span *ngIf="fila.deleted" class="badge bg-danger font-size-10"><i class="mdi mdi-lock me-1"></i> Inhabilitado</span>
+          <span class="badge font-size-10" [ngClass]="{'bg-danger': fila.deleted, 'bg-success': !fila.deleted}"><i class="mdi me-1" [ngClass]="{'mdi-lock': fila.deleted, 'mdi-lock-open': !fila.deleted}"></i> {{fila.deleted ? 'Inhabilitado': 'Habilitado'}}</span>
         </div>
         <div *ngSwitchDefault>
           {{fila[campo]}}

@@ -13,13 +13,19 @@ import { PagoContadoComponent } from './pago-contado/pago-contado.component';
 import { FormularioPagosComponent } from './pago-contado/formulario/formulario.component';
 import { ListaPagosComponent } from './pago-contado/lista/lista.component';
 import { UiSwitchModule } from 'ngx-ui-switch';
-
+import { TransaccionesKafkaComponent } from './transacciones-kafka/transacciones-kafka.component';
+import { ListaTransaccionesComponent } from './transacciones-kafka/lista/lista.component';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 @NgModule({
   declarations: [
     PagoContadoComponent,
     FormularioPagosComponent,
     ListaPagosComponent,
+    TransaccionesKafkaComponent,
+    ListaTransaccionesComponent,
   ],
   imports: [
     CommonModule,
@@ -30,6 +36,9 @@ import { UiSwitchModule } from 'ngx-ui-switch';
     WidgetModule,
     UIModule,
     BsDatepickerModule.forRoot(),
+    BsDropdownModule.forRoot(),
+    TabsModule.forRoot(),
+    TooltipModule.forRoot(),
     HerramientasModule,
     UiSwitchModule,
   ],
@@ -37,6 +46,8 @@ import { UiSwitchModule } from 'ngx-ui-switch';
     PagoContadoComponent,
     FormularioPagosComponent,
     ListaPagosComponent,
+    TransaccionesKafkaComponent,
+    ListaTransaccionesComponent,
   ]
 })
 export class ConfiguracionModule { }

@@ -104,6 +104,11 @@ export const MENU: MenuItem[] = [
         label: 'Pagos al Contado',
         link: 'configuracion/pagoContado',
       },
+      {
+        id: 702,
+        label: 'Transacciones Kafka',
+        link: 'configuracion/transaccionesKafka',
+      },
     ]
   },
   /* {
