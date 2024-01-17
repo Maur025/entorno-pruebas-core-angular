@@ -45,7 +45,7 @@
               <li data-bs-toggle="tooltip" data-bs-placement="top" title="Operaciones">
                 <div class="btn-group" dropdown container="body" [isDisabled]="fila.deleted || opciones.length == 0" [insideClick]="true">
                   <button id="button-basic" dropdownToggle type="button" class="btn btn-sm btn-info dropdown-toggle" aria-controls="dropdown-basic">
-                    <i class="mdi mdi-cogs"></i><span class="mdi mdi-chevron-down"></span>
+                    <i class="fas fa-cogs"></i><span class="mdi mdi-chevron-down"></span>
                   </button>
                   <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu text-center"role="menu" aria-labelledby="button-basic" >
                     <ng-template ngFor let-estado [ngForOf]="opciones" let-index="index">
