@@ -15,10 +15,6 @@ import { FuncionesComponent } from '../../funciones.component';
 })
 export class ListaComponent extends FuncionesComponent implements OnInit  {
 
-
-  
-
-
   @ViewChild('appFormAnticipo') appFormAnticipo: FormularioComponent;
 
   breadCrumbItems: Array<{}>;
@@ -31,8 +27,6 @@ export class ListaComponent extends FuncionesComponent implements OnInit  {
   @Input() id;
   @Input() direccion = true;
   titleModal: any;
-
-
   editCreateWithModal = false;
   dataEdit = null;
   modalRef?: BsModalRef;
@@ -40,7 +34,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit  {
   servicio = null;
   anticipo:any;
   anticipoData:any;
-  
+
   constructor(
     public AnticipoService: AnticipoService,
     public modalService: BsModalService,
@@ -77,15 +71,11 @@ export class ListaComponent extends FuncionesComponent implements OnInit  {
       "estado": this.getOpcionesCabecera('Estado', 12,'text', true, false)
     }
   }
- } 
-
- 
+ }
 
   verDetalleAnticipo(id){
     this.router.navigate(['anticipo', id,'aplicacion']);
   }
-
-
 
   eliminar(data: any, component) {
     this.NotificacionService.alertaEliminacion(data.nombre, (response: any) => {
@@ -105,23 +95,16 @@ export class ListaComponent extends FuncionesComponent implements OnInit  {
     });
   }
 
- 
-
-
-
   aplicacionAnticipo(data: any, template: any){
     //this.fondo = data;
     this.anticipo = true;
     this.anticipoData = data;
     this.titleModal = 'Movimiento';
     this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
-  
   }
 
   cerrarModal(){
     this.modalService.hide();
     this.titleModal = '';
   }
-  
-
 }

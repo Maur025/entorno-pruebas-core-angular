@@ -69,7 +69,8 @@
   <div class="modal-footer">
     <div class="hstack gap-2 justify-content-end">
       <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
-      <button type="button" class="btn btn-warning" (click)="appFormEntidad.guardar()">Guardar</button>
+      <button type="button" class="btn" [class]="{ 'btn-warning': titleModal == 'Editar', 'btn-success': titleModal != 'Editar'}" (click)="appFormEntidad.guardar()" >{{titleModal == 'Editar' ? 'Guardar' : 'Registrar' }}</button>
+
     </div>
   </div>
 </ng-template>

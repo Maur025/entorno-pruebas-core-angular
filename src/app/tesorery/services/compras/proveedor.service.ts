@@ -7,10 +7,10 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
 @Injectable({
     providedIn: 'root'
   })
-  export class EmpleadosService {
+  export class ProveedorService {
 
-    apiName:string = 'empleado';
-    entitys:string = 'Bancos';
+    apiName:string = 'proveedor';
+    entitys:string = 'Proveedor';
     apiUrl:string = '' ;
     prefix:string = '';
     constructor(private http: HttpClient, private apiService : ConsumoApiService) { }
@@ -19,7 +19,7 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
       this.prefix = prefix;
     }
 
-    searchEmpleado(keyword :any ){
-      return this.apiService.compras.get(`${this.apiUrl}${this.prefix}/${this.apiName}/search?keyword=${keyword}`);
+    searchProveedor(keyword :any ){
+      return this.apiService.compras.post(`${this.apiUrl}${this.prefix}/${this.apiName}/filter`, {keyword:keyword});
     }
   }

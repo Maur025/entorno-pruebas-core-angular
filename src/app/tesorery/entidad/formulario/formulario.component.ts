@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, ViewChild, OnInit, } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { EntidadService } from "src/app/tesorery/services/tesoreria/entidad.service";
-import { EmpleadosService } from "src/app/tesorery/services/compras/empleados.service";
+import { ProveedorService } from "src/app/tesorery/services/compras/proveedor.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 
 @Component({
@@ -29,7 +29,7 @@ export class FormularioComponent implements OnInit {
   constructor(
     private FormBuilder: FormBuilder,
     private entidadService: EntidadService,
-    private empleadosService: EmpleadosService,
+    private proveedorService: ProveedorService,
     private notificacionService: NotificacionService,
   ){}
 
@@ -100,7 +100,7 @@ export class FormularioComponent implements OnInit {
       if (event.id) {
         this.form['refId'].setValue(event.id);
         this.form['nombre'].setValue(event.nombre);
-        this.form['nitCi'].setValue(event.numeroDocumento);
+        this.form['nitCi'].setValue(event.nitCi);
       } else {
         this.form['refId'].setValue(null);
       }
@@ -123,7 +123,7 @@ export class FormularioComponent implements OnInit {
         break;
       case "PROVEEDOR":
         /* busca en el modulo de compras */
-        this.empleadosService.searchEmpleado(keyword).subscribe(data =>{
+        this.proveedorService.searchProveedor(keyword).subscribe(data =>{
           this.datos_entidad = data.content;
         })
         break;
