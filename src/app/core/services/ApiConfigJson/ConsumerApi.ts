@@ -25,11 +25,11 @@ export class ConsumerApi implements IConsumer {
     return this.http.get<any>(this.url_json);
   }
   private getURI(data: any) {
-    if (environment.production) {
-      return data[this.key_json];
-    } else {
-      return data[this.key_json].substring(data[this.key_json].search('/api/'), data[this.key_json].length);
-    }
+    let path = data[this.key_json];
+    if (!environment.production) {
+      path = path.substring(path.search('/api/'),path.length);
+    } 
+    return path;
   }
 
 }

@@ -1,8 +1,30 @@
 {
+    "/api/contabilidad/*": {
+        "target": "http://localhost:8081",
+        "secure": false,
+        "changeOrigin": true,
+        "rejectUnauthorized": false,
+        "logLevel": "debug"
+    },
+    "/api/v1/*": {
+        "target": "https://sandbox-kbi-inventarios-api.kernotec.com",
+        "secure": false,
+        "changeOrigin": true,
+        "rejectUnauthorized": false,
+        "logLevel": "debug"
+    },
+    "/api/compras/*": {
+        "target": "https://sandbox-kbi-compras-api.kernotec.com",
+        "secure": false,
+        "changeOrigin": true,
+        "rejectUnauthorized": false,
+        "logLevel": "debug"
+    },
     "/api/tesoreria/*": {
         "target": "http://localhost:8082",
         "secure": false,
-        "logLevel": "debug",
-        "changeOrigin": true
+        "changeOrigin": true,
+        "rejectUnauthorized": false,
+        "logLevel": "debug"
     }
 }
