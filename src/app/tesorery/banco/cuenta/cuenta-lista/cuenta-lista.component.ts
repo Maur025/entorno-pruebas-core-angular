@@ -51,6 +51,7 @@ export class CuentaListaComponent {
         "acciones": this.getOpcionesCabecera('Acciones', 12),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
         "nroCuenta": this.getOpcionesCabecera('Nro Cuenta', 12),
+        "descripcion": this.getOpcionesCabecera('Descripción', 12),
         /* "banco": this.getOpcionesCabecera('Banco', 12), */
         "moneda": this.getOpcionesCabecera('Moneda', 12),
         "estado": this.getOpcionesCabecera('Estado', 6),

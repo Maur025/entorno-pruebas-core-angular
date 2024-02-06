@@ -39,10 +39,10 @@
               </li>
               <li data-bs-toggle="tooltip" data-bs-placement="top" title="Aplicacion">
                 <button class="btn btn-sm btn-info" style="transform: scale(0.8);" (click)="verDetalleAnticipo(fila.id)"><i class="mdi mdi-eye"></i></button>
-              </li>             
+              </li>
             </ul>
         </div>
-        
+
         <div *ngSwitchCase="'estado'">
             <div *ngIf="!fila.deleted" class="badge bg-success font-size-10"><i class="mdi mdi-lock-open me-1"></i> Habilitado</div>
             <div *ngIf="fila.deleted" class="badge bg-danger font-size-10"><i class="mdi mdi-lock me-1"></i> Inhabilitado</div>
@@ -54,13 +54,13 @@
             {{fila.entidadReferencial.entidad.nombre}}
           </div>
           <div *ngSwitchCase="'fecha'">
-            {{fila.fecha | date:"dd-MM-yyyy" }}  <!--  fechasimple (pipe) -->
+            {{fila.fecha | fechaSimple}}  <!--  fechasimple (pipe) -->
           </div>
           <div *ngSwitchCase="'monto'">
-            {{fila.monto }}  
+            {{fila.monto }}
           </div>
           <div *ngSwitchCase="'saldo'">
-            {{fila.saldo }}  
+            {{fila.saldo }}
           </div>
         <div *ngSwitchDefault>
             <td>{{fila[campo]}}</td>
