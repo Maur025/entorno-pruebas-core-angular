@@ -1,5 +1,5 @@
 import { Component, ComponentFactoryResolver, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { CentrocostoService } from '../../services/tesoreria/centrocosto.service';
@@ -41,35 +41,36 @@ export class FormularioComponent implements OnInit {
   listaCentroCostos: any;
   tipoEntidadId: any = null;
   listaEstadoAnticipo: any;
-  listaFondoAperturados:any;
-
+  listaFondoAperturados: any;
   listaBancos: any;
   listaCuentasBanco: any;
   listaMedioTransferencias: any;
+  montoTotal: number = 0;
+  listaOperaciones = [];
 
   dateNow = new Date((new Date).setHours(23, 59, 59, 999));
 
 
   inout: number = 0;
-  operacion:any;
+  operacion: any;
 
   ingresoEgreso: any = [
     { value: "IN", name: "INGRESO" },
     { value: "OUT", name: "EGRESO" },
   ];
-  
+
 
   tipoOperacion: any = [
-    { value: "BN", name: "BANCO" },
-    { value: "FNDO", name: "FONDO OPERATIVO" },
+    { value: "BN", name: "Banco" },
+    { value: "FNDO", name: "Fondo Operativo" },
     //{ value: "FNDR", name: "FONDO A RENDIR" },
   ];
-  
+
 
   constructor(
     private readonly router: Router,
     private route: ActivatedRoute,
-    private FormBuilder: FormBuilder,
+    private formBuilder: FormBuilder,
     private notificacionService: NotificacionService,
     private centroCostoService: CentrocostoService,
     private entidadService: EntidadService,
@@ -80,14 +81,14 @@ export class FormularioComponent implements OnInit {
     private medioTransferenciaService: MedioTransferenciaService,
     private estadoAnticipoService: EstadoAnticipoService,
     private aplicacionAnticipoService: AplicacionAnticipoService,
-    private fondoOperativoService:FondoOperativoService,
+    private fondoOperativoService: FondoOperativoService,
     private _localeService: BsLocaleService
   ) {
     this._localeService.use('es');
   }
 
   ngOnInit(): void {
-    this.formGroup = this.FormBuilder.group(this.fieldsFormValidation());
+    this.formGroup = this.formBuilder.group(this.fieldsFormValidation());
     //this.maxDate = this.dateNow;
     if (!this.maxDate) this.maxDate = this.dateNow;
     this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true },];
@@ -101,7 +102,7 @@ export class FormularioComponent implements OnInit {
       this.getEntidadReferencialTipoEntidad(uuid);
     });
 
-   
+
     if (this.anticipo) {
       this.getEstadoAnticipo();
       this.formGroup.removeControl('estado');
@@ -117,37 +118,30 @@ export class FormularioComponent implements OnInit {
       this.formGroup.addControl('estado', new FormControl(null, Validators.required));
     }
     else {
-      console.log('anticipo');
       this.formGroup.removeControl('tipoOperacion');
       this.formGroup.removeControl('estado');
       this.formGroup.removeControl('ingresoEgreso');
-      this.formGroup.addControl('tipoOperacion', new FormControl(null, Validators.required));
       this.getFondoApertudados();
     }
   }
 
-
-
-
   get form() {
     return this.formGroup.controls;
   }
+
   guardar() {
     this.submitted = true;
-    console.log(this.formGroup.valid);
-    if (this.formGroup.valid) {
+    if (this.formGroup.valid && this.montoTotal == this.form['monto'].value) {
       if (this.anticipo) {
-        
         let data = this.formGroup.value;
         data.saldo = this.anticipo.monto
         data.movimiento = "MOVIMIENTO DE PROVEEDOR";
         data.anticipoId = this.anticipoData.id;
-        if(this.inout == 1 ){          //devolucion
+        if (this.inout == 1) {          //devolucion
         }
-        else{          //compensacion
+        else {          //compensacion
         }
 
-        //console.log(this.anticipoData)
         this.aplicacionAnticipoService.register(data).subscribe((res: any) => {
           this.notificacionService.successStandar();
           this.alGuardar.emit(res);
@@ -155,14 +149,11 @@ export class FormularioComponent implements OnInit {
           this.notificacionService.alertError(err);
         }
         );
-
       } else {
-
         let data = this.formGroup.value;
         data.saldo = data.monto;
         data.origen = 'ANTICIPO';
         data.ingresoEgreso = 'OUT';
-
         this.anticipoService.register(data).subscribe((res: any) => {
           this.notificacionService.successStandar();
           this.alGuardar.emit(res);
@@ -195,7 +186,7 @@ export class FormularioComponent implements OnInit {
 
         let data = this.formGroup.value;
         data.saldo = data.monto;
-        data.ingresoEgreso='OUT';
+        data.ingresoEgreso = 'OUT';
         data.origen = 'ANTICIPO';
 
         this.anticipoService.register(data).subscribe((res: any) => {
@@ -269,8 +260,8 @@ export class FormularioComponent implements OnInit {
       this.listaEstadoAnticipo = data.content;
     });
   }
-  getFondoApertudados(){
-    this.fondoOperativoService.aperturados().subscribe( fondo =>{
+  getFondoApertudados() {
+    this.fondoOperativoService.aperturados().subscribe(fondo => {
       this.listaFondoAperturados = fondo.content
     })
   }
@@ -278,20 +269,14 @@ export class FormularioComponent implements OnInit {
   fieldsFormValidation() {
     return {
       id: [, []],
-      monto: [, [Validators.required]],
       fecha: [, [Validators.required]],
-      ingresoEgreso: [, [Validators.required]],
-      nroReferencia: [, [Validators.required]],
-      centroCostoId: [, [Validators.required]],
       entidadReferencialId: [, [Validators.required]],
-      descripcion: [, [Validators.required]],
-      bancoId: [, [Validators.required]],
-      cuentaBancoId: [, [Validators.required]],
-      medioTransferenciaId: [, [Validators.required]],
+      centroCostoId: [, [Validators.required]],
+      nroReferencia: [, [Validators.required]],
+      ingresoEgreso: [, [Validators.required]],
       estado: [, []],
-      tipoOperacion: [, []],
-      //nombre: [, []],
-      fondoOperativoId: [, []],
+      monto: [, [Validators.required, Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
+      operaciones: this.formBuilder.array([])
     };
   }
 
@@ -299,16 +284,16 @@ export class FormularioComponent implements OnInit {
     if (event.nombre === 'COMPENZACION') {
       this.inout = 2;
       this.formGroup.addControl('ingresoEgreso', new FormControl(null, Validators.required));
-    } 
+    }
     else {
 
-      if (event.nombre === 'DEVOLUCION'){
+      if (event.nombre === 'DEVOLUCION') {
         this.inout = 1;
         this.addFormMovimientoCuenta()
 
       }
       else {
-       // this.formGroup.removeControl('ingresoEgreso');
+        // this.formGroup.removeControl('ingresoEgreso');
         this.removeFormMovimientoCuenta()
         this.inout = 0;
       }
@@ -320,25 +305,25 @@ export class FormularioComponent implements OnInit {
 
   cambioOperacion(event: any) {
     console.log(event.value);
-    this.operacion=event.value;
+    this.operacion = event.value;
 
     switch (event.value) {
       case 'BN':
         this.addFormMovimientoCuentaOperacion();
-        this.inout = 1;        
+        this.inout = 1;
         break;
       case 'FNDO':
-        this.inout = 0;  
+        this.inout = 0;
         this.removeFormMovimientoCuentaOperacion();
         break;
-    /*  case 'FNDR':
-        this.inout = 0;  
-        this.removeFormMovimientoCuentaOperacion();
-        break; */
-     
+      /*  case 'FNDR':
+          this.inout = 0;
+          this.removeFormMovimientoCuentaOperacion();
+          break; */
+
     }
-    
-    
+
+
   }
 
   addFormMovimientoCuenta() {
@@ -360,15 +345,15 @@ export class FormularioComponent implements OnInit {
   }
 
   removeFormMovimientoCuentaOperacion() {
-    
-    
+
+
     this.formGroup.removeControl('bancoId');
     this.formGroup.removeControl('cuentaBancoId');
     this.formGroup.removeControl('medioTransferenciaId');
     this.formGroup.removeControl('descripcion');
-    
+
     this.formGroup.addControl('fondoOperativoId', new FormControl(null, Validators.required));
-    
+
 
   }
   addFormMovimientoCuentaOperacion() {
@@ -379,7 +364,87 @@ export class FormularioComponent implements OnInit {
     this.formGroup.removeControl('ingresoEgreso');
     this.formGroup.removeControl('fondoOperativoId');
   }
-  
-  
+
+  get operaciones(): FormArray {
+    return this.formGroup.get('operaciones') as FormArray
+  }
+
+  newOperacion(): FormGroup {
+    return this.formBuilder.group({
+      tipoOperacion: [, Validators.required],
+      monto: [0, [Validators.required, Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
+    })
+  }
+
+  addOperacion() {
+    this.listaOperaciones.push({ monto: 0 });
+    this.operaciones.push(this.newOperacion());
+
+  }
+
+  removeOperacion(index) {
+    this.listaOperaciones.splice(index, 1);
+    this.operaciones.removeAt(index);
+  }
+
+  cambiaOperacion(index) {
+    this.operaciones.controls[index]['controls']['monto'].setValue(0);
+    if (this.operaciones.controls[index]['controls']['tipoOperacion'].value != null) {
+      if (this.operaciones.controls[index]['controls']['tipoOperacion'].value == 'BN') {
+        this.operaciones.at(index)['addControl']('bancoId', new FormControl(null, Validators.required));
+        this.operaciones.at(index)['addControl']('cuentaBancoId', new FormControl(null, Validators.required));
+        this.operaciones.at(index)['addControl']('medioTransferenciaId', new FormControl(null, Validators.required));
+        this.operaciones.at(index)['addControl']('descripcion', new FormControl(null, Validators.required));
+        this.operaciones.at(index)['removeControl']('fondoOperativoId');
+      } else {
+        this.operaciones.at(index)['addControl']('fondoOperativoId', new FormControl(null, Validators.required));
+        this.operaciones.at(index)['removeControl']('bancoId');
+        this.operaciones.at(index)['removeControl']('cuentaBancoId');
+        this.operaciones.at(index)['removeControl']('medioTransferenciaId');
+        this.operaciones.at(index)['removeControl']('descripcion');
+      }
+    } else {
+      this.operaciones.at(index)['removeControl']('bancoId');
+      this.operaciones.at(index)['removeControl']('cuentaBancoId');
+      this.operaciones.at(index)['removeControl']('medioTransferenciaId');
+      this.operaciones.at(index)['removeControl']('descripcion');
+      this.operaciones.at(index)['removeControl']('fondoOperativoId');
+    }
+    this.calcularMontos();
+    if (this.form['monto'].value != null && (this.form['monto'].value - this.montoTotal)) {
+      this.operaciones.controls[index]['controls']['monto'].setValue(this.form['monto'].value - this.montoTotal);
+    } else {
+      this.operaciones.controls[index]['controls']['monto'].setValue(0);
+    }
+    this.calcularMontos();
+  }
+
+  cambiaBanco(index) {
+    if (this.operaciones.controls[index]['controls']['bancoId'].value != null) {
+      this.cuentaBancoService.getCuentasBanco(1000, 1, 'id', false, '', this.operaciones.controls[index]['controls']['bancoId'].value).subscribe(data => {
+        this.listaOperaciones[index].listaCuentasBanco = data.content;
+      }, (error) => {
+        this.notificacionService.alertError(error);
+      });
+    } else {
+      this.operaciones.controls[index]['controls']['cuentaBancoId'].setValue(null);
+      this.listaOperaciones[index].listaCuentasBanco = [];
+    }
+  }
+
+  calcularMontos(){
+    let formData = this.formGroup.value;
+    this.montoTotal = 0;
+    formData.operaciones.forEach(operacion => {
+      if (operacion.monto != null) {
+        this.montoTotal += Number(operacion.monto);
+      }
+    });
+  }
+
+  verificarOperaciones() {
+
+  }
+
 
 }

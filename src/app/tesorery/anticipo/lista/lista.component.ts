@@ -13,7 +13,7 @@ import { FuncionesComponent } from '../../funciones.component';
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.scss']
 })
-export class ListaComponent extends FuncionesComponent implements OnInit  {
+export class ListaComponent extends FuncionesComponent implements OnInit {
 
   @ViewChild('appFormAnticipo') appFormAnticipo: FormularioComponent;
 
@@ -32,8 +32,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit  {
   modalRef?: BsModalRef;
   formato: any;
   servicio = null;
-  anticipo:any;
-  anticipoData:any;
+  anticipo: any;
+  anticipoData: any;
 
   constructor(
     public AnticipoService: AnticipoService,
@@ -41,7 +41,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit  {
     private NotificacionService: NotificacionService,
     private route: ActivatedRoute,
     private router: Router
-  ){
+  ) {
     super();
   }
 
@@ -49,61 +49,60 @@ export class ListaComponent extends FuncionesComponent implements OnInit  {
     this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true }];
     if (this.rel_prefix) this.servicio.setPrefix(this.rel_prefix);
     this.formato = this.cabecera();
-    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
+    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false; this.formato.cabeceras[this.rel_field].visibleCheck = false }
   }
 
   crear(template: any) {
     this.anticipo = false;
     this.anticipoData = undefined;
-    this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
+    this.modalRef = this.modalService.show(template, { class: `modal-xl modal-scrollable` });
   }
 
- cabecera = () =>  {
-  return {
-    cabeceras: {
-      "acciones": this.getOpcionesCabecera('Acciones', 12,'text', true, false),
-      "id" : this.getOpcionesCabecera('ID',0,'text',false) ,
-      "centroCosto": this.getOpcionesCabecera('Centro Costo', 12,'text', true, true),
-      "entidadReferencial": this.getOpcionesCabecera('Proveedor', 12,'text', true, true),
-      "nroReferencia": this.getOpcionesCabecera('Nro Referencia', 12,'text', true, true),
-      "monto": this.getOpcionesCabecera('Monto', 12,'text', true, true),
-      "saldo": this.getOpcionesCabecera('Saldo', 12,'text', true, true),
-      "estado": this.getOpcionesCabecera('Estado', 12,'text', true, false)
+  cabecera = () => {
+    return {
+      cabeceras: {
+        "acciones": this.getOpcionesCabecera('Acciones', 12, 'text', true, false),
+        "id": this.getOpcionesCabecera('ID', 0, 'text', false),
+        "centroCosto": this.getOpcionesCabecera('Centro Costo', 12, 'text', true, true),
+        "entidadReferencial": this.getOpcionesCabecera('Proveedor', 12, 'text', true, true),
+        "nroReferencia": this.getOpcionesCabecera('Nro Referencia', 12, 'text', true, true),
+        "fecha": this.getOpcionesCabecera('Fecha', 12, 'text', true, true),
+        "monto": this.getOpcionesCabecera('Monto', 12, 'text', true, true),
+        "saldo": this.getOpcionesCabecera('Saldo', 12, 'text', true, true),
+        "estado": this.getOpcionesCabecera('Estado', 12, 'text', true, false)
+      }
     }
   }
- }
 
-  verDetalleAnticipo(id){
-    this.router.navigate(['anticipo', id,'aplicacion']);
+  verDetalleAnticipo(id) {
+    this.router.navigate(['anticipo', id, 'aplicacion']);
   }
 
   eliminar(data: any, component) {
     this.NotificacionService.alertaEliminacion(data.nombre, (response: any) => {
       if (response) {
-        this.servicio.delete(data.id).subscribe(
-          (data) => {
-            component.obtenerDatos();
-            this.NotificacionService.successStandar(
-              "Registro eliminado exitosamente."
-            );
-          },
-          (error) => {
-            this.NotificacionService.alertError(error);
-          }
+        this.servicio.delete(data.id).subscribe((data) => {
+          component.obtenerDatos();
+          this.NotificacionService.successStandar(
+            "Registro eliminado exitosamente."
+          );
+        }, (error) => {
+          this.NotificacionService.alertError(error);
+        }
         );
       }
     });
   }
 
-  aplicacionAnticipo(data: any, template: any){
+  aplicacionAnticipo(data: any, template: any) {
     //this.fondo = data;
     this.anticipo = true;
     this.anticipoData = data;
     this.titleModal = 'Movimiento';
-    this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
+    this.modalRef = this.modalService.show(template, { class: `modal-xl modal-scrollable` });
   }
 
-  cerrarModal(){
+  cerrarModal() {
     this.modalService.hide();
     this.titleModal = '';
   }

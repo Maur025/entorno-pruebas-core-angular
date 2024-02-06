@@ -14,6 +14,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WidgetModule } from 'src/app/shared/widget/widget.module';
 import { UIModule } from 'src/app/shared/ui/ui.module';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { NgxMaskModule } from 'ngx-mask';
 
 
 @NgModule({
@@ -32,7 +34,9 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     ReactiveFormsModule,
     WidgetModule,
     UIModule,
-    BsDatepickerModule
+    BsDatepickerModule,
+    CollapseModule.forRoot(),
+    NgxMaskModule.forRoot(),
   ]
 })
 export class AnticipoModule { }
