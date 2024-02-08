@@ -3,13 +3,14 @@ import { CuentaContadoMedioService } from "src/app/tesorery/services/tesoreria/c
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { FormularioPagosComponent } from '../formulario/formulario.component';
+import { FuncionesComponent } from 'src/app/tesorery/funciones.component';
 
 @Component({
   selector: 'app-lista',
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.scss']
 })
-export class ListaPagosComponent implements OnInit {
+export class ListaPagosComponent extends FuncionesComponent implements OnInit {
 
   @ViewChild('appFormPagoContado') appFormPagoContado: FormularioPagosComponent;
   textoBuscar = 'Ingrese criterio de busqueda: nombre y nit/ci'
@@ -26,7 +27,9 @@ export class ListaPagosComponent implements OnInit {
     public cuentaContadoMedioService: CuentaContadoMedioService,
     private modalService: BsModalService,
     private NotificacionService: NotificacionService,
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.formato = this.getCabeceras();
@@ -45,20 +48,6 @@ export class ListaPagosComponent implements OnInit {
         "deleted": this.getOpcionesCabecera('Estado', 6),
       }
     };
-  }
-
-  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true, sorteable: boolean = true) {
-    return {
-      "visible": visible,
-      "buscable": true,
-      "buscableCheck": true,
-      "visibleCheck": visible,
-      "sortable": sorteable,
-      "filtrable": true,
-      "texto": texto,
-      "colsize": colsize,
-      "filtrotipo": filtrotipo
-    }
   }
 
   crear(template: any) {

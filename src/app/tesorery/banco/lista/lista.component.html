@@ -38,10 +38,10 @@
                 <button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(modalGeneral, fila)"><i class="mdi mdi-pencil-outline"></i></button>
               </li>
               <li data-bs-toggle="tooltip" data-bs-placement="top" title="Agregar Cuenta">
-                <button class="btn btn-sm btn-success" [disabled]="fila.deleted" (click)="crearCuenta(modalCuentaNueva, fila)"><i class="mdi mdi-credit-card-plus-outline"></i></button>
+                <button class="btn btn-sm btn-success" [disabled]="fila.deleted" (click)="crearCuenta(modalCuentaNueva, fila)"><i class="mdi mdi-plus"></i></button>
               </li>
               <li data-bs-toggle="tooltip" data-bs-placement="top" title="Ver Cuentas">
-                <button class="btn btn-sm btn-info" [disabled]="fila.deleted" (click)="verCuentas(fila)"><i class="mdi mdi-credit-card-multiple-outline"></i></button>
+                <button class="btn btn-sm btn-info" [disabled]="fila.deleted" (click)="verCuentas(fila)"><i class="mdi mdi-format-list-bulleted"></i></button>
               </li>
               <li data-bs-toggle="tooltip" data-bs-placement="top" title="Habilitar" *ngIf="fila.deleted">
                 <a class="btn btn-sm btn-success" (click)="habilitar(fila, tabla,'habilitar')"><i class="mdi mdi-power"></i></a>

@@ -14,10 +14,10 @@
     </div>
     <div class="col-6">
       <div class="mb-3 px-1">
-        <label class="mb-2">Descripción </label>
-        <textarea class="form-control uppercase" rows="1" placeholder="Descripción de la cuenta" formControlName="descripcion" [ngClass]="{'is-invalid': submitted && form['descripcion'].errors}"></textarea>
-        <div *ngIf="submitted && form['descripcion'].errors" class="invalid-feedback" >
-          <div *ngIf="form['descripcion'].errors['maxlength']">Debe tener menos de {{ form["descripcion"].errors["maxlength"]["requiredLength"] }}carácteres</div>
+        <label class="mb-2">Monto </label>
+        <input type="text" class="form-control uppercase" formControlName="saldo" [ngClass]="{ 'is-invalid': submitted && form['saldo'].errors }" (change)="cambioMonto()"/>
+        <div *ngIf="submitted && form['saldo'].errors" class="invalid-feedback" >
+          <div *ngIf="form['saldo'].errors['pattern']">El monto solo deber contener carácteres númericos</div>
         </div>
       </div>
     </div>
@@ -31,6 +31,16 @@
         </div>
       </div>
     </div>
+    <div class="col-6" *ngIf="transferencia">
+      <div class="mb-3 px-1">
+        <label class="mb-2">(*) Medio de Transferencia </label>
+        <ng-select class="uppercase" formControlName="medioTransferenciaId" placeholder="Seleccione un medio de transferencia" [items]="listaMediosTransferencia" bindLabel="medio" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['medioTransferenciaId'].errors != null }">
+        </ng-select>
+        <div *ngIf="submitted && form['medioTransferenciaId'].errors" >
+          <div class="text-danger mt-1 font-size-10" *ngIf="form['medioTransferenciaId'].errors['required']">Seleccionar un medio de transferencia es obligatorio</div>
+        </div>
+      </div>
+    </div>
     <div class="col-6">
       <div class="mb-3 px-1">
         <label class="mb-2">(*) Moneda </label>
@@ -38,6 +48,15 @@
         </ng-select>
         <div *ngIf="submitted && form['monedaId'].errors" >
           <div class="text-danger mt-1 font-size-10" *ngIf="form['monedaId'].errors['required']">Seleccionar una moneda es obligatoria</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="mb-3 px-1">
+        <label class="mb-2">Descripción </label>
+        <textarea class="form-control uppercase" rows="2" placeholder="Descripción de la cuenta" formControlName="descripcion" [ngClass]="{'is-invalid': submitted && form['descripcion'].errors}"></textarea>
+        <div *ngIf="submitted && form['descripcion'].errors" class="invalid-feedback" >
+          <div *ngIf="form['descripcion'].errors['maxlength']">Debe tener menos de {{ form["descripcion"].errors["maxlength"]["requiredLength"] }}carácteres</div>
         </div>
       </div>
     </div>

@@ -4,13 +4,14 @@ import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { FormularioRendirComponent } from '../formulario/formulario.component';
 import { ActivatedRoute, Router } from "@angular/router";
+import { FuncionesComponent } from 'src/app/tesorery/funciones.component';
 
 @Component({
   selector: 'app-lista',
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.scss']
 })
-export class ListaRendirComponent implements OnInit{
+export class ListaRendirComponent extends FuncionesComponent implements OnInit {
 
   breadCrumbItems: Array<{}>;
   breadCrumbTitle: string = 'Administrar Fondos a Rendir';
@@ -18,7 +19,7 @@ export class ListaRendirComponent implements OnInit{
   @Input() rel_prefix: any;
   @Input() rel_field: any;
   @Input() rel_id: any;
-  titulo:string = 'Lista de Fondos a Rendir';
+  titulo: string = 'Lista de Fondos a Rendir';
   formato: any;
   modalRef?: BsModalRef;
   fondo: any;
@@ -33,18 +34,20 @@ export class ListaRendirComponent implements OnInit{
     private modalService: BsModalService,
     private notificacion: NotificacionService,
     private router: Router,
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true }];
     this.formato = this.getCabeceras();
-    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
+    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false; this.formato.cabeceras[this.rel_field].visibleCheck = false }
   }
 
   getCabeceras() {
     return {
       cabeceras: {
-        "acciones": this.getOpcionesCabecera('Acciones', 12,'text', true, false),
+        "acciones": this.getOpcionesCabecera('Acciones', 12, 'text', true, false),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
         "nombre": this.getOpcionesCabecera('Nombre', 12),
         "nroSolicitud": this.getOpcionesCabecera('Nro Solicitud', 12),
@@ -59,27 +62,13 @@ export class ListaRendirComponent implements OnInit{
     };
   }
 
-  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true, sorteable: boolean =true) {
-    return {
-      "visible": visible,
-      "buscable": true,
-      "buscableCheck": true,
-      "visibleCheck": visible,
-      "sortable": sorteable,
-      "filtrable": true,
-      "texto": texto,
-      "colsize": colsize,
-      "filtrotipo": filtrotipo
-    }
-  }
-
   crear(template: any) {
     this.fondo = undefined;
     this.apertura = false;
     this.descargo = false;
     this.tipoDescargo = undefined;
     this.titleModal = 'Nuevo Fondo a Rendir ';
-    this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
+    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 
   editar(data: any, template: any) {
@@ -88,47 +77,47 @@ export class ListaRendirComponent implements OnInit{
     this.descargo = false;
     this.tipoDescargo = undefined;
     this.titleModal = 'Editar Fondo Operativo';
-    this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
+    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 
-  aperturar(data: any, template: any){
+  aperturar(data: any, template: any) {
     this.fondo = data;
     this.apertura = true;
     this.descargo = false;
     this.tipoDescargo = 'APERTURADO';
     this.titleModal = 'Apertura de Fondo a Rendir ';
-    this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
+    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 
-  descargos(data: any, template: any, tipo){
+  descargos(data: any, template: any, tipo) {
     this.fondo = data;
     this.descargo = true;
     this.apertura = false;
     this.tipoDescargo = tipo;
     tipo == 'RENDIDO' ? this.tipoTexto = 'RENDICIÓN' : this.tipoTexto = tipo;
     this.titleModal = ' de a Rendir ';
-    this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
+    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 
-  detalleFondo(data: any){
+  detalleFondo(data: any) {
     this.fondo = data;
     this.router.navigate(['fondo/rendir/detalleFondo', data.id]);
   }
 
-  cerrar(data, tabla){
-    this.notificacion.alertaSimpleConfirmacionBoton("Esta seguro que desea cerrar el fondo operativo: '"+data.nombre+"'.","Sí, cerrar",(response: any) => {
+  cerrar(data, tabla) {
+    this.notificacion.alertaSimpleConfirmacionBoton("Esta seguro que desea cerrar el fondo operativo: '" + data.nombre + "'.", "Sí, cerrar", (response: any) => {
       if (response) {
-        this.fondoRendirService.cerrarFondo(data.id).subscribe(data =>{
+        this.fondoRendirService.cerrarFondo(data.id).subscribe(data => {
           tabla.obtenerDatos();
           this.notificacion.successStandar('Registro cerrado exitosamente.');
-        },(error) => {
+        }, (error) => {
           this.notificacion.alertError(error);
         });
       }
     })
   }
 
-  cerrarModal(){
+  cerrarModal() {
     this.modalService.hide();
   }
 
@@ -137,11 +126,11 @@ export class ListaRendirComponent implements OnInit{
       if (response) {
         this.fondoRendirService.habilitar(data.id).subscribe(
           (data) => {
-            let estado='';
+            let estado = '';
             component.obtenerDatos();
-            texto == 'habilitar'? estado='habilitado' : estado='inhabilitado';
-            this.notificacion.successStandar('Registro '+estado+' exitosamente.');
-          },(error) => {
+            texto == 'habilitar' ? estado = 'habilitado' : estado = 'inhabilitado';
+            this.notificacion.successStandar('Registro ' + estado + ' exitosamente.');
+          }, (error) => {
             this.notificacion.alertError(error);
           }
         );

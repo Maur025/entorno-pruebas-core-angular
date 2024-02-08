@@ -5,13 +5,14 @@ import { NotificacionService } from 'src/app/core/services/notificacion.service'
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormularioComponent } from '../formulario/formulario.component';
 import { DevengadoService } from '../../services/tesoreria/devengado.service';
+import { FuncionesComponent } from '../../funciones.component';
 
 @Component({
   selector: 'app-lista',
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.scss']
 })
-export class ListaComponent implements OnInit {
+export class ListaComponent extends FuncionesComponent implements OnInit {
 
   @ViewChild('appFormDevengado') appFormDevengado: FormularioComponent;
 
@@ -41,7 +42,9 @@ export class ListaComponent implements OnInit {
     private NotificacionService: NotificacionService,
     private route: ActivatedRoute,
     public devengadoService:DevengadoService
-  ){}
+  ){
+    super();
+  }
 
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true }];
@@ -52,27 +55,13 @@ export class ListaComponent implements OnInit {
         "id":{"visible":false,"buscable":true,"buscableCheck":true,"visibleCheck":false,"sortable":true,"filtrable":true,"texto":"ID","colsize":"12","filtrotipo":"text"},
         "centroCosto":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Centro Costo","colsize":"12","filtrotipo":"text"},
         "entidadReferencial":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":true,"filtrable":true,"texto":"Proveedor","colsize":"12","filtrotipo":"text"},
-        "nroReferencia": this.getOpcionesCabecera('Nro Referencia', 12),       
+        "nroReferencia": this.getOpcionesCabecera('Nro Referencia', 12),
         "fecha":this.getOpcionesCabecera('Fecha', 12),
         "monto":this.getOpcionesCabecera('Monto', 12),
       "estado":{"visible":true,"buscable":true,"buscableCheck":true,"visibleCheck":true,"sortable":false,"filtrable":true,"texto":"Estado","colsize":"12","filtrotipo":"text"},
       }
     };
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
-  }
-
-  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true) {
-    return {
-      "visible": visible,
-      "buscable": true,
-      "buscableCheck": true,
-      "visibleCheck": visible,
-      "sortable": true,
-      "filtrable": true,
-      "texto": texto,
-      "colsize": colsize,
-      "filtrotipo": filtrotipo
-    }
   }
 
   crear(template: any) {
@@ -90,7 +79,7 @@ export class ListaComponent implements OnInit {
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 
- 
+
 
   eliminar(data: any, component) {
     this.NotificacionService.alertaEliminacion(data.nombre, (response: any) => {

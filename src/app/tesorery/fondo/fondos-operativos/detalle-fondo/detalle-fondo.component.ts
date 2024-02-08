@@ -4,13 +4,15 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FondoOperativoService } from "src/app/tesorery/services/tesoreria/fondo-operativo.service";
 import { DetalleFondoOperativoService } from "src/app/tesorery/services/tesoreria/detalle-fondo-operativo.service";
 import { Location } from '@angular/common';
+import { extend } from 'leaflet';
+import { FuncionesComponent } from 'src/app/tesorery/funciones.component';
 
 @Component({
   selector: 'app-detalle-fondo',
   templateUrl: './detalle-fondo.component.html',
   styleUrls: ['./detalle-fondo.component.scss']
 })
-export class DetalleFondoComponent implements OnInit{
+export class DetalleFondoComponent extends FuncionesComponent implements OnInit {
 
   breadCrumbItems: Array<{}>;
   breadCrumbTitle: string = 'Adminstrar Cuentas de Banco';
@@ -26,7 +28,7 @@ export class DetalleFondoComponent implements OnInit{
   descripcion: any;
   id: any;
   formato: any;
-  fondo:any;
+  fondo: any;
 
   constructor(
     private fondoOperativoService: FondoOperativoService,
@@ -35,11 +37,13 @@ export class DetalleFondoComponent implements OnInit{
     private route: ActivatedRoute,
     private notificacionService: NotificacionService,
     private location: Location,
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.formato = this.getCabeceras();
-    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
+    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false; this.formato.cabeceras[this.rel_field].visibleCheck = false }
     if (this.route.snapshot.params["id"]) {
       this.id = this.route.snapshot.params["id"];
       this.setFondo();
@@ -61,22 +65,8 @@ export class DetalleFondoComponent implements OnInit{
     };
   }
 
-  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true) {
-    return {
-      "visible": visible,
-      "buscable": true,
-      "buscableCheck": true,
-      "visibleCheck": visible,
-      "sortable": true,
-      "filtrable": true,
-      "texto": texto,
-      "colsize": colsize,
-      "filtrotipo": filtrotipo
-    }
-  }
-
-  setFondo(){
-    this.fondoOperativoService.find(this.id).subscribe(data =>{
+  setFondo() {
+    this.fondoOperativoService.find(this.id).subscribe(data => {
       this.fondo = data.content
     })
   }

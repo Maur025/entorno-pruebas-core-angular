@@ -4,13 +4,14 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FondoRendirService } from "src/app/tesorery/services/tesoreria/fondo-rendir.service";
 import { DetalleFondoRendirService } from "src/app/tesorery/services/tesoreria/detalle-fondo-rendir.service";
 import { Location } from '@angular/common';
+import { FuncionesComponent } from 'src/app/tesorery/funciones.component';
 
 @Component({
   selector: 'app-detalle-fondo',
   templateUrl: './detalle-fondo.component.html',
   styleUrls: ['./detalle-fondo.component.scss']
 })
-export class DetalleFondoRendirComponent implements OnInit{
+export class DetalleFondoRendirComponent extends FuncionesComponent implements OnInit{
 
   breadCrumbItems: Array<{}>;
   breadCrumbTitle: string = 'Adminstrar Cuentas de Banco';
@@ -30,7 +31,9 @@ export class DetalleFondoRendirComponent implements OnInit{
     private route: ActivatedRoute,
     private notificacionService: NotificacionService,
     private location: Location,
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.formato = this.getCabeceras();
@@ -54,20 +57,6 @@ export class DetalleFondoRendirComponent implements OnInit{
         "estado": this.getOpcionesCabecera('Estado', 6),
       }
     };
-  }
-
-  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true) {
-    return {
-      "visible": visible,
-      "buscable": true,
-      "buscableCheck": true,
-      "visibleCheck": visible,
-      "sortable": true,
-      "filtrable": true,
-      "texto": texto,
-      "colsize": colsize,
-      "filtrotipo": filtrotipo
-    }
   }
 
   setFondo(){
