@@ -151,6 +151,7 @@ export class FormularioComponent implements OnInit {
         );
       } else {
         let data = this.formGroup.value;
+        data.saldo = Number(data.monto);
         data.saldo = data.monto;
         data.origen = 'ANTICIPO';
         data.ingresoEgreso = 'OUT';
@@ -274,6 +275,7 @@ export class FormularioComponent implements OnInit {
       centroCostoId: [, [Validators.required]],
       nroReferencia: [, [Validators.required]],
       ingresoEgreso: [, [Validators.required]],
+      descripcion: [, [Validators.required]],
       estado: [, []],
       monto: [, [Validators.required, Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
       operaciones: this.formBuilder.array([])
@@ -412,7 +414,7 @@ export class FormularioComponent implements OnInit {
     }
     this.calcularMontos();
     if (this.form['monto'].value != null && (this.form['monto'].value - this.montoTotal)) {
-      this.operaciones.controls[index]['controls']['monto'].setValue(this.form['monto'].value - this.montoTotal);
+      this.operaciones.controls[index]['controls']['monto'].setValue(Number(this.form['monto'].value - this.montoTotal));
     } else {
       this.operaciones.controls[index]['controls']['monto'].setValue(0);
     }
