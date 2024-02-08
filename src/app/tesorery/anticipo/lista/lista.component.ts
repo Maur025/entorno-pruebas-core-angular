@@ -5,7 +5,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnticipoService } from '../../services/tesoreria/anticipo.service';
-import { FuncionesComponent } from '../../funciones.component';
+import { FuncionesComponent } from 'src/app/tesorery/funciones.component';
 
 
 @Component({

@@ -14,7 +14,6 @@ const routes: Routes = [
   { path: "entidad", loadChildren: () => import('./entidad/entidad.module').then(m => m.EntidadModule) },
   { path: "fondo", loadChildren: () => import('./fondo/fondo.module').then(m => m.FondoModule) },
   { path: "configuracion", loadChildren: () => import('./configuracion/configuracion.module').then(m => m.ConfiguracionModule) },
-  { path: "rendicion", loadChildren: () => import('./rendicion/rendicion.module').then(m => m.RendicionModule) },
   { path: "devengado", loadChildren: () => import('./devengado/devengado.module').then(m => m.DevengadoModule) },
   { path: "credito", loadChildren: () => import('./credito/credito.module').then(m => m.CreditoModule) },
 ];

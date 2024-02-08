@@ -3,13 +3,14 @@ import { CreditoService } from "../../services/tesoreria/credito.service";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { ActivatedRoute, Router } from "@angular/router";
+import { FuncionesComponent } from 'src/app/tesorery/funciones.component';
 
 @Component({
   selector: 'app-lista',
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.scss']
 })
-export class ListaComponent implements OnInit {
+export class ListaComponent  extends FuncionesComponent  implements OnInit {
 
   breadCrumbItems: Array<{}>;
   breadCrumbTitle: string = 'Adminstrar Créditos';
@@ -28,7 +29,9 @@ export class ListaComponent implements OnInit {
     private NotificacionService: NotificacionService,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true }];
@@ -53,19 +56,6 @@ export class ListaComponent implements OnInit {
     };
   }
 
-  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true, sorteable: boolean = true) {
-    return {
-      "visible": visible,
-      "buscable": true,
-      "buscableCheck": true,
-      "visibleCheck": visible,
-      "sortable": sorteable,
-      "filtrable": true,
-      "texto": texto,
-      "colsize": colsize,
-      "filtrotipo": filtrotipo
-    }
-  }
 
   cerrarModal() {
     this.modalService.hide();

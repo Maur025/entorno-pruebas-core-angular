@@ -4,13 +4,14 @@ import { NotificacionService } from "src/app/core/services/notificacion.service"
 import { ActivatedRoute, Router } from "@angular/router";
 import { CuentaBancoService } from "src/app/tesorery/services/tesoreria/cuenta-banco.service";
 import { CuentaFormularioComponent } from '../cuenta-formulario/cuenta-formulario.component';
+import { FuncionesComponent } from 'src/app/tesorery/funciones.component';
 
 @Component({
   selector: 'app-cuenta-lista',
   templateUrl: './cuenta-lista.component.html',
   styleUrls: ['./cuenta-lista.component.scss']
 })
-export class CuentaListaComponent {
+export class CuentaListaComponent extends FuncionesComponent implements OnInit {
 
   @ViewChild('appFormCuenta') appFormCuenta: CuentaFormularioComponent;
 
@@ -23,6 +24,7 @@ export class CuentaListaComponent {
   @Input() getAll = 'getAll';
   @Input() id;
   @Input() direccion = true;
+  textoBuscar: string = 'Ingrese criterio de búsqueda: nro cuenta y descripción'
   editCreateWithModal = false;
   dataEdit = null;
   modalRef?: BsModalRef;
@@ -36,7 +38,9 @@ export class CuentaListaComponent {
     private NotificacionService: NotificacionService,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true }];
@@ -54,24 +58,12 @@ export class CuentaListaComponent {
         "descripcion": this.getOpcionesCabecera('Descripción', 12),
         /* "banco": this.getOpcionesCabecera('Banco', 12), */
         "moneda": this.getOpcionesCabecera('Moneda', 12),
+        "saldo": this.getOpcionesCabecera('Saldo', 12),
         "estado": this.getOpcionesCabecera('Estado', 6),
       }
     };
   }
 
-  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true) {
-    return {
-      "visible": visible,
-      "buscable": true,
-      "buscableCheck": true,
-      "visibleCheck": visible,
-      "sortable": true,
-      "filtrable": true,
-      "texto": texto,
-      "colsize": colsize,
-      "filtrotipo": filtrotipo
-    }
-  }
 
   crear(template: any) {
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
@@ -85,15 +77,14 @@ export class CuentaListaComponent {
   habilitar(data: any, component, texto) {
     this.NotificacionService.inhabilitarAlerta(texto, (response: any) => {
       if (response) {
-        this.CuentaBancoService.habilitar(data.id).subscribe(
-          (data) => {
-            let estado = '';
-            component.obtenerDatos();
-            texto == 'habilitar' ? estado = 'habilitado' : estado = 'inhabilitado';
-            this.NotificacionService.successStandar('Registro ' + estado + ' exitosamente.');
-          }, (error) => {
-            this.NotificacionService.alertError(error);
-          }
+        this.CuentaBancoService.habilitar(data.id).subscribe((data) => {
+          let estado = '';
+          component.obtenerDatos();
+          texto == 'habilitar' ? estado = 'habilitado' : estado = 'inhabilitado';
+          this.NotificacionService.successStandar('Registro ' + estado + ' exitosamente.');
+        }, (error) => {
+          this.NotificacionService.alertError(error);
+        }
         );
       }
     });
@@ -102,13 +93,12 @@ export class CuentaListaComponent {
   eliminar(data: any, component) {
     this.NotificacionService.alertaEliminacion(data.nombre, (response: any) => {
       if (response) {
-        this.servicio.delete(data.id).subscribe(
-          (data) => {
-            component.obtenerDatos();
-            this.NotificacionService.successStandar(
-              "Registro eliminado exitosamente."
-            );
-          },
+        this.servicio.delete(data.id).subscribe((data) => {
+          component.obtenerDatos();
+          this.NotificacionService.successStandar(
+            "Registro eliminado exitosamente."
+          );
+        },
           (error) => {
             this.NotificacionService.alertError(error);
           }

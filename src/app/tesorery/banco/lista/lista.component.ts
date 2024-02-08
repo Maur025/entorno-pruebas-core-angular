@@ -5,13 +5,14 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { BancoService } from "../../services/tesoreria/banco.service";
 import { FormularioComponent } from '../formulario/formulario.component';
 import { CuentaFormularioComponent } from '../cuenta/cuenta-formulario/cuenta-formulario.component';
+import { FuncionesComponent } from 'src/app/tesorery/funciones.component';
 
 @Component({
   selector: 'app-lista',
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.scss']
 })
-export class ListaComponent {
+export class ListaComponent extends FuncionesComponent implements OnInit{
 
   @ViewChild('appFormBanco') appFormBanco: FormularioComponent;
   @ViewChild('appFormCuenta') appFormCuenta: CuentaFormularioComponent;
@@ -39,6 +40,7 @@ export class ListaComponent {
     private route: ActivatedRoute,
     private router: Router
   ) {
+    super();
     this.servicio = BancoService;
   }
 
@@ -62,20 +64,6 @@ export class ListaComponent {
         "deleted": this.getOpcionesCabecera('Estado', 6),
       }
     };
-  }
-
-  getOpcionesCabecera(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true, sorteable: boolean =true) {
-    return {
-      "visible": visible,
-      "buscable": true,
-      "buscableCheck": true,
-      "visibleCheck": visible,
-      "sortable": sorteable,
-      "filtrable": true,
-      "texto": texto,
-      "colsize": colsize,
-      "filtrotipo": filtrotipo
-    }
   }
 
   crear(template: any) {
