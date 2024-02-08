@@ -27,7 +27,7 @@
         <label class="mb-2" for="entidadReferencialId">(*)Proveedor </label>
         <ng-select class="uppercase" formControlName="entidadReferencialId" placeholder="Seleccione Proveedor" [items]="listaEntidades" bindLabel="entidad.nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['entidadReferencialId'].errors != null }"></ng-select>
         <div *ngIf="submitted && form['entidadReferencialId'].errors">
-          <div class="text-danger mt-1 font-size-10" *ngIf="form['entidadReferencialId'].errors['required']">Seleccionar una Entidad de referencia</div>
+          <div class="text-danger mt-1 font-size-10" *ngIf="form['entidadReferencialId'].errors['required']">La entidad de referencia es obligatoria</div>
         </div>
       </div>
     </div>
@@ -37,7 +37,7 @@
         <label class="mb-2" for="centroCostoId">(*) Centro Costos </label>
         <ng-select class="uppercase" formControlName="centroCostoId" placeholder="Seleccione Centro de Costo" [items]="listaCentroCostos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['centroCostoId'].errors != null }"></ng-select>
         <div *ngIf="submitted && form['centroCostoId'].errors">
-          <div class="text-danger mt-1 font-size-10" *ngIf="form['centroCostoId'].errors['required']">Seleccionar un Centro de Costo obligatoria</div>
+          <div class="text-danger mt-1 font-size-10" *ngIf="form['centroCostoId'].errors['required']">El centro de costos es obligatorio</div>
         </div>
       </div>
     </div>
@@ -58,6 +58,15 @@
         <input type="text" class="form-control uppercase" formControlName="nroReferencia" [ngClass]="{ 'is-invalid': submitted && form['nroReferencia'].errors }" />
         <div *ngIf="submitted && form['nroReferencia'].errors" class="invalid-feedback">
           <div *ngIf="form['nroReferencia'].errors['required']">El nro de referencia es obligatorio</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="mb-3 px-1">
+        <label class="mb-2">(*) Descripción </label>
+        <textarea type="numeric" class="form-control uppercase" rows="2" formControlName="descripcion" [ngClass]="{ 'is-invalid': submitted && form['descripcion'].errors }" ></textarea>
+        <div *ngIf="submitted && form['descripcion'].errors" class="invalid-feedback">
+          <div *ngIf="form['descripcion'].errors['required']">La descripción es obligatoria</div>
         </div>
       </div>
     </div>
@@ -116,11 +125,11 @@
         <h4 class="card-title m-0">Lista de Operaciones</h4>
         <div>
           <button type="button" class="btn btn-sm btn-primary float-end" (click)="addOperacion()"><i class="mdi mdi-plus"></i>Añadir operación</button>
-          <div *ngIf="submitted && operaciones.length == 0" class="text-danger mt-1 font-size-11">El anticipo tiene que tener registrada al menos una operación.</div>
+          <div *ngIf="submitted && operaciones.length == 0" class="text-danger mt-1 font-size-11">El anticipo debe tener registrada al menos una operación.</div>
         </div>
       </div>
       <div *ngIf="listaOperaciones.length == 0">
-        <span class="fw-semibold semi text-primary ps-2">Sin Operaciones Registradas</span>
+        <span class="fw-semibold semi text-warning ps-2">Sin Operaciones Registradas</span>
       </div>
       <div formArrayName="operaciones">
         <div class="card card-body shadow-lg mb-3 pb-0" *ngFor="let operacion of listaOperaciones; index as i">
@@ -136,6 +145,11 @@
                     <input class="custom-control-input" style="transform: scale(1.3);" type="radio" formControlName="tipoOperacion" [value]="tipoOp.value" (change)="cambiaOperacion(i)" >
                     <label class="form-check-label ps-2">{{tipoOp.name}}</label>
                   </div>
+                </div>
+              </div>
+              <div class="col pb-3">
+                <div *ngIf="submitted && operaciones.controls[i]['controls']['tipoOperacion'].errors">
+                  <div *ngIf="operaciones.controls[i]['controls']['tipoOperacion'].errors['required']" class="text-danger mt-1 font-size-11">Seleccione un tipo de operación.</div>
                 </div>
               </div>
               <div class="col pb-3">

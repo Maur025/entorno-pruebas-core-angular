@@ -55,7 +55,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   crear(template: any) {
     this.anticipo = false;
     this.anticipoData = undefined;
-    this.modalRef = this.modalService.show(template, { class: `modal-xl modal-scrollable` });
+    this.modalRef = this.modalService.show(template, { class: `modal-xl modal-dialog-scrollable` });
   }
 
   cabecera = () => {
@@ -83,9 +83,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
       if (response) {
         this.servicio.delete(data.id).subscribe((data) => {
           component.obtenerDatos();
-          this.NotificacionService.successStandar(
-            "Registro eliminado exitosamente."
-          );
+          this.NotificacionService.successStandar("Registro eliminado exitosamente.");
         }, (error) => {
           this.NotificacionService.alertError(error);
         }

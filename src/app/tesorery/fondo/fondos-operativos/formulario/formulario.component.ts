@@ -157,10 +157,10 @@ export class FormularioOperativoComponent implements OnInit{
         case "RENDIDO":
           this.form.monto.setValidators([Validators.required]);
           break;
-        case "REPOSICIÓN":
+        case "REPOSICION":
           this.form.monto.setValidators([Validators.required, this.validatorMontoReposicion(this.fondo.importe - this.fondo.saldo)]);
           break;
-        case "DEVOLUCIÓN":
+        case "DEVOLUCION":
           this.form.monto.setValidators([Validators.required, Validators.max(this.fondo.saldo)]);
           break;
       }

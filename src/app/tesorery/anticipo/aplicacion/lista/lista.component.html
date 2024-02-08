@@ -1,45 +1,53 @@
 <app-page-title [title]="breadCrumbTitle" [breadcrumbItems]="breadCrumbItems"></app-page-title>
 <div class="container-fluid">
-  <div class="card-body">
+  <div class="card card-body">
     <h5 class="card-title mb-3 pb-3 border-bottom">Detalle de Anticipo : <span></span></h5>
-
     <div class="nav col-12 border-bottom">
-      <div class="col-4 mb-2 px-1">
-        <p class="ps-2">
-          <span class="fw-semibold semi">Centro de Costo:</span>
-          <span class="text-primary">{{ anticipoData?.centroCosto.nombre }}</span>
-        </p>
+      <div class="col-9 nav">
+        <div class="col-6 mb-2">
+          <p class="ps-2">
+            <span class="fw-semibold semi">Centro de Costo: </span>
+            <span class="text-primary">{{ anticipoData?.centroCosto.nombre }}</span>
+          </p>
+        </div>
+        <div class="col-6 mb-2">
+          <p class="ps-2">
+            <span class="fw-semibold semi">Proveedor: </span>
+            <span class="text-primary">{{ anticipoData?.entidadReferencial.entidad.nombre }}</span>
+          </p>
+        </div>
+        <div class="col-6 mb-2">
+          <p class="ps-2">
+            <span class="fw-semibold semi">Nro de Referencia: </span>
+            <span class="text-primary">{{ anticipoData?.nroReferencia }}</span>
+          </p>
+        </div>
+        <div class="col-6 mb-2">
+          <p class="ps-2">
+            <span class="fw-semibold semi">Fecha de Solicitud: </span>
+            <span class="text-primary"> {{ anticipoData?.fecha| date:"dd-MM-yyyy" }}</span>
+          </p>
+        </div>
+        <div class="col-6 mb-2">
+          <p class="ps-2">
+            <span class="fw-semibold semi">Monto: </span>
+            <span class="text-primary">{{ anticipoData?.monto }}</span>
+          </p>
+        </div>
+        <div class="col-6 mb-2">
+          <p class="ps-2">
+            <span class="fw-semibold semi">Saldo: </span>
+            <span class="text-primary"> {{ anticipoData?.saldo }}</span>
+          </p>
+        </div>
       </div>
-
-      <div class="col-4 mb-2 px-1">
+      <div class="col-3">
         <p class="ps-2">
-          <span class="fw-semibold semi">Proveedor:</span>
-          <span class="text-primary">{{ anticipoData?.entidadReferencial.entidad.nombre }}</span>
+          <span class="fw-semibold semi">Operaciones: </span>
         </p>
-      </div>
-      <div class="col-4 mb-3 px-1">
-        <p class="ps-2">
-          <span class="fw-semibold semi">Nro de Referencia:</span>
-          <span class="text-primary">{{ anticipoData?.nroReferencia }}</span>
-        </p>
-      </div>
-      <div class="col-4 mb-3 px-1">
-        <p class="ps-2">
-          <span class="fw-semibold semi">Fecha de Solicitud:</span>
-          <span class="text-primary"> {{ anticipoData?.fecha| date:"dd-MM-yyyy" }}</span>
-        </p>
-      </div>
-      <div class="col-4 mb-3 px-1">
-        <p class="ps-2">
-          <span class="fw-semibold semi">Monto:</span>
-          <span class="text-primary">{{ anticipoData?.monto }}</span>
-        </p>
-      </div>
-      <div class="col-4 mb-3 px-1">
-        <p class="ps-2">
-          <span class="fw-semibold semi">Saldo:</span>
-          <span class="text-primary"> {{ anticipoData?.saldo }}</span>
-        </p>
+        <ul class="list-group list-group-flush" *ngFor="let operacion of anticipoData?.anticipoOperaciones">
+          <li class="list-group-item">{{operacion.cuentaBanco ? operacion.cuentaBanco.banco.nombre +' - '+ operacion.cuentaBanco.nroCuenta : operacion.fondoOperativo.nombre}}</li>
+        </ul>
       </div>
     </div>
     <!-- *ngIf="anticipoData?.saldo > 0"-->
@@ -51,7 +59,7 @@
         [templateFila]="templateFila" [templateFiltrar]="templateFiltrar" [conOpciones]="false" [botonExportar]="false" [botonNuevo]="false"
         [filtros]="true" [filtrosData]="filtrosData">
       </krn-tabla>
-    
+
     <ng-template #templateFiltrar>
       <div class="nav">
         <div class="col-4">
@@ -108,7 +116,7 @@
                   <a data-bs-toggle="modal" class="btn btn-sm btn-danger" (click)="eliminar(fila, tabla,'eliminar')"><i
                       class="mdi mdi-power"></i></a>
                 </li>
-               
+
               </ul>
             </div>
             <div *ngSwitchCase="'id'">

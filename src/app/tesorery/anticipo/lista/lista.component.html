@@ -73,11 +73,10 @@
 
 <ng-template #modalGeneral role="document" let-modal>
   <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">Registrar {{titleModal}} Anticipo</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal"aria-label="Close"id="close-modal" (click)="cerrarModal()" ></button>
+    <h5 class="modal-title">Registrar {{titleModal}} Anticipo</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modalRef?.hide()"></button>
   </div>
   <div class="modal-body">
-   <!-- <app-formulario-fondoOperativo #appFormFondoOp [fondo]="fondo" [apertura]="apertura" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-fondoOperativo> -->
     <app-formulario #appFormAnticipo  [anticipoData]="anticipoData" [anticipo]="anticipo" (alGuardar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario>
   </div>
   <div class="modal-footer">
@@ -87,4 +86,5 @@
     </div>
   </div>
 </ng-template>
+
 
