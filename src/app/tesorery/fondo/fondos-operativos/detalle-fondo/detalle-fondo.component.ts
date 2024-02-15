@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FondoOperativoService } from "src/app/tesorery/services/tesoreria/fondo-operativo.service";
 import { DetalleFondoOperativoService } from "src/app/tesorery/services/tesoreria/detalle-fondo-operativo.service";
 import { Location } from '@angular/common';
-import { extend } from 'leaflet';
 import { FuncionesComponent } from 'src/app/tesorery/funciones.component';
 
 @Component({
@@ -33,7 +32,6 @@ export class DetalleFondoComponent extends FuncionesComponent implements OnInit 
   constructor(
     private fondoOperativoService: FondoOperativoService,
     public detalleFontoOperativoService: DetalleFondoOperativoService,
-    private router: Router,
     private route: ActivatedRoute,
     private notificacionService: NotificacionService,
     private location: Location,
@@ -68,7 +66,9 @@ export class DetalleFondoComponent extends FuncionesComponent implements OnInit 
   setFondo() {
     this.fondoOperativoService.find(this.id).subscribe(data => {
       this.fondo = data.content
-    })
+    }, (err: any) => {
+      this.notificacionService.alertError(err);
+    });
   }
 
   regresar() {

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { EntidadService } from "../../services/tesoreria/entidad.service";
+import { EntidadService } from "src/app/tesorery/services/tesoreria/entidad.service";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { FormularioComponent } from '../formulario/formulario.component';
@@ -72,17 +72,14 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   habilitar(data: any, component, texto) {
     this.NotificacionService.inhabilitarAlerta(texto, (response: any) => {
       if (response) {
-        this.entidadService.habilitar(data.id).subscribe(
-          (data) => {
-            let estado = '';
-            component.obtenerDatos();
-            texto == 'habilitar' ? estado = 'habilitado' : estado = 'inhabilitado';
-            this.NotificacionService.successStandar('Registro ' + estado + ' exitosamente.');
-          },
-          (error) => {
-            this.NotificacionService.alertError(error);
-          }
-        );
+        this.entidadService.habilitar(data.id).subscribe((data) => {
+          let estado = '';
+          component.obtenerDatos();
+          texto == 'habilitar' ? estado = 'habilitado' : estado = 'inhabilitado';
+          this.NotificacionService.successStandar('Registro ' + estado + ' exitosamente.');
+        }, (error) => {
+          this.NotificacionService.alertError(error);
+        });
       }
     });
   }

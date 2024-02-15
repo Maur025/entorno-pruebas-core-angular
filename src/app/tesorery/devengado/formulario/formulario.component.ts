@@ -1,16 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { CentrocostoService } from '../../services/tesoreria/centrocosto.service';
-import { EntidadService } from '../../services/entidad.service';
-import { AnticipoService } from '../../services/tesoreria/anticipo.service';
-import { TipoEntidadService } from '../../services/tipoentidad.service';
+import { EntidadService } from '../../services/tesoreria/entidad.service';
+import { TipoEntidadService } from '../../services/tesoreria/tipoentidad.service';
 import { CuentaBancoService } from '../../services/tesoreria/cuenta-banco.service';
 import { BancoService } from '../../services/tesoreria/banco.service';
 import { MedioTransferenciaService } from '../../services/tesoreria/medio-transferencia.service';
 import { EstadoAnticipoService } from '../../services/tesoreria/estadoanticipo.service';
-import { AplicacionAnticipoService } from '../../services/aplicacion-anticipo.service';
 import { DevengadoService } from '../../services/tesoreria/devengado.service';
 
 @Component({
@@ -41,15 +38,10 @@ export class FormularioComponent implements OnInit {
   listaCentroCostos: any;
   tipoEntidadId: any = null;
   listaEstadoAnticipo: any;
-
-
   listaBancos: any;
   listaCuentasBanco: any;
   listaMedioTransferencias: any;
-
   dateNow = new Date((new Date).setHours(23, 59, 59, 999));
-
-
   inout: number = 0;
   ingresoEgreso: any = [
     { value: "IN", name: "INGRESO" },
@@ -57,40 +49,29 @@ export class FormularioComponent implements OnInit {
   ];
 
   constructor(
-    private readonly router: Router,
-    private route: ActivatedRoute,
     private FormBuilder: FormBuilder,
     private notificacionService: NotificacionService,
     private centroCostoService: CentrocostoService,
     private entidadService: EntidadService,
-    private anticipoService: AnticipoService,
     public tipoEntidadService: TipoEntidadService,
     private cuentaBancoService: CuentaBancoService,
     private bancoService: BancoService,
     private medioTransferenciaService: MedioTransferenciaService,
     private estadoAnticipoService: EstadoAnticipoService,
-    private aplicacionAnticipoService: AplicacionAnticipoService,
-    private devengadoService:DevengadoService,
-  ) {
-
-  }
+    private devengadoService: DevengadoService,
+  ) { }
 
   ngOnInit(): void {
-    this.formGroup = this.FormBuilder.group(this.fieldsFormValidation());
-    //this.maxDate = this.dateNow;
+    this.setForm();
     if (!this.maxDate) this.maxDate = this.dateNow;
     this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true },];
-
-    //if (this.idRuta) this.form['id'].disable();
     this.getCentroCostos();
     this.getBancos();
     this.getMedioTransferencias();
     this.getTipoEntidadId("PROVEEDOR").then(uuid => {
       this.getEntidadReferencialTipoEntidad(uuid);
     })
-
-    
-    if(this.devengado){
+    if (this.devengado) {
       this.formGroup.setValue({
         id: this.devengado.id,
         entidadReferencialId: this.devengado.entidadReferencialId,
@@ -105,36 +86,41 @@ export class FormularioComponent implements OnInit {
     }
   }
 
+  setForm() {
+    this.formGroup = this.FormBuilder.group({
+      id: [, []],
+      monto: [, [Validators.required]],
+      fecha: [, [Validators.required]],
+      nroReferencia: [, [Validators.required]],
+      centroCostoId: [, [Validators.required]],
+      entidadReferencialId: [, [Validators.required]],
+    });
+  }
+
   get form() {
     return this.formGroup.controls;
   }
-  
+
   guardar() {
     this.submitted = true;
     if (this.formGroup.valid) {
       if (this.devengado) {
         //agregando datos y enviar
         let data = this.formGroup.value;
- 
         this.devengadoService.update(data).subscribe((res: any) => {
           this.notificacionService.successStandar();
-
           this.alActualizar.emit(res);
         }, (err: any) => {
           this.notificacionService.alertError(err);
         });
-
       } else {
-
         let data = this.formGroup.value;
-
         this.devengadoService.register(data).subscribe((res: any) => {
           this.notificacionService.successStandar();
           this.alGuardar.emit(res);
         }, (err: any) => {
           this.notificacionService.alertError(err);
-        }
-        );
+        });
       }
     }
   }
@@ -142,12 +128,15 @@ export class FormularioComponent implements OnInit {
   getCentroCostos() {
     this.centroCostoService.habilitados().subscribe(data => {
       this.listaCentroCostos = data.content;
+    }, (error) => {
+      this.notificacionService.alertError(error);
     });
   }
   getEntidadReferencialTipoEntidad(id: string) {
-
     this.entidadService.listaEntidadReferencialTipoEntidad(id).subscribe(data => {
       this.listaEntidades = data.content;
+    }, (error) => {
+      this.notificacionService.alertError(error);
     });
   }
 
@@ -162,6 +151,8 @@ export class FormularioComponent implements OnInit {
   async getTipoEntidadInicio() {
     this.tipoEntidadService.habilitados().subscribe(async data => {
       this.listaTipoEntidad = await data.content;
+    }, (error) => {
+      this.notificacionService.alertError(error);
     });
   }
 
@@ -197,18 +188,8 @@ export class FormularioComponent implements OnInit {
   getEstadoAnticipo() {
     this.estadoAnticipoService.habilitados().subscribe(data => {
       this.listaEstadoAnticipo = data.content;
+    }, (error) => {
+      this.notificacionService.alertError(error);
     });
-  }
-
-  fieldsFormValidation() {
-    return {
-      id: [, []],
-      monto: [, [Validators.required]],
-      fecha: [, [Validators.required]],
-      nroReferencia: [, [Validators.required]],
-      centroCostoId: [, [Validators.required]],
-      entidadReferencialId: [, [Validators.required]],
-
-    };
   }
 }

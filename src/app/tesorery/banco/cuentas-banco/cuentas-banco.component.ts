@@ -17,7 +17,7 @@ export class CuentasBancoComponent implements OnInit {
 
   breadCrumbItems: Array<{}>;
   breadCrumbTitle: string = 'Adminstrar Banco';
-  titulo = "Cuentas del Banco : ";
+  titulo = "Lista de Cuentas ";
   id: any;
 
   constructor(

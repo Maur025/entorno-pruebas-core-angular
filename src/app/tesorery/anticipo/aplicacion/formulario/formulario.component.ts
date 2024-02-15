@@ -4,9 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BsLocaleService } from "ngx-bootstrap/datepicker";
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { AnticipoService } from 'src/app/tesorery/services/tesoreria/anticipo.service';
-import { AplicacionAnticipoService } from 'src/app/tesorery/services/aplicacion-anticipo.service';
+import { AplicacionAnticipoService } from 'src/app/tesorery/services/tesoreria/aplicacion-anticipo.service';
 import { CentrocostoService } from 'src/app/tesorery/services/tesoreria/centrocosto.service';
-import { EntidadService } from 'src/app/tesorery/services/entidad.service';
+import { EntidadService } from 'src/app/tesorery/services/tesoreria/entidad.service';
 import { EstadoAnticipoService } from 'src/app/tesorery/services/tesoreria/estadoanticipo.service';
 
 @Component({

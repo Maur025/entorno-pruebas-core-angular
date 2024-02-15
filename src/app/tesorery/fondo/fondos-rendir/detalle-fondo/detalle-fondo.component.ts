@@ -11,7 +11,7 @@ import { FuncionesComponent } from 'src/app/tesorery/funciones.component';
   templateUrl: './detalle-fondo.component.html',
   styleUrls: ['./detalle-fondo.component.scss']
 })
-export class DetalleFondoRendirComponent extends FuncionesComponent implements OnInit{
+export class DetalleFondoRendirComponent extends FuncionesComponent implements OnInit {
 
   breadCrumbItems: Array<{}>;
   breadCrumbTitle: string = 'Adminstrar Cuentas de Banco';
@@ -22,7 +22,7 @@ export class DetalleFondoRendirComponent extends FuncionesComponent implements O
   @Input() rel_id: any;
   id: any;
   formato: any;
-  fondo:any;
+  fondo: any;
 
   constructor(
     private fondoRendirService: FondoRendirService,
@@ -37,7 +37,7 @@ export class DetalleFondoRendirComponent extends FuncionesComponent implements O
 
   ngOnInit(): void {
     this.formato = this.getCabeceras();
-    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
+    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false; this.formato.cabeceras[this.rel_field].visibleCheck = false }
     if (this.route.snapshot.params["id"]) {
       this.id = this.route.snapshot.params["id"];
       this.setFondo();
@@ -59,10 +59,12 @@ export class DetalleFondoRendirComponent extends FuncionesComponent implements O
     };
   }
 
-  setFondo(){
-    this.fondoRendirService.find(this.id).subscribe(data =>{
+  setFondo() {
+    this.fondoRendirService.find(this.id).subscribe(data => {
       this.fondo = data.content
-    })
+    }, (err: any) => {
+      this.notificacionService.alertError(err);
+    });
   }
 
   regresar() {

@@ -58,7 +58,7 @@ export class FormularioRendirComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.formGroup = this.FormBuilder.group(this.fieldsFormValidation());
+    this.setForm();
     this.getResponsables();
     if (this.fondo) {
       this.setFondo();
@@ -79,8 +79,8 @@ export class FormularioRendirComponent implements OnInit {
     this.fechaActual = new Date();
   }
 
-  fieldsFormValidation() {
-    return {
+  setForm() {
+    this.formGroup = this.FormBuilder.group({
       id: [, []],
       nombre: [, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
       fechaSolicitud: [, [Validators.required]],
@@ -89,7 +89,7 @@ export class FormularioRendirComponent implements OnInit {
       aperturado: [],
       descripcion: [],
       responsableId: [, [Validators.required]]
-    };
+    });
   }
 
   addFormApertura() {
@@ -146,8 +146,8 @@ export class FormularioRendirComponent implements OnInit {
   getEstados() {
     this.estadosService.habilitadosFondos().subscribe(data => {
       this.listaEstados = data.content;
-      if (this.apertura || this.descargo){
-        this.form.estado.setValue(this.listaEstados.find(e => e.nombre == this.tipoDescargo).id);      ;
+      if (this.apertura || this.descargo) {
+        this.form.estado.setValue(this.listaEstados.find(e => e.nombre == this.tipoDescargo).id);;
         this.rendicion = this.listaEstados.find(e => e.nombre == 'RENDIDO');
         this.reposicion = this.listaEstados.find(e => e.nombre == 'REPOSICIÓN');
         this.devolucion = this.listaEstados.find(e => e.nombre == 'DEVOLUCIÓN');
@@ -205,14 +205,14 @@ export class FormularioRendirComponent implements OnInit {
             dataDevolucion.estado = this.devolucion.id;
             this.detalleFondoRendirService.register(dataDevolucion).subscribe(res => {
             }, (error) => {
-            this.notificacionService.alertError(error);
+              this.notificacionService.alertError(error);
             });
             this.notificacionService.successStandar();
             this.alActualizar.emit();
           }, (error) => {
-          this.notificacionService.alertError(error);
+            this.notificacionService.alertError(error);
           });
-        } else if (this.form.monto.value > this.fondo.importe){
+        } else if (this.form.monto.value > this.fondo.importe) {
           this.detalleFondoRendirService.register(data).subscribe(res => {
             let dataReposicion = this.formGroup.getRawValue();
             dataReposicion.nroReferencia = data.nroSolicitud;
@@ -222,12 +222,12 @@ export class FormularioRendirComponent implements OnInit {
             dataReposicion.estado = this.reposicion.id;
             this.detalleFondoRendirService.register(dataReposicion).subscribe(res => {
             }, (error) => {
-            this.notificacionService.alertError(error);
+              this.notificacionService.alertError(error);
             });
             this.notificacionService.successStandar();
             this.alActualizar.emit();
           }, (error) => {
-          this.notificacionService.alertError(error);
+            this.notificacionService.alertError(error);
           });
 
         } else {
@@ -235,7 +235,7 @@ export class FormularioRendirComponent implements OnInit {
             this.notificacionService.successStandar();
             this.alActualizar.emit();
           }, (error) => {
-          this.notificacionService.alertError(error);
+            this.notificacionService.alertError(error);
           });
         }
       } else if (this.apertura) {

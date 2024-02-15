@@ -17,7 +17,7 @@ export class CuentaListaComponent extends FuncionesComponent implements OnInit {
 
   breadCrumbItems: Array<{}>;
   breadCrumbTitle: string = 'Adminstrar Cuentas de Banco';
-  @Input() titulo = 'Cuentas de Banco'
+  @Input() titulo = 'Lista de Cuentas de Banco'
   @Input() rel_prefix: any;
   @Input() rel_field: any;
   @Input() rel_id: any;
@@ -98,10 +98,9 @@ export class CuentaListaComponent extends FuncionesComponent implements OnInit {
           this.NotificacionService.successStandar(
             "Registro eliminado exitosamente."
           );
-        },
-          (error) => {
-            this.NotificacionService.alertError(error);
-          }
+        }, (error) => {
+          this.NotificacionService.alertError(error);
+        }
         );
       }
     });

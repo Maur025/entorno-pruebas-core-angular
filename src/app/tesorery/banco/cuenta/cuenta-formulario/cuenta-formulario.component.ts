@@ -48,7 +48,7 @@ export class CuentaFormularioComponent implements OnInit {
 
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true },];
-    this.formGroup = this.FormBuilder.group(this.fieldsFormValidation());
+    this.setForm();
     if (this.idRuta) this.form['bancoId'].disable();
     this.getBancos();
     this.getMonedas();
@@ -58,6 +58,17 @@ export class CuentaFormularioComponent implements OnInit {
     } else {
       this.form['bancoId'].setValue(this.idRuta)
     }
+  }
+
+  setForm() {
+    this.formGroup = this.FormBuilder.group({
+      id: ["", []],
+      nroCuenta: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
+      descripcion: [, [Validators.minLength(2)]],
+      bancoId: [, [Validators.required]],
+      monedaId: [, [Validators.required]],
+      saldo: [, [Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
+    });
   }
 
   get form() {
@@ -131,16 +142,5 @@ export class CuentaFormularioComponent implements OnInit {
         );
       }
     }
-  }
-
-  fieldsFormValidation() {
-    return {
-      id: ["", []],
-      nroCuenta: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
-      descripcion: [, [Validators.minLength(2)]],
-      bancoId: [, [Validators.required]],
-      monedaId: [, [Validators.required]],
-      saldo: [, [Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
-    };
   }
 }
