@@ -5,7 +5,7 @@ import { NotificacionService } from 'src/app/core/services/notificacion.service'
 import { AnticipoService } from 'src/app/tesorery/services/tesoreria/anticipo.service';
 import { CentrocostoService } from 'src/app/tesorery/services/tesoreria/centrocosto.service';
 import { FormularioComponent } from '../formulario/formulario.component'
-import { AplicacionAnticipoService } from 'src/app/tesorery/services/aplicacion-anticipo.service';
+import { AplicacionAnticipoService } from 'src/app/tesorery/services/tesoreria/aplicacion-anticipo.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { TablaComponent } from 'src/app/core/herramientas/tabla/tabla.component';
 import { EstadoAnticipoService } from 'src/app/tesorery/services/tesoreria/estadoanticipo.service';
@@ -98,9 +98,9 @@ export class ListaComponent implements OnInit {
     this.getAnticipo(this.route.snapshot.paramMap.get('id'));
     //this.id = this.route.snapshot.paramMap.get('id');
     this.actualizarFiltros();
-   
+
     this.getEstadoAnticipo();
-    
+
 
     this.formato = {
       cabeceras: {
@@ -115,7 +115,7 @@ export class ListaComponent implements OnInit {
       }
     };
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false; this.formato.cabeceras[this.rel_field].visibleCheck = false }
-   
+
   }
 
   crear(template: any) {

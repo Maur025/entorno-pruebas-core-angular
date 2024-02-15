@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, ViewChild, OnInit, } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { EntidadService } from "src/app/tesorery/services/tesoreria/entidad.service";
+import { EntidadService } from "../../services/tesoreria/entidad.service";
 import { ProveedorService } from "src/app/tesorery/services/compras/proveedor.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 
@@ -15,7 +15,7 @@ export class FormularioComponent implements OnInit {
   @Output() alActualizar = new EventEmitter<any>();
   @Input() entidad;
   listaEntidades: any;
-  submitted= false;
+  submitted = false;
   formGroup: FormGroup;
   datos_entidad: any;
   datos_nitCi: any;
@@ -31,32 +31,32 @@ export class FormularioComponent implements OnInit {
     private entidadService: EntidadService,
     private proveedorService: ProveedorService,
     private notificacionService: NotificacionService,
-  ){}
+  ) { }
 
   ngOnInit(): void {
     this.getEntidades();
-    this.formGroup = this.FormBuilder.group(this.fieldsFormValidation());
+    this.setForm();
     this.cambioTipo();
     if (this.entidad) {
       this.setEntidad();
     }
   }
 
-  fieldsFormValidation() {
-    return {
+  setForm() {
+    this.formGroup = this.FormBuilder.group({
       id: ["", []],
       nombre: [, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
       nitCi: [, [Validators.minLength(2)]],
       tipoId: [, [Validators.required]],
       refId: [],
-    };
+    });
   }
 
   get form() {
     return this.formGroup.controls;
   }
 
-  setEntidad(){
+  setEntidad() {
     this.formGroup.setValue({
       id: this.entidad.id,
       nombre: this.entidad.nombre,
@@ -72,18 +72,20 @@ export class FormularioComponent implements OnInit {
     });
   }
 
-  getEntidades(){
+  getEntidades() {
     this.entidadService.getTipoEntidad().subscribe(data => {
       this.listaEntidades = data.content;
-      this.listaEntidades.forEach(entidad  => {
+      this.listaEntidades.forEach(entidad => {
         this.entidades[entidad.id] = entidad.tipo;
       });
+    }, (err: any) => {
+      this.notificacionService.alertError(err);
     });
   }
 
-  cambioTipo(){
+  cambioTipo() {
     if (!this.entidad) {
-      if (this.form.tipoId.value != null){
+      if (this.form.tipoId.value != null) {
         this.tipoId = false
         this.form.nombre.enable();
         this.form.nitCi.enable();
@@ -95,8 +97,8 @@ export class FormularioComponent implements OnInit {
     }
   }
 
-  cambioEntidad(event){
-    if (event != undefined ) {
+  cambioEntidad(event) {
+    if (event != undefined) {
       if (event.id) {
         this.form['refId'].setValue(event.id);
         this.form['nombre'].setValue(event.nombre);
@@ -107,8 +109,8 @@ export class FormularioComponent implements OnInit {
     }
   }
 
-  buscar(e){
-    if (this.form.tipoId.value != null){
+  buscar(e) {
+    if (this.form.tipoId.value != null) {
       if (e.term.length >= 3) {
         let searchTerm = e.term.toLocaleUpperCase();
         this.buscarPorTipo(searchTerm, this.entidades[this.form.tipoId.value]);
@@ -116,14 +118,14 @@ export class FormularioComponent implements OnInit {
     }
   }
 
-  buscarPorTipo(keyword, tipo){
+  buscarPorTipo(keyword, tipo) {
     switch (tipo) {
       case "CLIENTE":
         /* busca en el modulo de ventas */
         break;
       case "PROVEEDOR":
         /* busca en el modulo de compras */
-        this.proveedorService.searchProveedor(keyword).subscribe(data =>{
+        this.proveedorService.searchProveedor(keyword).subscribe(data => {
           this.datos_entidad = data.content;
         })
         break;
@@ -170,7 +172,7 @@ export class FormularioComponent implements OnInit {
             let datos = {};
             datos['entidadId'] = res.content.id;
             datos['tipoEntidadId'] = data.tipoId;
-            this.entidadService.registerTipoEntidad(datos).subscribe(result =>{
+            this.entidadService.registerTipoEntidad(datos).subscribe(result => {
               this.notificacionService.successStandar();
               this.alActualizar.emit();
             })

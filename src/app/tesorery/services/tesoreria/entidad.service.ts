@@ -71,4 +71,10 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
     deleteEntidadTipo(data: any) {
       return this.apiService.tesoreria.delete(`${this.apiUrl}${this.prefix}/${this.apiName}/${data.entidadId}/tipoEntidad/${data.tipoEntidadId}`);
     }
+    listaEntidadReferncial(){
+      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/entidadReferencial`);
+    }
+    listaEntidadReferencialTipoEntidad(id:string = ''){
+      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/entidadReferencial/tipoEntidad/${id}`);
+    }
   }

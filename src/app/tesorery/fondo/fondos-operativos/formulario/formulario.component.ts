@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewChild, OnInit, } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, FormControl} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import { FondoOperativoService } from "src/app/tesorery/services/tesoreria/fondo-operativo.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { BsLocaleService } from "ngx-bootstrap/datepicker";
@@ -18,7 +18,7 @@ import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/fo
   templateUrl: './formulario.component.html',
   styleUrls: ['./formulario.component.scss']
 })
-export class FormularioOperativoComponent implements OnInit{
+export class FormularioOperativoComponent implements OnInit {
 
   @Input() fondo;
   @Input() apertura;
@@ -48,12 +48,12 @@ export class FormularioOperativoComponent implements OnInit{
     private cuentaBancoService: CuentaBancoService,
     private notificacionService: NotificacionService,
     private _localeService: BsLocaleService,
-  ){
+  ) {
     this._localeService.use('es');
   }
 
   ngOnInit(): void {
-    this.formGroup = this.FormBuilder.group(this.fieldsFormValidation());
+    this.setForm();
     if (this.fondo) {
       this.setFondo();
       this.getEstados();
@@ -73,8 +73,8 @@ export class FormularioOperativoComponent implements OnInit{
     this.fechaActual = new Date();
   }
 
-  fieldsFormValidation() {
-    return {
+  setForm() {
+    this.formGroup = this.FormBuilder.group({
       id: [, []],
       nombre: [, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
       fechaSolicitud: [, [Validators.required]],
@@ -82,10 +82,11 @@ export class FormularioOperativoComponent implements OnInit{
       importe: [, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       aperturado: [],
       descripcion: [],
-    };
+    });
   }
 
-  addFormApertura(){
+
+  addFormApertura() {
     this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('bancoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('cuentaBancoId', new FormControl(null, Validators.required));
@@ -93,53 +94,53 @@ export class FormularioOperativoComponent implements OnInit{
     this.formGroup.addControl('estado', new FormControl(null, Validators.required));
   }
 
-  addFormDescargo(){
+  addFormDescargo() {
     this.formGroup.addControl('monto', new FormControl(null, [Validators.required]));
     this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('fechaMovimiento', new FormControl(null, [Validators.required, this.validatorFecha()]));
     this.formGroup.addControl('estado', new FormControl(null, Validators.required));
   }
 
-  getCentroCostos(){
-    this.centroCostosService.habilitados().subscribe(data =>{
+  getCentroCostos() {
+    this.centroCostosService.habilitados().subscribe(data => {
       this.listaCentroCostos = data.content;
-    },(error) => {
+    }, (error) => {
       this.notificacionService.alertError(error);
     });
   }
 
-  getBancos(){
-    this.bancoService.habilitados().subscribe(data =>{
+  getBancos() {
+    this.bancoService.habilitados().subscribe(data => {
       this.listaBancos = data.content;
-    },(error) => {
+    }, (error) => {
       this.notificacionService.alertError(error);
     });
   }
 
-  getMedioTransferencias(){
-    this.medioTransferenciaService.habilitados().subscribe(data =>{
+  getMedioTransferencias() {
+    this.medioTransferenciaService.habilitados().subscribe(data => {
       this.listaMedioTransferencias = data.content;
-    },(error) => {
+    }, (error) => {
       this.notificacionService.alertError(error);
     });
   }
 
-  getEstados(){
-    this.estadosService.habilitadosFondos().subscribe(data =>{
+  getEstados() {
+    this.estadosService.habilitadosFondos().subscribe(data => {
       this.listaEstados = data.content;
-      if(this.apertura || this.descargo) this.form.estado.setValue(this.listaEstados.find(e => e.nombre == this.tipoDescargo).id);      ;
-    },(error) => {
+      if (this.apertura || this.descargo) this.form.estado.setValue(this.listaEstados.find(e => e.nombre == this.tipoDescargo).id);;
+    }, (error) => {
       this.notificacionService.alertError(error);
     });
   }
 
-  cambioBanco(){
+  cambioBanco() {
     this.listaCuentasBanco = [];
     this.form.cuentaBancoId.setValue(null);
     if (this.form.bancoId.value != null) {
-      this.cuentaBancoService.getCuentasBanco(1000, 1, 'id', false,'', this.form.bancoId.value).subscribe(data =>{
+      this.cuentaBancoService.getCuentasBanco(1000, 1, 'id', false, '', this.form.bancoId.value).subscribe(data => {
         this.listaCuentasBanco = data.content;
-      },(error) => {
+      }, (error) => {
         this.notificacionService.alertError(error);
       });
     } else {
@@ -148,11 +149,11 @@ export class FormularioOperativoComponent implements OnInit{
     }
   }
 
-  cambioEstado(){
+  cambioEstado() {
     if (this.form.monto == undefined) {
       this.form.monto.setValidators([Validators.required]);
     } else {
-      let estado = this.listaEstados.find(({id}) => id === this.form.estado.value);
+      let estado = this.listaEstados.find(({ id }) => id === this.form.estado.value);
       switch (estado.nombre) {
         case "RENDIDO":
           this.form.monto.setValidators([Validators.required]);
@@ -172,7 +173,7 @@ export class FormularioOperativoComponent implements OnInit{
     return this.formGroup.controls;
   }
 
-  setFondo(){
+  setFondo() {
     this.formGroup.setValue({
       id: this.fondo.id,
       nombre: this.fondo.nombre,
@@ -184,7 +185,7 @@ export class FormularioOperativoComponent implements OnInit{
     });
   }
 
-  public guardar(){
+  public guardar() {
     this.submitted = true;
     if (this.formGroup.valid) {
       if (this.descargo) {
@@ -192,10 +193,10 @@ export class FormularioOperativoComponent implements OnInit{
         data.nroReferencia = data.nroSolicitud;
         data.refId = null;
         data.fondoOperativoId = data.id;
-        this.detalleFontoOperativoService.register(data).subscribe(data =>{
+        this.detalleFontoOperativoService.register(data).subscribe(data => {
           this.notificacionService.successStandar();
           this.alActualizar.emit();
-        },(error) => {
+        }, (error) => {
           this.notificacionService.alertError(error);
         });
       } else if (this.apertura) {
@@ -216,22 +217,22 @@ export class FormularioOperativoComponent implements OnInit{
         ]).subscribe((responses) => {
           this.notificacionService.successStandar();
           this.alActualizar.emit();
-        },(error) => {
+        }, (error) => {
           this.notificacionService.alertError(error);
         });
       } else {
         if (this.fondo) {
-          this.fondoOperativoService.update(this.formGroup.getRawValue()).subscribe(data =>{
+          this.fondoOperativoService.update(this.formGroup.getRawValue()).subscribe(data => {
             this.notificacionService.successStandar();
             this.alActualizar.emit();
-          },(error) => {
+          }, (error) => {
             this.notificacionService.alertError(error);
           });
         } else {
-          this.fondoOperativoService.register(this.formGroup.getRawValue()).subscribe(data =>{
+          this.fondoOperativoService.register(this.formGroup.getRawValue()).subscribe(data => {
             this.notificacionService.successStandar();
             this.alActualizar.emit();
-          },(error) => {
+          }, (error) => {
             this.notificacionService.alertError(error);
           });
         }
@@ -240,10 +241,10 @@ export class FormularioOperativoComponent implements OnInit{
   }
 
   public validatorFecha() {
-    return (control: AbstractControl): any =>{
-      let errores= 'invalido';
+    return (control: AbstractControl): any => {
+      let errores = 'invalido';
       let diaActual = (new Date());
-      diaActual.setHours(0,0,0,0);
+      diaActual.setHours(0, 0, 0, 0);
       if (control.value && control.value > diaActual || JSON.stringify(control.value) == JSON.stringify(diaActual)) errores = 'valido';
       if (control.value && errores == 'invalido') return { fechaInvalida: "INVALID" }
       else return null;
@@ -251,8 +252,8 @@ export class FormularioOperativoComponent implements OnInit{
   }
 
   validatorMontoReposicion(monto) {
-    return (control: AbstractControl): any =>{
-      let errores= 'invalido';
+    return (control: AbstractControl): any => {
+      let errores = 'invalido';
       if (control.value && control.value <= monto) errores = 'valido';
       if (control.value && errores == 'invalido') return { montoReposicion: "INVALID" }
       else return null;

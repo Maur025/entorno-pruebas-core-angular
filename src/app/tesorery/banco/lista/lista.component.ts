@@ -12,13 +12,13 @@ import { FuncionesComponent } from 'src/app/tesorery/funciones.component';
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.scss']
 })
-export class ListaComponent extends FuncionesComponent implements OnInit{
+export class ListaComponent extends FuncionesComponent implements OnInit {
 
   @ViewChild('appFormBanco') appFormBanco: FormularioComponent;
   @ViewChild('appFormCuenta') appFormCuenta: CuentaFormularioComponent;
   breadCrumbItems: Array<{}>;
   breadCrumbTitle: string = 'Adminstrar Banco';
-  titulo:string = 'Lista de Bancos';
+  titulo: string = 'Lista de Bancos';
   textoBuscar = 'Ingrese criterio de busqueda: nombre, sigla, descripcion, dirección y url'
   @Input() rel_prefix: any;
   @Input() rel_field: any;
@@ -47,13 +47,13 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true }];
     this.formato = this.getCabeceras();
-    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false;this.formato.cabeceras[this.rel_field].visibleCheck = false }
+    if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false; this.formato.cabeceras[this.rel_field].visibleCheck = false }
   }
 
   getCabeceras() {
     return {
       cabeceras: {
-        "acciones": this.getOpcionesCabecera('Acciones', 12,'text', true, false),
+        "acciones": this.getOpcionesCabecera('Acciones', 12, 'text', true, false),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
         "nombre": this.getOpcionesCabecera('Nombre', 12),
         "sigla": this.getOpcionesCabecera('Sigla', 12),
@@ -69,95 +69,58 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
   crear(template: any) {
     this.titleModal = 'Nuevo';
     this.banco = undefined;
-    this.modalRef = this.modalService.show(template, {class: `modal-xl modal-scrollable`});
+    this.modalRef = this.modalService.show(template, { class: `modal-xl modal-scrollable` });
   }
 
   editar(template: any, data: any) {
     this.titleModal = 'Editar';
     this.banco = data;
-    this.modalRef = this.modalService.show(template, {class: `modal-xl modal-scrollable`});
+    this.modalRef = this.modalService.show(template, { class: `modal-xl modal-scrollable` });
     //this.router.navigate(['./id/' + data.id, {}], { relativeTo: this.route });
   }
 
-  crearCuenta(template: any, data: any){
+  crearCuenta(template: any, data: any) {
     this.banco = data;
-    this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
+    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 
-  verCuentas(data: any){
+  verCuentas(data: any) {
     this.router.navigate(['./cuentas/' + data.id, {}], { relativeTo: this.route });
   }
 
   habilitar(data: any, component, texto) {
     this.NotificacionService.inhabilitarAlerta(texto, (response: any) => {
       if (response) {
-        this.BancoService.habilitar(data.id).subscribe(
-          (data) => {
-            let estado='';
-            component.obtenerDatos();
-            texto == 'habilitar'? estado='habilitado' : estado='inhabilitado';
-            this.NotificacionService.successStandar('Registro '+estado+' exitosamente.');
-          },
-          (error) => {
-            this.NotificacionService.alertError(error);
-          }
+        this.BancoService.habilitar(data.id).subscribe((data) => {
+          let estado = '';
+          component.obtenerDatos();
+          texto == 'habilitar' ? estado = 'habilitado' : estado = 'inhabilitado';
+          this.NotificacionService.successStandar('Registro ' + estado + ' exitosamente.');
+        }, (error) => {
+          this.NotificacionService.alertError(error);
+        }
         );
       }
     });
   }
+
   eliminar(data: any, component) {
     this.NotificacionService.alertaEliminacion(data.nombre, (response: any) => {
       if (response) {
-        this.servicio.delete(data.id).subscribe(
-          (data) => {
-            component.obtenerDatos();
-            this.NotificacionService.successStandar(
-              "Registro eliminado exitosamente."
-            );
-          },
-          (error) => {
-            this.NotificacionService.alertError(error);
-          }
+        this.servicio.delete(data.id).subscribe((data) => {
+          component.obtenerDatos();
+          this.NotificacionService.successStandar(
+            "Registro eliminado exitosamente."
+          );
+        }, (error) => {
+          this.NotificacionService.alertError(error);
+        }
         );
       }
     });
   }
 
-  openModal(data, template) {
-    this.dataEdit = data;
-    this.modalRef = this.modalService.show(template, {
-      class: `modal-lg modal-fullscreen-lg-down modal-dialog-centered`,
-    });
-    return;
-  }
-
-  getCabecera() {
-    return {
-      cabeceras: {
-        "id": this.getFielFilter('id', 12, 'number', false),
-        "nombre": this.getFielFilter('Nombre', 12),
-        "descripcion": this.getFielFilter('Descripción', 6),
-        "direccion": this.getFielFilter('Dirección', 6),
-        "url": this.getFielFilter('Url', 6, 'true', true)
-      }
-    };
-  }
-
-  getFielFilter(texto: string, colsize: number, filtrotipo: string = 'text', visible: boolean = true) {
-    return {
-      "visible": visible,
-      "buscable": true,
-      "buscableCheck": true,
-      "visibleCheck": visible,
-      "sortable": true,
-      "filtrable": true,
-      "texto": texto,
-      "colsize": colsize,
-      "filtrotipo": filtrotipo
-    }
-  }
-
-  cerrarModal(){
+  cerrarModal() {
     this.modalService.hide();
   }
 }
