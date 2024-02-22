@@ -86,7 +86,7 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
     this.fondo = data;
     this.apertura = true;
     this.descargo = false;
-    this.tipoDescargo = 'APERTURADO';
+    this.tipoDescargo = 'APERT';
     this.titleModal = 'Apertura de Fondo Operativo ';
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
@@ -96,7 +96,7 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
     this.descargo = true;
     this.apertura = false;
     this.tipoDescargo = tipo;
-    tipo == 'RENDIDO' ? this.tipoTexto = 'RENDICIÓN' : this.tipoTexto = tipo;
+    tipo == 'REND' ? this.tipoTexto = 'RENDICIÓN' : this.tipoTexto = tipo;
     this.titleModal = ' de Fondo Operativo';
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
