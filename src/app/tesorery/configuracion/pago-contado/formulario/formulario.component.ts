@@ -19,12 +19,13 @@ export class FormularioPagosComponent {
   @Output() alGuardar = new EventEmitter<any>();
   @Output() alActualizar = new EventEmitter<any>();
   @Input() cuentaContadoMedio;
-  submitted= false;
+  submitted = false;
   formGroup: FormGroup;
-  fondoCuenta = 'fondo';
+  cajaBanco: any;
   listaBancos: any;
   listaCuentasBanco: any;
   listaMedioTransferencias: any;
+  listaTipoPagoContado: any;
   listaFondos: any;
   cajaTipoPago: any;
   bancoTipoPago: any;
@@ -41,18 +42,17 @@ export class FormularioPagosComponent {
     private cuentaBancoService: CuentaBancoService,
     private medioTransferenciaService: MedioTransferenciaService,
     private notificacionService: NotificacionService,
-  ){}
+  ) { }
 
   ngOnInit(): void {
     this.formGroup = this.FormBuilder.group(this.fieldsFormValidation());
     this.getTipoPagoContado();
     if (this.cuentaContadoMedio) {
-      this.cuentaContadoMedio.tipoPagoContado.codigo == 'B' ? this.fondoCuenta = 'cuentaBanco' : this.fondoCuenta = 'fondo';
+      this.cuentaContadoMedio.tipoPagoContado.codigo == 'B' ? this.cajaBanco = 'B' : this.cajaBanco = 'C';
       this.form.id.setValue(this.cuentaContadoMedio.id);
       this.form.bancoId.disable();
       this.form.cuentaBancoId.disable();
       this.form.fondoOperativoId.disable();
-
     }
     this.cambioTipoConfiguracion();
     this.getBancos();
@@ -74,59 +74,61 @@ export class FormularioPagosComponent {
     return this.formGroup.controls;
   }
 
-  getFondos(){
-    this.fondoOperativoService.habilitados().subscribe(data =>{
+  getFondos() {
+    this.fondoOperativoService.habilitados().subscribe(data => {
       this.listaFondos = data.content;
-      if (this.cuentaContadoMedio && this.fondoCuenta == 'fondo') {
+      if (this.cuentaContadoMedio && this.cajaBanco == 'C') {
         this.form.fondoOperativoId.setValue(this.cuentaContadoMedio.tablaRefId);
         let mediosId = [];
-        this.cuentaContadoMedio.medioTransferencias.forEach(m => { mediosId.push(m.id);});
+        this.cuentaContadoMedio.medioTransferencias.forEach(m => { mediosId.push(m.id); });
         this.form.medioTransferenciaId.setValue(mediosId);
       }
-    },(error) => {
+    }, (error) => {
       this.notificacionService.alertError(error);
     });
   }
 
-  async getBancos(){
-    this.bancoService.habilitados().subscribe(data =>{
+  async getBancos() {
+    this.bancoService.habilitados().subscribe(data => {
       this.listaBancos = data.content;
-      if (this.cuentaContadoMedio && this.fondoCuenta == 'cuentaBanco') {
+      if (this.cuentaContadoMedio && this.cajaBanco == 'B') {
         this.bancoId = this.listaBancos.find(b => b.nombre == this.cuentaContadoMedio.nombre).id;
         this.form.bancoId.setValue(this.bancoId);
         this.cambioBanco();
         this.form.cuentaBancoId.setValue(this.cuentaContadoMedio.tablaRefId);
         let mediosId = [];
-        this.cuentaContadoMedio.medioTransferencias.forEach(m => { mediosId.push(m.id);});
+        this.cuentaContadoMedio.medioTransferencias.forEach(m => { mediosId.push(m.id); });
         this.form.medioTransferenciaId.setValue(mediosId);
       }
-    },(error) => {
+    }, (error) => {
       this.notificacionService.alertError(error);
     });
   }
 
-  getMedioTransferencias(){
-    this.medioTransferenciaService.habilitados().subscribe(data =>{
+  getMedioTransferencias() {
+    this.medioTransferenciaService.habilitados().subscribe(data => {
       this.listaMedioTransferencias = data.content;
-    },(error) => {
+    }, (error) => {
       this.notificacionService.alertError(error);
     });
   }
 
-  getTipoPagoContado(){
-    this.tipoPagoContadoService.habilitados().subscribe(data =>{
+  getTipoPagoContado() {
+    this.tipoPagoContadoService.habilitados().subscribe(data => {
+      this.listaTipoPagoContado = data.content;
+      this.cajaBanco = data.content[0].codigo;
       this.cajaTipoPago = data.content.find(c => c.codigo == 'C');
       this.bancoTipoPago = data.content.find(b => b.codigo == 'B');
-    },(error) => {
+    }, (error) => {
       this.notificacionService.alertError(error);
     });
   }
 
-  cambioTipoConfiguracion(){
+  cambioTipoConfiguracion() {
     this.form.bancoId.setValue(null);
     this.form.cuentaBancoId.setValue(null);
     this.form.fondoOperativoId.setValue(null);
-    if (this.fondoCuenta == 'cuentaBanco') {
+    if (this.cajaBanco == 'B') {
       this.form.bancoId.setValidators([Validators.required]);
       this.form.cuentaBancoId.setValidators([Validators.required]);
       this.form.fondoOperativoId.setValidators([]);
@@ -140,13 +142,13 @@ export class FormularioPagosComponent {
     this.form.cuentaBancoId.updateValueAndValidity();
   }
 
-  cambioBanco(){
+  cambioBanco() {
     this.listaCuentasBanco = [];
     this.form.cuentaBancoId.setValue(null);
     if (this.form.bancoId.value != null) {
-      this.cuentaBancoService.getCuentasBanco(1000, 1, 'id', false,'', this.form.bancoId.value).subscribe(data =>{
+      this.cuentaBancoService.getCuentasBanco(1000, 1, 'id', false, '', this.form.bancoId.value).subscribe(data => {
         this.listaCuentasBanco = data.content;
-      },(error) => {
+      }, (error) => {
         this.notificacionService.alertError(error);
       });
     } else {
@@ -155,7 +157,7 @@ export class FormularioPagosComponent {
     }
   }
 
-  guardar(){
+  guardar() {
     this.submitted = true;
     if (this.formGroup.valid) {
       let dataCuentaContMedio = {};
@@ -167,22 +169,22 @@ export class FormularioPagosComponent {
         this.cuentaContadoMedioService.register(dataCuentaContMedio).subscribe(data => {
           this.notificacionService.successStandar();
           this.alActualizar.emit();
-        },(error) => {
+        }, (error) => {
           this.notificacionService.alertError(error);
         });
       } else {
-        if (this.fondoCuenta == 'fondo') {
+        if (this.cajaBanco == 'C') {
           dataCuentaCont['cuenta'] = 'FONDO OPERATIVO';
           dataCuentaCont['nombre'] = this.listaFondos.find(b => b.id == this.form.fondoOperativoId.value).nombre;
-          dataCuentaCont['tabla'] =  'fondos_operativos';
-          dataCuentaCont['tablaRefId'] =  this.form.fondoOperativoId.value;
-          dataCuentaCont['tipoPagoContadoId'] =  this.cajaTipoPago.id;
+          dataCuentaCont['tabla'] = 'fondos_operativos';
+          dataCuentaCont['tablaRefId'] = this.form.fondoOperativoId.value;
+          dataCuentaCont['tipoPagoContadoId'] = this.cajaTipoPago.id;
         } else {
           dataCuentaCont['cuenta'] = this.listaCuentasBanco.find(c => c.id == this.form.cuentaBancoId.value).nroCuenta;
           dataCuentaCont['nombre'] = this.listaBancos.find(b => b.id == this.form.bancoId.value).nombre;
-          dataCuentaCont['tabla'] =  'cuentas_banco';
-          dataCuentaCont['tablaRefId'] =  this.form.cuentaBancoId.value;
-          dataCuentaCont['tipoPagoContadoId'] =  this.bancoTipoPago.id;
+          dataCuentaCont['tabla'] = 'cuentas_banco';
+          dataCuentaCont['tablaRefId'] = this.form.cuentaBancoId.value;
+          dataCuentaCont['tipoPagoContadoId'] = this.bancoTipoPago.id;
         }
         this.cuentaContadoService.register(dataCuentaCont).subscribe(data => {
           dataCuentaContMedio['cuentaContadoId'] = data.content.id;
@@ -190,10 +192,10 @@ export class FormularioPagosComponent {
           this.cuentaContadoMedioService.register(dataCuentaContMedio).subscribe(data => {
             this.notificacionService.successStandar();
             this.alActualizar.emit();
-          },(error) => {
+          }, (error) => {
             this.notificacionService.alertError(error);
           });
-        },(error) => {
+        }, (error) => {
           this.notificacionService.alertError(error);
         });
       }

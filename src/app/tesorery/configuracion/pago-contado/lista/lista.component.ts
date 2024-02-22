@@ -13,7 +13,7 @@ import { FuncionesComponent } from 'src/app/tesorery/funciones.component';
 export class ListaPagosComponent extends FuncionesComponent implements OnInit {
 
   @ViewChild('appFormPagoContado') appFormPagoContado: FormularioPagosComponent;
-  textoBuscar = 'Ingrese criterio de busqueda: nombre y nit/ci'
+  textoBuscar = 'Ingrese criterio de busqueda: nombre'
   @Input() rel_prefix: any;
   @Input() rel_field: any;
   @Input() rel_id: any;
@@ -41,9 +41,9 @@ export class ListaPagosComponent extends FuncionesComponent implements OnInit {
       cabeceras: {
         "acciones": this.getOpcionesCabecera('Acciones', 12, 'text', true, false),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
-        "tipoPagoContado": this.getOpcionesCabecera('Tipo Pago', 12, 'text', true, false),
-        "nombre": this.getOpcionesCabecera('Nombre', 12, 'text', true, false),
-        "cuenta": this.getOpcionesCabecera('Cuenta', 12, 'text', true, false),
+        "tipoPagoContado": this.getOpcionesCabecera('Tipo Pago', 12),
+        "nombre": this.getOpcionesCabecera('Nombre', 12),
+        "cuenta": this.getOpcionesCabecera('Cuenta', 12),
         "medioTransferencias": this.getOpcionesCabecera('Medios de Transferencia', 12, 'text', true, false),
         "deleted": this.getOpcionesCabecera('Estado', 6),
       }

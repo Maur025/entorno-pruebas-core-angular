@@ -83,10 +83,11 @@
     <div class="mb-3 nav col-12 px-1" *ngIf="descargo">
       <label class="col-3 col-form-label">(*) Fecha del Movimiento</label>
       <div class="col-9">
-        <input type="text" placeholder="dd-mm-AA" formControlName="fechaMovimiento" [minDate]="fechaActual" class="form-control" bsDatepicker [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY'}" [ngClass]="{ 'is-invalid': submitted && form['fechaMovimiento'].errors}">
+        <input type="text" placeholder="dd-mm-AA" formControlName="fechaMovimiento" [minDate]="fechaMinima" class="form-control" bsDatepicker [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY'}" [ngClass]="{ 'is-invalid': submitted && form['fechaMovimiento'].errors}">
         <div *ngIf="submitted && form['fechaMovimiento'].errors" class="col-sm-12">
           <div *ngIf="form['fechaMovimiento'].errors['required']" class="text-danger mt-1 font-size-10">La fecha es obligatoria</div>
-          <div *ngIf="form['fechaMovimiento'].errors['fechaInvalida']" class="text-danger font-size-10 mt-1" >La fecha debe ser igual o mayor a la fecha actual</div>
+          <div *ngIf="form['fechaMovimiento'].errors['fechaInvalida']" class="text-danger font-size-10 mt-1" >La fecha del movimiento debe ser igual o mayor a la fecha actual</div>
+          <div *ngIf="form['fechaMovimiento'].errors['fechaMovimientoInvalida']" class="text-danger font-size-10 mt-1" >La fecha del movimiento debe ser posterior a la fecha de solicitud</div>
         </div>
       </div>
     </div>

@@ -33,7 +33,7 @@ export class FormularioOperativoComponent implements OnInit {
   listaCuentasBanco: any;
   listaMedioTransferencias: any;
   listaEstados: any;
-  fechaActual: any;
+  fechaMinima: any;
   saldo: any;
 
   constructor(
@@ -54,6 +54,7 @@ export class FormularioOperativoComponent implements OnInit {
 
   ngOnInit(): void {
     this.setForm();
+    this.fechaMinima = new Date();
     if (this.fondo) {
       this.setFondo();
       this.getEstados();
@@ -70,7 +71,6 @@ export class FormularioOperativoComponent implements OnInit {
         this.saldo = this.fondo.saldo;
       }
     }
-    this.fechaActual = new Date();
   }
 
   setForm() {
@@ -97,7 +97,7 @@ export class FormularioOperativoComponent implements OnInit {
   addFormDescargo() {
     this.formGroup.addControl('monto', new FormControl(null, [Validators.required]));
     this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
-    this.formGroup.addControl('fechaMovimiento', new FormControl(null, [Validators.required, this.validatorFecha()]));
+    this.formGroup.addControl('fechaMovimiento', new FormControl(null, [Validators.required, this.validatorFecha(), this.validatorFechaMovimiento()]));
     this.formGroup.addControl('estado', new FormControl(null, Validators.required));
   }
 
@@ -128,7 +128,7 @@ export class FormularioOperativoComponent implements OnInit {
   getEstados() {
     this.estadosService.habilitadosFondos().subscribe(data => {
       this.listaEstados = data.content;
-      if (this.apertura || this.descargo) this.form.estado.setValue(this.listaEstados.find(e => e.nombre == this.tipoDescargo).id);;
+      if (this.apertura || this.descargo) this.form.estado.setValue(this.listaEstados.find(e => e.codigo == this.tipoDescargo).id);;
     }, (error) => {
       this.notificacionService.alertError(error);
     });
@@ -256,6 +256,15 @@ export class FormularioOperativoComponent implements OnInit {
       let errores = 'invalido';
       if (control.value && control.value <= monto) errores = 'valido';
       if (control.value && errores == 'invalido') return { montoReposicion: "INVALID" }
+      else return null;
+    }
+  }
+
+  validatorFechaMovimiento() {
+    return (control: AbstractControl): any => {
+      let errores = 'invalido';
+      if (control.value && (new Date(control.value) >= new Date(this.fondo.fechaSolicitud))) errores = 'valido';
+      if (control.value && errores == 'invalido') return { fechaMovimientoInvalida: "INVALID" }
       else return null;
     }
   }
