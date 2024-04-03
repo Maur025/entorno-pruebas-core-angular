@@ -26,6 +26,7 @@ import { WidgetModule } from 'src/app/shared/widget/widget.module';
 import { UIModule } from 'src/app/shared/ui/ui.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { CargandoDirective } from './directives/cargando.directive';
 import { CargandotoolsDirective } from './directives/cargandotools.directive';
 import { FormularioComponent as SubFormularioComponent } from './subtabla/formulario/formulario.component';
 import { FormularioComponent } from './tabla/formulario/formulario.component';
@@ -46,6 +47,7 @@ import { FechasimplePipe } from 'src/app/core/pipes/fechasimple.pipe';
     ImportarComponent,
     TablaselectorComponent,
     SubtablaComponent,
+    CargandoDirective,
     CargandotoolsDirective,
     FormularioComponent,
     SubFormularioComponent,
@@ -87,7 +89,8 @@ import { FechasimplePipe } from 'src/app/core/pipes/fechasimple.pipe';
     TablaselectorComponent,
     SelectorAddComponent,
     SelectorImageComponent,
-    FechasimplePipe
+    FechasimplePipe,
+    CargandoDirective,
   ]
 })
 export class HerramientasModule { }

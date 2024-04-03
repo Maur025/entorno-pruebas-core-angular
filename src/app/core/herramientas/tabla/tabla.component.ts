@@ -31,10 +31,11 @@ export class TablaComponent implements OnInit {
   @Input() campoEstado: any = 'estado';
   @Input() valueEstado: any = 'habilitado';
   @Input() textoBuscar: string = 'Ingrese criterio de búsqueda';
-  @Input() filtros = false;
-  @Input() filtrosData: any;
+  @Input() filtros: any;
+  @Input() filtrosNoRefresh = [];
   @Input() idRuta: any;
   @Output() alCargar: EventEmitter<any> = new EventEmitter();
+  @Output() alRefrescar: EventEmitter<any> = new EventEmitter();
   @Output() alCrear: EventEmitter<any> = new EventEmitter();
   @Output() alFiltrar: EventEmitter<any> = new EventEmitter();
   @Output() alEditar: EventEmitter<any> = new EventEmitter();
@@ -46,7 +47,7 @@ export class TablaComponent implements OnInit {
   @Output() alExportarPlantilla: EventEmitter<any> = new EventEmitter();
 
   @Input() getAll: any;
-  @Input() exportReport: any;
+  @Input() exportReport: any = 'exportReport';
 
   @Input() templateFila: TemplateRef<any>;
   @Input() templateTbody: any;
@@ -60,7 +61,7 @@ export class TablaComponent implements OnInit {
   estaCargando = true;
   filtrosNuevo = {};
 
-  pagination = {
+  public pagination = {
     size: 10,
     page: 1,
     sortBy: 'id',
@@ -79,8 +80,6 @@ export class TablaComponent implements OnInit {
 
   classTable: string = 'table mb-0 table-hover align-middle nowrap data-table table-condensed';
 
-  /*filtros */
-
   config_autoclose: any = false;
   mostrarTodas() {
     this.cabeceras.forEach(key => {
@@ -90,6 +89,7 @@ export class TablaComponent implements OnInit {
       }
     });
   }
+
   ampliar() {
     this.smallTable = !this.smallTable;
   }
@@ -117,14 +117,10 @@ export class TablaComponent implements OnInit {
 
   ngOnChanges() {
     this.filtros;
-    this.filtrosData;
     if (this.filtros) {
-      if (this.filtrosData != undefined) {
-        this.cabeceras = this.objectKeys(this.formato.cabeceras);
-        this.filtrosData;
-        if (this.inputBuscar || this.inputBuscar != '') this.filtrosData.keyword = this.inputBuscar;
-        this.obtenerDatos();
-      }
+      this.cabeceras = this.objectKeys(this.formato.cabeceras);
+      if (this.inputBuscar || this.inputBuscar != '') this.filtros.keyword = this.inputBuscar;
+      this.obtenerDatos();
     } else {
       this.cabeceras = this.objectKeys(this.formato.cabeceras);
       this.obtenerDatos();
@@ -134,14 +130,14 @@ export class TablaComponent implements OnInit {
   buscarKeyDown(buscar) {
     if (!this.inputBuscar || this.inputBuscar == '' || buscar) {
       this.buscar = true;
-      if (this.filtros && (this.inputBuscar || this.inputBuscar != '')) this.filtrosData.keyword = this.inputBuscar;
+      if (this.filtros) this.inputBuscar || this.inputBuscar != '' ? this.filtros.keyword = this.inputBuscar : delete this.filtros.keyword;
       this.obtenerDatos();
     }
   }
 
   public obtenerDatos() {
     if (this.paginate) {
-      if (this.filtros == false) {
+      if (!this.filtros) {
         if (this.idRuta) {
           this.datosService[this.getAll](this.pagination.size, this.pagination.page, this.pagination.sortBy, this.pagination.descending, this.inputBuscar, this.idRuta).subscribe((result: any) => {
             this.datos = result.content;
@@ -164,7 +160,7 @@ export class TablaComponent implements OnInit {
           });
         }
       } else {
-        this.datosService[this.getAll](this.pagination.size, this.pagination.page, this.pagination.sortBy, this.pagination.descending, this.inputBuscar, this.filtrosData).subscribe((result: any) => {
+        this.datosService[this.getAll](this.pagination.size, this.pagination.page, this.pagination.sortBy, this.pagination.descending, this.inputBuscar, this.filtros).subscribe((result: any) => {
           this.datos = result.content;
           this.pagination.rowsNumber = result.pagination ? result.pagination.rowsNumber : result.content.length;
           this.pagination.pages = result.pagination ? result.pagination.pages : 1;
@@ -175,7 +171,7 @@ export class TablaComponent implements OnInit {
         });
       }
     } else {
-      this.datosService[this.getAll](this.inputBuscar, this.filtrosData).subscribe((result: any) => {
+      this.datosService[this.getAll](this.inputBuscar, this.filtros).subscribe((result: any) => {
         this.datos = result.content;
         this.pagination.rowsNumber = result.pagination ? result.pagination.rowsNumber : result.content.length;
         this.pagination.pages = result.pagination ? result.pagination.pages : 1;
@@ -230,21 +226,12 @@ export class TablaComponent implements OnInit {
   }
 
   exportar(tipo) {
-    if (!this.exportReport) {
-      this.datosService.exportReporte(tipo, this.filtrosData).subscribe(response => {
-        if (tipo == 'XLSX') this.archivosService.generar64aExcel(response['content'].content, response['content'].name);
-        if (tipo == 'PDF') this.archivosService.generar64aPDF(response['content'].content, response['content'].name);
-      }, error => {
-        this.notificacionService.alertError(error);
-      });
-    } else {
-      this.datosService[this.exportReport](tipo, this.filtrosData).subscribe(response => {
-        if (tipo == 'XLSX') this.archivosService.generar64aExcel(response['content'].content, response['content'].name);
-        if (tipo == 'PDF') this.archivosService.generar64aPDF(response['content'].content, response['content'].name);
-      }, error => {
-        this.notificacionService.alertError(error);
-      });
-    }
+    this.datosService[this.exportReport](tipo, this.filtros).subscribe(response => {
+      if (tipo == 'XLSX') this.archivosService.generar64aExcel(response['content'].content, response['content'].name);
+      if (tipo == 'PDF') this.archivosService.generar64aPDF(response['content'].content, response['content'].name);
+    }, error => {
+      this.notificacionService.alertError(error);
+    });
   }
 
   resetButtonsCabecera() {
@@ -255,13 +242,20 @@ export class TablaComponent implements OnInit {
   };
 
   refrescar() {
-    this.filtrosData = {};
+    if (this.filtros) {
+      Object.entries(this.filtros).forEach(([key, value]) => {
+        if (!this.filtrosNoRefresh.includes(key)) delete this.filtros[key];
+      });
+    }
     this.inputBuscar = '';
     this.resetButtonsCabecera();
-    this.pagination.sortBy = 'id';
-    this.pagination.page = 1;
-    this.pagination.descending = false,
+    this.refreshPaginate();
+      this.alRefrescar.emit(this.datos);
     this.obtenerDatos();
+  }
+
+  refreshPaginate() {
+    this.pagination = {size: 10, page: 1, sortBy: 'id',descending: false, rowsNumber: 0, pages: 0 }
   }
 
   exportarPlantilla() {

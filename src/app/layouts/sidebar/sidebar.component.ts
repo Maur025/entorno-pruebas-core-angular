@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { MENU } from './menu';
 import { MenuItem } from './menu.model';
 import { TranslateService } from '@ngx-translate/core';
+import { ModulosService } from 'src/app/tesorery/services/tesoreria/modulos.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -28,7 +29,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
 
   @ViewChild('sideMenu') sideMenu: ElementRef;
 
-  constructor(private eventService: EventService, private router: Router, public translate: TranslateService, private http: HttpClient) {
+  constructor(private eventService: EventService, private router: Router, public translate: TranslateService, private http: HttpClient, private modulosService: ModulosService) {
     router.events.forEach((event) => {
       if (event instanceof NavigationEnd) {
         this._activateMenuDropdown();
@@ -132,7 +133,10 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
         }
       }
     }
+  }
 
+  capitalizar(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
   }
 
   /**
@@ -140,6 +144,34 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
    */
   initialize(): void {
     this.menuItems = MENU;
+    this.cargarModulos();
+  }
+
+  abrirSubItem(uri) {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([uri])
+    });
+  }
+
+  cargarModulos() {
+    this.modulosService.getConfigurables().subscribe(data => {
+      let arrayConfigurables = [];
+      data.content.forEach((modulo, index) => {
+        arrayConfigurables.push(41 + index)
+      });
+      this.menuItems = this.menuItems.filter(objeto => !arrayConfigurables.includes(objeto.id));
+      data.content.forEach((modulo, index) => {
+        this.menuItems.splice(this.menuItems.findIndex(item => item.id === 4) + 1 + index, 0,
+          {
+            id: 41 + index,
+            label: this.capitalizar(modulo.nombre),
+            icon: 'mdi mdi-circle-small',
+            link: 'transacciones/modulo/' + modulo.id + '/lista',
+            reload: true
+          }
+        );
+      });
+    }, err => { });
   }
 
   /**

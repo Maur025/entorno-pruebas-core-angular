@@ -59,6 +59,7 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
         "saldo": this.getOpcionesCabecera('Saldo', 12),
         "aperturado": this.getOpcionesCabecera('Aperturado', 12),
         "cierre": this.getOpcionesCabecera('Cerrado', 12),
+        "estadoIntegracion": this.getOpcionesCabecera('Estado de Integracion', 6),
         "deleted": this.getOpcionesCabecera('Estado', 6),
       }
     };
@@ -91,12 +92,12 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 
-  descargos(data: any, template: any, tipo) {
+  descargos(data: any, template: any, tipo, tipoTexto) {
     this.fondo = data;
     this.descargo = true;
     this.apertura = false;
     this.tipoDescargo = tipo;
-    tipo == 'REND' ? this.tipoTexto = 'RENDICIÓN' : this.tipoTexto = tipo;
+    this.tipoTexto = tipoTexto;
     this.titleModal = ' de Fondo Operativo';
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }

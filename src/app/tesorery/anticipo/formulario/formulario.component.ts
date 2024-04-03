@@ -143,7 +143,7 @@ export class FormularioComponent implements OnInit {
           this.alGuardar.emit(res);
         }, (err: any) => {
           this.notificacionService.alertError(err);
-        }        );
+        });
       } else {
         let data = this.formGroup.value;
         data.saldo = Number(data.monto);

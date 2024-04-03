@@ -60,6 +60,16 @@ export const MENU: MenuItem[] = [
     link: 'credito',
   },
   {
+    id: 4,
+    label: 'Transacciones',
+    isTitle: true
+  },
+  {
+    id: 7,
+    label: 'Panel de Control',
+    isTitle: true
+  },
+  {
     id: 70,
     label: 'Configuración',
     icon: 'mdi mdi-cog',

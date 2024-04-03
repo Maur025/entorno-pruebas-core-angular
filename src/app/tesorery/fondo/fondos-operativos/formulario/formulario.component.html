@@ -68,6 +68,7 @@
           <div *ngIf="form['monto'].errors['pattern']" class="text-danger mt-1 font-size-10">El monto de movimiento solo deben ser carácteres númericos</div>
           <div *ngIf="form['monto'].errors['max']" class="text-danger font-size-10 mt-1" >El monto de movimiento de devolución no debe superar al saldo de {{saldo}}</div>
           <div *ngIf="form['monto'].errors['montoReposicion']" class="text-danger font-size-10 mt-1" >El monto de movimiento de reposición no debe superar {{fondo.importe-fondo.saldo}}</div>
+          <div *ngIf="form['monto'].errors['min']" class="text-danger font-size-10 mt-1" >El monto del movimiento debe ser mayor a 1</div>
         </div>
       </div>
     </div>
