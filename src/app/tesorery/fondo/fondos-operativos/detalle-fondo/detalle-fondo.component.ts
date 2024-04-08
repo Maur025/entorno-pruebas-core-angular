@@ -74,4 +74,8 @@ export class DetalleFondoComponent extends FuncionesComponent implements OnInit 
   regresar() {
     this.location.back();
   }
+
+  refrescar(){
+    this.setFondo();
+  }
 }

@@ -34,4 +34,8 @@ export class EstadosService {
   habilitadosSagas() {
     return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/sagas`);
   }
+
+  habilitadosIntegracion() {
+    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/integracion`);
+  }
 }

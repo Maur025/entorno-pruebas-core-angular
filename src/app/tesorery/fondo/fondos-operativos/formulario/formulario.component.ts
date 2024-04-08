@@ -12,6 +12,8 @@ import { DetalleFondoOperativoService } from "src/app/tesorery/services/tesoreri
 import { EstadosService } from "src/app/tesorery/services/tesoreria/estados.service";
 import { forkJoin } from 'rxjs';
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
+import { BsModalService } from "ngx-bootstrap/modal";
+import { EsquemaService } from "src/app/tesorery/services/tesoreria/esquema.service";
 
 @Component({
   selector: 'app-formulario-operativo',
@@ -20,12 +22,16 @@ import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/fo
 })
 export class FormularioOperativoComponent implements OnInit {
 
+  @Input() transaccion;
+  @Input() esquemaId;
+
   @Input() fondo;
   @Input() apertura;
   @Input() descargo;
   @Input() tipoDescargo;
   @Output() alGuardar = new EventEmitter<any>();
   @Output() alActualizar = new EventEmitter<any>();
+  @Output() alProcesar = new EventEmitter<any>();
   formGroup: FormGroup;
   submitted = false;
   listaCentroCostos: any;
@@ -48,6 +54,8 @@ export class FormularioOperativoComponent implements OnInit {
     private cuentaBancoService: CuentaBancoService,
     private notificacionService: NotificacionService,
     private _localeService: BsLocaleService,
+    public esquemasService: EsquemaService,
+    private modalService: BsModalService
   ) {
     this._localeService.use('es');
   }
@@ -64,12 +72,12 @@ export class FormularioOperativoComponent implements OnInit {
         this.getMedioTransferencias();
         this.formGroup.disable();
         this.addFormApertura();
-      }
-      if (this.descargo) {
+      } else if (this.descargo) {
         this.formGroup.disable();
         this.addFormDescargo();
         this.saldo = this.fondo.saldo;
       }
+      if (this.transaccion) this.setTransaccion();
     }
   }
 
@@ -128,7 +136,8 @@ export class FormularioOperativoComponent implements OnInit {
   getEstados() {
     this.estadosService.habilitadosFondos().subscribe(data => {
       this.listaEstados = data.content;
-      if (this.apertura || this.descargo) this.form.estado.setValue(this.listaEstados.find(e => e.codigo == this.tipoDescargo).id);;
+      if (this.apertura || this.descargo) this.form.estado.setValue(this.listaEstados.find(e => e.codigo == this.tipoDescargo).id);
+      this.cambioEstado();
     }, (error) => {
       this.notificacionService.alertError(error);
     });
@@ -150,23 +159,25 @@ export class FormularioOperativoComponent implements OnInit {
   }
 
   cambioEstado() {
-    if (this.form.monto == undefined) {
-      this.form.monto.setValidators([Validators.required]);
-    } else {
-      let estado = this.listaEstados.find(({ id }) => id === this.form.estado.value);
-      switch (estado.nombre) {
-        case "RENDIDO":
-          this.form.monto.setValidators([Validators.required]);
-          break;
-        case "REPOSICION":
-          this.form.monto.setValidators([Validators.required, this.validatorMontoReposicion(this.fondo.importe - this.fondo.saldo)]);
-          break;
-        case "DEVOLUCION":
-          this.form.monto.setValidators([Validators.required, Validators.max(this.fondo.saldo)]);
-          break;
+    if (this.fondo) {
+      if (this.form.monto == undefined) {
+        this.form.monto.setValidators([Validators.required]);
+      } else {
+        let estado = this.listaEstados.find(({ id }) => id === this.form.estado.value);
+        switch (estado.codigo) {
+          case "REND":
+            this.form.monto.setValidators([Validators.required, Validators.min(1)]);
+            break;
+          case "REP":
+            this.form.monto.setValidators([Validators.required, this.validatorMontoReposicion(this.fondo.importe - this.fondo.saldo), Validators.min(1)]);
+            break;
+          case "DEV":
+            this.form.monto.setValidators([Validators.required, Validators.max(this.fondo.saldo), Validators.min(1)]);
+            break;
+        }
       }
+      this.form.monto.updateValueAndValidity()
     }
-    this.form.monto.updateValueAndValidity()
   }
 
   get form() {
@@ -185,8 +196,21 @@ export class FormularioOperativoComponent implements OnInit {
     });
   }
 
+  setTransaccion() {
+    let fecha = this.transaccion.fechaMovimiento.substring(5, 7) + '-' + this.transaccion.fechaMovimiento.substring(8, 10) + '-' + this.transaccion.fechaMovimiento.substring(0, 4);
+    this.formGroup.patchValue({
+      monto: this.transaccion.monto,
+      centroCostoId: this.transaccion.centroCostoId,
+      fechaMovimiento: new Date(fecha),
+      estado: this.transaccion.estado,
+    });
+    this.formGroup.disable();
+    this.form.fechaMovimiento.enable();
+  }
+
   public guardar() {
     this.submitted = true;
+    this.cambioEstado();
     if (this.formGroup.valid) {
       if (this.descargo) {
         let data = this.formGroup.getRawValue();
@@ -195,6 +219,12 @@ export class FormularioOperativoComponent implements OnInit {
         data.fondoOperativoId = data.id;
         this.detalleFontoOperativoService.register(data).subscribe(data => {
           this.notificacionService.successStandar();
+          if (this.transaccion && this.esquemaId) {
+            this.esquemasService.updateNextEstadoIntegracion(this.esquemaId).subscribe(data => {
+              this.alProcesar.emit();
+              this.cerrarModal();
+            }, error => this.notificacionService.alertError(error));
+          }
           this.alActualizar.emit();
         }, (error) => {
           this.notificacionService.alertError(error);
@@ -221,7 +251,7 @@ export class FormularioOperativoComponent implements OnInit {
           this.notificacionService.alertError(error);
         });
       } else {
-        if (this.fondo) {
+        if (this.fondo && !this.transaccion) {
           this.fondoOperativoService.update(this.formGroup.getRawValue()).subscribe(data => {
             this.notificacionService.successStandar();
             this.alActualizar.emit();
@@ -267,6 +297,10 @@ export class FormularioOperativoComponent implements OnInit {
       if (control.value && errores == 'invalido') return { fechaMovimientoInvalida: "INVALID" }
       else return null;
     }
+  }
+
+  cerrarModal() {
+    this.modalService.hide();
   }
 
 }

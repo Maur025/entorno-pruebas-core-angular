@@ -31,10 +31,11 @@ export class TablaselectorComponent implements OnInit {
   @Input() campoEstado:any = 'estado';
   @Input() valueEstado:any = 'habilitado';
   @Input() textoBuscar: string = 'Ingrese criterio de busqueda';
-  @Input() filtros = false;
-  @Input() filtrosData :any;
+  @Input() filtros :any;
+  @Input() filtrosNoRefresh = [];
   @Input() idRuta :any;
   @Output() alCargar: EventEmitter<any> = new EventEmitter();
+  @Output() alRefrescar: EventEmitter<any> = new EventEmitter();
   @Output() alCrear: EventEmitter<any> = new EventEmitter();
   @Output() alFiltrar: EventEmitter<any> = new EventEmitter();
   @Output() alEditar: EventEmitter<any> = new EventEmitter();
@@ -45,7 +46,7 @@ export class TablaselectorComponent implements OnInit {
   @Output() alExportar: EventEmitter<any> = new EventEmitter();
 
   @Input() getAll: any;
-  @Input() exportReport: any;
+  @Input() exportReport: any = 'exportReport';
 
   @Input() templateFila: TemplateRef<any>;
   @Input() templateTbody:any;

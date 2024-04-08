@@ -46,10 +46,9 @@
                   <i class="mdi mdi-cogs"></i><span class="mdi mdi-chevron-down"></span>
                 </button>
                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu text-center"role="menu" aria-labelledby="button-basic">
-                  <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'REND')">Rendición <i class="mdi mdi-transfer-down"></i></button></li>
-                  <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'REP')">Reposición <i class="mdi mdi-restore-alert"></i></button></li>
-                  <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'DEV')">Devolución <i class="mdi mdi-sync"></i></button></li>
-                  <!-- <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'DEVOLUCIÓN')">Cierre <i class="mdi mdi-close"></i></button></li> -->
+                  <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'REND', 'RENDICIÓN')">Rendición <i class="mdi mdi-transfer-down"></i></button></li>
+                  <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'REP','REPOSICIÓN')">Reposición <i class="mdi mdi-restore-alert"></i></button></li>
+                  <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'DEV','DEVOLUCIÓN')">Devolución <i class="mdi mdi-sync"></i></button></li>
                 </ul>
               </div>
             </li>
@@ -78,6 +77,9 @@
         </div>
         <div *ngSwitchCase="'cierre'" class="text-center">
           <span class="badge font-size-12" style="width: 30px;" [ngClass]="{'bg-success': fila.cierre, 'bg-secondary': !fila.cierre}">{{fila.cierre==true ? 'SI' : 'NO'}}</span>
+        </div>
+        <div *ngSwitchCase="'estadoIntegracion'">
+          {{fila.estadoIntegracion?.nombre }}
         </div>
         <div *ngSwitchCase="'deleted'">
           <span *ngIf="!fila.deleted" class="badge bg-success font-size-10"><i class="mdi mdi-lock-open me-1"></i> Habilitado</span>

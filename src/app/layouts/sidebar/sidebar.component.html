@@ -18,11 +18,22 @@
               translate}}</span>
           </a>
 
-          <a routerLink="{{item.link}}" *ngIf="!hasItems(item)" class="side-nav-link-ref" routerLinkActive="active">
-            <i class="{{ item.icon }}" *ngIf="item.icon"></i>
+          <a routerLink="{{ item.link }}" *ngIf="!hasItems(item) && !item.reload" class="side-nav-link-ref"
+            routerLinkActive="active">
+            <i class="{{ item.icon }} icon-animate" *ngIf="item.icon"></i>
             <span> {{ item.label | translate }}</span>
-            <span class="badge rounded-pill bg-{{item.badge.variant}} float-end" *ngIf="item.badge">{{item.badge.text |
-              translate}}</span>
+            <span class="badge rounded-pill bg-{{ item.badge?.variant }} float-end" *ngIf="item.badge">
+              {{ item.badge.text | translate }}
+            </span>
+          </a>
+
+          <a routerLink="{{ item.link }}" *ngIf="!hasItems(item) && item.reload" class="side-nav-link-ref"
+            routerLinkActive="active" (click)="abrirSubItem(item.link)">
+            <i class="{{ item.icon }} icon-animate" *ngIf="item.icon"></i>
+            <span> {{ item.label | translate }}</span>
+            <span class="badge rounded-pill bg-{{ item.badge?.variant }} float-end" *ngIf="item.badge">
+              {{ item.badge.text | translate }}
+            </span>
           </a>
 
           <ul *ngIf="hasItems(item)" class="sub-menu" aria-expanded="false">

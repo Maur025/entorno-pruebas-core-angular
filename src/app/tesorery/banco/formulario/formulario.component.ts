@@ -45,13 +45,13 @@ export class FormularioComponent extends FuncionesComponent implements OnInit {
 
   setForm() {
     this.formGroup = this.FormBuilder.group({
-      id: ["", []],
-      nombre: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
-      sigla: ["", [Validators.minLength(2), Validators.maxLength(255)]],
-      descripcion: ["", []],
-      url: ["", []],
-      direccion: ["", []],
-      telefono: ["", []],
+      id: [, []],
+      nombre: [, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
+      sigla: [, [Validators.minLength(2), Validators.maxLength(255)]],
+      descripcion: [, []],
+      url: [, []],
+      direccion: [, []],
+      telefono: [, []],
     });
   }
 
