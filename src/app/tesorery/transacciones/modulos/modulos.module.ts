@@ -14,17 +14,21 @@ import { ModulosRoutingModule } from './modulos-routing.module';
 import { FormularioModuloComponent } from './formulario/formulario.component';
 import { ListaComponent } from './lista/lista.component';
 import { FondoModule } from '../../fondo/fondo.module';
+import { CreditoModule } from '../../credito/credito.module';
+import { FormularioFormaPagoComponent } from './formulario-forma-pago/formulario-forma-pago.component';
 
 
 @NgModule({
   declarations: [
     ListaComponent,
     FormularioModuloComponent,
+    FormularioFormaPagoComponent,
   ],
   imports: [
     CommonModule,
     HerramientasCompartidas,
     FondoModule,
+    CreditoModule,
     UIModule,
     FormsModule,
     NgSelectModule,

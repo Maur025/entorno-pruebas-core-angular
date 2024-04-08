@@ -1,8 +1,7 @@
 <div appCargando [cargando]="cargandoContenido">
-  <div *ngIf="transaccion">
    <!--  <div *ngIf="modulo.codigo == 'COM'" class="card-body p-3  border-bottom">
       <app-facturas-recibos #appFacturasRecibos [esquema]="esquema" (actualizarAsiento)="recibirAsiento($event)"></app-facturas-recibos>
     </div> -->
-    <app-formulario-operativo #appFormAsiento [transaccion]="transaccion" [fondo]="transaccion" [descargo]="['RENDFO'].includes(esquema.codigoProceso)" [tipoDescargo]="'REND'" [esquemaId]="esquema.id" (alProcesar)="alProcesar.emit($event)"></app-formulario-operativo>
+    <app-formulario-operativo #appFormAsiento *ngIf="esquema.codigoProceso == 'RENDFO'" [transaccion]="transaccion" [fondo]="transaccion" [descargo]="['RENDFO'].includes(esquema.codigoProceso)" [tipoDescargo]="'REND'" [esquemaId]="esquema.id" (alProcesar)="alProcesar.emit($event)"></app-formulario-operativo>
+    <app-formulario-forma-pago #appFormCredito *ngIf="esquema.codigoProceso == 'PAG'" [esquema]="esquema"></app-formulario-forma-pago>
   </div>
-</div>

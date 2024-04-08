@@ -22,4 +22,9 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
     searchProveedor(keyword :any ){
       return this.apiService.compras.post(`${this.apiUrl}${this.prefix}/${this.apiName}/filter`, {keyword:keyword});
     }
+
+    habilitados(){
+      return this.apiService.compras.get(`${this.apiUrl}${this.prefix}/${this.apiName}/habilitados`);
+    }
+
   }

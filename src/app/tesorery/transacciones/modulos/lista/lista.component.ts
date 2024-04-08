@@ -9,6 +9,7 @@ import { FuncionesComponent } from 'src/app/tesorery/funciones.component';
 import { BsLocaleService } from "ngx-bootstrap/datepicker";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { FormularioOperativoComponent } from 'src/app/tesorery/fondo/fondos-operativos/formulario/formulario.component';
+import { TransaccionesComprasService } from 'src/app/tesorery/services/tesoreria/transaccionesCompras.service';
 @Component({
   selector: 'app-lista',
   templateUrl: './lista.component.html',
@@ -36,8 +37,10 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   procesar: boolean;
   modalTitle: string = '';
   esquema: any;
+  transaccion: any;
 
   constructor(
+    private transaccionesComprasService: TransaccionesComprasService,
     private route: ActivatedRoute,
     private router: Router,
     private estadosService: EstadosService,
@@ -96,13 +99,26 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   }
 
   modalProcesarTransaccionKafka(template, data): void {
-    this.modalTitle = 'Procesar Transacción Movimiento';
     this.esquema = data;
     this.procesar = true;
-    let sizeModal;
-    this.esquema.codigoProceso == 'RENDFO' ? sizeModal = 'lg' : sizeModal = 'xl';
-    this.modalRef = this.modalService.show(template, { class: 'modal-' + sizeModal + ' modal-dialog-scrollable', backdrop: 'static' });
+    this.getAsientoAutomaticoDatos(template);
     //this.router.navigate(['transacciones/modulo/'+this.moduloId+'/formulario/'+this.esquema.transaccionKafkaId+'/tipo/'+this.esquema.codigoProceso+'/'+this.esquema.id]);
+  }
+
+  getAsientoAutomaticoDatos(template) {
+    switch (this.esquema.codigoProceso) {
+      case 'RENDFO':
+      this.modalTitle = 'Procesar Transacción Movimiento';
+        this.transaccionesComprasService.getMovimientoFondoOperativo({ transaccionKafkaId: this.esquema.transaccionKafkaId }).subscribe(data => {
+          this.transaccion = data.content;
+          this.modalRef = this.modalService.show(template, { class: `modal-lg modal-dialog-scrollable`, backdrop: 'static' });
+        }, error => this.notificacion.alertError(error));
+        break;
+      case 'PAG':
+        this.modalTitle = 'Procesar Transacción Formas de Pago';
+        this.modalRef = this.modalService.show(template, { class: `modal-xl modal-dialog-scrollable`, backdrop: 'static' });
+        break;
+    }
   }
 
   verDatos(template, data) {
@@ -156,6 +172,11 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     });
   }
 
+  procesarFormaPago(appFormModulo) {
+    this.notificacion.alertaSimpleConfirmacionBoton('¿Está seguro de realizar el proceso de registro de la forma de pago?', 'Si, procesar', (response: any) => {
+      if (response) appFormModulo.appFormCredito.guardar();
+    });
+  }
   cerrarModal() {
     this.modalService.hide();
   };
