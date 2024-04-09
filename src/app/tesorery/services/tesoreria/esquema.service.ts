@@ -20,7 +20,7 @@ export class EsquemaService {
   }
 
   filter(size: number = 100, page: number = 1, sortBy: string = 'id', descending: false, keyword: any, filtros: any) {
-    return this.apiService.tesoreria.post(this.prefix + `/${this.apiName}/filter?size=${size}&page=${page - 1}&sortBy=${sortBy}&descending=${descending}`, filtros);
+    return this.apiService.tesoreria.post(this.prefix + `/${this.apiName}/filter?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}`, filtros);
   }
 
   updateNextEstadoIntegracion(esquemaId:any){

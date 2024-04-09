@@ -88,12 +88,13 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()"></button>
       </div>
       <div class="modal-body">
-        <app-formulario-modulo #appFormModulo [esquema]="esquema" [modulo]="modulo" [moduloId]="moduloId" (alProcesar)="tabla.obtenerDatos()"></app-formulario-modulo>
+        <app-formulario-modulo #appFormModulo [esquema]="esquema" [transaccion]="transaccion" [modulo]="modulo" [moduloId]="moduloId" (alProcesar)="tabla.obtenerDatos()"></app-formulario-modulo>
       </div>
       <div class="modal-footer">
         <div class="hstack gap-2 justify-content-end">
           <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modalRef.hide()">Cerrar</button>
           <button *ngIf="esquema.codigoProceso == 'RENDFO'" type="button" class="btn btn-success" (click)="rendirFormulario(appFormModulo)">Procesar</button>
+          <button *ngIf="esquema.codigoProceso == 'PAG'" type="button" class="btn btn-success" (click)="procesarFormaPago(appFormModulo)">Procesar</button>
         </div>
       </div>
     </ng-template>

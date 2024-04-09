@@ -40,3 +40,18 @@ ng-select.ngselect-invalid .ng-select-container {
 input.uppercase, textarea.uppercase {
   text-transform: uppercase;
 }
+
+.customClassPopOver .popover-arrow.arrow::after {
+  border-left-color: #50a5f1 !important;
+  border-right-color: #50a5f1 !important;
+}
+.customClassPopOver .popover-content.popover-body {
+  border: solid #c4c8dd 2px !important;
+}
+
+
+.ng-select-container  {
+  min-height: 0px;
+  border-radius: 0;
+}
+
