@@ -17,8 +17,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   @ViewChild('appFormDevengado') appFormDevengado: FormularioComponent;
 
   breadCrumbItems: Array<{}>;
-  breadCrumbTitle: string = 'Administración de Devengados';
-  titulo: string = 'Devengados Proveedor'
+  breadCrumbTitle: string = 'Devengados';
+  titulo: string = 'Lista Devengados Proveedor'
   @Input() rel_prefix: any;
   @Input() rel_field: any;
   @Input() rel_id: any;

@@ -3,5 +3,5 @@
       <app-facturas-recibos #appFacturasRecibos [esquema]="esquema" (actualizarAsiento)="recibirAsiento($event)"></app-facturas-recibos>
     </div> -->
     <app-formulario-operativo #appFormAsiento *ngIf="esquema.codigoProceso == 'RENDFO'" [transaccion]="transaccion" [fondo]="transaccion" [descargo]="['RENDFO'].includes(esquema.codigoProceso)" [tipoDescargo]="'REND'" [esquemaId]="esquema.id" (alProcesar)="alProcesar.emit($event)"></app-formulario-operativo>
-    <app-formulario-forma-pago #appFormCredito *ngIf="esquema.codigoProceso == 'PAG'" [esquema]="esquema"></app-formulario-forma-pago>
+    <app-formulario-forma-pago #appFormCredito *ngIf="esquema.codigoProceso == 'PAG'" [esquema]="esquema" (alProcesar)="alProcesar.emit()"></app-formulario-forma-pago>
   </div>

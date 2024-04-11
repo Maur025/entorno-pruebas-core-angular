@@ -16,7 +16,7 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
   @ViewChild('appFormFondoOp') appFormFondoOp: FormularioOperativoComponent;
 
   breadCrumbItems: Array<{}>;
-  breadCrumbTitle: string = 'Adminstrar Fondos Operativos';
+  breadCrumbTitle: string = 'Fondos Operativos';
   textoBuscar = 'Ingrese criterio de busqueda: nombre, nro solicitud y descripción'
   @Input() rel_prefix: any;
   @Input() rel_field: any;

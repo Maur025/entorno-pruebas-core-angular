@@ -13,7 +13,7 @@ import { FuncionesComponent } from 'src/app/tesorery/funciones.component';
 export class ListaComponent  extends FuncionesComponent  implements OnInit {
 
   breadCrumbItems: Array<{}>;
-  breadCrumbTitle: string = 'Adminstrar Créditos';
+  breadCrumbTitle: string = 'Créditos';
   textoBuscar = 'Ingrese criterio de busqueda: nro de referecia'
   @Input() rel_prefix: any;
   @Input() rel_field: any;
@@ -62,9 +62,9 @@ export class ListaComponent  extends FuncionesComponent  implements OnInit {
   }
 
   verDetalle(data: any, template: any) {
-    this.modalRef = this.modalService.show(template, { class: `modal-xl modal-scrollable` });
+    //this.modalRef = this.modalService.show(template, { class: `modal-xl modal-scrollable` });
     this.credito = data;
-    //this.router.navigate(['./detalle/' + data.id, {}], { relativeTo: this.route });
+    this.router.navigate(['credito/detalle/' + this.credito.id]);
   }
 
   habilitar(data: any, component, texto) {

@@ -1,5 +1,8 @@
-<div class="container-fluid" *ngIf="credito">
-  <div class="nav col-12">
+<app-page-title title="Créditos" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+
+<div class="card card-body" appCargando [cargando]="cargandoContenido">
+  <h5 class="card-title mb-3 pb-3 border-bottom">Detalle de Crédito</h5>
+  <div class="nav col-12" *ngIf="credito">
     <div class="nav col-12 border-bottom">
       <div class="col-4 mb-2 px-1">
         <p class="ps-2">
@@ -49,6 +52,7 @@
         <table class="table table-hover">
           <thead>
             <tr>
+              <th>Acciones</th>
               <th>Descripción</th>
               <th>Descripcion Pagado</th>
               <th>Fecha a Pagar</th>
@@ -60,6 +64,9 @@
           </thead>
           <tbody>
             <tr *ngFor="let detalle of credito.detalleCredito">
+              <td>
+                <button [disabled]="detalle.monto == detalle.montoPagado" class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Pagar" (click)="pagarCredito(pagarCuenta, detalle)"><i class="bx bx-dollar"></i></button>
+              </td>
               <td>{{detalle.descripcion}}</td>
               <td>{{detalle.descripcionPagado}}</td>
               <td>{{detalle.fechaPagar | fechaSimple}}</td>
@@ -74,3 +81,19 @@
     </div>
   </div>
 </div>
+
+<ng-template #pagarCuenta role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Registro Pago de Crédito</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modalRef?.hide()"></button>
+  </div>
+  <div class="modal-body">
+    <app-formulario-pago #appFormPagoCredito [detalleCredito]="detalleCredito" (alGuardar)="modalRef?.hide(); getCredito()"></app-formulario-pago>
+  </div>
+  <div class="modal-footer">
+    <div class="hstack gap-2 justify-content-end">
+      <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modalRef?.hide()">Cancelar</button>
+      <button type="button" class="btn btn-success" (click)="appFormPagoCredito.guardar()">Registrar</button>
+    </div>
+  </div>
+</ng-template>

@@ -17,7 +17,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   @ViewChild('appFormBanco') appFormBanco: FormularioComponent;
   @ViewChild('appFormCuenta') appFormCuenta: CuentaFormularioComponent;
   breadCrumbItems: Array<{}>;
-  breadCrumbTitle: string = 'Adminstrar Banco';
+  breadCrumbTitle: string = 'Bancos';
   titulo: string = 'Lista de Bancos';
   textoBuscar = 'Ingrese criterio de busqueda: nombre, sigla, descripcion, dirección y url'
   @Input() rel_prefix: any;

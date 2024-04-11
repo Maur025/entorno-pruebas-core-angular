@@ -15,7 +15,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   @ViewChild('appFormEntidad') appFormEntidad: FormularioComponent;
 
   breadCrumbItems: Array<{}>;
-  breadCrumbTitle: string = 'Adminstrar Entidades';
+  breadCrumbTitle: string = 'Entidades';
   textoBuscar = 'Ingrese criterio de busqueda: nombre y nit/ci'
   @Input() rel_prefix: any;
   @Input() rel_field: any;

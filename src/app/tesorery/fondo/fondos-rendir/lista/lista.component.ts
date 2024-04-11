@@ -14,7 +14,7 @@ import { FuncionesComponent } from 'src/app/tesorery/funciones.component';
 export class ListaRendirComponent extends FuncionesComponent implements OnInit {
 
   breadCrumbItems: Array<{}>;
-  breadCrumbTitle: string = 'Administrar Fondos a Rendir';
+  breadCrumbTitle: string = 'Fondos a Rendir';
   textoBuscar = 'Ingrese criterio de busqueda: nombre, nro solicitud y descripción'
   @Input() rel_prefix: any;
   @Input() rel_field: any;

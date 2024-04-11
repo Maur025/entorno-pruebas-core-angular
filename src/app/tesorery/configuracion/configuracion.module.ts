@@ -9,7 +9,6 @@ import { HerramientasModule } from 'src/app/core/herramientas/herramientas.modul
 
 import { ConfiguracionRoutingModule } from './configuracion-routing.module';
 
-import { PagoContadoComponent } from './pago-contado/pago-contado.component';
 import { FormularioPagosComponent } from './pago-contado/formulario/formulario.component';
 import { ListaPagosComponent } from './pago-contado/lista/lista.component';
 import { UiSwitchModule } from 'ngx-ui-switch';
@@ -21,7 +20,6 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 @NgModule({
   declarations: [
-    PagoContadoComponent,
     FormularioPagosComponent,
     ListaPagosComponent,
     TransaccionesKafkaComponent,
@@ -43,7 +41,6 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     UiSwitchModule,
   ],
   exports: [
-    PagoContadoComponent,
     FormularioPagosComponent,
     ListaPagosComponent,
     TransaccionesKafkaComponent,
