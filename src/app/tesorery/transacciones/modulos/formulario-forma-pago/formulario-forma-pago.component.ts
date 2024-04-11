@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { ProveedorService } from 'src/app/tesorery/services/compras/proveedor.service';
+import { EsquemaService } from 'src/app/tesorery/services/tesoreria/esquema.service';
 import { MedioTransferenciaService } from 'src/app/tesorery/services/tesoreria/medio-transferencia.service';
 import { TipoPagoContadoService } from 'src/app/tesorery/services/tesoreria/tipo-pago-contado.service';
 import { TransaccionesComprasService } from 'src/app/tesorery/services/tesoreria/transaccionesCompras.service';
@@ -13,8 +14,9 @@ import { TransaccionesComprasService } from 'src/app/tesorery/services/tesoreria
 })
 export class FormularioFormaPagoComponent implements OnInit {
 
-  formFormasPago: UntypedFormGroup;
+  @Output() alProcesar = new EventEmitter<any>();
   @Input() esquema;
+  formFormasPago: UntypedFormGroup;
   transaccion: any;
   viewPlan = false;
   viewMedio = false;
@@ -37,9 +39,11 @@ export class FormularioFormaPagoComponent implements OnInit {
     public proveedorService: ProveedorService,
     public medioTransferenciaService: MedioTransferenciaService,
     public tipoPagoContadoService: TipoPagoContadoService,
+    public esquemaService: EsquemaService,
   ) { }
 
   ngOnInit(): void {
+    console.log(this.esquema)
     this.transaccion = this.esquema.transaccionKafka.datos;
     this.getProveedores();
     this.getMediosTransferencia();
@@ -97,8 +101,12 @@ export class FormularioFormaPagoComponent implements OnInit {
 
   guardar() {
     this.transaccionesComprasService.getFormaPago({ transaccionKafkaId: this.esquema.transaccionKafkaId }).subscribe(data => {
-      this.notificacion.successStandar("Se registro la transaccion exitosamente")
+      this.esquemaService.updateNextEstadoIntegracion(this.esquema.id).subscribe(data => {
+        this.alProcesar.emit();
+        this.notificacion.successStandar("Se registro la transaccion exitosamente");
+      })
     }, error => this.notificacion.alertError(error));
   }
+
 
 }

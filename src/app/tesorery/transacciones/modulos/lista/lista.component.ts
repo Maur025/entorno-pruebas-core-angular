@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { ModulosService } from 'src/app/tesorery/services/tesoreria/modulos.service';
 import { EstadosService } from 'src/app/tesorery/services/tesoreria/estados.service';
@@ -17,6 +17,7 @@ import { TransaccionesComprasService } from 'src/app/tesorery/services/tesoreria
 })
 export class ListaComponent extends FuncionesComponent implements OnInit {
 
+  @ViewChild('tabla') tabla;
   @Input() rel_prefix: any;
   @Input() rel_field: any;
   @Input() rel_id: any;
@@ -38,6 +39,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   modalTitle: string = '';
   esquema: any;
   transaccion: any;
+  viewAcciones: boolean = true;
 
   constructor(
     private transaccionesComprasService: TransaccionesComprasService,
@@ -66,9 +68,9 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   getCabeceras() {
     return {
       cabeceras: {
-        "acciones": this.getOpcionesCabecera('Acciones', 12, 'text', true, false),
+        "acciones": this.getOpcionesCabecera('Acciones', 12, 'text', this.viewAcciones, false),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
-        "codigoProceso": this.getOpcionesCabecera('Código Proceso', 12),
+        "codigoProceso": this.getOpcionesCabecera('Código Proceso', 12, 'text'),
         "descripcion": this.getOpcionesCabecera('Descripción', 12),
         "fechaEnvio": this.getOpcionesCabecera('Fecha Envio', 12),
         "datos": this.getOpcionesCabecera('Datos', 12),
@@ -84,6 +86,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     this.estadosService.habilitadosIntegracion().subscribe(data => {
       this.listaEstadosIntegracion = data.content;
       this.tabId = this.listaEstadosIntegracion[0].codigo;
+      this.tabId == 'PORPROC' ? this.viewAcciones = true : this.viewAcciones = false;
       this.estadoIntegracionId = this.listaEstadosIntegracion[0].id;
       this.actualizarFiltros();
     }, error => this.notificacion.alertError(error));
@@ -108,7 +111,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   getAsientoAutomaticoDatos(template) {
     switch (this.esquema.codigoProceso) {
       case 'RENDFO':
-      this.modalTitle = 'Procesar Transacción Movimiento';
+        this.modalTitle = 'Procesar Transacción Movimiento';
         this.transaccionesComprasService.getMovimientoFondoOperativo({ transaccionKafkaId: this.esquema.transaccionKafkaId }).subscribe(data => {
           this.transaccion = data.content;
           this.modalRef = this.modalService.show(template, { class: `modal-lg modal-dialog-scrollable`, backdrop: 'static' });
@@ -128,8 +131,10 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     this.modalRef = this.modalService.show(template, { class: `modal-md modal-dialog-scrollable` });
   }
 
-  onSelect(data: TabDirective): void {
+  onSelect(data: TabDirective, tabla): void {
+    tabla.tablaA.refreshPaginate();
     this.tabId = data.id;
+    this.tabId == 'PORPROC' ? this.viewAcciones = true : this.viewAcciones = false;
     this.formato = this.getCabeceras();
     this.estadoIntegracionId = this.listaEstadosIntegracion.find(x => x.codigo == this.tabId).id;
     this.actualizarFiltros();
@@ -139,6 +144,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     this.filtroFecha = e;
     this.actualizarFiltros();
   }
+
   convertirFecha(fecha, tipo) {
     let fechaOriginal = new Date(fecha);
     let año = fechaOriginal.getFullYear();

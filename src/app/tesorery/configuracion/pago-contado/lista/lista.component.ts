@@ -17,6 +17,8 @@ export class ListaPagosComponent extends FuncionesComponent implements OnInit {
   @Input() rel_prefix: any;
   @Input() rel_field: any;
   @Input() rel_id: any;
+  breadCrumbItems: Array<{}>;
+  breadCrumbTitle: string = 'Pagos al Contado';
   titulo: string = 'Lista de Configuraciones de Pagos al Contado';
   formato: any;
   modalRef?: BsModalRef;
@@ -32,6 +34,7 @@ export class ListaPagosComponent extends FuncionesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true }];
     this.formato = this.getCabeceras();
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false; this.formato.cabeceras[this.rel_field].visibleCheck = false }
   }

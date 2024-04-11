@@ -1,7 +1,7 @@
 <app-page-title title="Transacciones" [breadcrumbItems]="breadCrumbItems"></app-page-title>
 <div *ngIf="filtrosData">
   <tabset [justified]="false" class="nav-tabs">
-    <tab *ngFor="let estado of listaEstadosIntegracion" heading="{{estado.nombre}}" id="{{estado.codigo}}" (selectTab)="onSelect($event)"></tab>
+    <tab *ngFor="let estado of listaEstadosIntegracion" heading="{{estado.nombre}}" id="{{estado.codigo}}" (selectTab)="onSelect($event, tabla)"></tab>
   </tabset>
   <ng-template *ngIf="['PORPROC', 'PROCE'].includes(this.tabId); then isTemplateEsquemas; else isTemplateMovimientos"></ng-template>
   <ng-template #isTemplateEsquemas>
@@ -16,7 +16,7 @@
     [smallTable]="false"
     [softDelete]="false"
     (crearNuevo)="null"
-    (alActualizar)="null"a
+    (alActualizar)="null"
     (alFiltrar)="null"
     campoEstado="estado"
     valueEstado="habilitado"
@@ -51,7 +51,7 @@
             </div>
             <div *ngSwitchCase="'acciones'">
               <ul class="list-unstyled hstack gap-1 mb-0">
-                <li data-bs-toggle="tooltip" data-bs-placement="top" title="Contabilizar">
+                <li data-bs-toggle="tooltip" data-bs-placement="top" title="Contabilizar" *ngIf="this.tabId == 'PORPROC'">
                   <button class="btn btn-sm btn-primary" [disabled]="fila.deleted" (click)="modalProcesarTransaccionKafka(modalGeneral, fila)"><i class="mdi mdi-check-bold"></i></button>
                 </li>
               </ul>
@@ -88,7 +88,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()"></button>
       </div>
       <div class="modal-body">
-        <app-formulario-modulo #appFormModulo [esquema]="esquema" [transaccion]="transaccion" [modulo]="modulo" [moduloId]="moduloId" (alProcesar)="tabla.obtenerDatos()"></app-formulario-modulo>
+        <app-formulario-modulo #appFormModulo [esquema]="esquema" [transaccion]="transaccion" [modulo]="modulo" [moduloId]="moduloId" (alProcesar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-modulo>
       </div>
       <div class="modal-footer">
         <div class="hstack gap-2 justify-content-end">

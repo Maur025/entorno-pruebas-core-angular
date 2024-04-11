@@ -18,8 +18,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   @ViewChild('appFormAnticipo') appFormAnticipo: FormularioComponent;
 
   breadCrumbItems: Array<{}>;
-  breadCrumbTitle: string = 'Administración de Anticipos';
-  titulo: string = 'Anticipos Proveedor'
+  breadCrumbTitle: string = 'Anticipos';
+  titulo: string = 'Lista Anticipos Proveedor'
   @Input() rel_prefix: any;
   @Input() rel_field: any;
   @Input() rel_id: any;
