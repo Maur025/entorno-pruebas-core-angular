@@ -8,7 +8,7 @@ import { MedioTransferenciaService } from '../../services/tesoreria/medio-transf
 import { BancoService } from '../../services/tesoreria/banco.service';
 import { TipoDocumentoService } from '../../services/tesoreria/tipo-documento.service';
 import { BsLocaleService } from "ngx-bootstrap/datepicker";
-import { DetalleCreditoService } from '../../services/tesoreria/deatalle-credito.service';
+import { DetalleCreditoService } from '../../services/tesoreria/detalle-credito.service';
 
 @Component({
   selector: 'app-formulario-pago',
@@ -34,6 +34,7 @@ export class FormularioPagoComponent implements OnInit {
   fondoOperativo: any;
   banco: any;
   submitted = false;
+  cargandoContenido = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -51,6 +52,7 @@ export class FormularioPagoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.cargandoContenido = true;
     this.setForm();
     this.getTipoPagoContado();
     this.getBancos();
@@ -73,7 +75,7 @@ export class FormularioPagoComponent implements OnInit {
       medioTransferenciaId: [, [Validators.required]],
       numero: [, [Validators.required]],
       descripcionPagado: [, [Validators.required]],
-      montoPagado: [, [Validators.required, Validators.max(this.detalleCredito.monto)]],
+      montoPagado: [, [Validators.required, Validators.max(this.detalleCredito.monto - (this.detalleCredito.montoPagado ? this.detalleCredito.montoPagado : 0)), Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
       fechaPagado: [, [Validators.required]]
     });
   }
@@ -97,12 +99,6 @@ export class FormularioPagoComponent implements OnInit {
   getFondos() {
     this.fondoOperativoService.habilitados().subscribe(data => {
       this.fondosOperativosList = data.content;
-      /* if (this.cuentaContadoMedio && this.cajaBanco == 'C') {
-        this.form.fondoOperativoId.setValue(this.cuentaContadoMedio.tablaRefId);
-        let mediosId = [];
-        this.cuentaContadoMedio.medioTransferencias.forEach(m => { mediosId.push(m.id); });
-        this.form.medioTransferenciaId.setValue(mediosId);
-      } */
     }, (error) => {
       this.notificacionService.alertError(error);
     });
@@ -111,15 +107,6 @@ export class FormularioPagoComponent implements OnInit {
   getBancos() {
     this.bancoService.habilitados().subscribe(data => {
       this.bancosList = data.content;
-      /* if (this.cuentaContadoMedio && this.cajaBanco == 'B') {
-        this.bancoId = this.listaBancos.find(b => b.nombre == this.cuentaContadoMedio.nombre).id;
-        this.form.bancoId.setValue(this.bancoId);
-        this.cambioBanco();
-        this.form.cuentaBancoId.setValue(this.cuentaContadoMedio.tablaRefId);
-        let mediosId = [];
-        this.cuentaContadoMedio.medioTransferencias.forEach(m => { mediosId.push(m.id); });
-        this.form.medioTransferenciaId.setValue(mediosId);
-      } */
     }, (error) => {
       this.notificacionService.alertError(error);
     });
@@ -136,6 +123,7 @@ export class FormularioPagoComponent implements OnInit {
   getTipoDocumentos() {
     this.tipoDocumentoService.habilitados().subscribe(data => {
       this.tipoDocumentosList = data.content;
+      this.cargandoContenido = false;
     }, (error) => {
       this.notificacionService.alertError(error);
     });
@@ -174,7 +162,7 @@ export class FormularioPagoComponent implements OnInit {
     }
   }
 
-  cambioTipoPago(){
+  cambioTipoPago() {
     if (this.cajaBanco == 'B') {
       this.form.fondoOperativoId.clearValidators();
       this.form.fondoOperativoId.setValue(null);
@@ -195,7 +183,7 @@ export class FormularioPagoComponent implements OnInit {
   guardar() {
     this.submitted = true;
     if (this.formPagoCredito.valid) {
-      this.detalleCreditoService.pagoCredito(this.formPagoCredito.getRawValue()).subscribe(data =>{
+      this.detalleCreditoService.pagoCredito(this.formPagoCredito.getRawValue()).subscribe(data => {
         this.alGuardar.emit(data);
         this.notificacionService.successStandar("Pago registrado exitosamente");
       }, (error) => {

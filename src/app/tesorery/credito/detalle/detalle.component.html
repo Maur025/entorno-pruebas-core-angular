@@ -1,9 +1,9 @@
 <app-page-title title="Créditos" [breadcrumbItems]="breadCrumbItems"></app-page-title>
 
 <div class="card card-body" appCargando [cargando]="cargandoContenido">
-  <h5 class="card-title mb-3 pb-3 border-bottom">Detalle de Crédito</h5>
+  <h5 class="card-title mb-3 pb-3 border-bottom">Crédito</h5>
   <div class="nav col-12" *ngIf="credito">
-    <div class="nav col-12 border-bottom">
+    <div class="nav col-12">
       <div class="col-4 mb-2 px-1">
         <p class="ps-2">
           <span class="fw-semibold semi" >Nro de Referencia:</span>
@@ -47,37 +47,86 @@
         </p>
       </div>
     </div>
-    <div class="nav col-12 pt-3">
-      <div class="table-responsive w-100">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>Acciones</th>
-              <th>Descripción</th>
-              <th>Descripcion Pagado</th>
-              <th>Fecha a Pagar</th>
-              <th>Fecha Pagado</th>
-              <th>Estado</th>
-              <th>Monto</th>
-              <th>Monto Pagado</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let detalle of credito.detalleCredito">
-              <td>
-                <button [disabled]="detalle.monto == detalle.montoPagado" class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Pagar" (click)="pagarCredito(pagarCuenta, detalle)"><i class="bx bx-dollar"></i></button>
-              </td>
-              <td>{{detalle.descripcion}}</td>
-              <td>{{detalle.descripcionPagado}}</td>
-              <td>{{detalle.fechaPagar | fechaSimple}}</td>
-              <td>{{detalle.fechaPagado | fechaSimple}}</td>
-              <td>{{detalle.estadoCredito.nombre}}</td>
-              <td class="text-end">{{detalle.monto}}</td>
-              <td class="text-end">{{detalle.montoPagado}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div class="w-100 card mb-0 shadow-lg">
+      <krn-tabla
+      #tabla
+      [titulo]="titulo"
+      [datosService]="detalleCreditoService"
+      getAll="filter"
+      [formato]="formato"
+      [textoBuscar]="textoBuscar"
+      [isSubtable]="rel_prefix?true:false"
+      [smallTable]="false"
+      [softDelete]="false"
+      (crearNuevo)="null"
+      (alActualizar)="null"
+      (alFiltrar)="null"
+      campoEstado="estado"
+      valueEstado="habilitado"
+      [templateFila]="templateFila"
+      [templateFiltrar]="templateFiltrar"
+      [conOpciones]="false"
+      [botonExportar]="false"
+      [botonImportar]="false"
+      [botonNuevo]="false"
+      [filtros]="filtrosData"
+      [filtrosNoRefresh]="filtrosNoRefresh">
+      </krn-tabla>
+
+      <ng-template #templateFiltrar >
+        <div class="nav">
+          <div class="col-6 nav">
+            <div class="mt-3 input-group">
+              <div class="input-group-text">Fecha Pagado (Desde-Hasta) </div>
+              <input type="text" [(ngModel)]="filtroFecha" placeholder="dd/mm/AAAA - dd/mm/AAAA" class="form-control date" name="daterange" autocomplete="off" bsDaterangepicker (bsValueChange)="cambioFecha($event)"/>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras" >
+        <ng-template ngFor let-campo [ngForOf]="cabeceras">
+          <ng-template *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"></ng-template>
+          <ng-template #tempTD>
+            <td [ngSwitch]="campo">
+              <div *ngSwitchCase="'id'">
+              {{fila[campo]}}
+              </div>
+              <div *ngSwitchCase="'acciones'">
+                <ul class="list-unstyled hstack gap-1 mb-0">
+                  <li data-bs-toggle="tooltip" data-bs-placement="top" title="Contabilizar">
+                    <button [disabled]="fila.monto == fila.montoPagado" class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Pagar" (click)="pagarCredito(pagarCuenta, fila)"><i class="bx bx-dollar"></i></button>
+                  </li>
+                  <li>
+                    <button *ngIf="fila.documentoRespaldos.length > 0" class="btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Detalle de Pagos" (click)="verDetallePagos(detallePagos, fila)"><i class="mdi mdi-eye"></i></button>
+                  </li>
+                </ul>
+              </div>
+              <div *ngSwitchCase="'fechaPagar'">
+                {{fila.fechaPagar | fechaSimple}}
+              </div>
+              <div *ngSwitchCase="'fechaPagado'">
+                {{fila.fechaPagado | fechaSimple}}
+              </div>
+              <div *ngSwitchCase="'monto'">
+                {{fila.monto}}
+              </div>
+              <div *ngSwitchCase="'montoPagado'">
+                {{fila.monto}}
+              </div>
+              <div *ngSwitchCase="'estadoCredito'">
+                {{fila.estadoCredito.nombre}}
+              </div>
+              <div *ngSwitchCase="'deleted'">
+                <span class="badge font-size-10" [ngClass]="{'bg-danger': fila.deleted, 'bg-success': !fila.deleted}"><i class="mdi me-1" [ngClass]="{'mdi-lock': fila.deleted, 'mdi-lock-open': !fila.deleted}"></i> {{fila.deleted ? 'Inhabilitado': 'Habilitado'}}</span>
+              </div>
+              <div *ngSwitchDefault>
+                {{fila[campo]}}
+              </div>
+            </td>
+          </ng-template>
+        </ng-template>
+      </ng-template>
     </div>
   </div>
 </div>
@@ -94,6 +143,42 @@
     <div class="hstack gap-2 justify-content-end">
       <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modalRef?.hide()">Cancelar</button>
       <button type="button" class="btn btn-success" (click)="appFormPagoCredito.guardar()">Registrar</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #detallePagos role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Detalle de Pago de Crédito</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modalRef?.hide()"></button>
+  </div>
+  <div class="modal-body">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Nro</th>
+            <th>Tipo Documento</th>
+            <th>Número</th>
+            <th>Monto</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let documento of detalleCredito.documentoRespaldos; index as i">
+            <td>{{ i + 1 }}</td>
+            <td>{{ documento.tiposDocumento.nombre }}</td>
+            <td>{{ documento.numero }}</td>
+            <td>{{ documento.monto }}</td>
+            <td>{{ documento.fecha | fechaSimple }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="hstack gap-2 justify-content-end">
+      <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modalRef?.hide()">Cancelar</button>
     </div>
   </div>
 </ng-template>
