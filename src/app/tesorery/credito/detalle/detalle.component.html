@@ -6,44 +6,44 @@
     <div class="nav col-12">
       <div class="col-4 mb-2 px-1">
         <p class="ps-2">
-          <span class="fw-semibold semi" >Nro de Referencia:</span>
-          <span class="text-primary"> {{credito.nroReferencia}}</span>
+          <span class="fw-semibold semi" >Nro de Referencia: </span>
+          <span class="text-primary">{{credito.nroReferencia}}</span>
         </p>
       </div>
       <div class="col-4 mb-2 px-1">
         <p class="ps-2">
-          <span class="fw-semibold semi" >Centro de Costos:</span>
-          <span class="text-primary"> {{credito.centroCosto.nombre}}</span>
+          <span class="fw-semibold semi" >Centro de Costos: </span>
+          <span class="text-primary">{{credito.centroCosto.nombre}}</span>
         </p>
       </div>
       <div class="col-4 mb-2 px-1">
         <p class="ps-2">
-          <span class="fw-semibold semi" >Fecha:</span>
-          <span class="text-primary"> {{credito.fecha | fechaSimple}}</span>
+          <span class="fw-semibold semi" >Fecha: </span>
+          <span class="text-primary">{{credito.fecha | fechaSimple}}</span>
         </p>
       </div>
       <div class="col-4 mb-2 px-1">
         <p class="ps-2">
-          <span class="fw-semibold semi" >Entidad Referencial:</span>
+          <span class="fw-semibold semi" >Entidad Referencial: </span>
           <span class="text-primary">{{credito.entidadReferencial.entidad.nombre}} ({{credito.entidadReferencial.tipoEntidad.tipo}})</span>
         </p>
       </div>
       <div class="col-4 mb-2 px-1">
         <p class="ps-2">
-          <span class="fw-semibold semi" >Monto:</span>
-          <span class="text-primary"> {{credito.monto}}</span>
+          <span class="fw-semibold semi" >Monto: </span>
+          <span class="text-primary">{{credito.monto}}</span>
         </p>
       </div>
       <div class="col-4 mb-2 px-1">
         <p class="ps-2">
-          <span class="fw-semibold semi" >Saldo</span>
-          <span class="text-primary"> {{credito.saldo}}</span>
+          <span class="fw-semibold semi" >Saldo: </span>
+          <span class="text-primary">{{credito.saldo}}</span>
         </p>
       </div>
       <div class="col-4 mb-2 px-1">
         <p class="ps-2">
-          <span class="fw-semibold semi" >Estado :</span>
-          <span class="text-primary"> {{credito.estadoCredito.nombre}}</span>
+          <span class="fw-semibold semi" >Estado: </span>
+          <span class="text-primary">{{credito.estadoCredito.nombre}}</span>
         </p>
       </div>
     </div>
@@ -112,7 +112,7 @@
                 {{fila.monto}}
               </div>
               <div *ngSwitchCase="'montoPagado'">
-                {{fila.monto}}
+                {{fila.montoPagado}}
               </div>
               <div *ngSwitchCase="'estadoCredito'">
                 {{fila.estadoCredito.nombre}}
