@@ -1,195 +1,198 @@
-<form [formGroup]="formPagoCredito">
-  <div class="w-100 pb-0 px-2">
-    <h5 class="pb-2 mb-3 col-12">Detalle de Crédito</h5>
-    <div class="nav">
-      <p class="col-6 pb-2"><span class="fw-semibold semi">Descripción: </span><span class="text-primary">{{ detalleCredito.descripcion }}</span></p>
-      <p class="col-6 pb-2"><span class="fw-semibold semi">Estado: </span><span class="text-primary">{{ detalleCredito.estadoCredito.nombre }}</span></p>
-      <p class="col-6 pb-2"><span class="fw-semibold semi">Fecha por Pagar: </span><span class="text-primary">{{ detalleCredito.fechaPagar | fechaSimple }}</span></p>
-      <p class="col-6 pb-2"><span class="fw-semibold semi">Monto: </span><span class="text-primary">{{ detalleCredito.monto }}</span></p>
+<div appCargando [cargando]="cargandoContenido">
+  <form [formGroup]="formPagoCredito">
+    <div class="w-100 pb-0 px-2">
+      <h5 class="pb-2 mb-3 col-12">Detalle de Crédito</h5>
+      <div class="nav">
+        <p class="col-6 pb-2"><span class="fw-semibold semi">Descripción: </span><span class="text-primary">{{ detalleCredito.descripcion }}</span></p>
+        <p class="col-6 pb-2"><span class="fw-semibold semi">Estado: </span><span class="text-primary">{{ detalleCredito.estadoCredito.nombre }}</span></p>
+        <p class="col-6 pb-2"><span class="fw-semibold semi">Fecha por Pagar: </span><span class="text-primary">{{ detalleCredito.fechaPagar | fechaSimple }}</span></p>
+        <p class="col-6 pb-2"><span class="fw-semibold semi">Monto por Pagar : </span><span class="text-primary">{{ detalleCredito.monto - (detalleCredito.montoPagado ? detalleCredito.montoPagado : 0)}}</span></p>
+      </div>
     </div>
-  </div>
-  <div class="card card-body shadow-lg">
-    <div class="nav w-100">
-      <div class="col-8 pe-3">
-        <label class="mb-3">Los campos marcados con asterisco (*) son obligatorios.</label>
-        <div class="mb-3 nav">
-          <div class="col-6 pe-2">
-            <label class="mb-2">(*) Tipo de Pago {{cajaBanco}} </label>
-            <div class="col nav py-2">
-              <div *ngFor="let tipoPagoContado of tipoPagoContadoList" class="col ps-3">
-                <div class="form-check form-check">
-                  <label class="ps-2 form-check-label"> {{tipoPagoContado.nombre}} </label>
-                  <input type="radio" [(ngModel)]="cajaBanco" [ngModelOptions]="{standalone: true}" (change)="cambioTipoPago()"
-                    style="transform: scale(1.6);" [value]="tipoPagoContado.codigo" class="form-check-input" checked>
+    <div class="card card-body shadow-lg">
+      <div class="nav w-100">
+        <div class="col-8 pe-3">
+          <label class="mb-3">Los campos marcados con asterisco (*) son obligatorios.</label>
+          <div class="mb-3 nav">
+            <div class="col-6 pe-2">
+              <label class="mb-2">(*) Tipo de Pago {{cajaBanco}} </label>
+              <div class="col nav py-2">
+                <div *ngFor="let tipoPagoContado of tipoPagoContadoList" class="col ps-3">
+                  <div class="form-check form-check">
+                    <label class="ps-2 form-check-label"> {{tipoPagoContado.nombre}} </label>
+                    <input type="radio" [(ngModel)]="cajaBanco" [ngModelOptions]="{standalone: true}" (change)="cambioTipoPago()"
+                      style="transform: scale(1.6);" [value]="tipoPagoContado.codigo" class="form-check-input" checked>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="col-6">
-            <label class="mb-2">(*) Número </label>
-            <input type="text" formControlName="numero" class="form-control" [ngClass]="{'is-invalid':submitted && form['numero'].errors}">
-            <div *ngIf="submitted && form['numero'].errors">
-              <div class="text-danger font-size-10 mt-1" *ngIf="form['numero'].errors['required']">El número es obligatorio</div>
+            <div class="col-6">
+              <label class="mb-2">(*) Número </label>
+              <input type="text" formControlName="numero" class="form-control" [ngClass]="{'is-invalid':submitted && form['numero'].errors}">
+              <div *ngIf="submitted && form['numero'].errors">
+                <div class="text-danger font-size-10 mt-1" *ngIf="form['numero'].errors['required']">El número es obligatorio</div>
+              </div>
             </div>
           </div>
-        </div>
-        <div *ngIf="cajaBanco == 'B'" class="mb-3 nav">
-          <div class="col-6 pe-2">
-            <label class="mb-2">(*) Banco </label>
-            <ng-select formControlName="bancoId" [items]="bancosList" (change)="cambioBanco()" bindValue="id"
-              bindLabel="nombre" appendTo="body" [ngClass]="{'ngselect-invalid':submitted && form['bancoId'].errors}"></ng-select>
-            <div *ngIf="submitted && form['bancoId'].errors">
-              <div class="text-danger font-size-10 mt-1" *ngIf="form['bancoId'].errors['required']">El banco es obligatorio</div>
+          <div *ngIf="cajaBanco == 'B'" class="mb-3 nav">
+            <div class="col-6 pe-2">
+              <label class="mb-2">(*) Banco </label>
+              <ng-select formControlName="bancoId" [items]="bancosList" (change)="cambioBanco()" bindValue="id"
+                bindLabel="nombre" appendTo="body" [ngClass]="{'ngselect-invalid':submitted && form['bancoId'].errors}"></ng-select>
+              <div *ngIf="submitted && form['bancoId'].errors">
+                <div class="text-danger font-size-10 mt-1" *ngIf="form['bancoId'].errors['required']">El banco es obligatorio</div>
+              </div>
             </div>
-          </div>
-          <div class="col-6">
-            <label class="mb-2">(*) Cuenta Bancaria </label>
-            <ng-select formControlName="cuentaBancoId" [items]="cuentasBancoList" (change)="cambioCuentaBanco()"
-              bindValue="id" bindLabel="nroCuenta" appendTo="body" [ngClass]="{'ngselect-invalid':submitted && form['cuentaBancoId'].errors}"></ng-select>
+            <div class="col-6">
+              <label class="mb-2">(*) Cuenta Bancaria </label>
+              <ng-select formControlName="cuentaBancoId" [items]="cuentasBancoList" (change)="cambioCuentaBanco()"
+                bindValue="id" bindLabel="nroCuenta" appendTo="body" [ngClass]="{'ngselect-invalid':submitted && form['cuentaBancoId'].errors}"></ng-select>
 
-            <div *ngIf="submitted && form['cuentaBancoId'].errors">
-              <div class="text-danger font-size-10 mt-1" *ngIf="form['cuentaBancoId'].errors['required']">la cuenta de banco es obligatoria</div>
+              <div *ngIf="submitted && form['cuentaBancoId'].errors">
+                <div class="text-danger font-size-10 mt-1" *ngIf="form['cuentaBancoId'].errors['required']">la cuenta de banco es obligatoria</div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="cajaBanco == 'C'" class="mb-3">
+            <label class="mb-2">(*) Caja </label>
+            <ng-select formControlName="fondoOperativoId" [items]="fondosOperativosList" bindValue="id"(change)="cambioCaja()" bindLabel="nombre" appendTo="body" [ngClass]="{'ngselect-invalid':submitted && form['fondoOperativoId'].errors}"></ng-select>
+            <div *ngIf="submitted && form['fondoOperativoId'].errors">
+              <div class="text-danger font-size-10 mt-1" *ngIf="form['fondoOperativoId'].errors['required']">La caja es obligatoria</div>
+            </div>
+          </div>
+          <div class="mb-3 nav">
+            <div class="col-6 pe-2">
+              <label class="mb-2">(*) Medio de Transferencia </label>
+              <ng-select formControlName="medioTransferenciaId" [items]="medioTransferenciasList" bindValue="id" bindLabel="medio" appendTo="body" [ngClass]="{'ngselect-invalid':submitted && form['medioTransferenciaId'].errors}"></ng-select>
+              <div *ngIf="submitted && form['medioTransferenciaId'].errors">
+                <div class="text-danger font-size-10 mt-1" *ngIf="form['medioTransferenciaId'].errors['required']">El medio de transferencia es obligatoria</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <label class="mb-2">(*) Tipo Documento </label>
+              <ng-select formControlName="tipoDocumentoId" [items]="tipoDocumentosList" bindValue="id" bindLabel="nombre" appendTo="body" [ngClass]="{'ngselect-invalid':submitted && form['tipoDocumentoId'].errors}"></ng-select>
+              <div *ngIf="submitted && form['tipoDocumentoId'].errors">
+                <div class="text-danger font-size-10 mt-1" *ngIf="form['tipoDocumentoId'].errors['required']">El tipo de documento es obligatorio</div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3 nav">
+            <div class="col-6 pe-2">
+              <label class="mb-2">(*) Fecha de Pago </label>
+              <input type="text" formControlName="fechaPagado" class="form-control" bsDatepicker [ngClass]="{'is-invalid':submitted && form['fechaPagado'].errors}">
+              <div *ngIf="submitted && form['fechaPagado'].errors">
+                <div class="text-danger font-size-10 mt-1" *ngIf="form['fechaPagado'].errors['required']">La fecha de pago es obligatoria</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <label class="mb-2">(*) Monto de Pago </label>
+              <input type="text" formControlName="montoPagado" class="form-control text-end" [ngClass]="{'is-invalid':submitted && form['montoPagado'].errors}">
+              <div *ngIf="submitted && form['montoPagado'].errors"  class="text-danger font-size-10 mt-1">
+                <div *ngIf="form['montoPagado'].errors['pattern']">El monto de pago solo acepta caracteres numéricos y un punto decimal</div>
+                <div *ngIf="form['montoPagado'].errors['required']">El monto de pago es obligatoria</div>
+                <div *ngIf="form['montoPagado'].errors['max']">El monto de pago debe ser menor o igual a {{detalleCredito.monto - (detalleCredito.montoPagado ? detalleCredito.montoPagado : 0)}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="mb-2">(*) Descripción de pago</label>
+            <textarea formControlName="descripcionPagado" class="form-control" rows="2" [ngClass]="{'is-invalid':submitted && form['descripcionPagado'].errors}"></textarea>
+            <div *ngIf="submitted && form['descripcionPagado'].errors">
+              <div class="text-danger font-size-10 mt-1" *ngIf="form['descripcionPagado'].errors['required']">La descripción de pago es obligatoria</div>
             </div>
           </div>
         </div>
-        <div *ngIf="cajaBanco == 'C'" class="mb-3">
-          <label class="mb-2">(*) Caja </label>
-          <ng-select formControlName="fondoOperativoId" [items]="fondosOperativosList" bindValue="id"(change)="cambioCaja()" bindLabel="nombre" appendTo="body" [ngClass]="{'ngselect-invalid':submitted && form['fondoOperativoId'].errors}"></ng-select>
-          <div *ngIf="submitted && form['fondoOperativoId'].errors">
-            <div class="text-danger font-size-10 mt-1" *ngIf="form['fondoOperativoId'].errors['required']">La caja es obligatoria</div>
-          </div>
-        </div>
-        <div class="mb-3 nav">
-          <div class="col-6 pe-2">
-            <label class="mb-2">(*) Medio de Transferencia </label>
-            <ng-select formControlName="medioTransferenciaId" [items]="medioTransferenciasList" bindValue="id" bindLabel="medio" appendTo="body" [ngClass]="{'ngselect-invalid':submitted && form['medioTransferenciaId'].errors}"></ng-select>
-            <div *ngIf="submitted && form['medioTransferenciaId'].errors">
-              <div class="text-danger font-size-10 mt-1" *ngIf="form['medioTransferenciaId'].errors['required']">El medio de transferencia es obligatoria</div>
-            </div>
-          </div>
-          <div class="col-6">
-            <label class="mb-2">(*) Tipo Documento </label>
-            <ng-select formControlName="tipoDocumentoId" [items]="tipoDocumentosList" bindValue="id" bindLabel="nombre" appendTo="body" [ngClass]="{'ngselect-invalid':submitted && form['tipoDocumentoId'].errors}"></ng-select>
-            <div *ngIf="submitted && form['tipoDocumentoId'].errors">
-              <div class="text-danger font-size-10 mt-1" *ngIf="form['tipoDocumentoId'].errors['required']">El tipo de documento es obligatorio</div>
-            </div>
-          </div>
-        </div>
-        <div class="mb-3 nav">
-          <div class="col-6 pe-2">
-            <label class="mb-2">(*) Fecha de Pago </label>
-            <input type="text" formControlName="fechaPagado" class="form-control" bsDatepicker [ngClass]="{'is-invalid':submitted && form['fechaPagado'].errors}">
-            <div *ngIf="submitted && form['fechaPagado'].errors">
-              <div class="text-danger font-size-10 mt-1" *ngIf="form['fechaPagado'].errors['required']">La fecha de pago es obligatoria</div>
-            </div>
-          </div>
-          <div class="col-6">
-            <label class="mb-2">(*) Monto de Pago </label>
-            <input type="text" formControlName="montoPagado" class="form-control text-end" [ngClass]="{'is-invalid':submitted && form['montoPagado'].errors}">
-            <div *ngIf="submitted && form['montoPagado'].errors">
-              <div class="text-danger font-size-10 mt-1" *ngIf="form['montoPagado'].errors['required']">El monto de pago es obligatoria</div>
-              <div class="text-danger font-size-10 mt-1" *ngIf="form['montoPagado'].errors['max']">El monto de pago debe ser menor o igual a {{detalleCredito.monto}}</div>
-            </div>
-          </div>
-        </div>
-        <div class="mb-3">
-          <label class="mb-2">(*) Descripción de pago</label>
-          <textarea formControlName="descripcionPagado" class="form-control" rows="2" [ngClass]="{'is-invalid':submitted && form['descripcionPagado'].errors}"></textarea>
-          <div *ngIf="submitted && form['descripcionPagado'].errors">
-            <div class="text-danger font-size-10 mt-1" *ngIf="form['descripcionPagado'].errors['required']">La descripción de pago es obligatoria</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-4 bg-light rounded-4 mt-5">
-        <div *ngIf="cajaBanco == 'B'" class="container-card preload ps-4">
-          <div class="creditcard">
-            <div class="front">
-              <div id="ccsingle"></div>
-              <svg version="1.1" id="cardfront" xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 750 471"
-                style="enable-background:new 0 0 750 471;" xml:space="preserve">
-                <g id="Front">
-                  <g id="CardBackground">
-                    <g id="Page-1_1_">
-                      <g id="amex_1_">
-                        <path id="Rectangle-1_1_" class="lightcolor lightgrey"
-                          d="M40,0h670c22.1,0,40,17.9,40,40v391c0,22.1-17.9,40-40,40H40c-22.1,0-40-17.9-40-40V40C0,17.9,17.9,0,40,0z" />
+        <div class="col-4 bg-light rounded-4 mt-5">
+          <div *ngIf="cajaBanco == 'B'" class="container-card preload ps-4">
+            <div class="creditcard">
+              <div class="front">
+                <div id="ccsingle"></div>
+                <svg version="1.1" id="cardfront" xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 750 471"
+                  style="enable-background:new 0 0 750 471;" xml:space="preserve">
+                  <g id="Front">
+                    <g id="CardBackground">
+                      <g id="Page-1_1_">
+                        <g id="amex_1_">
+                          <path id="Rectangle-1_1_" class="lightcolor lightgrey"
+                            d="M40,0h670c22.1,0,40,17.9,40,40v391c0,22.1-17.9,40-40,40H40c-22.1,0-40-17.9-40-40V40C0,17.9,17.9,0,40,0z" />
+                        </g>
+                      </g>
+                      <path class="darkcolor cyandark"
+                        d="M750,431V193.2c-217.6-57.5-556.4-13.5-750,24.9V431c0,22.1,17.9,40,40,40h670C732.1,471,750,453.1,750,431z" />
+                    </g>
+                    <text transform="matrix(1 0 0 1 60.106 295.0121)" id="svgnumber" class="st2 st3 st4">
+                      {{cuentaBanco? cuentaBanco.nroCuenta : 'XXXX XXXX XXXX XXXX'}}
+                    </text>
+                    <text transform="matrix(1 0 0 1 54.1064 428.1723)" id="svgname"
+                      class="st2 st5 st6">{{banco? banco.nombre : 'XXXX'}}</text>
+                    <text transform="matrix(1 0 0 1 54.1074 389.8793)" class="st7 st5 st8">Banco</text>
+                    <text transform="matrix(1 0 0 1 65.1054 241.5)" class="st7 st5 st8 font-size-28">Nro Cuenta</text>
+                    <g id="cchip">
+                      <g>
+                        <path class="chip-color"
+                          d="M168.1,143.6H82.9c-10.2,0-18.5-8.3-18.5-18.5V74.9c0-10.2,8.3-18.5,18.5-18.5h85.3 c10.2,0,18.5,8.3,18.5,18.5v50.2C186.6,135.3,178.3,143.6,168.1,143.6z" />
+                      </g>
+                      <g>
+                        <g>
+                          <rect x="82" y="70" class="st12" width="1.5" height="60" />
+                        </g>
+                        <g>
+                          <rect x="167.4" y="70" class="st12" width="1.5" height="60" />
+                        </g>
+                        <g>
+                          <path class="st12" d="M125.5,130.8c-10.2,0-18.5-8.3-18.5-18.5c0-4.6,1.7-8.9,4.7-12.3c-3-3.4-4.7-7.7-4.7-12.3
+                              c0-10.2,8.3-18.5,18.5-18.5s18.5,8.3,18.5,18.5c0,4.6-1.7,8.9-4.7,12.3c3,3.4,4.7,7.7,4.7,12.3
+                              C143.9,122.5,135.7,130.8,125.5,130.8z M125.5,70.8c-9.3,0-16.9,7.6-16.9,16.9c0,4.4,1.7,8.6,4.8,11.8l0.5,0.5l-0.5,0.5
+                              c-3.1,3.2-4.8,7.4-4.8,11.8c0,9.3,7.6,16.9,16.9,16.9s16.9-7.6,16.9-16.9c0-4.4-1.7-8.6-4.8-11.8l-0.5-0.5l0.5-0.5
+                              c3.1-3.2,4.8-7.4,4.8-11.8C142.4,78.4,134.8,70.8,125.5,70.8z" />
+                        </g>
+                        <g>
+                          <rect x="82.8" y="82.1" class="st12" width="25.8" height="1.5" />
+                        </g>
+                        <g>
+                          <rect x="82.8" y="117.9" class="st12" width="26.1" height="1.5" />
+                        </g>
+                        <g>
+                          <rect x="142.4" y="82.1" class="st12" width="25.8" height="1.5" />
+                        </g>
+                        <g>
+                          <rect x="142" y="117.9" class="st12" width="26.2" height="1.5" />
+                        </g>
                       </g>
                     </g>
-                    <path class="darkcolor cyandark"
-                      d="M750,431V193.2c-217.6-57.5-556.4-13.5-750,24.9V431c0,22.1,17.9,40,40,40h670C732.1,471,750,453.1,750,431z" />
                   </g>
-                  <text transform="matrix(1 0 0 1 60.106 295.0121)" id="svgnumber" class="st2 st3 st4">
-                    {{cuentaBanco? cuentaBanco.nroCuenta : 'XXXX XXXX XXXX XXXX'}}
-                  </text>
-                  <text transform="matrix(1 0 0 1 54.1064 428.1723)" id="svgname"
-                    class="st2 st5 st6">{{banco? banco.nombre : 'XXXX'}}</text>
-                  <text transform="matrix(1 0 0 1 54.1074 389.8793)" class="st7 st5 st8">Banco</text>
-                  <text transform="matrix(1 0 0 1 65.1054 241.5)" class="st7 st5 st8 font-size-28">Nro Cuenta</text>
-                  <g id="cchip">
-                    <g>
-                      <path class="chip-color"
-                        d="M168.1,143.6H82.9c-10.2,0-18.5-8.3-18.5-18.5V74.9c0-10.2,8.3-18.5,18.5-18.5h85.3 c10.2,0,18.5,8.3,18.5,18.5v50.2C186.6,135.3,178.3,143.6,168.1,143.6z" />
-                    </g>
-                    <g>
-                      <g>
-                        <rect x="82" y="70" class="st12" width="1.5" height="60" />
-                      </g>
-                      <g>
-                        <rect x="167.4" y="70" class="st12" width="1.5" height="60" />
-                      </g>
-                      <g>
-                        <path class="st12" d="M125.5,130.8c-10.2,0-18.5-8.3-18.5-18.5c0-4.6,1.7-8.9,4.7-12.3c-3-3.4-4.7-7.7-4.7-12.3
-                            c0-10.2,8.3-18.5,18.5-18.5s18.5,8.3,18.5,18.5c0,4.6-1.7,8.9-4.7,12.3c3,3.4,4.7,7.7,4.7,12.3
-                            C143.9,122.5,135.7,130.8,125.5,130.8z M125.5,70.8c-9.3,0-16.9,7.6-16.9,16.9c0,4.4,1.7,8.6,4.8,11.8l0.5,0.5l-0.5,0.5
-                            c-3.1,3.2-4.8,7.4-4.8,11.8c0,9.3,7.6,16.9,16.9,16.9s16.9-7.6,16.9-16.9c0-4.4-1.7-8.6-4.8-11.8l-0.5-0.5l0.5-0.5
-                            c3.1-3.2,4.8-7.4,4.8-11.8C142.4,78.4,134.8,70.8,125.5,70.8z" />
-                      </g>
-                      <g>
-                        <rect x="82.8" y="82.1" class="st12" width="25.8" height="1.5" />
-                      </g>
-                      <g>
-                        <rect x="82.8" y="117.9" class="st12" width="26.1" height="1.5" />
-                      </g>
-                      <g>
-                        <rect x="142.4" y="82.1" class="st12" width="25.8" height="1.5" />
-                      </g>
-                      <g>
-                        <rect x="142" y="117.9" class="st12" width="26.2" height="1.5" />
-                      </g>
-                    </g>
-                  </g>
-                </g>
-              </svg>
+                </svg>
+              </div>
             </div>
           </div>
-        </div>
-        <div *ngIf="cajaBanco == 'C'" class="ms-3 ps-5 py-3">
-          <div class="safe">
-            <div class="dial">
-              <div class="bar"></div>
-              <div class="bar2"></div>
-            </div>
-            <div class="handle"></div>
-            <div class="puerta"></div>
-            <div class="nombreFondo text-center align-middle">
-              <span class="fw-semibold semi">{{fondoOperativo?.nombre}}</span>
+          <div *ngIf="cajaBanco == 'C'" class="ms-3 ps-5 py-3">
+            <div class="safe">
+              <div class="dial">
+                <div class="bar"></div>
+                <div class="bar2"></div>
+              </div>
+              <div class="handle"></div>
+              <div class="puerta"></div>
+              <div class="nombreFondo text-center align-middle">
+                <span class="fw-semibold semi">{{fondoOperativo?.nombre}}</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div *ngIf="cajaBanco == 'B' && cuentaBanco" class="card card-body mx-3 rounded-4">
-          <h5 class="pb-2 mb-3 border-bottom">Detalle de Cuenta Bancaria</h5>
-          <p class="nav justify-content-between pb-2"><span class="fw-semibold semi">Descripción: </span><span class="text-primary">{{ cuentaBanco.descripcion }}</span></p>
-          <p class="nav justify-content-between pb-2"><span class="fw-semibold semi">Moneda: </span><span class="text-primary">{{ cuentaBanco.moneda.nombre }} ({{cuentaBanco.moneda.sigla}})</span></p>
-          <p class="nav justify-content-between pb-2"><span class="fw-semibold semi">Saldo: </span><span class="text-primary">{{ cuentaBanco.saldo }}</span></p>
-        </div>
-        <div *ngIf="cajaBanco == 'C' && fondoOperativo" class="card card-body mx-3">
-          <h5 class="pb-2 mb-3 border-bottom">Detalle de Caja</h5>
-          <p class="nav justify-content-between pb-2"><span class="fw-semibold semi">Descripción: </span><span class="text-primary">{{ fondoOperativo.descripcion }}</span></p>
-          <p class="nav justify-content-between pb-2"><span class="fw-semibold semi">Nro Solicitud: </span><span class="text-primary">{{ fondoOperativo.nroSolicitud }}</span></p>
-          <p class="nav justify-content-between pb-2"><span class="fw-semibold semi">Saldo: </span><span class="text-primary">{{ fondoOperativo.saldo }}</span></p>
+          <div *ngIf="cajaBanco == 'B' && cuentaBanco" class="card card-body mx-3 rounded-4">
+            <h5 class="pb-2 mb-3 border-bottom">Detalle de Cuenta Bancaria</h5>
+            <p class="nav justify-content-between pb-2"><span class="fw-semibold semi">Descripción: </span><span class="text-primary">{{ cuentaBanco.descripcion }}</span></p>
+            <p class="nav justify-content-between pb-2"><span class="fw-semibold semi">Moneda: </span><span class="text-primary">{{ cuentaBanco.moneda.nombre }} ({{cuentaBanco.moneda.sigla}})</span></p>
+            <p class="nav justify-content-between pb-2"><span class="fw-semibold semi">Saldo: </span><span class="text-primary">{{ cuentaBanco.saldo }}</span></p>
+          </div>
+          <div *ngIf="cajaBanco == 'C' && fondoOperativo" class="card card-body mx-3">
+            <h5 class="pb-2 mb-3 border-bottom">Detalle de Caja</h5>
+            <p class="nav justify-content-between pb-2"><span class="fw-semibold semi">Descripción: </span><span class="text-primary">{{ fondoOperativo.descripcion }}</span></p>
+            <p class="nav justify-content-between pb-2"><span class="fw-semibold semi">Nro Solicitud: </span><span class="text-primary">{{ fondoOperativo.nroSolicitud }}</span></p>
+            <p class="nav justify-content-between pb-2"><span class="fw-semibold semi">Saldo: </span><span class="text-primary">{{ fondoOperativo.saldo }}</span></p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</form>
+  </form>
+</div>
