@@ -7,7 +7,7 @@
         <label for="formrow-password-input">(*) Fecha</label>
         <div class="input-group">
           <input type="text" placeholder="dd-mm-AA" class="form-control" bsDatepicker required formControlName="fecha"
-          [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY' }"
+            [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY' }"
             [ngClass]="{ 'is-invalid': submitted && form['fecha'].errors }">
           <span class="input-group-text"><i class="mdi mdi-calendar-outline"></i></span>
           <div *ngIf="submitted && form['fecha'].errors" class="invalid-feedback" align="left">
@@ -18,12 +18,11 @@
       </div>
     </div>
 
-    <div class="col-6" >
+    <div class="col-6">
       <div class="mb-3 px-1">
-        <label class="mb-2" for="+
-            ">(*) Estado </label>
-        <ng-select class="uppercase" formControlName="estado" placeholder="Seleccione Estado de Anticipo" (change)="cambioEstado($event)"
-          [items]="listaEstadoAnticipo" bindLabel="nombre" bindValue="id"
+        <label class="mb-2">(*) Estado </label>
+        <ng-select class="uppercase" formControlName="estado" placeholder="Seleccione Estado de Anticipo"
+          (change)="cambioEstado($event)" [items]="listaEstadoAnticipo" bindLabel="nombre" bindValue="id"
           [ngClass]="{ 'ngselect-invalid': submitted && form['estado'].errors != null }">
         </ng-select>
         <div *ngIf="submitted && form['estado'].errors">
@@ -35,14 +34,17 @@
 
     <div class="col-6" *ngIf="inout">
       <div class="mb-3 px-1">
-      <label class="mb-2" for="ingresoEgreso">(*) Ingreso/Egreso </label>
-      <ng-select class="uppercase" formControlName="ingresoEgreso" placeholder="Seleccione Ingreso/Egreso" [items]="ingresoEgreso" bindLabel="name" bindValue="value" [ngClass]="{ 'ngselect-invalid': submitted && form['ingresoEgreso'].errors != null }">
-      </ng-select>
-      <div *ngIf="submitted && form['ingresoEgreso'].errors" >
-          <div class="text-danger mt-1 font-size-10" *ngIf="form['ingresoEgreso'].errors['required']">Seleccionar una opción obligatoria</div>
+        <label class="mb-2" for="ingresoEgreso">(*) Ingreso/Egreso </label>
+        <ng-select class="uppercase" formControlName="ingresoEgreso" placeholder="Seleccione Ingreso/Egreso"
+          [items]="ingresoEgreso" bindLabel="name" bindValue="value"
+          [ngClass]="{ 'ngselect-invalid': submitted && form['ingresoEgreso'].errors != null }">
+        </ng-select>
+        <div *ngIf="submitted && form['ingresoEgreso'].errors">
+          <div class="text-danger mt-1 font-size-10" *ngIf="form['ingresoEgreso'].errors['required']">Seleccionar una
+            opción obligatoria</div>
+        </div>
       </div>
-      </div>
-</div>
+    </div>
 
     <div class="col-6">
       <div class="mb-3 px-1">

@@ -159,7 +159,7 @@ export class FormularioOperativoComponent implements OnInit {
   }
 
   cambioEstado() {
-    if (this.fondo) {
+    if (this.fondo && this.form.monto) {
       if (this.form.monto == undefined) {
         this.form.monto.setValidators([Validators.required]);
       } else {
@@ -235,7 +235,7 @@ export class FormularioOperativoComponent implements OnInit {
         data.saldo = data.importe;
         data.fecha = data.fechaSolicitud;
         data.nroReferencia = data.nroSolicitud;
-        data.origen = 'TESORERIA';
+        data.origen = 'FONDO OPERATIVO';
         data.aperturado = true;
         data.fechaMovimiento = data.fechaSolicitud;
         data.refId = null;

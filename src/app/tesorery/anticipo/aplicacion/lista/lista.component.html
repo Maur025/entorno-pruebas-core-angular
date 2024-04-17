@@ -1,158 +1,137 @@
 <app-page-title [title]="breadCrumbTitle" [breadcrumbItems]="breadCrumbItems"></app-page-title>
-<div class="container-fluid">
-  <div class="card card-body">
-    <h5 class="card-title mb-3 pb-3 border-bottom">Detalle de Anticipo : <span></span></h5>
-    <div class="nav col-12 border-bottom">
-      <div class="col-9 nav">
-        <div class="col-6 mb-2">
-          <p class="ps-2">
-            <span class="fw-semibold semi">Centro de Costo: </span>
-            <span class="text-primary">{{ anticipoData?.centroCosto.nombre }}</span>
-          </p>
-        </div>
-        <div class="col-6 mb-2">
-          <p class="ps-2">
-            <span class="fw-semibold semi">Proveedor: </span>
-            <span class="text-primary">{{ anticipoData?.entidadReferencial.entidad.nombre }}</span>
-          </p>
-        </div>
-        <div class="col-6 mb-2">
-          <p class="ps-2">
-            <span class="fw-semibold semi">Nro de Referencia: </span>
-            <span class="text-primary">{{ anticipoData?.nroReferencia }}</span>
-          </p>
-        </div>
-        <div class="col-6 mb-2">
-          <p class="ps-2">
-            <span class="fw-semibold semi">Fecha de Solicitud: </span>
-            <span class="text-primary"> {{ anticipoData?.fecha| date:"dd-MM-yyyy" }}</span>
-          </p>
-        </div>
-        <div class="col-6 mb-2">
-          <p class="ps-2">
-            <span class="fw-semibold semi">Monto: </span>
-            <span class="text-primary">{{ anticipoData?.monto }}</span>
-          </p>
-        </div>
-        <div class="col-6 mb-2">
-          <p class="ps-2">
-            <span class="fw-semibold semi">Saldo: </span>
-            <span class="text-primary"> {{ anticipoData?.saldo }}</span>
-          </p>
-        </div>
+<div class="card card-body">
+  <h5 class="card-title mb-3 pb-3 border-bottom">Detalle de Anticipo : <span></span></h5>
+  <div class="nav col-12 border-bottom">
+    <div class="col-9 nav">
+      <div class="col-6 mb-2">
+        <p class="ps-2"><span class="fw-semibold semi">Centro de Costo: </span><span class="text-primary">{{ anticipoData?.centroCosto.nombre }}</span></p>
       </div>
-      <div class="col-3">
-        <p class="ps-2">
-          <span class="fw-semibold semi">Operaciones: </span>
-        </p>
-        <ul class="list-group list-group-flush" *ngFor="let operacion of anticipoData?.anticipoOperaciones">
-          <li class="list-group-item">{{operacion.cuentaBanco ? operacion.cuentaBanco.banco.nombre +' - '+ operacion.cuentaBanco.nroCuenta : operacion.fondoOperativo.nombre}}</li>
-        </ul>
+      <div class="col-6 mb-2">
+        <p class="ps-2"><span class="fw-semibold semi">Proveedor: </span><span class="text-primary">{{ anticipoData?.entidadReferencial.entidad.nombre }}</span></p>
+      </div>
+      <div class="col-6 mb-2">
+        <p class="ps-2"><span class="fw-semibold semi">Nro de Referencia: </span><span class="text-primary">{{ anticipoData?.nroReferencia }}</span></p>
+      </div>
+      <div class="col-6 mb-2">
+        <p class="ps-2"><span class="fw-semibold semi">Fecha de Solicitud: </span><span class="text-primary"> {{ anticipoData?.fecha| date:"dd-MM-yyyy" }}</span></p>
+      </div>
+      <div class="col-6 mb-2">
+        <p class="ps-2"><span class="fw-semibold semi">Monto: </span><span class="text-primary">{{ anticipoData?.monto }}</span></p>
+      </div>
+      <div class="col-6 mb-2">
+        <p class="ps-2"><span class="fw-semibold semi">Saldo: </span><span class="text-primary"> {{ anticipoData?.saldo }}</span></p>
       </div>
     </div>
-    <!-- *ngIf="anticipoData?.saldo > 0"-->
-    <div class="col-12">
-      <krn-tabla #tabla [titulo]="titulo" [datosService]="AplicacionAnticipoService" getAll="filter" [formato]="formato"
-        [textoBuscar]="textoBuscar" [isSubtable]="rel_prefix?true:false" [smallTable]="false" [softDelete]="false"
-        (crearNuevo)="(null)" (alCrear)="crear(null)" (alActualizar)="(null)" (alFiltrar)="(null)"
-        (alEditar)="editar($event, modalEditar)" campoEstado="estado" valueEstado="habilitado"
-        [templateFila]="templateFila" [templateFiltrar]="templateFiltrar" [conOpciones]="false" [botonExportar]="false" [botonNuevo]="false"
-        [filtros]="filtrosData">
-      </krn-tabla>
+    <div class="col-3">
+      <p class="ps-2"><span class="fw-semibold semi">Operaciones: </span></p>
+      <ul class="list-group list-group-flush" *ngFor="let operacion of anticipoData?.anticipoOperaciones">
+        <li class="list-group-item">{{operacion.cuentaBanco ? operacion.cuentaBanco.banco.nombre +' - '+ operacion.cuentaBanco.nroCuenta : operacion.fondoOperativo.nombre}}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-12">
+    <krn-tabla #tabla
+      [titulo]="titulo"
+      [datosService]="AplicacionAnticipoService"
+      getAll="filter" [formato]="formato"
+      [textoBuscar]="textoBuscar"
+      [isSubtable]="rel_prefix?true:false"
+      (crearNuevo)="(null)"
+      (alCrear)="crear(null)"
+      (alActualizar)="(null)"
+      (alFiltrar)="(null)"
+      (alEditar)="editar($event, modalEditar)"
+      campoEstado="estado"
+      valueEstado="habilitado"
+      [templateFila]="templateFila"
+      [templateFiltrar]="templateFiltrar"
+      [conOpciones]="false"
+      [botonExportar]="false"
+      [botonNuevo]="false"
+      [filtros]="filtrosData">
+    </krn-tabla>
 
-    <ng-template #templateFiltrar>
-      <div class="nav">
-        <div class="col-4">
-          <div class="my-3 input-group">
-            <div class="input-group-text">Fecha (Desde-Hasta) </div>
-            <input type="text" [(ngModel)]="filtroFecha" placeholder="dd/mm/AAAA - dd/mm/AAAA" class="form-control date"
-              name="daterange" autocomplete="off" bsDaterangepicker (bsValueChange)="cambioFecha($event)" />
-          </div>
+  <ng-template #templateFiltrar>
+    <div class="nav">
+      <div class="col-4">
+        <div class="my-3 input-group">
+          <div class="input-group-text">Fecha (Desde-Hasta)</div>
+          <input type="text" [(ngModel)]="filtroFecha" placeholder="dd/mm/AAAA - dd/mm/AAAA" class="form-control date" name="daterange" autocomplete="off" bsDaterangepicker (bsValueChange)="cambioFecha($event)" />
         </div>
-        <div class="col-4 px-2">
-          <div class="my-3 input-group">
-            <div class="input-group-text">Estado</div>
-            <ng-select notFoundText="Sin registros" [(ngModel)]="filtroEstadoAnticipo" placeholder="Seleccione estado"
-              class="uppercase col" [items]="listaEstadoAnticipo" bindLabel="nombre" bindValue="id"
-              (change)="actualizarFiltros()">
+      </div>
+      <div class="col-4 px-2">
+        <div class="my-3 input-group">
+          <div class="input-group-text">Estado</div>
+          <ng-select notFoundText="Sin registros" [(ngModel)]="filtroEstadoAnticipo" placeholder="Seleccione estado" class="uppercase col" [items]="listaEstadoAnticipo" bindLabel="nombre" bindValue="id" (change)="actualizarFiltros()">
+          </ng-select>
+        </div>
+      </div>
+      <div class="col-4 pe-1">
+        <div class="my-3 input-group">
+          <div class="input-group-text col-2">Monto</div>
+          <div class="col-3">
+            <ng-select notFoundText="Sin registros" [(ngModel)]="filtroOperador" class="col uppercase custom" style=".ng-select .ng-select-container {border-radius: 0;}" (change)="actualizarFiltros()">
+              <ng-option *ngFor="let operador of operadores" [value]="operador.id">
+                {{ operador.id }} <span class="text-muted font-size-10">({{ operador.nombre }})</span>
+              </ng-option>
+            </ng-select>
+          </div>
+          <div class="col-4">
+            <input type="text" [(ngModel)]="filtroMonto" class="form-control" style="border-radius: 0; height: 36px;" (change)="actualizarFiltros()"/>
+          </div>
+          <div class="col-3">
+            <ng-select notFoundText="Sin registros" [(ngModel)]="filtroDebeHaber" class="col uppercase custom1" [items]="tipos" bindLabel="nombre" bindValue="id" (change)="actualizarFiltros()">
             </ng-select>
           </div>
         </div>
-        <div class="col-4 pe-1">
-          <div class="my-3 input-group">
-            <div class="input-group-text col-2">Monto</div>
-            <div class="col-3">
-              <ng-select notFoundText="Sin registros" [(ngModel)]="filtroOperador" class="col uppercase custom"
-                style=".ng-select .ng-select-container {border-radius: 0;}" (change)="actualizarFiltros()">
-                <ng-option *ngFor="let operador of operadores" [value]="operador.id">
-                  {{ operador.id }} <span class="text-muted font-size-10">({{ operador.nombre }})</span>
-                </ng-option>
-              </ng-select>
-            </div>
-            <div class="col-4">
-              <input type="text" [(ngModel)]="filtroMonto" class="form-control" style="border-radius: 0; height: 36px;"
-                (change)="actualizarFiltros()" />
-            </div>
-            <div class="col-3">
-              <ng-select notFoundText="Sin registros" [(ngModel)]="filtroDebeHaber" class="col uppercase custom1"
-                [items]="tipos" bindLabel="nombre" bindValue="id" (change)="actualizarFiltros()">
-              </ng-select>
-            </div>
-          </div>
-        </div>
       </div>
-    </ng-template>
-    <ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">
-      <ng-template ngFor let-campo [ngForOf]="cabeceras">
-        <ng-template *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"></ng-template>
-        <ng-template #tempTD>
-          <td [ngSwitch]="campo">
-            <div *ngSwitchCase="'acciones'">
-              <ul class="list-unstyled hstack gap-1 mb-0">
-                <li data-bs-toggle="tooltip" data-bs-placement="top" title="Ver detalles">
-                  <!-- <button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila, modalEditar)"><i class="mdi mdi-pencil-outline"></i></button> -->
-                </li>
-                <li data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar" *ngIf="!fila.deleted">
-                  <a data-bs-toggle="modal" class="btn btn-sm btn-danger" (click)="eliminar(fila, tabla,'eliminar')"><i
-                      class="mdi mdi-power"></i></a>
-                </li>
-
-              </ul>
-            </div>
-            <div *ngSwitchCase="'id'">
-              {{fila[campo]}}
-            </div>
-            <div *ngSwitchCase="'fecha'">
-              {{fila.fecha | date:"dd-MM-yyyy" }}
-            </div>
-            <div *ngSwitchCase="'estado'">
-              {{fila.estadoAnticipo.nombre}}
-            </div>
-            <div *ngSwitchCase="'monto'" class="text-end">
-              {{fila.monto }}
-            </div>
-            <div *ngSwitchCase="'saldo'" class="text-end">
-              {{fila.saldo }}
-            </div>
-
-            <div *ngSwitchDefault>
-              {{fila[campo]}}
-            </div>
-          </td>
-        </ng-template>
+    </div>
+  </ng-template>
+  <ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">
+    <ng-template ngFor let-campo [ngForOf]="cabeceras">
+      <ng-template *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"></ng-template>
+      <ng-template #tempTD>
+        <td [ngSwitch]="campo">
+          <div *ngSwitchCase="'acciones'">
+            <ul class="list-unstyled hstack gap-1 mb-0">
+              <li data-bs-toggle="tooltip" data-bs-placement="top" title="Ver detalles">
+                <!-- <button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila, modalEditar)"><i class="mdi mdi-pencil-outline"></i></button> -->
+              </li>
+              <li data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar" *ngIf="!fila.deleted">
+                <a data-bs-toggle="modal" class="btn btn-sm btn-danger" (click)="eliminar(fila, tabla,'eliminar')"><i class="mdi mdi-power"></i></a>
+              </li>
+            </ul>
+          </div>
+          <div *ngSwitchCase="'id'">
+            {{fila[campo]}}
+          </div>
+          <div *ngSwitchCase="'fecha'">
+            {{fila.fecha | date:"dd-MM-yyyy" }}
+          </div>
+          <div *ngSwitchCase="'estado'">
+            {{fila.estadoAnticipo.nombre}}
+          </div>
+          <div *ngSwitchCase="'monto'" class="text-end">
+            {{fila.monto }}
+          </div>
+          <div *ngSwitchCase="'saldo'" class="text-end">
+            {{fila.saldo }}
+          </div>
+          <div *ngSwitchDefault>
+            {{fila[campo]}}
+          </div>
+        </td>
       </ng-template>
     </ng-template>
-    </div>
-    <div class="row">
-      <div class="nav justify-content-end">
-        <button type="button" class="btn btn-light" (click)="regresar()">Regresar</button>
-      </div>
+  </ng-template>
+  </div>
+  <div class="row">
+    <div class="nav justify-content-end">
+      <button type="button" class="btn btn-light" (click)="regresar()">Regresar</button>
     </div>
   </div>
-
-
 </div>
-<!---->
+
 <ng-template #modalNuevo role="document" let-modal>
   <div class="modal-header">
     <h5 class="modal-title" id="exampleModalLabel">Registar Movimiento de Anticipo</h5>
@@ -160,9 +139,7 @@
       (click)="modalRef.hide()"></button>
   </div>
   <div class="modal-body">
-
-    <app-aplicacion-formulario #appFormAplicacion [idRuta]="id"
-      (alGuardar)="modalRef.hide(); tabla.obtenerDatos()"></app-aplicacion-formulario>
+    <app-aplicacion-formulario #appFormAplicacion [idRuta]="id" (alGuardar)="modalRef.hide(); tabla.obtenerDatos()"></app-aplicacion-formulario>
   </div>
   <div class="modal-footer">
     <div class="hstack gap-2 justify-content-end">
@@ -179,9 +156,7 @@
       (click)="modalRef.hide()"></button>
   </div>
   <div class="modal-body">
-
-    <app-aplicacion-formulario #appFormAplicacion [anticipo]="anticipo" [idRuta]="id"
-      (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-aplicacion-formulario>
+    <app-aplicacion-formulario #appFormAplicacion [anticipo]="anticipo" [idRuta]="id" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-aplicacion-formulario>
   </div>
   <div class="modal-footer">
     <div class="hstack gap-2 justify-content-end">

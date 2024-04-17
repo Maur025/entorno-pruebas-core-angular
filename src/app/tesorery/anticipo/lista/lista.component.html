@@ -10,7 +10,7 @@
   [smallTable]="false"
   [softDelete]="false"
   (crearNuevo)="(null)"
-  (alCrear)="crear(modalGeneral)"
+  (alCrear)="crear(modalGeneral, 'nuevo')"
   (alActualizar)="(null)"
   (alFiltrar)="(null)"
   (alEditar)="(null)"
@@ -35,7 +35,7 @@
                 <!--<button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila, modalEditar)"><i class="mdi mdi-pencil-outline"></i></button>-->
               </li>
               <li data-bs-toggle="tooltip" data-bs-placement="top" title="Movimientos Anticipo" *ngIf="fila.saldo > 0">
-                <button class="btn btn-sm btn-light" [disabled]="fila.deleted" (click)="aplicacionAnticipo(fila, modalGeneral)"><i class="mdi mdi-transfer-down"></i></button>
+                <button class="btn btn-sm btn-light" [disabled]="fila.deleted" (click)="aplicacionAnticipo(fila, modalGeneral, 'aplicacion')"><i class="mdi mdi-transfer-down"></i></button>
               </li>
               <li data-bs-toggle="tooltip" data-bs-placement="top" title="Aplicacion">
                 <button class="btn btn-sm btn-info" style="transform: scale(0.8);" (click)="verDetalleAnticipo(fila.id)"><i class="mdi mdi-eye"></i></button>
@@ -77,7 +77,7 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modalRef?.hide()"></button>
   </div>
   <div class="modal-body">
-    <app-formulario #appFormAnticipo  [anticipoData]="anticipoData" [anticipo]="anticipo" (alGuardar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario>
+    <app-formulario #appFormAnticipo [anticipoData]="anticipoData" [tipo]="anticipoTipo" (alGuardar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario>
   </div>
   <div class="modal-footer">
     <div class="hstack gap-2 justify-content-end">

@@ -25,12 +25,11 @@ export class FormularioComponent implements OnInit {
   routeApi = 'anticipo';
   levelNavigate = 2;
   service = null;
-  @Input() maxDate: any;
   formGroup: FormGroup;
   submitted = false;
   @Output() alGuardar = new EventEmitter<any>();
   @Output() alActualizar = new EventEmitter<any>();
-  @Input() anticipo;
+  @Input() tipo;
   @Input() anticipoData;
   @Input() idRuta;
   @Input() apertura;
@@ -45,9 +44,7 @@ export class FormularioComponent implements OnInit {
   listaMedioTransferencias: any;
   montoTotal: number = 0;
   listaOperaciones = [];
-  dateNow = new Date((new Date).setHours(23, 59, 59, 999));
-  inout: number = 0;
-  operacion: any;
+  estado: any;
   ingresoEgreso: any = [
     { value: "IN", name: "INGRESO" },
     { value: "OUT", name: "EGRESO" },
@@ -55,7 +52,6 @@ export class FormularioComponent implements OnInit {
   tipoOperacion: any = [
     { value: "BN", name: "Banco" },
     { value: "FNDO", name: "Fondo Operativo" },
-    //{ value: "FNDR", name: "FONDO A RENDIR" },
   ];
 
   constructor(
@@ -80,35 +76,11 @@ export class FormularioComponent implements OnInit {
 
   ngOnInit(): void {
     this.setForm();
-    if (!this.maxDate) this.maxDate = this.dateNow;
     this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true },];
-    this.getCentroCostos();
     this.getBancos();
+    this.getFondoApertudados();
     this.getMedioTransferencias();
-    this.getTipoEntidadId("PROVEEDOR").then(uuid => {
-      this.getEntidadReferencialTipoEntidad(uuid);
-    });
-
-
-    if (this.anticipo) {
-      this.getEstadoAnticipo();
-      this.formGroup.removeControl('estado');
-      this.formGroup.removeControl('centroCostoId');
-      this.formGroup.removeControl('entidadReferencialId');
-      this.formGroup.removeControl('ingresoEgreso');
-      this.formGroup.removeControl('bancoId');
-      this.formGroup.removeControl('cuentaBancoId');
-      this.formGroup.removeControl('medioTransferenciaId');
-      this.formGroup.removeControl('descripcion');
-      this.formGroup.removeControl('tipoOperacion');
-      this.formGroup.addControl('estado', new FormControl(null, Validators.required));
-    }
-    else {
-      this.formGroup.removeControl('tipoOperacion');
-      this.formGroup.removeControl('estado');
-      this.formGroup.removeControl('ingresoEgreso');
-      this.getFondoApertudados();
-    }
+    this.setTipoAnticipo();
   }
 
   setForm() {
@@ -118,10 +90,10 @@ export class FormularioComponent implements OnInit {
       entidadReferencialId: [, [Validators.required]],
       centroCostoId: [, [Validators.required]],
       nroReferencia: [, [Validators.required]],
-      ingresoEgreso: [, [Validators.required]],
       descripcion: [, [Validators.required]],
       estado: [, []],
-      monto: [, [Validators.required, Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
+      saldo: [, [Validators.required]],
+      monto: [, []],
       operaciones: this.formBuilder.array([])
     });
   }
@@ -130,213 +102,102 @@ export class FormularioComponent implements OnInit {
     return this.formGroup.controls;
   }
 
-  guardar() {
-    this.submitted = true;
-    if (this.formGroup.valid && this.montoTotal == this.form['monto'].value) {
-      if (this.anticipo) {
-        let data = this.formGroup.value;
-        data.saldo = this.anticipo.monto
-        data.movimiento = "MOVIMIENTO DE PROVEEDOR";
-        data.anticipoId = this.anticipoData.id;
-        this.aplicacionAnticipoService.register(data).subscribe((res: any) => {
-          this.notificacionService.successStandar();
-          this.alGuardar.emit(res);
-        }, (err: any) => {
-          this.notificacionService.alertError(err);
-        });
-      } else {
-        let data = this.formGroup.value;
-        data.saldo = Number(data.monto);
-        data.saldo = data.monto;
-        data.origen = 'ANTICIPO';
-        data.ingresoEgreso = 'OUT';
-        this.anticipoService.register(data).subscribe((res: any) => {
-          this.notificacionService.successStandar();
-          this.alGuardar.emit(res);
-        }, (err: any) => {
-          this.notificacionService.alertError(err);
-        }
-        );
-      }
-    }
-  }
-
-  guardarAnt() {
-    this.submitted = true;
-    if (this.formGroup.valid) {
-      if (this.anticipo) {
-        //agregando datos y enviar
-        let data = this.formGroup.value;
-        data.saldo = this.anticipo.monto;
-        this.anticipoService.update(data).subscribe((res: any) => {
-          this.notificacionService.successStandar();
-          this.alActualizar.emit(res);
-        }, (err: any) => {
-          this.notificacionService.alertError(err);
-        });
-      } else {
-        let data = this.formGroup.value;
-        data.saldo = data.monto;
-        data.ingresoEgreso = 'OUT';
-        data.origen = 'ANTICIPO';
-        this.anticipoService.register(data).subscribe((res: any) => {
-          this.notificacionService.successStandar();
-          this.alGuardar.emit(res);
-        }, (err: any) => {
-          this.notificacionService.alertError(err);
-        });
-      }
+  setTipoAnticipo() {
+    if (this.tipo == 'nuevo') {
+      this.formGroup.removeControl('estado');
+      this.formGroup.removeControl('saldo');
+      this.getCentroCostos();
+      this.getTipoEntidadId("PROVEEDOR").then(uuid => {
+        this.getEntidadReferencialTipoEntidad(uuid);
+      });
+    } else {
+      this.getEstadoAnticipo();
+      this.formGroup.removeControl('centroCostoId');
+      this.formGroup.removeControl('operaciones');
+      this.formGroup.removeControl('entidadReferencialId');
+      this.form.estado.setValidators([Validators.required]);
+      this.form.monto.setValidators([Validators.required, Validators.max(this.anticipoData.saldo), Validators.pattern('^[0-9]+(.[0-9]*)?$')]);
+      this.form.saldo.setValue(this.anticipoData.saldo);
+      this.form.saldo.disable();
     }
   }
 
   getCentroCostos() {
     this.centroCostoService.habilitados().subscribe(data => {
       this.listaCentroCostos = data.content;
-    }, (error) => {
-      this.notificacionService.alertError(error);
-    });
+    }, error => this.notificacionService.alertError(error));
   }
-  getEntidadReferencialTipoEntidad(id: string) {
 
+  getEntidadReferencialTipoEntidad(id: string) {
     this.entidadService.listaEntidadReferencialTipoEntidad(id).subscribe(data => {
       this.listaEntidades = data.content;
-    }, (error) => {
-      this.notificacionService.alertError(error);
-    });
+    }, error => this.notificacionService.alertError(error));
   }
 
   async getTipoEntidadId(tipo: String) {
     let respuesta: any;
     await this.tipoEntidadService.habilitados().toPromise().then((response) => {
       respuesta = response.content.filter(data => data.tipo === tipo)[0].id;
-    }).catch(e => console.error(e));
+    }).catch(error => this.notificacionService.alertError(error));
     return respuesta;
-  }
-
-  async getTipoEntidadInicio() {
-    this.tipoEntidadService.habilitados().subscribe(async data => {
-      this.listaTipoEntidad = await data.content;
-    }, (error) => {
-      this.notificacionService.alertError(error);
-    });
   }
 
   getBancos() {
     this.bancoService.habilitados().subscribe(data => {
       this.listaBancos = data.content;
-    }, (error) => {
-      this.notificacionService.alertError(error);
-    });
+    }, error => this.notificacionService.alertError(error));
   }
 
   getMedioTransferencias() {
     this.medioTransferenciaService.habilitados().subscribe(data => {
       this.listaMedioTransferencias = data.content;
-    }, (error) => {
-      this.notificacionService.alertError(error);
-    });
+    }, error => this.notificacionService.alertError(error));
   }
 
-  cambioBanco() {
+  /* cambioBanco() {
     if (this.form.bancoId.value != null) {
       this.cuentaBancoService.getCuentasBanco(1000, 1, 'id', false, '', this.form.bancoId.value).subscribe(data => {
         this.listaCuentasBanco = data.content;
-      }, (error) => {
-        this.notificacionService.alertError(error);
-      });
+      }, error => this.notificacionService.alertError(error));
     } else {
       this.listaCuentasBanco = [];
       this.form.cuentaBancoId.setValue(null);
     }
-  }
+  } */
 
   getEstadoAnticipo() {
     this.estadoAnticipoService.habilitados().subscribe(data => {
       this.listaEstadoAnticipo = data.content;
-    }, (error) => {
-      this.notificacionService.alertError(error);
-    });
+    }, error => this.notificacionService.alertError(error));
   }
 
   getFondoApertudados() {
     this.fondoOperativoService.aperturados().subscribe(fondo => {
       this.listaFondoAperturados = fondo.content
-    }, (error) => {
-      this.notificacionService.alertError(error);
-    });
+    }, error => this.notificacionService.alertError(error));
   }
 
-  cambioEstado(event: any) {
-    if (event.nombre === 'COMPENZACION') {
-      this.inout = 2;
-      this.formGroup.addControl('ingresoEgreso', new FormControl(null, Validators.required));
-    }
-    else {
-      if (event.nombre === 'DEVOLUCION') {
-        this.inout = 1;
-        this.addFormMovimientoCuenta()
+  cambioEstado() {
+    if (this.form.estado.value != null) {
+      this.estado = this.listaEstadoAnticipo.find(x => x.id === this.form.estado.value);
+      switch (this.estado.nombre) {
+        case 'COMPENZACION':
+          this.formGroup.removeControl('operaciones');
+          this.formGroup.addControl('ingresoEgreso', new FormControl(null, Validators.required));
+          break;
+        case 'DEVOLUCION':
+          this.formGroup.addControl('operaciones', this.formBuilder.array([]));
+          this.formGroup.removeControl('ingresoEgreso');
+          break;
+        case 'REGULARIZACION':
+          this.formGroup.removeControl('operaciones');
+          this.formGroup.removeControl('ingresoEgreso');
+          break;
       }
-      else {
-        // this.formGroup.removeControl('ingresoEgreso');
-        this.removeFormMovimientoCuenta()
-        this.inout = 0;
-      }
+    } else {
+      this.formGroup.removeControl('ingresoEgreso');
+      this.estado = undefined;
     }
-  }
-
-  cambioOperacion(event: any) {
-    console.log(event.value);
-    this.operacion = event.value;
-    switch (event.value) {
-      case 'BN':
-        this.addFormMovimientoCuentaOperacion();
-        this.inout = 1;
-        break;
-      case 'FNDO':
-        this.inout = 0;
-        this.removeFormMovimientoCuentaOperacion();
-        break;
-      /*  case 'FNDR':
-          this.inout = 0;
-          this.removeFormMovimientoCuentaOperacion();
-          break; */
-    }
-  }
-
-  addFormMovimientoCuenta() {
-    this.formGroup.addControl('descripcion', new FormControl(null, Validators.required));
-    this.formGroup.addControl('bancoId', new FormControl(null, Validators.required));
-    this.formGroup.addControl('cuentaBancoId', new FormControl(null, Validators.required));
-    this.formGroup.addControl('medioTransferenciaId', new FormControl(null, Validators.required));
-    this.formGroup.removeControl('ingresoEgreso');
-  }
-
-  removeFormMovimientoCuenta() {
-    this.formGroup.removeControl('centroCostoId');
-    this.formGroup.removeControl('entidadReferencialId');
-    this.formGroup.removeControl('ingresoEgreso');
-    this.formGroup.removeControl('bancoId');
-    this.formGroup.removeControl('cuentaBancoId');
-    this.formGroup.removeControl('medioTransferenciaId');
-    this.formGroup.removeControl('descripcion');
-    this.formGroup.removeControl('tipoOperacion');
-  }
-
-  removeFormMovimientoCuentaOperacion() {
-    this.formGroup.removeControl('bancoId');
-    this.formGroup.removeControl('cuentaBancoId');
-    this.formGroup.removeControl('medioTransferenciaId');
-    this.formGroup.removeControl('descripcion');
-    this.formGroup.addControl('fondoOperativoId', new FormControl(null, Validators.required));
-  }
-
-  addFormMovimientoCuentaOperacion() {
-    this.formGroup.addControl('descripcion', new FormControl(null, Validators.required));
-    this.formGroup.addControl('bancoId', new FormControl(null, Validators.required));
-    this.formGroup.addControl('cuentaBancoId', new FormControl(null, Validators.required));
-    this.formGroup.addControl('medioTransferenciaId', new FormControl(null, Validators.required));
-    this.formGroup.removeControl('ingresoEgreso');
-    this.formGroup.removeControl('fondoOperativoId');
   }
 
   get operaciones(): FormArray {
@@ -353,7 +214,6 @@ export class FormularioComponent implements OnInit {
   addOperacion() {
     this.listaOperaciones.push({ monto: 0 });
     this.operaciones.push(this.newOperacion());
-
   }
 
   removeOperacion(index) {
@@ -362,6 +222,7 @@ export class FormularioComponent implements OnInit {
   }
 
   cambiaOperacion(index) {
+    delete this.listaOperaciones[index].datos;
     this.operaciones.controls[index]['controls']['monto'].setValue(0);
     if (this.operaciones.controls[index]['controls']['tipoOperacion'].value != null) {
       if (this.operaciones.controls[index]['controls']['tipoOperacion'].value == 'BN') {
@@ -394,7 +255,9 @@ export class FormularioComponent implements OnInit {
   }
 
   cambiaBanco(index) {
+    delete this.listaOperaciones[index].datos;
     if (this.operaciones.controls[index]['controls']['bancoId'].value != null) {
+      this.operaciones.controls[index]['controls']['cuentaBancoId'].setValue(null);
       this.cuentaBancoService.getCuentasBanco(1000, 1, 'id', false, '', this.operaciones.controls[index]['controls']['bancoId'].value).subscribe(data => {
         this.listaOperaciones[index].listaCuentasBanco = data.content;
       }, (error) => {
@@ -406,13 +269,78 @@ export class FormularioComponent implements OnInit {
     }
   }
 
+  cambioCuentaBancaria(index){
+    if (this.operaciones.controls[index]['controls']['cuentaBancoId'].value != null) {
+      this.listaOperaciones[index].datos = this.listaOperaciones[index].listaCuentasBanco.find(lop => lop.id === this.operaciones.controls[index]['controls']['cuentaBancoId'].value);
+      this.listaOperaciones[index].tituloDetalle = 'Detalle de Cuenta Bancaria';
+    } else {
+      this.listaOperaciones[index].datos = undefined;
+    }
+  }
+
+  cambioFondoOperativo(index){
+    if (this.operaciones.controls[index]['controls']['fondoOperativoId'].value != null) {
+      this.listaOperaciones[index].datos = this.listaFondoAperturados.find(fo => fo.id === this.operaciones.controls[index]['controls']['fondoOperativoId'].value);
+      this.listaOperaciones[index].tituloDetalle = 'Detalle de Fondo Operativo';
+    } else {
+      this.listaOperaciones[index].datos = undefined;
+    }
+  }
+
   calcularMontos() {
     let formData = this.formGroup.value;
     this.montoTotal = 0;
     formData.operaciones.forEach(operacion => {
-      if (operacion.monto != null) {
-        this.montoTotal += Number(operacion.monto);
-      }
+      if (operacion.monto != null) this.montoTotal += Number(operacion.monto);
     });
   }
+
+  guardar() {
+    this.submitted = true;
+    if (this.formGroup.valid) {
+      if (this.tipo == 'aplicacion') {
+        let data = this.formGroup.value;
+        data.movimiento = "MOVIMIENTO DE PROVEEDOR";
+        data.anticipoId = this.anticipoData.id;
+        this.aplicacionAnticipoService.register(data).subscribe((res: any) => {
+          this.notificacionService.successStandar();
+          this.alGuardar.emit(res);
+        }, error => this.notificacionService.alertError(error));
+      } else if (this.tipo == 'nuevo' && this.montoTotal == this.form['monto'].value) {
+        let data = this.formGroup.value;
+        data.saldo = Number(data.monto);
+        data.saldo = data.monto;
+        data.origen = 'ANTICIPO';
+        data.ingresoEgreso = 'OUT';
+        this.anticipoService.register(data).subscribe((res: any) => {
+          this.notificacionService.successStandar();
+          this.alGuardar.emit(res);
+        }, error => this.notificacionService.alertError(error));
+      }
+    }
+  }
+
+  /*  guardarAnt() {
+     this.submitted = true;
+     if (this.formGroup.valid) {
+       if (this.anticipo) {
+         //agregando datos y enviar
+         let data = this.formGroup.value;
+         data.saldo = this.anticipo.monto;
+         this.anticipoService.update(data).subscribe((res: any) => {
+           this.notificacionService.successStandar();
+           this.alActualizar.emit(res);
+         }, error => this.notificacionService.alertError(error));
+       } else {
+         let data = this.formGroup.value;
+         data.saldo = data.monto;
+         data.ingresoEgreso = 'OUT';
+         data.origen = 'ANTICIPO';
+         this.anticipoService.register(data).subscribe((res: any) => {
+           this.notificacionService.successStandar();
+           this.alGuardar.emit(res);
+         }, error => this.notificacionService.alertError(error));
+       }
+     }
+   } */
 }
