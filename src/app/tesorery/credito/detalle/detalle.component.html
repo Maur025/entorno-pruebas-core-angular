@@ -3,7 +3,7 @@
 <div class="card card-body" appCargando [cargando]="cargandoContenido">
   <h5 class="card-title mb-3 pb-3 border-bottom">Crédito</h5>
   <div class="nav col-12" *ngIf="credito">
-    <div class="nav col-12">
+    <div class="nav col-12 border-bottom">
       <div class="col-4 mb-2 px-1">
         <p class="ps-2">
           <span class="fw-semibold semi" >Nro de Referencia: </span>
@@ -47,7 +47,7 @@
         </p>
       </div>
     </div>
-    <div class="w-100 card mb-0 shadow-lg">
+    <div class="w-100">
       <krn-tabla
       #tabla
       [titulo]="titulo"

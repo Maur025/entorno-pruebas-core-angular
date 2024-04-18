@@ -98,7 +98,7 @@
                 {{fila.monto}}
               </div>
               <div *ngSwitchCase="'centroCosto'">
-                {{fila.centroCosto.nombre}}
+                {{fila.centroCosto?.nombre}}
               </div>
               <div *ngSwitchCase="'estadoFondo'">
                 {{fila.estadoFondo.nombre}}

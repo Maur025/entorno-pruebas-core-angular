@@ -32,8 +32,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   modalRef?: BsModalRef;
   formato: any;
   servicio = null;
-  anticipo: any;
   anticipoData: any;
+  anticipoTipo:any;
 
   constructor(
     public AnticipoService: AnticipoService,
@@ -52,8 +52,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false; this.formato.cabeceras[this.rel_field].visibleCheck = false }
   }
 
-  crear(template: any) {
-    this.anticipo = false;
+  crear(template: any, tipo) {
+    this.anticipoTipo = tipo;
     this.anticipoData = undefined;
     this.modalRef = this.modalService.show(template, { class: `modal-xl modal-dialog-scrollable` });
   }
@@ -92,9 +92,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     });
   }
 
-  aplicacionAnticipo(data: any, template: any) {
-    //this.fondo = data;
-    this.anticipo = true;
+  aplicacionAnticipo(data: any, template: any, tipo) {
+    this.anticipoTipo = tipo;
     this.anticipoData = data;
     this.titleModal = 'Movimiento';
     this.modalRef = this.modalService.show(template, { class: `modal-xl modal-scrollable` });
