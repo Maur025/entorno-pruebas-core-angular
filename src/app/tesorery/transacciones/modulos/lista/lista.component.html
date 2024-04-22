@@ -95,6 +95,7 @@
           <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modalRef.hide()">Cerrar</button>
           <button *ngIf="esquema.codigoProceso == 'RENDFO'" type="button" class="btn btn-success" (click)="rendirFormulario(appFormModulo)">Procesar</button>
           <button *ngIf="esquema.codigoProceso == 'PAG'" type="button" class="btn btn-success" (click)="procesarFormaPago(appFormModulo)">Procesar</button>
+          <button *ngIf="esquema.codigoProceso == 'RENDFR'" type="button" class="btn btn-success" (click)="procesarFondoRendir(appFormModulo)">Procesar</button>
         </div>
       </div>
     </ng-template>

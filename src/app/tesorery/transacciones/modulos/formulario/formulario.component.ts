@@ -9,8 +9,10 @@ import { TransaccionesComprasService } from 'src/app/tesorery/services/tesoreria
 })
 export class FormularioModuloComponent implements OnInit {
 
-  @ViewChild('appFormAsiento') appFormAsiento;
+  @ViewChild('appFormOperativo') appFormOperativo;
   @ViewChild('appFormCredito') appFormCredito;
+  @ViewChild('appFormRendir') appFormRendir;
+
   @Output() alProcesar = new EventEmitter<any>();
   @Input() modulo;
   @Input() moduloId;

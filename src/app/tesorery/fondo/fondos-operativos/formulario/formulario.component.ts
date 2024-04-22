@@ -26,8 +26,6 @@ export class FormularioOperativoComponent implements OnInit {
   @Input() esquemaId;
 
   @Input() fondo;
-  @Input() apertura;
-  @Input() descargo;
   @Input() tipoDescargo;
   @Output() alGuardar = new EventEmitter<any>();
   @Output() alActualizar = new EventEmitter<any>();
@@ -67,12 +65,12 @@ export class FormularioOperativoComponent implements OnInit {
       this.setFondo();
       this.getEstados();
       this.getCentroCostos();
-      if (this.apertura) {
+      if (this.tipoDescargo && this.tipoDescargo == 'APERT') {
         this.getBancos();
         this.getMedioTransferencias();
         this.formGroup.disable();
         this.addFormApertura();
-      } else if (this.descargo) {
+      } else if (this.tipoDescargo && this.tipoDescargo != 'APERT') {
         this.formGroup.disable();
         this.addFormDescargo();
         this.saldo = this.fondo.saldo;
@@ -136,7 +134,7 @@ export class FormularioOperativoComponent implements OnInit {
   getEstados() {
     this.estadosService.habilitadosFondos().subscribe(data => {
       this.listaEstados = data.content;
-      if (this.apertura || this.descargo) this.form.estado.setValue(this.listaEstados.find(e => e.codigo == this.tipoDescargo).id);
+      if (this.tipoDescargo) this.form.estado.setValue(this.listaEstados.find(e => e.codigo == this.tipoDescargo).id);
       this.cambioEstado();
     }, (error) => {
       this.notificacionService.alertError(error);
@@ -212,7 +210,7 @@ export class FormularioOperativoComponent implements OnInit {
     this.submitted = true;
     this.cambioEstado();
     if (this.formGroup.valid) {
-      if (this.descargo) {
+      if (this.tipoDescargo != 'APERT') {
         let data = this.formGroup.getRawValue();
         data.nroReferencia = data.nroSolicitud;
         data.refId = null;
@@ -229,7 +227,7 @@ export class FormularioOperativoComponent implements OnInit {
         }, (error) => {
           this.notificacionService.alertError(error);
         });
-      } else if (this.apertura) {
+      } else if (this.tipoDescargo == 'APERT') {
         let data = this.formGroup.getRawValue();
         data.monto = data.importe;
         data.saldo = data.importe;

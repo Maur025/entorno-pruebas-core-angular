@@ -27,6 +27,10 @@ export class TransaccionesComprasService {
     return this.apiService.tesoreria.post(this.prefix + `/${this.apiName}/fondoOperativo/movimiento/generate`, datos);
   }
 
+  getMovimientoFondoRendir(datos) {
+    return this.apiService.tesoreria.post(this.prefix + `/${this.apiName}/fondoRendir/movimiento/generate2`, datos);
+  }
+
   getFormaPago(datos) {
     return this.apiService.tesoreria.post(this.prefix + `/${this.apiName}/formaPago/generate`, datos);
   }

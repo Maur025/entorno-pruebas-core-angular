@@ -10,6 +10,7 @@ import { BsLocaleService } from "ngx-bootstrap/datepicker";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { FormularioOperativoComponent } from 'src/app/tesorery/fondo/fondos-operativos/formulario/formulario.component';
 import { TransaccionesComprasService } from 'src/app/tesorery/services/tesoreria/transaccionesCompras.service';
+import { FondoRendirService } from 'src/app/tesorery/services/tesoreria/fondo-rendir.service';
 @Component({
   selector: 'app-lista',
   templateUrl: './lista.component.html',
@@ -48,6 +49,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     private estadosService: EstadosService,
     private modulosService: ModulosService,
     public esquemasService: EsquemaService,
+    public fondoRendirService: FondoRendirService,
     private notificacion: NotificacionService,
     private _localeService: BsLocaleService,
     private modalService: BsModalService,
@@ -111,7 +113,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   getAsientoAutomaticoDatos(template) {
     switch (this.esquema.codigoProceso) {
       case 'RENDFO':
-        this.modalTitle = 'Procesar Transacción Movimiento';
+        this.modalTitle = 'Procesar Transacción Rendición de Fondo Operativo';
         this.transaccionesComprasService.getMovimientoFondoOperativo({ transaccionKafkaId: this.esquema.transaccionKafkaId }).subscribe(data => {
           this.transaccion = data.content;
           this.modalRef = this.modalService.show(template, { class: `modal-lg modal-dialog-scrollable`, backdrop: 'static' });
@@ -121,6 +123,13 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
         this.modalTitle = 'Procesar Transacción Formas de Pago';
         this.modalRef = this.modalService.show(template, { class: `modal-xl modal-dialog-scrollable`, backdrop: 'static' });
         break;
+      case 'RENDFR':
+      this.modalTitle = 'Procesar Transacción Rendición de Fondo Rendir';
+      this.transaccionesComprasService.getMovimientoFondoRendir({ transaccionKafkaId: this.esquema.transaccionKafkaId }).subscribe(data => {
+        this.transaccion = data.content;
+        this.modalRef = this.modalService.show(template, { class: `modal-lg modal-dialog-scrollable`, backdrop: 'static' });
+      }, error => this.notificacion.alertError(error));
+      break;
     }
   }
 
@@ -174,13 +183,18 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 
   rendirFormulario(appFormModulo) {
     this.notificacion.alertaSimpleConfirmacionBoton('¿Está seguro de realizar el proceso de rendición?', 'Si, procesar', (response: any) => {
-      if (response) appFormModulo.appFormAsiento.guardar();
+      if (response) appFormModulo.appFormOperativo.guardar();
     });
   }
 
   procesarFormaPago(appFormModulo) {
     this.notificacion.alertaSimpleConfirmacionBoton('¿Está seguro de realizar el proceso de registro de la forma de pago?', 'Si, procesar', (response: any) => {
       if (response) appFormModulo.appFormCredito.guardar();
+    });
+  }
+  procesarFondoRendir(appFormModulo){
+    this.notificacion.alertaSimpleConfirmacionBoton('¿Está seguro de realizar el proceso de registro del fondo a rendir?', 'Si, procesar', (response: any) => {
+      if (response) appFormModulo.appFormRendir.guardar();
     });
   }
   cerrarModal() {
