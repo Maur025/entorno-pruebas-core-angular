@@ -17,6 +17,8 @@ import { ListaTransaccionesComponent } from './transacciones-kafka/lista/lista.c
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { FormularioProcesosComponent } from './procesos-automaticos/formulario/formulario.component';
+import { ListaProcesosComponent } from './procesos-automaticos/lista/lista.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     ListaPagosComponent,
     TransaccionesKafkaComponent,
     ListaTransaccionesComponent,
+    FormularioProcesosComponent,
+    ListaProcesosComponent,
   ],
   imports: [
     CommonModule,

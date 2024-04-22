@@ -173,7 +173,7 @@
             <td>{{i+1}}</td>
             <td>
               <div class="input-group input-group-sm fecha-input">
-                <input type="text"formControlName="fechaPago" placeholder="dd-mm-AA" class="form-control" bsDatepicker [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY', adaptivePosition: true}" [ngClass]="{ 'is-invalid': submitted && planPagos.controls[i]['controls']['fechaPago'].errors}">
+                <input type="text"formControlName="fechaPago" placeholder="dd-mm-AA" class="form-control" bsDatepicker  [minDate]="fechaActual" [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY', adaptivePosition: true}" [ngClass]="{ 'is-invalid': submitted && planPagos.controls[i]['controls']['fechaPago'].errors}">
                 <span class="input-group-text"><i class="mdi mdi-calendar-outline"></i></span>
               </div>
               <div *ngIf="submitted && planPagos.controls[i]['controls']['fechaPago'].errors" class="col-sm-12">
