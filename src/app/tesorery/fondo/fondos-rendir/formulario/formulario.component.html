@@ -1,6 +1,6 @@
 <form [formGroup]="formGroup">
   <label class="mb-3 col-12">Los campos marcados con asterisco (*) son obligatorios.</label>
-  <div class="nav col-12">
+  <div class="nav col-12 mb-3">
     <div class="col-6 mb-3 px-1">
       <label class="mb-2">(*) Nro de Solicitud </label>
       <input type="text" class="form-control" formControlName="nroSolicitud" [ngClass]="{ 'is-invalid': submitted && form['nroSolicitud'].errors}">
@@ -57,7 +57,7 @@
         </div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="apertura || descargo">
+   <!--  <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo">
       <label class="col-3 col-form-label">(*) Estado</label>
       <div class="col-9">
         <ng-select class="uppercase" formControlName="estado" placeholder="Seleccione un estado" [items]="listaEstados" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['estado'].errors != null }"></ng-select>
@@ -65,27 +65,27 @@
           <div *ngIf="form['estado'].errors['required']" class="text-danger mt-1 font-size-10">El estado es obligatorio</div>
         </div>
       </div>
-    </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="descargo">
+    </div> -->
+    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo && tipoDescargo != 'APERT'">
       <label class="col-3 col-form-label">(*) Monto de Movimiento</label>
       <div class="col-9">
-        <input type="text" class="form-control text-end" formControlName="monto" placeholder="Bs." [ngClass]="{ 'is-invalid': submitted && form['monto'].errors}">
+        <input type="number" class="form-control text-end" formControlName="monto" placeholder="Bs." [ngClass]="{ 'is-invalid': submitted && form['monto'].errors}" (change)="cambioMontoMovimiento()">
         <div *ngIf="submitted && form['monto'].errors" class="col-sm-12">
           <div *ngIf="form['monto'].errors['required']" class="text-danger mt-1 font-size-10">El monto de descargo es obligatorio</div>
           <div *ngIf="form['monto'].errors['pattern']" class="text-danger mt-1 font-size-10">El monto de descargo solo deben ser carácteres númericos</div>
         </div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="apertura || descargo">
+    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo">
       <label class="col-3 col-form-label">(*) Centro de Costos</label>
       <div class="col-9">
-        <ng-select class="uppercase" formControlName="centroCostoId" placeholder="Seleccione un centro de costos" [items]="listaCentroCostos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['centroCostoId'].errors != null }"></ng-select>
+        <ng-select class="uppercase" formControlName="centroCostoId" appendTo="body" placeholder="Seleccione un centro de costos" [items]="listaCentroCostos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['centroCostoId'].errors != null }"></ng-select>
         <div *ngIf="submitted && form['centroCostoId'].errors" class="col-sm-12">
           <div *ngIf="form['centroCostoId'].errors['required']" class="text-danger mt-1 font-size-10">El centro de costos es obligatorio</div>
         </div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="descargo">
+    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo && tipoDescargo != 'APERT'">
       <label class="col-3 col-form-label">(*) Fecha del Movimiento</label>
       <div class="col-9">
         <input type="text" placeholder="dd-mm-AA" formControlName="fechaMovimiento" [minDate]="fechaActual" class="form-control" bsDatepicker [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY'}" [ngClass]="{ 'is-invalid': submitted && form['fechaMovimiento'].errors}">
@@ -95,28 +95,136 @@
         </div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="apertura">
+    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo && tipoDescargo == 'APERT'">
       <label class="col-3 col-form-label">(*) Banco</label>
       <div class="col-9">
-        <ng-select class="uppercase" formControlName="bancoId" placeholder="Seleccione un banco" (change)="cambioBanco()" [items]="listaBancos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['bancoId'].errors != null }"></ng-select>
+        <ng-select class="uppercase" formControlName="bancoId" appendTo="body"  placeholder="Seleccione un banco" (change)="cambioBanco()" [items]="listaBancos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['bancoId'].errors != null }"></ng-select>
         <div *ngIf="submitted && form['bancoId'].errors" class="col-sm-12">
           <div *ngIf="form['bancoId'].errors['required']" class="text-danger mt-1 font-size-10">El banco es obligatorio</div>
         </div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="apertura">
+    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo && tipoDescargo == 'APERT'">
       <label class="col-3 col-form-label">(*) Cuenta</label>
       <div class="col-9">
-        <ng-select class="uppercase" formControlName="cuentaBancoId" placeholder="Seleccione una cuenta" [items]="listaCuentasBanco" bindLabel="nroCuenta" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['cuentaBancoId'].errors != null }"></ng-select>
+        <ng-select class="uppercase" formControlName="cuentaBancoId" appendTo="body"  placeholder="Seleccione una cuenta" [items]="listaCuentasBanco" bindLabel="nroCuenta" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['cuentaBancoId'].errors != null }"></ng-select>
         <div *ngIf="submitted && form['cuentaBancoId'].errors" class="col-sm-12">
           <div *ngIf="form['cuentaBancoId'].errors['required']" class="text-danger mt-1 font-size-10">La cuenta es obligatoria</div>
         </div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="apertura">
+    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo && tipoDescargo == 'APERT'">
       <label class="col-3 col-form-label">(*) Medio Transferencia</label>
       <div class="col-9">
         <ng-select class="uppercase" formControlName="medioTransferenciaId" placeholder="Seleccione un medio de transferencia" [items]="listaMedioTransferencias" bindLabel="medio" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['medioTransferenciaId'].errors != null }"></ng-select>
+        <div *ngIf="submitted && form['medioTransferenciaId'].errors" class="col-sm-12">
+          <div *ngIf="form['medioTransferenciaId'].errors['required']" class="text-danger mt-1 font-size-10">El medio de transferencia es obligatoria</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="tipoDescargo && tipoDescargo != 'APERT' && form.monto.value != null && form.monto.value > form.importe.value && isPlanPagos" class="col-12 px-2">
+    <h5 class="mb-3 pb-3 border-bottom">Plan de Pagos para Monto Excedente</h5>
+    <div class="nav">
+      <div class="col-6 mb-3 pe-1">
+        <label>(*) Monto Excedente a Pagar</label>
+        <input [(ngModel)]="montoPagar" [ngModelOptions]="{standalone: true}" class="form-control text-end" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" [disabled]="true" [ngClass]="{ 'is-invalid': submitted && !montoPagar || submitted && montoPagar != importeTotalCredito}"/>
+        <div *ngIf="submitted && !montoPagar" class="text-danger font-size-10 ">Ingrese monto a pagar</div>
+        <div *ngIf="submitted && montoPagar != importeTotalCredito" class="text-danger font-size-10">El monto excedente a pagar no es igual al total de importes del crédito</div>
+      </div>
+      <div class="col-6 mb-3 ps-1">
+        <label>Tipo</label>
+        <ng-select [(ngModel)]="creditoForm['tipoCuota']" [ngModelOptions]="{standalone: true}" notFoundText="Sin registros" class="uppercase" placeholder="Seleccione una opción">
+          <ng-option value="1">Cuotas con monto fijo</ng-option>
+          <ng-option value="2">Cuotas por porcentajes</ng-option>
+        </ng-select>
+      </div>
+      <div class="col-6 mb-3 pe-1">
+        <label>
+          <span *ngIf="creditoForm['tipoCuota'] != '2'">Nro. Cuotas</span>
+          <span *ngIf="creditoForm['tipoCuota'] == '2'">Porcentaje</span>
+        </label>
+        <input [(ngModel)]="creditoForm['cuotas']" [ngModelOptions]="{standalone: true}" class="form-control text-end"type="number"oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>
+      </div>
+      <div class="col-6 mb-3 ps-1">
+        <label>Intérvalo Días</label>
+        <input [(ngModel)]="creditoForm['dias']" [ngModelOptions]="{standalone: true}" class="form-control text-end" type="number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>
+      </div>
+    </div>
+    <div class="nav justify-content-between mb-3">
+      <button type="button" class="btn btn-primary" (click)="addPago()" title="Agregar Nueva Cuota en Blanco a la lista."><i class="mdi mdi-plus"></i> Cuota</button>
+      <button type="button" class="btn btn-success" (click)="generarPlanPagos() "title="Generar lista de Cuotas Segun los parametros.">Generar plan de pagos </button>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Acciones</th>
+            <th>Nro Cuota</th>
+            <th>Fecha Pago</th>
+            <th>Importe</th>
+          </tr>
+        </thead>
+        <tbody formArrayName="planPagos">
+          <tr *ngFor="let pago of planPagos.controls; index as i" [formGroupName]="i">
+            <td>
+              <button (click)="removePago(i)" class="btn btn-danger btn-sm"><i class="mdi mdi-trash-can-outline"></i></button>
+            </td>
+            <td>{{i+1}}</td>
+            <td>
+              <div class="input-group input-group-sm fecha-input">
+                <input type="text"formControlName="fechaPago" placeholder="dd-mm-AA" class="form-control" bsDatepicker [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY', adaptivePosition: true}" [ngClass]="{ 'is-invalid': submitted && planPagos.controls[i]['controls']['fechaPago'].errors}">
+                <span class="input-group-text"><i class="mdi mdi-calendar-outline"></i></span>
+              </div>
+              <div *ngIf="submitted && planPagos.controls[i]['controls']['fechaPago'].errors" class="col-sm-12">
+                <div *ngIf="planPagos.controls[i]['controls']['fechaPago'].errors['required']" class="text-danger mt-1 font-size-10">La fecha de pago es obligatoria</div>
+              </div>
+            </td>
+            <td>
+              <input type="number" formControlName="importe" (change)="calcularCuotas()" class="form-control text-end" [ngClass]="{ 'is-invalid': submitted && planPagos.controls[i]['controls']['importe'].errors}">
+              <div *ngIf="submitted && planPagos.controls[i]['controls']['importe'].errors" class="col-sm-12">
+                <div *ngIf="planPagos.controls[i]['controls']['importe'].errors['required']" class="text-danger mt-1 font-size-10">El importe es obligatorio</div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2" ></td>
+            <td class="text-end"><span class="fw-semibold semi">Importe Total</span></td>
+            <td class="text-end pe-4">
+              {{importeTotalCredito}}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="tipoDescargo && tipoDescargo != 'APERT'  && form.monto.value != null && form.monto.value < form.importe.value && isDevolucion" class="col-12">
+    <h5 class="mb-3 pb-3 border-bottom">Datos para la Devolución</h5>
+    <div class="mb-3 nav col-12 px-1">
+      <label class="col-3 col-form-label">(*) Banco</label>
+      <div class="col-9">
+        <ng-select class="uppercase" formControlName="bancoId" appendTo="body" placeholder="Seleccione un banco" (change)="cambioBanco()" [items]="listaBancos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['bancoId'].errors != null }"></ng-select>
+        <div *ngIf="submitted && form['bancoId'].errors" class="col-sm-12">
+          <div *ngIf="form['bancoId'].errors['required']" class="text-danger mt-1 font-size-10">El banco es obligatorio</div>
+        </div>
+      </div>
+    </div>
+    <div class="mb-3 nav col-12 px-1">
+      <label class="col-3 col-form-label">(*) Cuenta</label>
+      <div class="col-9">
+        <ng-select class="uppercase" formControlName="cuentaBancoId" appendTo="body" placeholder="Seleccione una cuenta" [items]="listaCuentasBanco" bindLabel="nroCuenta" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['cuentaBancoId'].errors != null }"></ng-select>
+        <div *ngIf="submitted && form['cuentaBancoId'].errors" class="col-sm-12">
+          <div *ngIf="form['cuentaBancoId'].errors['required']" class="text-danger mt-1 font-size-10">La cuenta es obligatoria</div>
+        </div>
+      </div>
+    </div>
+    <div class="mb-3 nav col-12 px-1">
+      <label class="col-3 col-form-label">(*) Medio Transferencia</label>
+      <div class="col-9">
+        <ng-select class="uppercase" formControlName="medioTransferenciaId" appendTo="body" placeholder="Seleccione un medio de transferencia" [items]="listaMedioTransferencias" bindLabel="medio" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['medioTransferenciaId'].errors != null }"></ng-select>
         <div *ngIf="submitted && form['medioTransferenciaId'].errors" class="col-sm-12">
           <div *ngIf="form['medioTransferenciaId'].errors['required']" class="text-danger mt-1 font-size-10">El medio de transferencia es obligatoria</div>
         </div>

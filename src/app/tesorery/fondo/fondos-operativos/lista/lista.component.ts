@@ -76,8 +76,6 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
 
   editar(data: any, template: any) {
     this.fondo = data;
-    this.apertura = false;
-    this.descargo = false;
     this.tipoDescargo = undefined;
     this.titleModal = 'Editar Fondo Operativo';
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
@@ -85,8 +83,6 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
 
   aperturar(data: any, template: any) {
     this.fondo = data;
-    this.apertura = true;
-    this.descargo = false;
     this.tipoDescargo = 'APERT';
     this.titleModal = 'Apertura de Fondo Operativo ';
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
@@ -94,8 +90,6 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
 
   descargos(data: any, template: any, tipo, tipoTexto) {
     this.fondo = data;
-    this.descargo = true;
-    this.apertura = false;
     this.tipoDescargo = tipo;
     this.tipoTexto = tipoTexto;
     this.titleModal = ' de Fondo Operativo';

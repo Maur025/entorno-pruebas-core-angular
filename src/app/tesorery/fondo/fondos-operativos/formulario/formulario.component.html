@@ -44,7 +44,7 @@
         </div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="descargo">
+    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo && tipoDescargo != 'APERT'">
       <label class="col-3 col-form-label">(*) Saldo</label>
       <div class="col-9">
         <input type="text" class="form-control text-end" [(ngModel)]="saldo" [disabled]=true [ngModelOptions]="{standalone: true}" placeholder="Bs.">
@@ -59,7 +59,7 @@
         </div>
       </div>
     </div> -->
-    <div class="mb-3 nav col-12 px-1" *ngIf="descargo">
+    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo && tipoDescargo != 'APERT'">
       <label class="col-3 col-form-label">(*) Monto de movimiento</label>
       <div class="col-9">
         <input type="text" class="form-control text-end" formControlName="monto" placeholder="Bs." [ngClass]="{ 'is-invalid': submitted && form['monto'].errors}">
@@ -72,7 +72,7 @@
         </div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="apertura || descargo">
+    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo">
       <label class="col-3 col-form-label">(*) Centro de Costos</label>
       <div class="col-9">
         <ng-select class="uppercase" formControlName="centroCostoId" placeholder="Seleccione un centro de costos" [items]="listaCentroCostos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['centroCostoId'].errors != null }"></ng-select>
@@ -81,7 +81,7 @@
         </div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="descargo">
+    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo && tipoDescargo != 'APERT'">
       <label class="col-3 col-form-label">(*) Fecha del Movimiento</label>
       <div class="col-9">
         <input type="text" placeholder="dd-mm-AA" formControlName="fechaMovimiento" [minDate]="fechaMinima" class="form-control" bsDatepicker [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY'}" [ngClass]="{ 'is-invalid': submitted && form['fechaMovimiento'].errors}">
@@ -92,7 +92,7 @@
         </div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="apertura">
+    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo && tipoDescargo == 'APERT'">
       <label class="col-3 col-form-label">(*) Banco</label>
       <div class="col-9">
         <ng-select class="uppercase" formControlName="bancoId" placeholder="Seleccione un banco" (change)="cambioBanco()" [items]="listaBancos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['bancoId'].errors != null }"></ng-select>
@@ -101,7 +101,7 @@
         </div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="apertura">
+    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo && tipoDescargo == 'APERT'">
       <label class="col-3 col-form-label">(*) Cuenta</label>
       <div class="col-9">
         <ng-select class="uppercase" formControlName="cuentaBancoId" placeholder="Seleccione una cuenta" [items]="listaCuentasBanco" bindLabel="nroCuenta" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['cuentaBancoId'].errors != null }"></ng-select>
@@ -110,7 +110,7 @@
         </div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="apertura">
+    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo && tipoDescargo == 'APERT'">
       <label class="col-3 col-form-label">(*) Medio Transferencia</label>
       <div class="col-9">
         <ng-select class="uppercase" formControlName="medioTransferenciaId" placeholder="Seleccione un medio de transferencia" [items]="listaMedioTransferencias" bindLabel="medio" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['medioTransferenciaId'].errors != null }"></ng-select>
