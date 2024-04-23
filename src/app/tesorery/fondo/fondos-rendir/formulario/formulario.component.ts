@@ -90,6 +90,7 @@ export class FormularioRendirComponent implements OnInit {
     if (this.esquema) this.setTransaccion();
 
     this.fechaActual = new Date();
+    this.fechaActual.setHours(0, 0, 0, 0);
   }
 
   setForm() {

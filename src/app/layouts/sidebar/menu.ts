@@ -81,8 +81,8 @@ export const MENU: MenuItem[] = [
       },
       {
         id: 702,
-        label: 'Transacciones Kafka',
-        link: 'configuracion/transaccionesKafka',
+        label: 'Procesos Automáticos',
+        link: 'configuracion/procesosAutomaticos',
       },
     ]
   },
