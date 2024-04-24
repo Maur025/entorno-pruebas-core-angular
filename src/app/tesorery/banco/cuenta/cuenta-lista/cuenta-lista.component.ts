@@ -59,6 +59,7 @@ export class CuentaListaComponent extends FuncionesComponent implements OnInit {
         /* "banco": this.getOpcionesCabecera('Banco', 12), */
         "moneda": this.getOpcionesCabecera('Moneda', 12),
         "saldo": this.getOpcionesCabecera('Saldo', 12),
+        "estadoContabilidad": this.getOpcionesCabecera('Estado Contabilidad', 6),
         "estado": this.getOpcionesCabecera('Estado', 6),
       }
     };

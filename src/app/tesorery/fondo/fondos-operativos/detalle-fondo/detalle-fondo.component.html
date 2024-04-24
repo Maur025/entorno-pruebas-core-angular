@@ -103,6 +103,9 @@
               <div *ngSwitchCase="'estadoFondo'">
                 {{fila.estadoFondo.nombre}}
               </div>
+              <div *ngSwitchCase="'estadoContabilidad'">
+                {{fila.estadoContabilidad?.nombre }}
+              </div>
               <div *ngSwitchCase="'estado'">
                 <div *ngIf="!fila.deleted" class="badge bg-success font-size-10"><i class="mdi mdi-lock-open me-1"></i> Habilitado</div>
                 <div *ngIf="fila.deleted" class="badge bg-danger font-size-10"><i class="mdi mdi-lock me-1"></i> Inhabilitado</div>

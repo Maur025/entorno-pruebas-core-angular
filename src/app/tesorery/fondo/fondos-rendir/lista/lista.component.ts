@@ -55,6 +55,7 @@ export class ListaRendirComponent extends FuncionesComponent implements OnInit {
         "reponsable": this.getOpcionesCabecera('Responsable', 12),
         "aperturado": this.getOpcionesCabecera('Aperturado', 12),
         "cierre": this.getOpcionesCabecera('Cerrado', 12),
+        "estadoContabilidad": this.getOpcionesCabecera('Estado Contabilidad', 6),
         "deleted": this.getOpcionesCabecera('Estado', 6),
       }
     };
