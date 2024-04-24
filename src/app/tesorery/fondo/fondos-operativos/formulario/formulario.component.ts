@@ -208,56 +208,57 @@ export class FormularioOperativoComponent implements OnInit {
 
   public guardar() {
     this.submitted = true;
+    let data = this.formGroup.getRawValue();
     this.cambioEstado();
     if (this.formGroup.valid) {
-      if (this.tipoDescargo != 'APERT') {
-        let data = this.formGroup.getRawValue();
-        data.nroReferencia = data.nroSolicitud;
-        data.refId = null;
-        data.fondoOperativoId = data.id;
-        this.detalleFontoOperativoService.register(data).subscribe(data => {
-          this.notificacionService.successStandar();
-          if (this.transaccion && this.esquemaId) {
-            this.esquemasService.updateNextEstadoIntegracion(this.esquemaId).subscribe(data => {
-              this.alProcesar.emit();
-              this.cerrarModal();
-            }, error => this.notificacionService.alertError(error));
-          }
-          this.alActualizar.emit();
-        }, (error) => {
-          this.notificacionService.alertError(error);
-        });
-      } else if (this.tipoDescargo == 'APERT') {
-        let data = this.formGroup.getRawValue();
-        data.monto = data.importe;
-        data.saldo = data.importe;
-        data.fecha = data.fechaSolicitud;
-        data.nroReferencia = data.nroSolicitud;
-        data.origen = 'FONDO OPERATIVO';
-        data.aperturado = true;
-        data.fechaMovimiento = data.fechaSolicitud;
-        data.refId = null;
-        data.fondoOperativoId = data.id;
-        forkJoin([
-          this.movimientoCuentaBancoService.register(data),
-          this.detalleFontoOperativoService.register(data),
-          this.fondoOperativoService.update(data)
-        ]).subscribe((responses) => {
-          this.notificacionService.successStandar();
-          this.alActualizar.emit();
-        }, (error) => {
-          this.notificacionService.alertError(error);
-        });
+      if (this.tipoDescargo) {
+        if (this.tipoDescargo != 'APERT') {
+          data.nroReferencia = data.nroSolicitud;
+          data.refId = null;
+          data.fondoOperativoId = data.id;
+          this.detalleFontoOperativoService.register(data).subscribe(data => {
+            this.notificacionService.successStandar();
+            if (this.transaccion && this.esquemaId) {
+              this.esquemasService.updateNextEstadoIntegracion(this.esquemaId).subscribe(data => {
+                this.alProcesar.emit();
+                this.cerrarModal();
+              }, error => this.notificacionService.alertError(error));
+            }
+            this.alActualizar.emit();
+          }, (error) => {
+            this.notificacionService.alertError(error);
+          });
+        } else {
+          data.monto = data.importe;
+          data.saldo = data.importe;
+          data.fecha = data.fechaSolicitud;
+          data.nroReferencia = data.nroSolicitud;
+          data.origen = 'FONDO OPERATIVO';
+          data.aperturado = true;
+          data.fechaMovimiento = data.fechaSolicitud;
+          data.refId = null;
+          data.fondoOperativoId = data.id;
+          forkJoin([
+            this.movimientoCuentaBancoService.register(data),
+            this.detalleFontoOperativoService.register(data),
+            this.fondoOperativoService.update(data)
+          ]).subscribe((responses) => {
+            this.notificacionService.successStandar();
+            this.alActualizar.emit();
+          }, (error) => {
+            this.notificacionService.alertError(error);
+          });
+        }
       } else {
         if (this.fondo && !this.transaccion) {
-          this.fondoOperativoService.update(this.formGroup.getRawValue()).subscribe(data => {
+          this.fondoOperativoService.update(data).subscribe(data => {
             this.notificacionService.successStandar();
             this.alActualizar.emit();
           }, (error) => {
             this.notificacionService.alertError(error);
           });
         } else {
-          this.fondoOperativoService.register(this.formGroup.getRawValue()).subscribe(data => {
+          this.fondoOperativoService.register(data).subscribe(data => {
             this.notificacionService.successStandar();
             this.alActualizar.emit();
           }, (error) => {

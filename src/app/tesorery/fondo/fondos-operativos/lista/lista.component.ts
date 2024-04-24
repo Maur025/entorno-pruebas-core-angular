@@ -59,7 +59,7 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
         "saldo": this.getOpcionesCabecera('Saldo', 12),
         "aperturado": this.getOpcionesCabecera('Aperturado', 12),
         "cierre": this.getOpcionesCabecera('Cerrado', 12),
-        "estadoIntegracion": this.getOpcionesCabecera('Estado de Integracion', 6),
+        "estadoContabilidad": this.getOpcionesCabecera('Estado Contabilidad', 6),
         "deleted": this.getOpcionesCabecera('Estado', 6),
       }
     };
