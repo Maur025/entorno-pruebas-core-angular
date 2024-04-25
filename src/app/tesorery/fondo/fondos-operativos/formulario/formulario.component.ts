@@ -38,7 +38,6 @@ export class FormularioOperativoComponent implements OnInit {
   listaMedioTransferencias: any;
   listaEstados: any;
   fechaMinima: any;
-  saldo: any;
 
   constructor(
     private FormBuilder: FormBuilder,
@@ -61,22 +60,36 @@ export class FormularioOperativoComponent implements OnInit {
   ngOnInit(): void {
     this.setForm();
     this.fechaMinima = new Date();
-    if (this.fondo) {
-      this.setFondo();
-      this.getEstados();
-      this.getCentroCostos();
-      if (this.tipoDescargo && this.tipoDescargo == 'APERT') {
+    this.getEstados();
+    this.getCentroCostos();
+    if (this.tipoDescargo) {
+      if (this.tipoDescargo == 'APERT') {
         this.getBancos();
         this.getMedioTransferencias();
-        this.formGroup.disable();
         this.addFormApertura();
-      } else if (this.tipoDescargo && this.tipoDescargo != 'APERT') {
+      } else if (this.tipoDescargo == 'CIERR') {
         this.formGroup.disable();
         this.addFormDescargo();
-        this.saldo = this.fondo.saldo;
+        this.form.monto.setValue(this.fondo.saldo);
+        this.form.fechaMovimiento.setValue(new Date());
+        this.form.saldo.disable();
+        this.form.fechaMovimiento.disable();
+        if (this.fondo.saldo == 0) {
+          this.formGroup.removeControl('centroCostoId')
+          this.form.monto.disable();
+        } else{
+          this.form.centroCostoId.enable();
+        }
+        this.formGroup.addControl('documento', new FormControl(null, Validators.required));
+      } else {
+        this.formGroup.disable();
+        this.addFormDescargo();
+        this.form.saldo.disable();
+        this.form.centroCostoId.enable();
       }
-      if (this.transaccion) this.setTransaccion();
     }
+    if (this.fondo) this.setFondo();
+    if (this.transaccion) this.setTransaccion();
   }
 
   setForm() {
@@ -88,12 +101,11 @@ export class FormularioOperativoComponent implements OnInit {
       importe: [, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       aperturado: [],
       descripcion: [],
+      centroCostoId: [, [Validators.required]]
     });
   }
 
-
   addFormApertura() {
-    this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('bancoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('cuentaBancoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('medioTransferenciaId', new FormControl(null, Validators.required));
@@ -101,8 +113,8 @@ export class FormularioOperativoComponent implements OnInit {
   }
 
   addFormDescargo() {
+    this.formGroup.addControl('saldo', new FormControl(null, Validators.required));
     this.formGroup.addControl('monto', new FormControl(null, [Validators.required]));
-    this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('fechaMovimiento', new FormControl(null, [Validators.required, this.validatorFecha(), this.validatorFechaMovimiento()]));
     this.formGroup.addControl('estado', new FormControl(null, Validators.required));
   }
@@ -110,25 +122,19 @@ export class FormularioOperativoComponent implements OnInit {
   getCentroCostos() {
     this.centroCostosService.habilitados().subscribe(data => {
       this.listaCentroCostos = data.content;
-    }, (error) => {
-      this.notificacionService.alertError(error);
-    });
+    }, error => this.notificacionService.alertError(error));
   }
 
   getBancos() {
     this.bancoService.habilitados().subscribe(data => {
       this.listaBancos = data.content;
-    }, (error) => {
-      this.notificacionService.alertError(error);
-    });
+    }, error => this.notificacionService.alertError(error));
   }
 
   getMedioTransferencias() {
     this.medioTransferenciaService.habilitados().subscribe(data => {
       this.listaMedioTransferencias = data.content;
-    }, (error) => {
-      this.notificacionService.alertError(error);
-    });
+    }, error => this.notificacionService.alertError(error));
   }
 
   getEstados() {
@@ -136,9 +142,7 @@ export class FormularioOperativoComponent implements OnInit {
       this.listaEstados = data.content;
       if (this.tipoDescargo) this.form.estado.setValue(this.listaEstados.find(e => e.codigo == this.tipoDescargo).id);
       this.cambioEstado();
-    }, (error) => {
-      this.notificacionService.alertError(error);
-    });
+    }, error => this.notificacionService.alertError(error));
   }
 
   cambioBanco() {
@@ -147,9 +151,7 @@ export class FormularioOperativoComponent implements OnInit {
     if (this.form.bancoId.value != null) {
       this.cuentaBancoService.getCuentasBanco(1000, 1, 'id', false, '', this.form.bancoId.value).subscribe(data => {
         this.listaCuentasBanco = data.content;
-      }, (error) => {
-        this.notificacionService.alertError(error);
-      });
+      }, error => this.notificacionService.alertError(error));
     } else {
       this.listaCuentasBanco = [];
       this.form.cuentaBancoId.setValue(null);
@@ -183,7 +185,7 @@ export class FormularioOperativoComponent implements OnInit {
   }
 
   setFondo() {
-    this.formGroup.setValue({
+    this.formGroup.patchValue({
       id: this.fondo.id,
       nombre: this.fondo.nombre,
       fechaSolicitud: new Date(this.fondo.fechaSolicitud),
@@ -191,6 +193,7 @@ export class FormularioOperativoComponent implements OnInit {
       importe: this.fondo.importe,
       aperturado: this.fondo.aperturado,
       descripcion: this.fondo.descripcion,
+      saldo : this.fondo.saldo
     });
   }
 
@@ -212,7 +215,26 @@ export class FormularioOperativoComponent implements OnInit {
     this.cambioEstado();
     if (this.formGroup.valid) {
       if (this.tipoDescargo) {
-        if (this.tipoDescargo != 'APERT') {
+        if (this.tipoDescargo == 'APERT') {
+          data.aperturado = true;
+          this.fondoOperativoService.register(data).subscribe(data => {
+            this.notificacionService.successStandar();
+            this.alActualizar.emit();
+          }, error => this.notificacionService.alertError(error));
+        } else if (this.tipoDescargo == 'CIERR'){
+          data.nroReferencia = data.nroSolicitud;
+          data.refId = null;
+          data.fondoOperativoId = data.id;
+          this.fondoOperativoService.cerrarFondo(data.id).subscribe(data => {
+            this.notificacionService.successStandar('Fondo operativo cerrado exitosamente.');
+            this.alActualizar.emit();
+          }, error => this.notificacionService.alertError(error));
+          if (this.fondo.saldo > 0) {
+            data.estado = this.listaEstados.find(e => e.codigo == 'DEV').id;
+            this.detalleFontoOperativoService.register(data).subscribe(data => {
+            }, error => this.notificacionService.alertError(error));
+          }
+        } else {
           data.nroReferencia = data.nroSolicitud;
           data.refId = null;
           data.fondoOperativoId = data.id;
@@ -225,45 +247,14 @@ export class FormularioOperativoComponent implements OnInit {
               }, error => this.notificacionService.alertError(error));
             }
             this.alActualizar.emit();
-          }, (error) => {
-            this.notificacionService.alertError(error);
-          });
-        } else {
-          data.monto = data.importe;
-          data.saldo = data.importe;
-          data.fecha = data.fechaSolicitud;
-          data.nroReferencia = data.nroSolicitud;
-          data.origen = 'FONDO OPERATIVO';
-          data.aperturado = true;
-          data.fechaMovimiento = data.fechaSolicitud;
-          data.refId = null;
-          data.fondoOperativoId = data.id;
-          forkJoin([
-            this.movimientoCuentaBancoService.register(data),
-            this.detalleFontoOperativoService.register(data),
-            this.fondoOperativoService.update(data)
-          ]).subscribe((responses) => {
-            this.notificacionService.successStandar();
-            this.alActualizar.emit();
-          }, (error) => {
-            this.notificacionService.alertError(error);
-          });
+          }, error => this.notificacionService.alertError(error));
         }
       } else {
         if (this.fondo && !this.transaccion) {
           this.fondoOperativoService.update(data).subscribe(data => {
             this.notificacionService.successStandar();
             this.alActualizar.emit();
-          }, (error) => {
-            this.notificacionService.alertError(error);
-          });
-        } else {
-          this.fondoOperativoService.register(data).subscribe(data => {
-            this.notificacionService.successStandar();
-            this.alActualizar.emit();
-          }, (error) => {
-            this.notificacionService.alertError(error);
-          });
+          }, error => this.notificacionService.alertError(error));
         }
       }
     }

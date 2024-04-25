@@ -14,7 +14,6 @@ import { FuncionesComponent } from 'src/app/tesorery/funciones.component';
 export class ListaOperativoComponent extends FuncionesComponent implements OnInit {
 
   @ViewChild('appFormFondoOp') appFormFondoOp: FormularioOperativoComponent;
-
   breadCrumbItems: Array<{}>;
   breadCrumbTitle: string = 'Fondos Operativos';
   textoBuscar = 'Ingrese criterio de busqueda: nombre, nro solicitud y descripción'
@@ -26,8 +25,6 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
   modalRef?: BsModalRef;
   fondo: any;
   titleModal: any;
-  apertura = false;
-  descargo = false;
   tipoDescargo: any;
   tipoTexto: any;
 
@@ -65,12 +62,10 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
     };
   }
 
-  crear(template: any) {
+  aperturarNuevo(template: any) {
     this.fondo = undefined;
-    this.apertura = false;
-    this.descargo = false;
-    this.tipoDescargo = undefined;
-    this.titleModal = 'Nuevo Fondo Operativo';
+    this.tipoDescargo = 'APERT';
+    this.titleModal = 'Apertura de Nuevo Fondo Operativo ';
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 
@@ -78,13 +73,6 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
     this.fondo = data;
     this.tipoDescargo = undefined;
     this.titleModal = 'Editar Fondo Operativo';
-    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
-  }
-
-  aperturar(data: any, template: any) {
-    this.fondo = data;
-    this.tipoDescargo = 'APERT';
-    this.titleModal = 'Apertura de Fondo Operativo ';
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 
@@ -102,19 +90,6 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
     //this.modalRef = this.modalService.show(template, {class: `modal-lg modal-scrollable`});
   }
 
-  cerrar(data, tabla) {
-    this.notificacion.alertaSimpleConfirmacionBoton("Esta seguro que desea cerrar el fondo operativo: '" + data.nombre + "'.", "Sí, cerrar", (response: any) => {
-      if (response) {
-        this.fondoOperativoService.cerrarFondo(data.id).subscribe(data => {
-          tabla.obtenerDatos();
-          this.notificacion.successStandar('Registro cerrado exitosamente.');
-        }, (error) => {
-          this.notificacion.alertError(error);
-        });
-      }
-    })
-  }
-
   cerrarModal() {
     this.modalService.hide();
   }
@@ -127,10 +102,7 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
           component.obtenerDatos();
           texto == 'habilitar' ? estado = 'habilitado' : estado = 'inhabilitado';
           this.notificacion.successStandar('Registro ' + estado + ' exitosamente.');
-        }, (error) => {
-          this.notificacion.alertError(error);
-        }
-        );
+        }, error => this.notificacion.alertError(error));
       }
     });
   }
