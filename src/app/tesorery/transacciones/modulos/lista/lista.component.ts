@@ -61,8 +61,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   ngOnInit(): void {
     this.breadCrumbItems = [{ label: 'Transacciones' }];
     this.moduloId = this.route.snapshot.paramMap.get("modulo_id");
-    this.getEstadosIntegracion();
     this.getModulo();
+    this.getEstadosIntegracion();
     this.formato = this.getCabeceras();
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false; this.formato.cabeceras[this.rel_field].visibleCheck = false }
   }

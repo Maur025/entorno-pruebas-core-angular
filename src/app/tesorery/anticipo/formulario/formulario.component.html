@@ -1,663 +1,217 @@
 <form (ngSubmit)="guardar()" [formGroup]="formGroup">
-	<label class="mb-3 col-12">
-		Los campos marcados con asterisco (*) son obligatorios.
-	</label>
-	<div class="nav col-12 border-bottom">
-		<div class="col-6">
-			<div class="mb-3 px-1">
-				<label for="formrow-password-input">(*) Fecha</label>
-				<div class="input-group">
-					<input
-						type="text"
-						placeholder="dd-mm-AA"
-						class="form-control"
-						bsDatepicker
-						required
-						formControlName="fecha"
-						[bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY' }"
-						[ngClass]="{ 'is-invalid': submitted && form['fecha'].errors }"
-					/>
-					<span class="input-group-text">
-						<i class="mdi mdi-calendar-outline"></i>
-					</span>
-					<div
-						*ngIf="submitted && form['fecha'].errors"
-						class="invalid-feedback"
-					>
-						<div *ngIf="form['fecha'].errors['required']">
-							Fecha es obligatorio
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-6" *ngIf="tipo == 'nuevo'">
-			<div class="mb-3 px-1">
-				<label class="mb-2" for="entidadReferencialId">(*)Proveedor </label>
-				<ng-select
-					class="uppercase"
-					formControlName="entidadReferencialId"
-					placeholder="Seleccione Proveedor"
-					[items]="listaEntidades"
-					bindLabel="entidad.nombre"
-					bindValue="id"
-					[ngClass]="{
-						'ngselect-invalid':
-							submitted && form['entidadReferencialId'].errors != null
-					}"
-				></ng-select>
-				<div *ngIf="submitted && form['entidadReferencialId'].errors">
-					<div
-						class="text-danger mt-1 font-size-10"
-						*ngIf="form['entidadReferencialId'].errors['required']"
-					>
-						La entidad de referencia es obligatoria
-					</div>
-				</div>
-			</div>
-		</div>
-		<div
-			class="col-6"
-			*ngIf="tipo === 'nuevo' || estado?.nombre === 'DEVOLUCION'"
-		>
-			<div class="mb-3 px-1">
-				<label class="mb-2" for="centroCostoId">(*) Centro Costos </label>
-				<ng-select
-					class="uppercase"
-					formControlName="centroCostoId"
-					placeholder="Seleccione Centro de Costo"
-					[items]="listaCentroCostos"
-					bindLabel="nombre"
-					bindValue="id"
-					[ngClass]="{
-						'ngselect-invalid':
-							submitted && form['centroCostoId'].errors != null
-					}"
-				></ng-select>
-				<div *ngIf="submitted && form['centroCostoId'].errors">
-					<div
-						class="text-danger mt-1 font-size-10"
-						*ngIf="form['centroCostoId'].errors['required']"
-					>
-						El centro de costos es obligatorio
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-6" *ngIf="!isRefund">
-			<div class="mb-3 px-1">
-				<label class="mb-2" for="nroReferencia">(*) Nro de Referencia</label>
-				<input
-					type="text"
-					class="form-control uppercase"
-					formControlName="nroReferencia"
-					[ngClass]="{
-						'is-invalid': submitted && form['nroReferencia'].errors
-					}"
-				/>
-				<div
-					*ngIf="submitted && form['nroReferencia'].errors"
-					class="invalid-feedback"
-				>
-					<div *ngIf="form['nroReferencia'].errors['required']">
-						El nro de referencia es obligatorio
-					</div>
-				</div>
-			</div>
-		</div>
+  <label class="mb-3 col-12">Los campos marcados con asterisco (*) son obligatorios.</label>
+  <div class="nav col-12 border-bottom">
+    <div class="col-6">
+      <div class="mb-3 px-1">
+        <label for="formrow-password-input">(*) Fecha</label>
+        <div class="input-group">
+          <input type="text" placeholder="dd-mm-AA" class="form-control" bsDatepicker required formControlName="fecha" [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY' }" [ngClass]="{ 'is-invalid': submitted && form['fecha'].errors }">
+          <span class="input-group-text"><i class="mdi mdi-calendar-outline"></i></span>
+          <div *ngIf="submitted && form['fecha'].errors" class="invalid-feedback" align="left">
+            <div *ngIf="form['fecha'].errors['required']">Fecha es obligatorio</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6" *ngIf="tipo == 'nuevo'">
+      <div class="mb-3 px-1">
+        <label class="mb-2" for="entidadReferencialId">(*)Proveedor </label>
+        <ng-select class="uppercase" formControlName="entidadReferencialId" placeholder="Seleccione Proveedor" [items]="listaEntidades" bindLabel="entidad.nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['entidadReferencialId'].errors != null }"></ng-select>
+        <div *ngIf="submitted && form['entidadReferencialId'].errors">
+          <div class="text-danger mt-1 font-size-10" *ngIf="form['entidadReferencialId'].errors['required']">La entidad de referencia es obligatoria</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="mb-3 px-1">
+        <label class="mb-2" for="centroCostoId">(*) Centro Costos </label>
+        <ng-select class="uppercase" formControlName="centroCostoId" placeholder="Seleccione Centro de Costo" [items]="listaCentroCostos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['centroCostoId'].errors != null }"></ng-select>
+        <div *ngIf="submitted && form['centroCostoId'].errors">
+          <div class="text-danger mt-1 font-size-10" *ngIf="form['centroCostoId'].errors['required']">El centro de costos es obligatorio</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="mb-3 px-1">
+        <label class="mb-2" for="nroReferencia">(*) Nro de Referencia</label>
+        <input type="text" class="form-control uppercase" formControlName="nroReferencia" [ngClass]="{ 'is-invalid': submitted && form['nroReferencia'].errors }" />
+        <div *ngIf="submitted && form['nroReferencia'].errors" class="invalid-feedback">
+          <div *ngIf="form['nroReferencia'].errors['required']">El nro de referencia es obligatorio</div>
+        </div>
+      </div>
+    </div>
 
-		<div class="col-12" *ngIf="!isRefund">
-			<div class="mb-3 px-1">
-				<label class="mb-2">(*) Descripción </label>
-				<textarea
-					type="numeric"
-					class="form-control uppercase"
-					rows="2"
-					formControlName="descripcion"
-					[ngClass]="{ 'is-invalid': submitted && form['descripcion'].errors }"
-				></textarea>
-				<div
-					*ngIf="submitted && form['descripcion'].errors"
-					class="invalid-feedback"
-				>
-					<div *ngIf="form['descripcion'].errors['required']">
-						La descripción es obligatoria
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-6" *ngIf="tipo == 'aplicacion' && !isRefund">
-			<div class="mb-3 px-1">
-				<label class="mb-2">(*) Estado</label>
-				<ng-select
-					class="uppercase"
-					formControlName="estado"
-					placeholder="Seleccione Estado de Anticipo"
-					(change)="cambioEstado()"
-					[items]="listaEstadoAnticipo"
-					bindLabel="nombre"
-					bindValue="id"
-					[ngClass]="{
-						'ngselect-invalid': submitted && form['estado'].errors != null
-					}"
-				></ng-select>
-				<div *ngIf="submitted && form['estado'].errors">
-					<div
-						class="text-danger mt-1 font-size-10"
-						*ngIf="form['estado'].errors['required']"
-					>
-						Seleccionar Estado de anticipo
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-6">
-			<div class="mb-3 px-1">
-				<label class="mb-2" for="monto">(*) Monto </label>
-				<input
-					type="numeric"
-					class="form-control disabled uppercase"
-					formControlName="monto"
-					[ngClass]="{ 'is-invalid': submitted && form['monto'].errors }"
-				/>
-				<div *ngIf="submitted && form['monto'].errors" class="invalid-feedback">
-					<div *ngIf="form['monto'].errors['required']">
-						El monto es obligatorio
-					</div>
-					<div *ngIf="form['monto'].errors['pattern']">
-						El monto solo acepta carácteres numéricos y un punto decimal
-					</div>
-					<div *ngIf="form['monto'].errors['max']">
-						El monto debe ser menor o igual al saldo {{ anticipoData.saldo }}
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-6" *ngIf="form.saldo">
-			<div class="mb-3 px-1">
-				<label class="mb-2">(*) Saldo </label>
-				<input
-					type="number"
-					class="form-control uppercase text-end"
-					formControlName="saldo"
-					[ngClass]="{ 'is-invalid': submitted && form['saldo'].errors }"
-				/>
-				<div *ngIf="submitted && form['saldo'].errors">
-					<div
-						class="text-danger mt-1 font-size-10"
-						*ngIf="form['saldo'].errors['required']"
-					>
-						El saldo es obligatorio
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-6" *ngIf="form.ingresoEgreso">
-			<div class="mb-3 px-1">
-				<label class="mb-2" for="ingresoEgreso">(*) Tipo de Movimiento </label>
-				<ng-select
-					class="uppercase"
-					formControlName="ingresoEgreso"
-					placeholder="Seleccione una opción"
-					[items]="ingresoEgreso"
-					bindLabel="name"
-					bindValue="value"
-					[ngClass]="{
-						'ngselect-invalid':
-							submitted && form['ingresoEgreso'].errors != null
-					}"
-				></ng-select>
-				<div *ngIf="submitted && form['ingresoEgreso'].errors">
-					<div
-						class="text-danger mt-1 font-size-10"
-						*ngIf="form['ingresoEgreso'].errors['required']"
-					>
-						Seleccionar una opción obligatoria
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div
-		class="nav col-12"
-		*ngIf="tipo == 'nuevo' || estado?.nombre == 'DEVOLUCION'"
-	>
-		<div class="card-body">
-			<div class="nav justify-content-between align-items-center py-3">
-				<h4 class="card-title m-0">Lista de Operaciones</h4>
-				<div>
-					<button
-						type="button"
-						class="btn btn-sm btn-primary float-end"
-						(click)="addOperacion()"
-					>
-						<i class="mdi mdi-plus"></i>Añadir operación
-					</button>
-					<div
-						*ngIf="submitted && operaciones.length == 0"
-						class="text-danger mt-1 font-size-11"
-					>
-						El anticipo debe tener registrada al menos una operación.
-					</div>
-				</div>
-			</div>
-			<div *ngIf="listaOperaciones.length == 0">
-				<span class="fw-semibold semi text-warning ps-2"
-					>Sin Operaciones Registradas</span
-				>
-			</div>
-			<div formArrayName="operaciones">
-				<div
-					class="card card-body shadow-lg mb-3 pb-0"
-					*ngFor="let operacion of listaOperaciones; index as i"
-				>
-					<div [formGroupName]="i">
-						<div
-							class="nav justify-content-between border-bottom align-items-center"
-						>
-							<div class="col-1 border-end pb-3">
-								<span class="fw-semibold semi text-primary ps-3">
-									Nro. {{ i + 1 }}
-								</span>
-							</div>
-							<div class="col-8 ps-2">
-								<div class="nav pb-3">
-									<label class="col-3 col-form-label">(*) Operación : </label>
-									<div
-										*ngFor="let tipoOp of tipoOperacion"
-										class="form-check col nav align-items-center"
-									>
-										<input
-											class="custom-control-input"
-											style="transform: scale(1.3)"
-											type="radio"
-											formControlName="tipoOperacion"
-											[value]="tipoOp.value"
-											(change)="cambiaOperacion(i)"
-											[id]="tipoOp.value + 'radioButton'"
-										/>
-										<label
-											class="form-check-label ps-2"
-											[htmlFor]="tipoOp.value + 'radioButton'"
-										>
-											{{ tipoOp.name }}
-										</label>
-									</div>
-								</div>
-							</div>
-							<div class="col pb-3">
-								<div
-									*ngIf="
-										submitted &&
-										operaciones.controls[i]['controls']['tipoOperacion'].errors
-									"
-								>
-									<div
-										*ngIf="
-											operaciones.controls[i]['controls']['tipoOperacion']
-												.errors['required']
-										"
-										class="text-danger mt-1 font-size-11"
-									>
-										Seleccione un tipo de operación.
-									</div>
-								</div>
-							</div>
-							<div class="col pb-3">
-								<button
-									class="btn btn-sm btn-danger me-2 float-end"
-									(click)="removeOperacion(i)"
-								>
-									<i class="mdi mdi-trash-can-outline"></i>
-								</button>
-							</div>
-						</div>
-						<div
-							[collapse]="
-								operaciones.controls[i]['controls']['tipoOperacion']['value'] !=
-								null
-									? false
-									: true
-							"
-							[isAnimated]="true"
-						>
-							<div class="nav py-3">
-								<div
-									class="col-9"
-									*ngIf="
-										operaciones.controls[i]['controls']['tipoOperacion'][
-											'value'
-										] == 'BN'
-									"
-								>
-									<div class="nav mb-3 px-1">
-										<label class="col-3 col-form-label">(*) Banco : </label>
-										<div class="col">
-											<ng-select
-												class="uppercase"
-												formControlName="bancoId"
-												placeholder="Seleccione un banco"
-												(change)="cambiaBanco(i)"
-												[items]="listaBancos"
-												bindLabel="nombre"
-												bindValue="id"
-												[ngClass]="{
-													'ngselect-invalid':
-														submitted &&
-														operaciones.controls[i]['controls']['bancoId']
-															.errors != null
-												}"
-											></ng-select>
-											<div
-												*ngIf="
-													submitted &&
-													operaciones.controls[i]['controls']['bancoId'].errors
-												"
-												class="col-sm-12"
-											>
-												<div
-													*ngIf="
-														operaciones.controls[i]['controls']['bancoId']
-															.errors['required']
-													"
-													class="text-danger mt-1 font-size-10"
-												>
-													El banco es obligatoria
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="nav mb-3 px-1">
-										<label class="col-3 col-form-label"
-											>(*) Cuenta Bancaria:
-										</label>
-										<div class="col">
-											<ng-select
-												class="uppercase"
-												formControlName="cuentaBancoId"
-												placeholder="Seleccione una cuenta"
-												(change)="cambioCuentaBancaria(i)"
-												[items]="this.listaOperaciones[i].listaCuentasBanco"
-												bindLabel="nroCuenta"
-												bindValue="id"
-												[ngClass]="{
-													'ngselect-invalid':
-														submitted &&
-														operaciones.controls[i]['controls']['cuentaBancoId']
-															.errors != null
-												}"
-											></ng-select>
-											<div
-												*ngIf="
-													submitted &&
-													operaciones.controls[i]['controls']['cuentaBancoId']
-														.errors
-												"
-												class="col-sm-12"
-											>
-												<div
-													*ngIf="
-														operaciones.controls[i]['controls']['cuentaBancoId']
-															.errors['required']
-													"
-													class="text-danger mt-1 font-size-10"
-												>
-													La cuenta es obligatoria
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="nav mb-3 px-1">
-										<label class="col-3 col-form-label"
-											>(*) Medio Transferencia :
-										</label>
-										<div class="col">
-											<ng-select
-												class="uppercase"
-												formControlName="medioTransferenciaId"
-												placeholder="Seleccione un medio de transferencia"
-												[items]="listaMedioTransferencias"
-												bindLabel="medio"
-												bindValue="id"
-												[ngClass]="{
-													'ngselect-invalid':
-														submitted &&
-														operaciones.controls[i]['controls'][
-															'medioTransferenciaId'
-														].errors != null
-												}"
-											></ng-select>
-											<div
-												*ngIf="
-													submitted &&
-													operaciones.controls[i]['controls'][
-														'medioTransferenciaId'
-													].errors
-												"
-												class="col-sm-12"
-											>
-												<div
-													*ngIf="
-														operaciones.controls[i]['controls'][
-															'medioTransferenciaId'
-														].errors['required']
-													"
-													class="text-danger mt-1 font-size-10"
-												>
-													el medio de transferencia es obligatoria
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="nav mb-3 px-1">
-										<label class="col-3 col-form-label"
-											>(*) Descripción :
-										</label>
-										<div class="col">
-											<textarea
-												class="form-control uppercase"
-												formControlName="descripcion"
-												rows="2"
-												[ngClass]="{
-													'is-invalid':
-														submitted &&
-														operaciones.controls[i]['controls']['descripcion']
-															.errors
-												}"
-											></textarea>
-											<div
-												*ngIf="
-													submitted &&
-													operaciones.controls[i]['controls']['descripcion']
-														.errors
-												"
-												class="col-sm-12"
-											>
-												<div
-													*ngIf="
-														operaciones.controls[i]['controls']['descripcion']
-															.errors['required']
-													"
-													class="text-danger mt-1 font-size-10"
-												>
-													La descripcion es obligatoria
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div
-									class="col-9"
-									*ngIf="
-										operaciones.controls[i]['controls']['tipoOperacion'][
-											'value'
-										] == 'FNDO'
-									"
-								>
-									<div class="nav mb-3 px-1">
-										<label class="col-3 col-form-label"
-											>(*) Fondo Operativo :
-										</label>
-										<div class="col">
-											<ng-select
-												class="uppercase"
-												formControlName="fondoOperativoId"
-												(change)="cambioFondoOperativo(i)"
-												placeholder="Seleccione un Fondo Operativo"
-												[items]="listaFondoAperturados"
-												bindLabel="nombre"
-												bindValue="id"
-												[ngClass]="{
-													'ngselect-invalid':
-														submitted &&
-														operaciones.controls[i]['controls'][
-															'fondoOperativoId'
-														].errors != null
-												}"
-											></ng-select>
-											<div
-												*ngIf="
-													submitted &&
-													operaciones.controls[i]['controls'][
-														'fondoOperativoId'
-													].errors
-												"
-												class="col-sm-12"
-											>
-												<div
-													*ngIf="
-														operaciones.controls[i]['controls'][
-															'fondoOperativoId'
-														].errors['required']
-													"
-													class="text-danger mt-1 font-size-10"
-												>
-													El fondo operativo es obligatorio
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-3">
-									<div class="nav mb-3 px-1">
-										<label class="col-5 col-form-label">(*) Monto Sub:</label>
-										<div class="col">
-											<input
-												type="text"
-												class="form-control uppercase text-end"
-												formControlName="monto"
-												[ngClass]="{
-													'is-invalid':
-														submitted &&
-														operaciones.controls[i]['controls']['monto'].errors
-												}"
-												(change)="calcularMontos()"
-											/>
-											<div
-												*ngIf="
-													submitted &&
-													operaciones.controls[i]['controls']['monto'].errors
-												"
-												class="col-sm-12"
-											>
-												<div
-													*ngIf="
-														operaciones.controls[i]['controls']['monto'].errors[
-															'required'
-														]
-													"
-													class="text-danger mt-1 font-size-10"
-												>
-													El monto es obligatorio
-												</div>
-												<div
-													*ngIf="
-														operaciones.controls[i]['controls']['monto'].errors[
-															'pattern'
-														]
-													"
-													class="text-danger mt-1 font-size-10"
-												>
-													El monto solo acepta carácteres numéricos y un punto
-													decimal
-												</div>
-											</div>
-										</div>
-									</div>
-									<div
-										*ngIf="listaOperaciones[i].datos"
-										class="px-3 py-1 border border-3 rounded-4 ms-2"
-									>
-										<h6 class="border-bottom mb-2 py-2">
-											{{ listaOperaciones[i].tituloDetalle }}
-										</h6>
-										<p
-											*ngIf="listaOperaciones[i].datos.descripcion"
-											class="nav justify-content-between pb-2"
-										>
-											<span class="fw-semibold semi">Descripción: </span
-											><span class="text-primary">{{
-												listaOperaciones[i].datos.descripcion
-											}}</span>
-										</p>
-										<p
-											*ngIf="listaOperaciones[i].datos.nroSolicitud"
-											class="nav justify-content-between pb-2"
-										>
-											<span class="fw-semibold semi">Nro Solicitud: </span
-											><span class="text-primary">{{
-												listaOperaciones[i].datos.nroSolicitud
-											}}</span>
-										</p>
-										<p
-											*ngIf="listaOperaciones[i].datos.moneda"
-											class="nav justify-content-between pb-2"
-										>
-											<span class="fw-semibold semi">Moneda: </span
-											><span class="text-primary">{{
-												listaOperaciones[i].datos.moneda.nombre
-											}}</span>
-										</p>
-										<p class="nav justify-content-between pb-2">
-											<span class="fw-semibold semi">Saldo: </span
-											><span class="text-primary">{{
-												listaOperaciones[i].datos.saldo
-													? listaOperaciones[i].datos.saldo
-													: 0
-											}}</span>
-										</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="nav justify-content-end" *ngIf="operaciones.length > 0">
-				<div class="col-3 nav mb-3 px-1 text-end">
-					<label class="col-4 col-form-label pe-2">Monto Total:</label>
-					<div class="col">
-						<input
-							type="text"
-							[disabled]="true"
-							class="form-control uppercase text-end"
-							[(ngModel)]="montoTotal"
-							[ngModelOptions]="{ standalone: true }"
-							[ngClass]="{
-								'is-invalid': submitted && montoTotal != form['monto'].value
-							}"
-						/>
-						<div
-							*ngIf="submitted && montoTotal != form['monto'].value"
-							class="col-sm-12"
-						>
-							<div class="text-danger mt-1 font-size-10">
-								El monto total no coincide con el monto del anticipo
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="col-12">
+      <div class="mb-3 px-1">
+        <label class="mb-2">(*) Descripción </label>
+        <textarea type="numeric" class="form-control uppercase" rows="2" formControlName="descripcion" [ngClass]="{ 'is-invalid': submitted && form['descripcion'].errors }" ></textarea>
+        <div *ngIf="submitted && form['descripcion'].errors" class="invalid-feedback">
+          <div *ngIf="form['descripcion'].errors['required']">La descripción es obligatoria</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6" *ngIf="tipo == 'aplicacion'">
+      <div class="mb-3 px-1">
+        <label class="mb-2">(*) Estado</label>
+        <ng-select class="uppercase" formControlName="estado" placeholder="Seleccione Estado de Anticipo" (change)="cambioEstado()" [items]="listaEstadoAnticipo" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['estado'].errors != null }"></ng-select>
+        <div *ngIf="submitted && form['estado'].errors">
+          <div class="text-danger mt-1 font-size-10" *ngIf="form['estado'].errors['required']">Seleccionar Estado de anticipo</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="mb-3 px-1">
+        <label class="mb-2" for="monto">(*) Monto </label>
+        <input type="numeric" class="form-control uppercase" formControlName="monto" [ngClass]="{ 'is-invalid': submitted && form['monto'].errors }" />
+        <div *ngIf="submitted && form['monto'].errors" class="invalid-feedback">
+          <div *ngIf="form['monto'].errors['required']">El monto es obligatorio</div>
+          <div *ngIf="form['monto'].errors['pattern']">El monto solo acepta carácteres numéricos y un punto decimal</div>
+          <div *ngIf="form['monto'].errors['max']">El monto debe ser menor o igual al saldo {{anticipoData.saldo}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6" *ngIf="form.saldo">
+      <div class="mb-3 px-1">
+        <label class="mb-2">(*) Saldo </label>
+        <input type="number" class="form-control uppercase text-end" formControlName="saldo" [ngClass]="{ 'is-invalid': submitted && form['saldo'].errors }"/>
+        <div *ngIf="submitted && form['saldo'].errors">
+          <div class="text-danger mt-1 font-size-10" *ngIf="form['saldo'].errors['required']">El saldo es obligatorio</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6" *ngIf="form.ingresoEgreso">
+      <div class="mb-3 px-1">
+        <label class="mb-2" for="ingresoEgreso">(*) Tipo de Movimiento </label>
+        <ng-select class="uppercase" formControlName="ingresoEgreso" placeholder="Seleccione una opción" [items]="ingresoEgreso" bindLabel="name" bindValue="value" [ngClass]="{ 'ngselect-invalid': submitted && form['ingresoEgreso'].errors != null }"></ng-select>
+        <div *ngIf="submitted && form['ingresoEgreso'].errors">
+          <div class="text-danger mt-1 font-size-10" *ngIf="form['ingresoEgreso'].errors['required']">Seleccionar una opción obligatoria</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="nav col-12" *ngIf="tipo == 'nuevo' || estado?.nombre == 'DEVOLUCION'">
+    <div class="card-body">
+      <div class="nav justify-content-between align-items-center py-3">
+        <h4 class="card-title m-0">Lista de Operaciones</h4>
+        <div>
+          <button type="button" class="btn btn-sm btn-primary float-end" (click)="addOperacion()"><i class="mdi mdi-plus"></i>Añadir operación</button>
+          <div *ngIf="submitted && operaciones.length == 0" class="text-danger mt-1 font-size-11">El anticipo debe tener registrada al menos una operación.</div>
+        </div>
+      </div>
+      <div *ngIf="listaOperaciones.length == 0">
+        <span class="fw-semibold semi text-warning ps-2">Sin Operaciones Registradas</span>
+      </div>
+      <div formArrayName="operaciones">
+        <div class="card card-body shadow-lg mb-3 pb-0" *ngFor="let operacion of listaOperaciones; index as i">
+          <div [formGroupName]="i">
+            <div class="nav justify-content-between border-bottom align-items-center">
+              <div class="col-1 border-end pb-3">
+                <span class="fw-semibold semi text-primary ps-3">Nro. {{i + 1}}</span>
+              </div>
+              <div class="col-8 ps-2">
+                <div class="nav pb-3">
+                  <label class="col-3 col-form-label">(*) Operación : </label>
+                  <div *ngFor="let tipoOp of tipoOperacion" class="form-check col nav align-items-center">
+                    <input class="custom-control-input" style="transform: scale(1.3);" type="radio" formControlName="tipoOperacion" [value]="tipoOp.value" (change)="cambiaOperacion(i)" >
+                    <label class="form-check-label ps-2">{{tipoOp.name}}</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col pb-3">
+                <div *ngIf="submitted && operaciones.controls[i]['controls']['tipoOperacion'].errors">
+                  <div *ngIf="operaciones.controls[i]['controls']['tipoOperacion'].errors['required']" class="text-danger mt-1 font-size-11">Seleccione un tipo de operación.</div>
+                </div>
+              </div>
+              <div class="col pb-3">
+                <button class="btn btn-sm btn-danger me-2 float-end" (click)="removeOperacion(i)"><i class="mdi mdi-trash-can-outline"></i></button>
+              </div>
+            </div>
+            <div [collapse]="operaciones.controls[i]['controls']['tipoOperacion']['value'] != null ? false : true" [isAnimated]="true">
+              <div class="nav py-3">
+                <div class="col-9" *ngIf="operaciones.controls[i]['controls']['tipoOperacion']['value'] == 'BN'">
+                  <div class="nav mb-3 px-1">
+                    <label class="col-3 col-form-label">(*) Banco : </label>
+                    <div class="col">
+                      <ng-select class="uppercase" formControlName="bancoId"placeholder="Seleccione un banco" (change)="cambiaBanco(i)" [items]="listaBancos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && operaciones.controls[i]['controls']['bancoId'].errors != null }"></ng-select>
+                      <div *ngIf="submitted && operaciones.controls[i]['controls']['bancoId'].errors" class="col-sm-12">
+                        <div *ngIf="operaciones.controls[i]['controls']['bancoId'].errors['required']" class="text-danger mt-1 font-size-10">El banco es obligatoria</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="nav mb-3 px-1">
+                    <label class="col-3 col-form-label">(*) Cuenta Bancaria: </label>
+                    <div class="col">
+                      <ng-select class="uppercase" formControlName="cuentaBancoId" placeholder="Seleccione una cuenta" (change)="cambioCuentaBancaria(i)" [items]="this.listaOperaciones[i].listaCuentasBanco" bindLabel="nroCuenta" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && operaciones.controls[i]['controls']['cuentaBancoId'].errors != null }"></ng-select>
+                      <div *ngIf="submitted && operaciones.controls[i]['controls']['cuentaBancoId'].errors" class="col-sm-12">
+                        <div *ngIf="operaciones.controls[i]['controls']['cuentaBancoId'].errors['required']" class="text-danger mt-1 font-size-10">La cuenta es obligatoria</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="nav mb-3 px-1">
+                    <label class="col-3 col-form-label">(*) Medio Transferencia : </label>
+                    <div class="col">
+                      <ng-select class="uppercase" formControlName="medioTransferenciaId" placeholder="Seleccione un medio de transferencia" [items]="listaMedioTransferencias" bindLabel="medio" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && operaciones.controls[i]['controls']['medioTransferenciaId'].errors != null }"></ng-select>
+                      <div *ngIf="submitted && operaciones.controls[i]['controls']['medioTransferenciaId'].errors" class="col-sm-12">
+                        <div *ngIf="operaciones.controls[i]['controls']['medioTransferenciaId'].errors['required']" class="text-danger mt-1 font-size-10">el medio de transferencia es obligatoria</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="nav mb-3 px-1">
+                    <label class="col-3 col-form-label">(*) Descripción : </label>
+                    <div class="col">
+                      <textarea class="form-control uppercase" formControlName="descripcion" rows="2" [ngClass]="{ 'is-invalid': submitted && operaciones.controls[i]['controls']['descripcion'].errors }"></textarea>
+                      <div *ngIf="submitted && operaciones.controls[i]['controls']['descripcion'].errors" class="col-sm-12">
+                        <div *ngIf="operaciones.controls[i]['controls']['descripcion'].errors['required']" class="text-danger mt-1 font-size-10">La descripcion es obligatoria</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-9" *ngIf="operaciones.controls[i]['controls']['tipoOperacion']['value'] == 'FNDO'">
+                  <div class="nav mb-3 px-1">
+                    <label class="col-3 col-form-label">(*) Fondo Operativo : </label>
+                    <div class="col">
+                      <ng-select class="uppercase" formControlName="fondoOperativoId" (change)="cambioFondoOperativo(i)" placeholder="Seleccione un Fondo Operativo" [items]="listaFondoAperturados" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && operaciones.controls[i]['controls']['fondoOperativoId'].errors != null }"></ng-select>
+                      <div *ngIf="submitted && operaciones.controls[i]['controls']['fondoOperativoId'].errors" class="col-sm-12">
+                        <div *ngIf="operaciones.controls[i]['controls']['fondoOperativoId'].errors['required']" class="text-danger mt-1 font-size-10">El fondo operativo es obligatorio</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="nav mb-3 px-1">
+                    <label class="col-5 col-form-label">(*) Monto Sub:</label>
+                    <div class="col">
+                      <input type="text" class="form-control uppercase text-end" formControlName="monto" [ngClass]="{ 'is-invalid': submitted && operaciones.controls[i]['controls']['monto'].errors }" (change)="calcularMontos()"/>
+                      <div *ngIf="submitted && operaciones.controls[i]['controls']['monto'].errors" class="col-sm-12">
+                        <div *ngIf="operaciones.controls[i]['controls']['monto'].errors['required']" class="text-danger mt-1 font-size-10">El monto es obligatorio</div>
+                        <div *ngIf="operaciones.controls[i]['controls']['monto'].errors['pattern']" class="text-danger mt-1 font-size-10">El monto solo acepta carácteres numéricos y un punto decimal</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="listaOperaciones[i].datos" class="px-3 py-1 border border-3 rounded-4 ms-2">
+                    <h6 class="border-bottom mb-2 py-2">{{listaOperaciones[i].tituloDetalle}}</h6>
+                    <p *ngIf="listaOperaciones[i].datos.descripcion" class="nav justify-content-between pb-2"><span class="fw-semibold semi">Descripción: </span><span class="text-primary">{{ listaOperaciones[i].datos.descripcion }}</span></p>
+                    <p *ngIf="listaOperaciones[i].datos.nroSolicitud"class="nav justify-content-between pb-2"><span class="fw-semibold semi">Nro Solicitud: </span><span class="text-primary">{{ listaOperaciones[i].datos.nroSolicitud }}</span></p>
+                    <p *ngIf="listaOperaciones[i].datos.moneda"class="nav justify-content-between pb-2"><span class="fw-semibold semi">Moneda: </span><span class="text-primary">{{ listaOperaciones[i].datos.moneda.nombre }}</span></p>
+                    <p class="nav justify-content-between pb-2"><span class="fw-semibold semi">Saldo: </span><span class="text-primary">{{ listaOperaciones[i].datos.saldo ? listaOperaciones[i].datos.saldo : 0}}</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav justify-content-end" *ngIf="operaciones.length > 0">
+        <div class="col-3 nav mb-3 px-1 text-end">
+          <label class="col-4 col-form-label pe-2">Monto Total:</label>
+          <div class="col">
+            <input type="text" [disabled]="true" class="form-control uppercase text-end" [(ngModel)]="montoTotal" [ngModelOptions]="{standalone: true}" [ngClass]="{ 'is-invalid': submitted && montoTotal != form['monto'].value}"/>
+            <div *ngIf=" submitted && montoTotal != form['monto'].value" class="col-sm-12">
+              <div class="text-danger mt-1 font-size-10">El monto total no coincide con el monto del anticipo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </form>

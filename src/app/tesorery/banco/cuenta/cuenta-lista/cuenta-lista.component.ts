@@ -35,7 +35,7 @@ export class CuentaListaComponent extends FuncionesComponent implements OnInit {
   constructor(
     public CuentaBancoService: CuentaBancoService,
     private modalService: BsModalService,
-    private NotificacionService: NotificacionService,
+    private notificacionService: NotificacionService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -75,16 +75,20 @@ export class CuentaListaComponent extends FuncionesComponent implements OnInit {
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 
+  verMovimientos(data) {
+    this.router.navigate(['./detalleMovimientos/' + data.id, {}], { relativeTo: this.route });
+  }
+
   habilitar(data: any, component, texto) {
-    this.NotificacionService.inhabilitarAlerta(texto, (response: any) => {
+    this.notificacionService.inhabilitarAlerta(texto, (response: any) => {
       if (response) {
         this.CuentaBancoService.habilitar(data.id).subscribe((data) => {
           let estado = '';
           component.obtenerDatos();
           texto == 'habilitar' ? estado = 'habilitado' : estado = 'inhabilitado';
-          this.NotificacionService.successStandar('Registro ' + estado + ' exitosamente.');
+          this.notificacionService.successStandar('Registro ' + estado + ' exitosamente.');
         }, (error) => {
-          this.NotificacionService.alertError(error);
+          this.notificacionService.alertError(error);
         }
         );
       }
@@ -92,15 +96,15 @@ export class CuentaListaComponent extends FuncionesComponent implements OnInit {
   }
 
   eliminar(data: any, component) {
-    this.NotificacionService.alertaEliminacion(data.nombre, (response: any) => {
+    this.notificacionService.alertaEliminacion(data.nombre, (response: any) => {
       if (response) {
         this.servicio.delete(data.id).subscribe((data) => {
           component.obtenerDatos();
-          this.NotificacionService.successStandar(
+          this.notificacionService.successStandar(
             "Registro eliminado exitosamente."
           );
         }, (error) => {
-          this.NotificacionService.alertError(error);
+          this.notificacionService.alertError(error);
         }
         );
       }

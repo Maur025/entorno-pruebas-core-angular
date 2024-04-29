@@ -10,19 +10,10 @@
       </div>
     </div>
     <div class="col-6 mb-3 px-1">
-      <label class="mb-2">(*) Fecha de Solicitud</label>
+      <label class="mb-2">(*) Fecha de Desembolso</label>
       <input type="text" placeholder="dd-mm-AA" formControlName="fechaSolicitud" class="form-control" bsDatepicker [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY' }" [ngClass]="{ 'is-invalid': submitted && form['fechaSolicitud'].errors}">
       <div *ngIf="submitted && form['fechaSolicitud'].errors" class="col-sm-12">
         <div *ngIf="form['fechaSolicitud'].errors['required']" class="text-danger mt-1 font-size-10">La fecha es obligatoria</div>
-      </div>
-    </div>
-    <div class="mb-3 nav col-12 px-1">
-      <label class="col-3 col-form-label">(*) Nombre</label>
-      <div class="col-9">
-        <input type="text" class="form-control uppercase" formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors}">
-        <div *ngIf="submitted && form['nombre'].errors" class="col-sm-12">
-          <div *ngIf="form['nombre'].errors['required']" class="text-danger mt-1 font-size-10">El nombre es obligatorio</div>
-        </div>
       </div>
     </div>
     <div class="mb-3 nav col-12 px-1">

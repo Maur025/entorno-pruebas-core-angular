@@ -85,7 +85,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   }
 
   verCuentas(data: any) {
-    this.router.navigate(['./cuentas/' + data.id, {}], { relativeTo: this.route });
+    this.router.navigate(['./' + data.id+'/cuentas/', {}], { relativeTo: this.route });
   }
 
   habilitar(data: any, component, texto) {

@@ -216,6 +216,7 @@ export class FormularioOperativoComponent implements OnInit {
     if (this.formGroup.valid) {
       if (this.tipoDescargo) {
         if (this.tipoDescargo == 'APERT') {
+          data.ingresoEgreso = 'OUT';
           data.aperturado = true;
           this.fondoOperativoService.register(data).subscribe(data => {
             this.notificacionService.successStandar();
@@ -230,6 +231,7 @@ export class FormularioOperativoComponent implements OnInit {
             this.alActualizar.emit();
           }, error => this.notificacionService.alertError(error));
           if (this.fondo.saldo > 0) {
+            data.ingresoEgreso = 'INPUT';
             data.estado = this.listaEstados.find(e => e.codigo == 'DEV').id;
             this.detalleFontoOperativoService.register(data).subscribe(data => {
             }, error => this.notificacionService.alertError(error));
@@ -238,6 +240,7 @@ export class FormularioOperativoComponent implements OnInit {
           data.nroReferencia = data.nroSolicitud;
           data.refId = null;
           data.fondoOperativoId = data.id;
+          this.tipoDescargo == 'DEV' ? data.ingresoEgreso = 'INPUT' : data.ingresoEgreso = 'OUT';
           this.detalleFontoOperativoService.register(data).subscribe(data => {
             this.notificacionService.successStandar();
             if (this.transaccion && this.esquemaId) {

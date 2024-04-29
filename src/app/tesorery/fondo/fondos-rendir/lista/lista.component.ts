@@ -61,32 +61,24 @@ export class ListaRendirComponent extends FuncionesComponent implements OnInit {
     };
   }
 
-  crear(template: any) {
+  aperturarNuevo(template: any) {
     this.fondo = undefined;
-    this.tipoDescargo = undefined;
-    this.titleModal = 'Nuevo Fondo a Rendir ';
+    this.tipoDescargo = 'APERT';
+    this.titleModal = 'Nuevo Desembolso de Fondo a Rendir ';
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 
   editar(data: any, template: any) {
     this.fondo = data;
     this.tipoDescargo = undefined;
-    this.titleModal = 'Editar Fondo Operativo';
+    this.titleModal = 'Editar Fondo a Rendir';
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 
-  aperturar(data: any, template: any) {
-    this.fondo = data;
-    this.tipoDescargo = 'APERT';
-    this.titleModal = 'Apertura de Fondo a Rendir ';
-    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
-  }
-
-  descargos(data: any, template: any, tipo) {
+  descargos(data: any, template: any, tipo, tipoTexto) {
     this.fondo = data;
     this.tipoDescargo = tipo;
-    tipo == 'RENDIDO' ? this.tipoTexto = 'RENDICIÓN' : this.tipoTexto = tipo;
-    this.titleModal = ' de a Rendir ';
+    this.titleModal = tipoTexto+' de Fondo a Rendir ';
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 

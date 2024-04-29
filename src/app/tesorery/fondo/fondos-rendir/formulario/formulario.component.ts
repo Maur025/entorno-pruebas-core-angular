@@ -71,22 +71,23 @@ export class FormularioRendirComponent implements OnInit {
   ngOnInit(): void {
     this.setForm();
     this.getResponsables();
-    if (this.fondo) {
-      this.setFondo();
-      this.getCentroCostos();
-      this.getEstados();
-      this.getBancos();
-      this.getMedioTransferencias();
-      if (this.tipoDescargo && this.tipoDescargo == 'APERT') {
-        this.formGroup.disable();
+    this.getCentroCostos();
+    this.getEstados();
+    if (this.tipoDescargo) {
+      if (this.tipoDescargo == 'APERT') {
+        this.getBancos();
+        this.getMedioTransferencias();
         this.addFormApertura();
-      }
-      if (this.tipoDescargo && this.tipoDescargo != 'APERT') {
+      } else if (this.tipoDescargo == 'CIERR') {
         this.formGroup.disable();
         this.addFormDescargo();
         this.saldo = this.fondo.saldo;
+      } else {
+        this.addFormDescargo();
+
       }
     }
+    if (this.fondo) this.setFondo();
     if (this.esquema) this.setTransaccion();
 
     this.fechaActual = new Date();
@@ -96,18 +97,17 @@ export class FormularioRendirComponent implements OnInit {
   setForm() {
     this.formGroup = this.formBuilder.group({
       id: [, []],
-      nombre: [, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
       fechaSolicitud: [, [Validators.required]],
       nroSolicitud: [, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       importe: [, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       aperturado: [],
       descripcion: [],
-      responsableId: [, [Validators.required]]
+      responsableId: [, [Validators.required]],
+      centroCostoId: [, [Validators.required]]
     });
   }
 
   addFormApertura() {
-    this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('bancoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('cuentaBancoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('medioTransferenciaId', new FormControl(null, Validators.required));
@@ -116,7 +116,6 @@ export class FormularioRendirComponent implements OnInit {
 
   addFormDescargo() {
     this.formGroup.addControl('monto', new FormControl(null, [Validators.required]));
-    this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('fechaMovimiento', new FormControl(null, [Validators.required, this.validatorFecha()]));
     this.formGroup.addControl('estado', new FormControl(null, Validators.required));
   }
@@ -167,13 +166,13 @@ export class FormularioRendirComponent implements OnInit {
 
   setFondo() {
     this.formGroup.patchValue({
-      nombre: this.fondo.nombre,
       fechaSolicitud: new Date(this.fondo.fechaSolicitud),
       nroSolicitud: this.fondo.nroSolicitud,
       importe: this.fondo.importe,
       aperturado: this.fondo.aperturado,
       descripcion: this.fondo.descripcion,
       responsableId: this.fondo.responsableId,
+      centroCostoid: this.fondo.centroCostoId
     });
   }
 
@@ -291,15 +290,23 @@ export class FormularioRendirComponent implements OnInit {
 
   public guardar() {
     this.submitted = true;
+    let data = this.formGroup.getRawValue();
     if (this.formGroup.valid) {
-      let data = this.formGroup.getRawValue();
       data.nroReferencia = data.nroSolicitud;
       data.refId = null;
       data.reponsable = this.listaResponsables.find(e => e.entidadId == data.responsableId).entidad.nombre;
       if (this.tipoDescargo) {
-        data.fondoRendirId = this.fondo.id;
-        data.nroReferencia = data.nroSolicitud;
-        if (this.tipoDescargo != 'APERT') {
+        if (this.tipoDescargo == 'APERT') {
+          data.ingresoEgreso = 'OUT';
+          data.aperturado = true;
+          this.fondoRendirService.register(data).subscribe(data => {
+            this.notificacionService.successStandar();
+            this.alActualizar.emit();
+          }, error => this.notificacionService.alertError(error));
+        }
+
+
+        /* if (this.tipoDescargo != 'APERT') {
           if (this.form.planPagos) {
             if (this.importeTotalCredito == this.montoPagar) {
               this.detalleFondoRendirService.register(data).subscribe(res => {
@@ -339,7 +346,7 @@ export class FormularioRendirComponent implements OnInit {
             this.notificacionService.successStandar();
             this.alActualizar.emit();
           }, error => this.notificacionService.alertError(error));
-        }
+        } */
       } else {
         if (this.fondo) {
           data.id = this.fondo.id;
@@ -362,7 +369,7 @@ export class FormularioRendirComponent implements OnInit {
       let errores = 'invalido';
       let diaActual = new Date();
       diaActual.setHours(0, 0, 0, 0);
-      if (control.value && new Date(control.value) >= diaActual ) errores = 'valido';
+      if (control.value && new Date(control.value) >= diaActual) errores = 'valido';
       if (control.value && errores == 'invalido') return { fechaInvalida: "INVALID" }
       else return null;
     }

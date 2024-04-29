@@ -118,13 +118,10 @@ export class TablaComponent implements OnInit {
   ngOnChanges() {
     this.filtros;
     if (this.filtros) {
-      this.cabeceras = this.objectKeys(this.formato.cabeceras);
       if (this.inputBuscar || this.inputBuscar != '') this.filtros.keyword = this.inputBuscar;
-      this.obtenerDatos();
-    } else {
-      this.cabeceras = this.objectKeys(this.formato.cabeceras);
-      this.obtenerDatos();
     }
+    this.cabeceras = this.objectKeys(this.formato.cabeceras);
+    this.obtenerDatos();
   }
 
   buscarKeyDown(buscar) {

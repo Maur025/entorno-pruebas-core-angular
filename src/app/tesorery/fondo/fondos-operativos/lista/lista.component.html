@@ -69,7 +69,7 @@
           <span class="badge font-size-12" style="width: 30px;" [ngClass]="{'bg-success': fila.aperturado, 'bg-danger': !fila.aperturado}">{{fila.aperturado==true ? 'SI' : 'NO'}}</span>
         </div>
         <div *ngSwitchCase="'cierre'" class="text-center">
-          <span class="badge font-size-12" style="width: 30px;" [ngClass]="{'bg-success': fila.cierre, 'bg-secondary': !fila.cierre}">{{fila.cierre==true ? 'SI' : 'NO'}}</span>
+          <span class="badge font-size-12" style="width: 30px;" [ngClass]="{'bg-danger': fila.cierre, 'bg-secondary': !fila.cierre}">{{fila.cierre==true ? 'SI' : 'NO'}}</span>
         </div>
         <div *ngSwitchCase="'estadoContabilidad'">
           {{fila.estadoContabilidad?.nombre }}

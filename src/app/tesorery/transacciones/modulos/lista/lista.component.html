@@ -1,5 +1,5 @@
 <app-page-title title="Transacciones" [breadcrumbItems]="breadCrumbItems"></app-page-title>
-<div *ngIf="filtrosData">
+<div *ngIf="modulo">
   <tabset [justified]="false" class="nav-tabs">
     <tab *ngFor="let estado of listaEstadosIntegracion" heading="{{estado.nombre}}" id="{{estado.codigo}}" (selectTab)="onSelect($event, tabla)"></tab>
   </tabset>

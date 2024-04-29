@@ -43,6 +43,9 @@
               <li data-bs-toggle="tooltip" data-bs-placement="top" title="Inhabilitar" *ngIf="!fila.deleted">
                 <a  data-bs-toggle="modal" class="btn btn-sm btn-danger" (click)="habilitar(fila, tabla, 'inhabilitar')"><i class="mdi mdi-power"></i></a>
               </li>
+              <li data-bs-toggle="tooltip" data-bs-placement="top" title="Detalle Movimientos">
+                <button class="btn btn-sm btn-info" (click)="verMovimientos(fila)"><i class="mdi mdi-eye"></i></button>
+              </li>
             </ul>
         </div>
         <div *ngSwitchCase="'banco'">

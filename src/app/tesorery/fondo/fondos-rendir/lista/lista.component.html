@@ -11,7 +11,7 @@
   [smallTable]="false"
   [softDelete]="false"
   (crearNuevo)="(null)"
-  (alCrear)="crear(modalGeneral)"
+  (alCrear)="aperturarNuevo(modalGeneral)"
   (alActualizar)="(null)"
   (alFiltrar)="(null)"
   (alEditar)="editar($event, modalGeneral)"
@@ -35,24 +35,20 @@
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" *ngIf="!fila.aperturado">
               <button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila, modalGeneral)"><i class="mdi mdi-pencil-outline"></i></button>
             </li>
-            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Aperturar" *ngIf="!fila.aperturado">
-              <button class="btn btn-sm btn-primary" [disabled]="fila.deleted" (click)="aperturar(fila, modalGeneral)"><i class="bx bx-lock-open"></i></button>
-            </li>
-            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Cerrar" *ngIf="fila.saldo == 0 && fila.cierre == false">
-              <button class="btn btn-sm btn-soft-danger" (click)="cerrar(fila, tabla)"><i class="mdi mdi-lock"></i></button>
-            </li>
-            <!-- <li data-bs-toggle="tooltip" data-bs-placement="top" title="Descargos" *ngIf="fila.aperturado && fila.saldo != 0">
-              <div class="btn-group" dropdown container="body" [isDisabled]="fila.deleted">
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Operaciones">
+              <div class="btn-group" dropdown container="body" [isDisabled]="fila.cierre || fila.deleted || !fila.estadoContabilidad || fila.estadoContabilidad?.codigo != 'CONT'">
                 <button id="button-basic" dropdownToggle type="button" class="btn btn-sm btn-light dropdown-toggle" aria-controls="dropdown-basic">
                   <i class="mdi mdi-cogs"></i><span class="mdi mdi-chevron-down"></span>
                 </button>
                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu text-center"role="menu" aria-labelledby="button-basic">
-                  <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'RENDIDO')">Rendición <i class="mdi mdi-transfer-down"></i></button></li>
+                  <!-- <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'RENDIDO')">Rendición <i class="mdi mdi-transfer-down"></i></button></li>
                   <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'REPOSICIÓN')">Reposición <i class="mdi mdi-restore-alert"></i></button></li>
-                  <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'DEVOLUCIÓN')">Devolución <i class="mdi mdi-sync"></i></button></li>
+                  <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'DEV','DEVOLUCIÓN')">Devolución <i class="mdi mdi-sync"></i></button></li>-->
+                  <li role="menuitem"><button class="dropdown-item bg-danger bg-opacity-75 rounded-4" (click)="descargos(fila, modalGeneral, 'CIERR','Cierre')">Cierre <i class="mdi mdi-lock"></i></button></li>
+
                 </ul>
               </div>
-            </li> -->
+            </li>
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Detalle fondo" *ngIf="fila.aperturado">
               <button class="btn btn-sm btn-info" (click)="detalleFondo(fila)"><i class="mdi mdi-eye"></i></button>
             </li>
@@ -77,7 +73,7 @@
           <span class="badge font-size-12" style="width: 30px;" [ngClass]="{'bg-success': fila.aperturado, 'bg-danger': !fila.aperturado}">{{fila.aperturado==true ? 'SI' : 'NO'}}</span>
         </div>
         <div *ngSwitchCase="'cierre'" class="text-center">
-          <span class="badge font-size-12" style="width: 30px;" [ngClass]="{'bg-success': fila.cierre, 'bg-secondary': !fila.cierre}">{{fila.cierre==true ? 'SI' : 'NO'}}</span>
+          <span class="badge font-size-12" style="width: 30px;" [ngClass]="{'bg-danger': fila.cierre, 'bg-secondary': !fila.cierre}">{{fila.cierre==true ? 'SI' : 'NO'}}</span>
         </div>
         <div *ngSwitchCase="'estadoContabilidad'">
           {{fila.estadoContabilidad?.nombre }}
