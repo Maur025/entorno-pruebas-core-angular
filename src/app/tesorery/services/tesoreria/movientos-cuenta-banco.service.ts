@@ -55,4 +55,8 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
       return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/listarHabilitados`);
     }
 
+    getAllMovimientos(size: number = 100, page: number = 1, sortBy:string = 'id', descending:false, keyword:any = '', cuentaBancoId:any) {
+      size = size <= 0? 100 : size;
+      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/cuentaBanco/${cuentaBancoId}?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`);
+    }
   }

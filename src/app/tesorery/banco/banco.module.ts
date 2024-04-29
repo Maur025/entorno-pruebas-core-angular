@@ -13,6 +13,7 @@ import { CuentaFormularioComponent } from './cuenta/cuenta-formulario/cuenta-for
 
 import { BancoRoutingModule } from './banco-routing.module';
 import { CuentasBancoComponent } from './cuentas-banco/cuentas-banco.component';
+import { CuentaDetalleMovimientosComponent } from './cuenta/cuenta-detalle-movimientos/cuenta-detalle-movimientos.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { CuentasBancoComponent } from './cuentas-banco/cuentas-banco.component';
     FormularioComponent,
     CuentaListaComponent,
     CuentaFormularioComponent,
-    CuentasBancoComponent
+    CuentasBancoComponent,
+    CuentaDetalleMovimientosComponent
   ],
   imports: [
     CommonModule,

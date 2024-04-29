@@ -19,6 +19,7 @@ export class CuentasBancoComponent implements OnInit {
   breadCrumbTitle: string = 'Adminstrar Banco';
   titulo = "Lista de Cuentas ";
   id: any;
+  banco: any;
 
   constructor(
     public CuentaBancoService: CuentaBancoService,
@@ -32,6 +33,7 @@ export class CuentasBancoComponent implements OnInit {
     if (this.route.snapshot.params["id"]) {
       this.id = this.route.snapshot.params["id"];
       this.bancoService.find(this.id).subscribe(data => {
+        this.banco = data.content;
         this.titulo = this.titulo + data.content.nombre;
       }, (error) => {
         this.notificacionService.alertError(error);
