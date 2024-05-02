@@ -4,6 +4,10 @@ import { ToastrService } from 'ngx-toastr'
 import { AuthenticationService } from 'src/app/core/services/auth.service'
 import { HttpErrorResponse } from '@angular/common/http'
 import { Router } from '@angular/router'
+import {
+	ErrorDetailDataResponseStandard,
+	ErrorResponseStandard,
+} from 'src/app/shared/interface/commonApiResponse'
 
 @Injectable({ providedIn: 'root' })
 export class NotificacionService {
@@ -13,18 +17,25 @@ export class NotificacionService {
 		private router: Router
 	) {}
 
-	alertError(ErrorResponse) {
-		let message = ''
-		var extramsg = ''
-		let llamado_accion = null
+	alertError(
+		errorResponse: ErrorResponseStandard = null,
+		messageCustom: {
+			message: string
+			title: string
+			icon?: any
+			confirmButtonText?: string
+			showCancelButton?: boolean
+		} = null
+	) {
+		let llamadoAccion: any = null
 
-		if (typeof ErrorResponse != 'string') {
-			let msg = []
-			let codigo = parseInt(ErrorResponse.status)
-			extramsg =
-				ErrorResponse.error != undefined ? ErrorResponse.error.message : ''
-			message = this.getMessageCodeError(msg, codigo, extramsg, llamado_accion)
-		}
+		let message: string = this.getMessageCodeError(
+			errorResponse?.status || 0,
+			errorResponse?.error?.message || '',
+			llamadoAccion,
+			errorResponse?.error?.detail || '',
+			errorResponse?.error?.data || []
+		)
 
 		const errorMessageAlert = Swal.mixin({
 			customClass: {
@@ -33,19 +44,29 @@ export class NotificacionService {
 			},
 			buttonsStyling: false,
 		})
-		errorMessageAlert
-			.fire({
-				title: 'Error',
-				html: message,
-				icon: 'warning',
-				confirmButtonText: 'Entiendo',
-				showCancelButton: false,
+		if (!messageCustom && errorResponse) {
+			errorMessageAlert
+				.fire({
+					title: 'Error',
+					html: message,
+					icon: 'warning',
+					confirmButtonText: 'Entiendo',
+					showCancelButton: false,
+				})
+				.then(result => {
+					if (result.isConfirmed && llamadoAccion != null) {
+						llamadoAccion()
+					}
+				})
+		} else {
+			errorMessageAlert.fire({
+				title: messageCustom.message || 'Error',
+				html: messageCustom.message || 'Ocurrió un error inesperado.',
+				icon: messageCustom.icon || 'error',
+				confirmButtonText: messageCustom.confirmButtonText || 'Entendido',
+				showCancelButton: messageCustom.showCancelButton || false,
 			})
-			.then(result => {
-				if (result.isConfirmed && llamado_accion != null) {
-					llamado_accion()
-				}
-			})
+		}
 	}
 
 	alertErrorOnlyMessage = (
@@ -252,16 +273,18 @@ export class NotificacionService {
 	}
 
 	getMessageCodeError(
-		msg: string[] = [],
-		codigo: number,
-		extramsg: any,
-		llamado_accion: any
+		codigo: number = 0,
+		extramsg: any = null,
+		llamado_accion: any,
+		errorDetail: string = null,
+		errorDataDetail: ErrorDetailDataResponseStandard[] = []
 	): string {
-		let message = ''
+		let msg: string[] = []
+		let message: string = ''
 		switch (codigo) {
 			case 0:
-				msg.push(`El Servidor no pudo obtener una respuesta a la solicitud`)
-				msg.push(`Es posible que el servicio no este disponible`)
+				msg.push(`El Servidor no pudo obtener una respuesta a la solicitud.`)
+				msg.push(`Es posible que el servicio no este disponible.`)
 				llamado_accion = () => {
 					window.location.href = '/'
 				}
@@ -278,30 +301,38 @@ export class NotificacionService {
 				llamado_accion = () => window.location.reload()
 				break
 			case 403:
-				msg.push(`Usuario no tiene los permisos necesarios `)
+				msg.push(`Usuario no tiene los permisos necesarios.`)
 				break
 			case 404:
-				msg.push(`No se puedo encontrar el contenido solicitado `)
+				msg.push(`No se puedo encontrar el contenido solicitado.`)
 				break
 			case 500:
 				msg.push(
-					`Error interno en servidor, no puede Intepretar, o el servicio no se encuentra disponible  `
+					`Error interno en servidor, no puede Intepretar, o el servicio no se encuentra disponible.`
 				)
 				break
 			case 505:
 				msg.push(
-					`La versión de HTTP usada en la petición no está soportada por el servidor. `
+					`La versión de HTTP usada en la petición no está soportada por el servidor.`
 				)
 				break
 
 			default:
 				msg.push(
-					`No se podido procesar su petición, refresque la pagina e intente nuevamente `
+					`No se podido procesar su petición, refresque la pagina e intente nuevamente.`
 				)
 				llamado_accion = () => window.location.reload()
 				break
 		}
-		msg.push(extramsg)
+		extramsg && msg.push(extramsg)
+		errorDetail && msg.push(`<span class="fs-6">${errorDetail}</span>`)
+		if (errorDataDetail.length > 0) {
+			for (let rowErrorDataDetail of errorDataDetail) {
+				msg.push(
+					`<p class="fs-6 text-start ms-3"><span class="fw-bold">Propiedad</span>: ${rowErrorDataDetail.propertyPath} <br/> <span class="fw-bold">Mensaje:</span> ${rowErrorDataDetail.message}</p>`
+				)
+			}
+		}
 		message = msg.join('<br>')
 		return message
 	}
