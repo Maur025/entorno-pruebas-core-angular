@@ -8,6 +8,7 @@ import {
 	ErrorDetailDataResponseStandard,
 	ErrorResponseStandard,
 } from 'src/app/shared/interface/commonApiResponse'
+import { environment } from 'src/environments/environment'
 
 @Injectable({ providedIn: 'root' })
 export class NotificacionService {
@@ -291,7 +292,9 @@ export class NotificacionService {
 				break
 			case 400:
 				msg.push(
-					`Se ha producido un inconveniente y el servidor ha respondido con el(los) siguiente(s) error(es):`
+					`Se ha producido un inconveniente y el servidor ha respondido con el(los) siguiente(s) error(es): ${
+						environment.production ? '</br>' : ''
+					}`
 				)
 				break
 			case 401:
@@ -324,7 +327,9 @@ export class NotificacionService {
 				llamado_accion = () => window.location.reload()
 				break
 		}
-		extramsg && msg.push(extramsg)
+		if (!environment.production) {
+			extramsg && msg.push(extramsg)
+		}
 		errorDetail && msg.push(`<span class="fs-6">${errorDetail}</span>`)
 		if (errorDataDetail.length > 0) {
 			for (let rowErrorDataDetail of errorDataDetail) {
