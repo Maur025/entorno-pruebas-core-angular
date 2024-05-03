@@ -49,3 +49,6 @@ src/environments/environment.ts
 
 #Prettier
 .prettierrc.json
+
+#ESLint
+eslint.config.mjs

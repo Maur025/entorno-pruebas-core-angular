@@ -3,11 +3,10 @@ import {
 	EventEmitter,
 	Input,
 	Output,
-	ViewChild,
 	OnInit,
+	TemplateRef,
 } from '@angular/core'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
-import { ActivatedRoute, Router } from '@angular/router'
 import { NotificacionService } from 'src/app/core/services/notificacion.service'
 import { CuentaBancoService } from 'src/app/tesorery/services/tesoreria/cuenta-banco.service'
 import { BancoService } from '../../../services/tesoreria/banco.service'
@@ -17,6 +16,9 @@ import {
 	ApiResponseStandard,
 	ErrorResponseStandard,
 } from 'src/app/shared/interface/commonApiResponse'
+import { ResponseDataStandard } from 'src/app/shared/interface/commonListInterfaces'
+import { UtilityService } from 'src/app/shared/services/utilityService.service'
+import { BsModalService } from 'ngx-bootstrap/modal'
 
 @Component({
 	selector: 'app-cuenta-formulario',
@@ -24,44 +26,35 @@ import {
 	styleUrls: ['./cuenta-formulario.component.scss'],
 })
 export class CuentaFormularioComponent implements OnInit {
-	breadCrumbItems: Array<{}>
-	breadCrumbTitle: string = 'Gestión de Cuentas-Banco'
-	titulo: any = 'Cuentas-Banco'
-	routeApi = 'cuentaBanco'
-	levelNavigate = 2
-	service = null
+	public titulo: string = 'Cuentas-Banco'
 
-	formGroup: FormGroup
-	submitted = false
-	@Output() alGuardar = new EventEmitter<any>()
-	@Output() alActualizar = new EventEmitter<any>()
+	public formGroup: FormGroup
+	public submitted: boolean = false
+	@Output() alGuardar: EventEmitter<ApiResponseStandard> =
+		new EventEmitter<ApiResponseStandard>()
+	@Output() alActualizar: EventEmitter<ApiResponseStandard> =
+		new EventEmitter<ApiResponseStandard>()
 	@Input() cuenta
 	@Input() idRuta
-	listaBancos: any
-	listaMonedas: any
-	transferencia: boolean = false
-	listaMediosTransferencia: any
-	estados: any = [
-		{ value: 'habilitado', name: 'Habilitado' },
-		{ value: 'deshabilitado', name: 'Deshabilitado' },
-	]
+	public listaBancos: ResponseDataStandard[] = []
+	public listaMonedas: ResponseDataStandard[] = []
+	public transferencia: boolean = false
+	public listaMediosTransferencia: ResponseDataStandard[] = []
+	public accountsExistingCurrentlySelect: ResponseDataStandard[] = []
+	public transferMediumList: ResponseDataStandard[] = []
 
 	constructor(
-		private readonly router: Router,
-		private route: ActivatedRoute,
 		private FormBuilder: FormBuilder,
 		private notificacionService: NotificacionService,
 		private cuentaBancoService: CuentaBancoService,
 		private bancoService: BancoService,
 		private monedaService: MonedaService,
-		private medioTransferenciaService: MedioTransferenciaService
+		private medioTransferenciaService: MedioTransferenciaService,
+		protected utilityService: UtilityService,
+		protected modalService: BsModalService
 	) {}
 
 	ngOnInit(): void {
-		this.breadCrumbItems = [
-			{ label: this.breadCrumbTitle },
-			{ label: this.titulo, active: true },
-		]
 		this.setForm()
 		if (this.idRuta) this.form['bancoId'].disable()
 		this.getBancos()
@@ -74,21 +67,27 @@ export class CuentaFormularioComponent implements OnInit {
 		}
 	}
 
-	setForm() {
+	setForm = (): void => {
 		this.formGroup = this.FormBuilder.group({
-			id: ['', []],
+			id: [null, []],
 			nroCuenta: [
-				'',
+				null,
 				[
 					Validators.required,
 					Validators.minLength(2),
 					Validators.maxLength(255),
 				],
 			],
-			descripcion: [, [Validators.minLength(2)]],
-			bancoId: [, [Validators.required]],
-			monedaId: [, [Validators.required]],
-			saldo: [, [Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
+			descripcion: [null, [Validators.minLength(2)]],
+			bancoId: [null, [Validators.required]],
+			monedaId: [null, [Validators.required]],
+			saldo: [null, [Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
+			typeAccountInitialize: [false],
+			cuentaOrigenId: [null, [Validators.required]],
+			balanceTotalTransfer: [
+				{ value: 0, disabled: true },
+				[Validators.required],
+			],
 		})
 	}
 
@@ -96,7 +95,7 @@ export class CuentaFormularioComponent implements OnInit {
 		return this.formGroup.controls
 	}
 
-	setCuenta() {
+	setCuenta = (): void => {
 		this.formGroup.setValue({
 			id: this.cuenta.id,
 			nroCuenta: this.cuenta.nroCuenta,
@@ -108,40 +107,40 @@ export class CuentaFormularioComponent implements OnInit {
 		this.form['saldo'].disable()
 	}
 
-	getBancos() {
+	getBancos = (): void => {
 		this.bancoService.habilitados().subscribe(
-			data => {
+			(data: ApiResponseStandard) => {
 				this.listaBancos = data.content
 			},
-			error => {
+			(error: ErrorResponseStandard) => {
 				this.notificacionService.alertError(error)
 			}
 		)
 	}
 
-	getMonedas() {
+	getMonedas = (): void => {
 		this.monedaService.habilitados().subscribe(
-			data => {
+			(data: ApiResponseStandard) => {
 				this.listaMonedas = data.content
 			},
-			error => {
+			(error: ErrorResponseStandard) => {
 				this.notificacionService.alertError(error)
 			}
 		)
 	}
 
-	getMediosTransferencia() {
+	getMediosTransferencia = (): void => {
 		this.medioTransferenciaService.habilitados().subscribe(
-			data => {
+			(data: ApiResponseStandard) => {
 				this.listaMediosTransferencia = data.content
 			},
-			error => {
+			(error: ErrorResponseStandard) => {
 				this.notificacionService.alertError(error)
 			}
 		)
 	}
 
-	cambioMonto() {
+	cambioMonto = (): void => {
 		if (this.form['saldo'].value ?? '' !== '') {
 			this.formGroup.addControl(
 				'medioTransferenciaId',
@@ -154,7 +153,7 @@ export class CuentaFormularioComponent implements OnInit {
 		}
 	}
 
-	guardar() {
+	guardar = (): void => {
 		this.submitted = true
 		if (this.formGroup.valid) {
 			if (this.cuenta) {
@@ -181,5 +180,17 @@ export class CuentaFormularioComponent implements OnInit {
 					)
 			}
 		}
+	}
+
+	onlyNumbersAccount = (fieldName: string = '', event: Event): void => {
+		const inputValue: string = (event.target as HTMLInputElement).value
+		const sanitizedValue: string = inputValue.replace(/\D/g, '')
+		this.formGroup.get(fieldName).setValue(sanitizedValue)
+	}
+
+	openModalTransferMedium = (template: string | TemplateRef<unknown>): void => {
+		this.modalService.show(template, {
+			class: 'modal-sm modal-scrollable',
+		})
 	}
 }
