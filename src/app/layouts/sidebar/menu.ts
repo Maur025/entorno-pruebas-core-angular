@@ -13,6 +13,13 @@ export const MENU: MenuItem[] = [
     icon: 'bx bxs-bank',
     link: 'banco',
   },
+
+  {
+    id: 11,
+    label: 'Cajas',
+    icon: 'mdi mdi-safe-square-outline',
+    link: 'caja',
+  },
   {
     id: 20,
     label: 'Entidades',

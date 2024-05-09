@@ -38,4 +38,8 @@ export class EstadosService {
   habilitadosIntegracion() {
     return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/integracion`);
   }
+
+  habilitadosCajas() {
+    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/cajas`);
+  }
 }

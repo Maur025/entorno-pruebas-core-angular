@@ -7,10 +7,10 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
 @Injectable({
     providedIn: 'root'
   })
-  export class FondoOperativoService {
+  export class MovimientoCajaService {
 
-    apiName:string = 'fondoOperativo';
-    entitys:string = 'FondoOperativo';
+    apiName:string = 'movimientoCaja';
+    entitys:string = 'Movimiento Caja';
 
     apiUrl:string = '' ;
     prefix:string = '';
@@ -41,29 +41,22 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
       return this.apiService.tesoreria.delete(`${this.apiUrl}${this.prefix}/${this.apiName}/${id}`);
     }
 
-    habilitar(id: string | number): Observable<any> {
-      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/${id}/habilita`);
+    habilitar(datos:any,id: string | number): Observable<any> {
+      datos[this.entitys] = 'habilitar';
+      return this.apiService.tesoreria.put(`${this.apiUrl}${this.prefix}/${this.apiName}/${datos.id}`, datos);
     }
 
     deshabilitar(datos:any,id: string | number): Observable<any> {
       datos[this.entitys] = 'deshabilitar';
-      return this.apiService.tesoreria.put(`${this.apiUrl}${this.prefix}/${this.apiName}/${datos.id}/habilita`, datos);
+      return this.apiService.tesoreria.put(`${this.apiUrl}${this.prefix}/${this.apiName}/${datos.id}`, datos);
     }
 
     habilitados(){
       return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/listarHabilitados`);
     }
 
-    aperturar(id:string = '') {
-      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/aperturar/${id}`);
+    getAllMovimientos(size: number = 100, page: number = 1, sortBy:string = 'id', descending:false, keyword:any = '', cajaId:any) {
+      size = size <= 0? 100 : size;
+      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/caja/${cajaId}?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`);
     }
-
-    cerrarFondo(fondoId:any){
-      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/${fondoId}/cierre`);
-    }
-
-    aperturados(){
-      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/listarApertutados`);
-    }
-
   }
