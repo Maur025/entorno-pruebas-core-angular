@@ -62,10 +62,29 @@ export class FormularioOperativoComponent implements OnInit {
     this.fechaMinima = new Date();
     this.getEstados();
     this.getCentroCostos();
+    this.tipoDescargoForm();
+    if (this.fondo) this.setFondo();
+    if (this.transaccion) this.setTransaccion();
+  }
+
+  setForm() {
+    this.formGroup = this.FormBuilder.group({
+      id: [, []],
+      nombre: [, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
+      fechaSolicitud: [, [Validators.required]],
+      nroSolicitud: [, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
+      importe: [, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
+      aperturado: [],
+      descripcion: []
+    });
+  }
+
+  tipoDescargoForm(){
     if (this.tipoDescargo) {
       if (this.tipoDescargo == 'APERT') {
         this.getBancos();
         this.getMedioTransferencias();
+        this.formGroup.disable();
         this.addFormApertura();
       } else if (this.tipoDescargo == 'CIERR') {
         this.formGroup.disable();
@@ -88,24 +107,10 @@ export class FormularioOperativoComponent implements OnInit {
         this.form.centroCostoId.enable();
       }
     }
-    if (this.fondo) this.setFondo();
-    if (this.transaccion) this.setTransaccion();
-  }
-
-  setForm() {
-    this.formGroup = this.FormBuilder.group({
-      id: [, []],
-      nombre: [, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
-      fechaSolicitud: [, [Validators.required]],
-      nroSolicitud: [, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
-      importe: [, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
-      aperturado: [],
-      descripcion: [],
-      centroCostoId: [, [Validators.required]]
-    });
   }
 
   addFormApertura() {
+    this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('bancoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('cuentaBancoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('medioTransferenciaId', new FormControl(null, Validators.required));
@@ -113,6 +118,7 @@ export class FormularioOperativoComponent implements OnInit {
   }
 
   addFormDescargo() {
+    this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('saldo', new FormControl(null, Validators.required));
     this.formGroup.addControl('monto', new FormControl(null, [Validators.required]));
     this.formGroup.addControl('fechaMovimiento', new FormControl(null, [Validators.required, this.validatorFecha(), this.validatorFechaMovimiento()]));
@@ -215,17 +221,22 @@ export class FormularioOperativoComponent implements OnInit {
     this.cambioEstado();
     if (this.formGroup.valid) {
       if (this.tipoDescargo) {
+        data.nroReferencia = data.nroSolicitud;
+        data.refId = null;
+        data.fondoOperativoId = data.id;
         if (this.tipoDescargo == 'APERT') {
-          data.ingresoEgreso = 'OUT';
-          data.aperturado = true;
-          this.fondoOperativoService.register(data).subscribe(data => {
+          data.fechaMovimiento = data.fechaSolicitud;
+          data.monto = data.importe;
+          forkJoin([
+            this.fondoOperativoService.aperturar(data.id),
+            this.detalleFontoOperativoService.register(data),
+          ]).subscribe((responses) => {
             this.notificacionService.successStandar();
             this.alActualizar.emit();
-          }, error => this.notificacionService.alertError(error));
+          }, (error) => {
+            this.notificacionService.alertError(error);
+          });
         } else if (this.tipoDescargo == 'CIERR'){
-          data.nroReferencia = data.nroSolicitud;
-          data.refId = null;
-          data.fondoOperativoId = data.id;
           this.fondoOperativoService.cerrarFondo(data.id).subscribe(data => {
             this.notificacionService.successStandar('Fondo operativo cerrado exitosamente.');
             this.alActualizar.emit();
@@ -237,9 +248,6 @@ export class FormularioOperativoComponent implements OnInit {
             }, error => this.notificacionService.alertError(error));
           }
         } else {
-          data.nroReferencia = data.nroSolicitud;
-          data.refId = null;
-          data.fondoOperativoId = data.id;
           this.tipoDescargo == 'DEV' ? data.ingresoEgreso = 'INPUT' : data.ingresoEgreso = 'OUT';
           this.detalleFontoOperativoService.register(data).subscribe(data => {
             this.notificacionService.successStandar();
@@ -255,6 +263,11 @@ export class FormularioOperativoComponent implements OnInit {
       } else {
         if (this.fondo && !this.transaccion) {
           this.fondoOperativoService.update(data).subscribe(data => {
+            this.notificacionService.successStandar();
+            this.alActualizar.emit();
+          }, error => this.notificacionService.alertError(error));
+        } else {
+          this.fondoOperativoService.register(data).subscribe(data => {
             this.notificacionService.successStandar();
             this.alActualizar.emit();
           }, error => this.notificacionService.alertError(error));

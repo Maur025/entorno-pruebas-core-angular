@@ -56,16 +56,29 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
         "saldo": this.getOpcionesCabecera('Saldo', 12),
         "aperturado": this.getOpcionesCabecera('Aperturado', 12),
         "cierre": this.getOpcionesCabecera('Cerrado', 12),
-        "estadoContabilidad": this.getOpcionesCabecera('Estado Contabilidad', 6),
         "deleted": this.getOpcionesCabecera('Estado', 6),
       }
     };
+  }
+
+  nuevo(template: any) {
+    this.fondo = undefined;
+    this.tipoDescargo = undefined;
+    this.titleModal = 'Nuevo Fondo Operativo ';
+    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 
   aperturarNuevo(template: any) {
     this.fondo = undefined;
     this.tipoDescargo = 'APERT';
     this.titleModal = 'Apertura de Nuevo Fondo Operativo ';
+    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
+  }
+
+  aperturar(data: any, template: any) {
+    this.fondo = data;
+    this.tipoDescargo = 'APERT';
+    this.titleModal = 'Apertura de Fondo Operativo ';
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 
