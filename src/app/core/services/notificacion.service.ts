@@ -21,16 +21,16 @@ export class NotificacionService {
 	alertError(
 		errorResponse: ErrorResponseStandard = null,
 		messageCustom: {
-			message: string
-			title: string
+			message?: string
+			title?: string
 			icon?: any
 			confirmButtonText?: string
 			showCancelButton?: boolean
 		} = null
 	) {
-		let llamadoAccion: any = null
+		const llamadoAccion: any = null
 
-		let message: string = this.getMessageCodeError(
+		const message: string = this.getMessageCodeError(
 			errorResponse?.status || 0,
 			errorResponse?.error?.message || '',
 			llamadoAccion,
@@ -61,7 +61,7 @@ export class NotificacionService {
 				})
 		} else {
 			errorMessageAlert.fire({
-				title: messageCustom.message || 'Error',
+				title: messageCustom.title || 'Error',
 				html: messageCustom.message || 'Ocurrió un error inesperado.',
 				icon: messageCustom.icon || 'error',
 				confirmButtonText: messageCustom.confirmButtonText || 'Entendido',
@@ -280,7 +280,7 @@ export class NotificacionService {
 		errorDetail: string = null,
 		errorDataDetail: ErrorDetailDataResponseStandard[] = []
 	): string {
-		let msg: string[] = []
+		const msg: string[] = []
 		let message: string = ''
 		switch (codigo) {
 			case 0:
@@ -332,7 +332,7 @@ export class NotificacionService {
 		}
 		errorDetail && msg.push(`<span class="fs-6">${errorDetail}</span>`)
 		if (errorDataDetail.length > 0) {
-			for (let rowErrorDataDetail of errorDataDetail) {
+			for (const rowErrorDataDetail of errorDataDetail) {
 				msg.push(
 					`<p class="fs-6 text-start ms-3"><span class="fw-bold">Propiedad</span>: ${rowErrorDataDetail.propertyPath} <br/> <span class="fw-bold">Mensaje:</span> ${rowErrorDataDetail.message}</p>`
 				)
