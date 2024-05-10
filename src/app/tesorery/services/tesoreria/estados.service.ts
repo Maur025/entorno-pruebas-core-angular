@@ -27,6 +27,11 @@ export class EstadosService {
     return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/fondos`);
   }
 
+  habilitadosFondoRendir() {
+    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/fondos/rendir`);
+  }
+  
+
   habilitadosDevengados() {
     return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/devengados`);
   }

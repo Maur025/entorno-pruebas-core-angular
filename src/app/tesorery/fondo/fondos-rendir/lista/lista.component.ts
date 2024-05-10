@@ -63,8 +63,8 @@ export class ListaRendirComponent extends FuncionesComponent implements OnInit {
 
   aperturarNuevo(template: any) {
     this.fondo = undefined;
-    this.tipoDescargo = 'APERT';
-    this.titleModal = 'Nuevo Desembolso de Fondo a Rendir ';
+    this.tipoDescargo = 'DESE';
+    this.titleModal = 'Nuevo Desembolso '//de Fondo a Rendir ';
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 

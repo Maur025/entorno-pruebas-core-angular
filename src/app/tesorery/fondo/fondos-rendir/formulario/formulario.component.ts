@@ -74,7 +74,7 @@ export class FormularioRendirComponent implements OnInit {
     this.getCentroCostos();
     this.getEstados();
     if (this.tipoDescargo) {
-      if (this.tipoDescargo == 'APERT') {
+      if (this.tipoDescargo == 'DESE') {
         this.getBancos();
         this.getMedioTransferencias();
         this.addFormApertura();
@@ -149,13 +149,15 @@ export class FormularioRendirComponent implements OnInit {
   }
 
   getEstados() {
-    this.estadosService.habilitadosFondos().subscribe(data => {
+    this.estadosService.habilitadosFondoRendir().subscribe(data => {
       this.listaEstados = data.content;
+      console.log('lsi estados',this.listaEstados)
       if (this.tipoDescargo) {
+        console.log('tipo descargo...',this.tipoDescargo)
         this.form.estado.setValue(this.listaEstados.find(e => e.codigo == this.tipoDescargo).id);
         this.rendicion = this.listaEstados.find(e => e.nombre == 'RENDIDO');
         this.reposicion = this.listaEstados.find(e => e.nombre == 'REPOSICIÓN');
-        this.devolucion = this.listaEstados.find(e => e.nombre == 'DEVOLUCIÓN');
+        this.devolucion = this.listaEstados.find(e => e.nombre == 'DEVOLUCION');
       }
     }, error => this.notificacionService.alertError(error));
   }
@@ -291,12 +293,13 @@ export class FormularioRendirComponent implements OnInit {
   public guardar() {
     this.submitted = true;
     let data = this.formGroup.getRawValue();
+    console.log('DATA. FORM....-> ',data)
     if (this.formGroup.valid) {
       data.nroReferencia = data.nroSolicitud;
       data.refId = null;
       data.reponsable = this.listaResponsables.find(e => e.entidadId == data.responsableId).entidad.nombre;
       if (this.tipoDescargo) {
-        if (this.tipoDescargo == 'APERT') {
+        if (this.tipoDescargo == 'DESE') {
           data.ingresoEgreso = 'OUT';
           data.aperturado = true;
           this.fondoRendirService.register(data).subscribe(data => {
@@ -306,7 +309,7 @@ export class FormularioRendirComponent implements OnInit {
         }
 
 
-        /* if (this.tipoDescargo != 'APERT') {
+        /* if (this.tipoDescargo != 'DESE') {
           if (this.form.planPagos) {
             if (this.importeTotalCredito == this.montoPagar) {
               this.detalleFondoRendirService.register(data).subscribe(res => {
