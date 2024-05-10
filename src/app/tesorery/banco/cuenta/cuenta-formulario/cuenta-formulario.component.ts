@@ -6,12 +6,17 @@ import {
 	OnInit,
 	TemplateRef,
 } from '@angular/core'
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
+import {
+	AbstractControl,
+	FormBuilder,
+	FormControl,
+	FormGroup,
+	Validators,
+} from '@angular/forms'
 import { NotificacionService } from 'src/app/core/services/notificacion.service'
 import { CuentaBancoService } from 'src/app/tesorery/services/tesoreria/cuenta-banco.service'
 import { BancoService } from '../../../services/tesoreria/banco.service'
 import { MonedaService } from '../../../services/tesoreria/monedas.service'
-import { MedioTransferenciaService } from '../../../services/tesoreria/medio-transferencia.service'
 import {
 	ApiResponseStandard,
 	ErrorResponseStandard,
@@ -19,6 +24,11 @@ import {
 import { ResponseDataStandard } from 'src/app/shared/interface/commonListInterfaces'
 import { UtilityService } from 'src/app/shared/services/utilityService.service'
 import { BsModalService } from 'ngx-bootstrap/modal'
+
+enum AccountInitializationTypeEnum {
+	SALDO_INICIAL = 'SALDO_INICIAL',
+	TRANSFERENCIA = 'TRANSFERENCIA',
+}
 
 @Component({
 	selector: 'app-cuenta-formulario',
@@ -42,6 +52,7 @@ export class CuentaFormularioComponent implements OnInit {
 	public listaMediosTransferencia: ResponseDataStandard[] = []
 	public accountsExistingCurrentlySelect: ResponseDataStandard[] = []
 	public transferMediumList: ResponseDataStandard[] = []
+	public showModalChildren: boolean = false
 
 	constructor(
 		private FormBuilder: FormBuilder,
@@ -49,7 +60,6 @@ export class CuentaFormularioComponent implements OnInit {
 		private cuentaBancoService: CuentaBancoService,
 		private bancoService: BancoService,
 		private monedaService: MonedaService,
-		private medioTransferenciaService: MedioTransferenciaService,
 		protected utilityService: UtilityService,
 		protected modalService: BsModalService
 	) {}
@@ -59,7 +69,6 @@ export class CuentaFormularioComponent implements OnInit {
 		if (this.idRuta) this.form['bancoId'].disable()
 		this.getBancos()
 		this.getMonedas()
-		this.getMediosTransferencia()
 		if (this.cuenta) {
 			this.setCuenta()
 		} else {
@@ -81,13 +90,9 @@ export class CuentaFormularioComponent implements OnInit {
 			descripcion: [null, [Validators.minLength(2)]],
 			bancoId: [null, [Validators.required]],
 			monedaId: [null, [Validators.required]],
-			saldo: [null, [Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
+			saldo: [null, [Validators.required]],
 			typeAccountInitialize: [false],
-			cuentaOrigenId: [null, [Validators.required]],
-			balanceTotalTransfer: [
-				{ value: 0, disabled: true },
-				[Validators.required],
-			],
+			balanceTotalTransfer: [{ value: 0, disabled: true }],
 		})
 	}
 
@@ -103,6 +108,8 @@ export class CuentaFormularioComponent implements OnInit {
 			bancoId: this.cuenta.bancoId,
 			monedaId: this.cuenta.monedaId,
 			saldo: this.cuenta.saldo,
+			typeAccountInitialize: null,
+			balanceTotalTransfer: null,
 		})
 		this.form['saldo'].disable()
 	}
@@ -129,17 +136,6 @@ export class CuentaFormularioComponent implements OnInit {
 		)
 	}
 
-	getMediosTransferencia = (): void => {
-		this.medioTransferenciaService.habilitados().subscribe(
-			(data: ApiResponseStandard) => {
-				this.listaMediosTransferencia = data.content
-			},
-			(error: ErrorResponseStandard) => {
-				this.notificacionService.alertError(error)
-			}
-		)
-	}
-
 	cambioMonto = (): void => {
 		if (this.form['saldo'].value ?? '' !== '') {
 			this.formGroup.addControl(
@@ -151,6 +147,44 @@ export class CuentaFormularioComponent implements OnInit {
 			this.formGroup.removeControl('medioTransferenciaId')
 			this.transferencia = false
 		}
+	}
+
+	filterAndValidateTransferMediumList = (): boolean => {
+		let errorFound: boolean = false
+
+		const transferMediumListFilter: ResponseDataStandard[] =
+			this.transferMediumList.filter(
+				({ medioTransferenciaId }: ResponseDataStandard) => medioTransferenciaId
+			)
+		this.transferMediumList = transferMediumListFilter
+		for (const rowTransferMediumData of this.transferMediumList) {
+			if (rowTransferMediumData.medioTransferenciaId) {
+				if (rowTransferMediumData.tipoMedioTransferencia === 'CUENTA') {
+					if (
+						!rowTransferMediumData.bancoId ||
+						!rowTransferMediumData.cuentaId ||
+						!parseFloat(rowTransferMediumData.montoTransferir || 0)
+					) {
+						rowTransferMediumData.errorRow = true
+						errorFound = true
+					} else {
+						rowTransferMediumData.errorRow = false
+					}
+				}
+				if (rowTransferMediumData.tipoMedioTransferencia === 'CAJA') {
+					if (
+						!rowTransferMediumData.cajaId ||
+						!parseFloat(rowTransferMediumData.montoTransferir || 0)
+					) {
+						rowTransferMediumData.errorRow = true
+						errorFound = true
+					} else {
+						rowTransferMediumData.errorRow = false
+					}
+				}
+			}
+		}
+		return errorFound
 	}
 
 	guardar = (): void => {
@@ -167,19 +201,62 @@ export class CuentaFormularioComponent implements OnInit {
 					}
 				)
 			} else {
-				this.cuentaBancoService
-					.register(this.formGroup.getRawValue())
-					.subscribe(
-						(response: ApiResponseStandard) => {
-							this.notificacionService.successStandar()
-							this.alGuardar.emit(response)
-						},
-						(error: ErrorResponseStandard) => {
-							this.notificacionService.alertError(error)
+				const jsonDataSend: { [key: string]: unknown } = {
+					...this.formGroup.value,
+					bancoId: this.formGroup.get('bancoId')?.value || this.idRuta || null,
+					tipoInicializacion: this.formGroup?.get('typeAccountInitialize')
+						?.value
+						? AccountInitializationTypeEnum.TRANSFERENCIA
+						: AccountInitializationTypeEnum.SALDO_INICIAL,
+				}
+				if (this.formGroup.get('typeAccountInitialize').value) {
+					if (this.transferMediumList?.length > 0) {
+						const errorFound: boolean =
+							this.filterAndValidateTransferMediumList()
+						if (!(this.transferMediumList.length > 0)) {
+							this.notificacionService?.alertError(null, {
+								message:
+									'Agregue al menos 1 registro valido a la tabla para continuar.',
+							})
+							return
 						}
-					)
+						if (errorFound) {
+							this.notificacionService?.alertError(null, {
+								message: 'Se requiere que complete los datos en la lista',
+							})
+							return
+						}
+					} else {
+						this.notificacionService?.alertError(null, {
+							message:
+								'Asigne al menos un medio de transferencia para continuar.',
+						})
+					}
+					jsonDataSend.mediosTransferenciaList = this.transferMediumList
+					jsonDataSend.saldo =
+						this.formGroup?.get('balanceTotalTransfer')?.value || 0
+					this.createAccount(jsonDataSend)
+				} else {
+					this.createAccount(jsonDataSend)
+				}
 			}
 		}
+	}
+
+	createAccount = (jsonDataSend: object): void => {
+		this.notificacionService.alertaSimpleConfirmacion((response: boolean) => {
+			if (response) {
+				this.cuentaBancoService.register(jsonDataSend).subscribe(
+					(response: ApiResponseStandard) => {
+						this.notificacionService.successStandar()
+						this.alGuardar.emit(response)
+					},
+					(error: ErrorResponseStandard) => {
+						this.notificacionService.alertError(error)
+					}
+				)
+			}
+		}, '¿Es correcta la información ingresada?... ¿Desea continuar el registro?')
 	}
 
 	onlyNumbersAccount = (fieldName: string = '', event: Event): void => {
@@ -188,9 +265,72 @@ export class CuentaFormularioComponent implements OnInit {
 		this.formGroup.get(fieldName).setValue(sanitizedValue)
 	}
 
-	openModalTransferMedium = (template: string | TemplateRef<unknown>): void => {
+	onChangeSwitchTransferType = (): void => {
+		this.transferMediumList = []
+		this.formGroup.patchValue({
+			balanceTotalTransfer: 0,
+			saldo: null,
+		})
+		const saldoControl: AbstractControl = this.formGroup.get('saldo')
+
+		if (this.formGroup.get('typeAccountInitialize').value) {
+			saldoControl.setValidators([Validators.required])
+		} else {
+			saldoControl.clearValidators()
+		}
+		saldoControl.updateValueAndValidity()
+	}
+
+	openModalTransferMedium = (template: string | TemplateRef<void>): void => {
+		this.showModalChildren = true
 		this.modalService.show(template, {
-			class: 'modal-sm modal-scrollable',
+			id: 2,
+			class:
+				'modal-lg modal-scrollable modal-dialog modal-dialog-centered children-custom-modal',
+			backdrop: 'static',
+		})
+	}
+
+	closeModalTransferMedium = (): void => {
+		this.modalService.hide(2)
+		this.showModalChildren = false
+	}
+
+	removeTransferMediumItem = (index: number = null): void => {
+		const arrayTemp: ResponseDataStandard[] = this.transferMediumList?.filter(
+			(rowTransferMedium: ResponseDataStandard, rowIndex: number) =>
+				rowIndex !== index
+		)
+		this.transferMediumList = arrayTemp
+		this.calculateTotalTransferMedium()
+	}
+
+	calculateTotalTransferMedium = (): void => {
+		let transferBalanceTotal: number = 0
+		if (this.transferMediumList.length > 0) {
+			for (const rowTransferMedium of this.transferMediumList) {
+				transferBalanceTotal += parseFloat(
+					rowTransferMedium.montoTransferir || 0
+				)
+			}
+		}
+		this.formGroup.patchValue({
+			balanceTotalTransfer: transferBalanceTotal,
+		})
+	}
+
+	addRowTransferMedium = (): void => {
+		this.transferMediumList.push({
+			id: null,
+			medioTransferenciaId: null,
+			bancoId: null,
+			cuentaId: null,
+			cajaId: null,
+			montoTransferir: null,
+			cashDataSelect: [],
+			bankDataSelect: [],
+			accountBelongingBankDataSelect: [],
+			errorRow: false,
 		})
 	}
 }

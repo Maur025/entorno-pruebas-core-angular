@@ -91,7 +91,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 	crearCuenta(template: any, data: any) {
 		this.banco = data
 		this.modalRef = this.modalService.show(template, {
-			class: `modal-lg modal-scrollable`,
+			class: `modal-xl modal-scrollable`,
+			backdrop: 'static',
 		})
 	}
 

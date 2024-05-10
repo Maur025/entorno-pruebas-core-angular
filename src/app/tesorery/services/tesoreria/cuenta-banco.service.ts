@@ -79,7 +79,7 @@ export class CuentaBancoService {
 		size: number = 100,
 		page: number = 1,
 		sortBy: string = 'id',
-		descending: false,
+		descending: boolean = false,
 		keyword: string = '',
 		id: string | number
 	): Observable<ApiResponseStandard> => {

@@ -74,7 +74,7 @@ export class CuentaListaComponent extends FuncionesComponent implements OnInit {
 
 	crear(template: string | TemplateRef<unknown>) {
 		this.modalRef = this.modalService.show(template, {
-			class: `modal-lg modal-scrollable`,
+			class: `modal-xl modal-scrollable`,
 		})
 	}
 

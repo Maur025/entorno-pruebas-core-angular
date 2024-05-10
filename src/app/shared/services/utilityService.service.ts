@@ -11,28 +11,35 @@ export class UtilityService {
 	onlyNumbers = (
 		name: string = '',
 		event: Event,
-		reactiveForm: UntypedFormGroup
-	): void => {
-		const inputValue: string = (event.target as HTMLInputElement).value
-		const sanitizedValue: string = inputValue.replace(
-			/[^\d.]|(?<=\.\d*)\./g,
-			''
-		)
-		if (event instanceof InputEvent) {
-			const inputEvent: InputEvent = event
-			if (
-				(/^\./.test(sanitizedValue) ||
-					(/^0\d/.test(sanitizedValue) && !/^0\.\d/.test(sanitizedValue))) &&
-				inputEvent.inputType !== 'deleteContentBackward' &&
-				inputEvent.inputType !== 'deleteContentForward'
-			) {
-				this.notificacionService.warningStandar(
-					'El valor parece incorrecto, podria generar problemas.'
-				)
+		reactiveForm: UntypedFormGroup = null
+	): string => {
+		if (event) {
+			const inputValue: string = (event.target as HTMLInputElement).value
+			const sanitizedValue: string = inputValue.replace(
+				/[^\d.]|(?<=\.\d*)\./g,
+				''
+			)
+			if (event instanceof InputEvent) {
+				const inputEvent: InputEvent = event
+				if (
+					(/^\./.test(sanitizedValue) ||
+						(/^0\d/.test(sanitizedValue) && !/^0\.\d/.test(sanitizedValue))) &&
+					inputEvent.inputType !== 'deleteContentBackward' &&
+					inputEvent.inputType !== 'deleteContentForward'
+				) {
+					this.notificacionService.warningStandar(
+						'El valor parece incorrecto, podria generar problemas.'
+					)
+				}
 			}
+			if (reactiveForm) {
+				reactiveForm.get(name).setValue(sanitizedValue)
+			} else {
+				return sanitizedValue
+			}
+		} else {
+			return null
 		}
-
-		reactiveForm.get(name).setValue(sanitizedValue)
 	}
 
 	convertUppercase = (

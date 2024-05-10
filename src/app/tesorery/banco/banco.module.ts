@@ -14,6 +14,7 @@ import { CuentasBancoComponent } from './cuentas-banco/cuentas-banco.component'
 import { CuentaDetalleMovimientosComponent } from './cuenta/cuenta-detalle-movimientos/cuenta-detalle-movimientos.component'
 import { UiSwitchModule } from 'ngx-ui-switch'
 import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap'
+import { MedioTransferenciaCuentaListFormComponent } from './cuenta/medio-transferencia-cuenta-list-form/medio-transferencia-cuenta-list-form.component'
 
 @NgModule({
 	declarations: [
@@ -23,6 +24,7 @@ import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap'
 		CuentaFormularioComponent,
 		CuentasBancoComponent,
 		CuentaDetalleMovimientosComponent,
+		MedioTransferenciaCuentaListFormComponent,
 	],
 	imports: [
 		CommonModule,
