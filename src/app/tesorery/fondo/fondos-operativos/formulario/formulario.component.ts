@@ -4,16 +4,12 @@ import { FondoOperativoService } from "src/app/tesorery/services/tesoreria/fondo
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { BsLocaleService } from "ngx-bootstrap/datepicker";
 import { CentrocostoService } from "src/app/tesorery/services/tesoreria/centrocosto.service";
-import { BancoService } from "src/app/tesorery/services/tesoreria/banco.service";
-import { CuentaBancoService } from "src/app/tesorery/services/tesoreria/cuenta-banco.service";
-import { MovimientoCuentaBancoService } from "src/app/tesorery/services/tesoreria/movientos-cuenta-banco.service";
-import { MedioTransferenciaService } from "src/app/tesorery/services/tesoreria/medio-transferencia.service";
 import { DetalleFondoOperativoService } from "src/app/tesorery/services/tesoreria/detalle-fondo-operativo.service";
 import { EstadosService } from "src/app/tesorery/services/tesoreria/estados.service";
-import { forkJoin } from 'rxjs';
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 import { BsModalService } from "ngx-bootstrap/modal";
 import { EsquemaService } from "src/app/tesorery/services/tesoreria/esquema.service";
+import { EntidadService } from "src/app/tesorery/services/tesoreria/entidad.service";
 
 @Component({
   selector: 'app-formulario-operativo',
@@ -37,18 +33,17 @@ export class FormularioOperativoComponent implements OnInit {
   listaCuentasBanco: any;
   listaMedioTransferencias: any;
   listaEstados: any;
+  listaResponsables: any;
   fechaMinima: any;
+  montoPagar:any;
 
   constructor(
-    private FormBuilder: FormBuilder,
+    private formBuilder: FormBuilder,
     private fondoOperativoService: FondoOperativoService,
-    private bancoService: BancoService,
+    private entidadService: EntidadService,
     private estadosService: EstadosService,
-    private movimientoCuentaBancoService: MovimientoCuentaBancoService,
-    private medioTransferenciaService: MedioTransferenciaService,
     private detalleFontoOperativoService: DetalleFondoOperativoService,
     private centroCostosService: CentrocostoService,
-    private cuentaBancoService: CuentaBancoService,
     private notificacionService: NotificacionService,
     private _localeService: BsLocaleService,
     public esquemasService: EsquemaService,
@@ -62,84 +57,74 @@ export class FormularioOperativoComponent implements OnInit {
     this.fechaMinima = new Date();
     this.getEstados();
     this.getCentroCostos();
-    this.tipoDescargoForm();
+    this.getResponsables();
     if (this.fondo) this.setFondo();
     if (this.transaccion) this.setTransaccion();
+    this.tipoDescargoForm();
   }
 
   setForm() {
-    this.formGroup = this.FormBuilder.group({
+    this.formGroup = this.formBuilder.group({
       id: [, []],
       nombre: [, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
       fechaSolicitud: [, [Validators.required]],
       nroSolicitud: [, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       importe: [, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       aperturado: [],
-      descripcion: []
+      descripcion: [, [Validators.required]],
+      responsableId: [],
+      responsable: [],
     });
   }
 
-  tipoDescargoForm(){
+  tipoDescargoForm() {
     if (this.tipoDescargo) {
       if (this.tipoDescargo == 'APERT') {
-        this.getBancos();
-        this.getMedioTransferencias();
         this.formGroup.disable();
         this.addFormApertura();
+        this.montoPagar = this.fondo.importe;
       } else if (this.tipoDescargo == 'CIERR') {
         this.formGroup.disable();
         this.addFormDescargo();
-        this.form.monto.setValue(this.fondo.saldo);
-        this.form.fechaMovimiento.setValue(new Date());
+        this.form.saldo.setValue(this.fondo.saldo);
         this.form.saldo.disable();
-        this.form.fechaMovimiento.disable();
+        this.montoPagar = this.fondo.saldo;
         if (this.fondo.saldo == 0) {
-          this.formGroup.removeControl('centroCostoId')
-          this.form.monto.disable();
-        } else{
+          this.formGroup.removeControl('centroCostoId');
+          this.formGroup.removeControl('operaciones');
+        } else {
           this.form.centroCostoId.enable();
         }
         this.formGroup.addControl('documento', new FormControl(null, Validators.required));
       } else {
         this.formGroup.disable();
         this.addFormDescargo();
+        this.form.saldo.setValue(this.fondo.saldo);
         this.form.saldo.disable();
         this.form.centroCostoId.enable();
       }
+      this.form.descripcion.setValue(null);
+      this.form.descripcion.enable();
     }
   }
 
   addFormApertura() {
     this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
-    this.formGroup.addControl('bancoId', new FormControl(null, Validators.required));
-    this.formGroup.addControl('cuentaBancoId', new FormControl(null, Validators.required));
-    this.formGroup.addControl('medioTransferenciaId', new FormControl(null, Validators.required));
     this.formGroup.addControl('estado', new FormControl(null, Validators.required));
+    this.formGroup.addControl('operaciones', this.formBuilder.array([], [Validators.required]));
   }
 
   addFormDescargo() {
     this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
     this.formGroup.addControl('saldo', new FormControl(null, Validators.required));
-    this.formGroup.addControl('monto', new FormControl(null, [Validators.required]));
-    this.formGroup.addControl('fechaMovimiento', new FormControl(null, [Validators.required, this.validatorFecha(), this.validatorFechaMovimiento()]));
+    if (this.tipoDescargo != 'CIERR') this.formGroup.addControl('monto', new FormControl(null, [Validators.required]));
     this.formGroup.addControl('estado', new FormControl(null, Validators.required));
+    this.formGroup.addControl('operaciones', this.formBuilder.array([], [Validators.required]));
   }
 
   getCentroCostos() {
     this.centroCostosService.habilitados().subscribe(data => {
       this.listaCentroCostos = data.content;
-    }, error => this.notificacionService.alertError(error));
-  }
-
-  getBancos() {
-    this.bancoService.habilitados().subscribe(data => {
-      this.listaBancos = data.content;
-    }, error => this.notificacionService.alertError(error));
-  }
-
-  getMedioTransferencias() {
-    this.medioTransferenciaService.habilitados().subscribe(data => {
-      this.listaMedioTransferencias = data.content;
     }, error => this.notificacionService.alertError(error));
   }
 
@@ -151,16 +136,16 @@ export class FormularioOperativoComponent implements OnInit {
     }, error => this.notificacionService.alertError(error));
   }
 
-  cambioBanco() {
-    this.listaCuentasBanco = [];
-    this.form.cuentaBancoId.setValue(null);
-    if (this.form.bancoId.value != null) {
-      this.cuentaBancoService.getCuentasBanco(1000, 1, 'id', false, '', this.form.bancoId.value).subscribe(data => {
-        this.listaCuentasBanco = data.content;
-      }, error => this.notificacionService.alertError(error));
-    } else {
-      this.listaCuentasBanco = [];
-      this.form.cuentaBancoId.setValue(null);
+  getResponsables() {
+    this.entidadService.getEntidadesByTipo("EMPLEADO").subscribe(data => {
+      this.listaResponsables = data.content;
+    }, error => this.notificacionService.alertError(error));
+  }
+
+  cambioResponsable() {
+    if (this.form.responsableId != null) {
+      this.form.responsable.setValue(this.listaResponsables.find(e => e.id == this.form.responsableId.value).entidad.nombre);
+      console.log('this.formGroup.getRawValue()', this.formGroup.getRawValue());
     }
   }
 
@@ -186,6 +171,10 @@ export class FormularioOperativoComponent implements OnInit {
     }
   }
 
+  cambioMonto(){
+    this.montoPagar = this.form.monto.value;
+  }
+
   get form() {
     return this.formGroup.controls;
   }
@@ -199,7 +188,8 @@ export class FormularioOperativoComponent implements OnInit {
       importe: this.fondo.importe,
       aperturado: this.fondo.aperturado,
       descripcion: this.fondo.descripcion,
-      saldo : this.fondo.saldo
+      saldo: this.fondo.saldo,
+      responsableId: this.fondo.responsableId,
     });
   }
 
@@ -224,42 +214,33 @@ export class FormularioOperativoComponent implements OnInit {
         data.nroReferencia = data.nroSolicitud;
         data.refId = null;
         data.fondoOperativoId = data.id;
+        data.fechaMovimiento = data.fechaSolicitud;
         if (this.tipoDescargo == 'APERT') {
-          data.fechaMovimiento = data.fechaSolicitud;
           data.monto = data.importe;
-          forkJoin([
-            this.fondoOperativoService.aperturar(data.id),
-            this.detalleFontoOperativoService.register(data),
-          ]).subscribe((responses) => {
-            this.notificacionService.successStandar();
-            this.alActualizar.emit();
-          }, (error) => {
-            this.notificacionService.alertError(error);
-          });
-        } else if (this.tipoDescargo == 'CIERR'){
-          this.fondoOperativoService.cerrarFondo(data.id).subscribe(data => {
-            this.notificacionService.successStandar('Fondo operativo cerrado exitosamente.');
-            this.alActualizar.emit();
-          }, error => this.notificacionService.alertError(error));
-          if (this.fondo.saldo > 0) {
-            data.ingresoEgreso = 'INPUT';
+        } else if (this.tipoDescargo == 'CIERR') {
+          if (this.fondo.saldo == 0) {
+            data.monto = data.saldo;
+            data.estado = this.listaEstados.find(e => e.codigo == 'CIERR').id;
+          } else {
             data.estado = this.listaEstados.find(e => e.codigo == 'DEV').id;
-            this.detalleFontoOperativoService.register(data).subscribe(data => {
+            data.monto = data.saldo;
+          }
+        }
+        this.detalleFontoOperativoService.register(data).subscribe(res => {
+          console.log('entro detalle',);
+          this.notificacionService.successStandar('Movimiento de fondo operativo registrado exitosamente.');
+          this.alActualizar.emit();
+          if (this.tipoDescargo == 'CIERR' && data.monto > 0) {
+            console.log('entro detalle cierre',);
+            data.estado = this.listaEstados.find(e => e.codigo == 'CIERR').id;
+            data.monto = 0;
+            data.operaciones = null;
+            this.detalleFontoOperativoService.register(data).subscribe(res => {
+              this.notificacionService.successStandar('Movimiento de fondo operativo registrado exitosamente.');
+              this.alActualizar.emit();
             }, error => this.notificacionService.alertError(error));
           }
-        } else {
-          this.tipoDescargo == 'DEV' ? data.ingresoEgreso = 'INPUT' : data.ingresoEgreso = 'OUT';
-          this.detalleFontoOperativoService.register(data).subscribe(data => {
-            this.notificacionService.successStandar();
-            if (this.transaccion && this.esquemaId) {
-              this.esquemasService.updateNextEstadoIntegracion(this.esquemaId).subscribe(data => {
-                this.alProcesar.emit();
-                this.cerrarModal();
-              }, error => this.notificacionService.alertError(error));
-            }
-            this.alActualizar.emit();
-          }, error => this.notificacionService.alertError(error));
-        }
+        }, error => this.notificacionService.alertError(error));
       } else {
         if (this.fondo && !this.transaccion) {
           this.fondoOperativoService.update(data).subscribe(data => {

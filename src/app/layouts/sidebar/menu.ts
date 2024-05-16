@@ -17,7 +17,7 @@ export const MENU: MenuItem[] = [
   {
     id: 11,
     label: 'Cajas',
-    icon: 'mdi mdi-safe-square-outline',
+    icon: 'mdi mdi-cash-register',
     link: 'caja',
   },
   {

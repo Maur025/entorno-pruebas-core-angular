@@ -6,12 +6,9 @@ import { CentrocostoService } from "src/app/tesorery/services/tesoreria/centroco
 import { EstadosService } from "src/app/tesorery/services/tesoreria/estados.service";
 import { CajaService } from "src/app/tesorery/services/tesoreria/caja.service";
 import { BsModalService } from "ngx-bootstrap/modal";
-import { MedioTransferenciaService } from "src/app/tesorery/services/tesoreria/medio-transferencia.service";
-import { BancoService } from "src/app/tesorery/services/tesoreria/banco.service";
-import { CuentaBancoService } from "src/app/tesorery/services/tesoreria/cuenta-banco.service";
 import { FondoCajaService } from "src/app/tesorery/services/tesoreria/fondo-caja.service";
 import { MovimientoCajaService } from "src/app/tesorery/services/tesoreria/movimiento-caja.service";
-import { forkJoin } from 'rxjs';
+import { EntidadService } from "src/app/tesorery/services/tesoreria/entidad.service";
 
 @Component({
   selector: 'app-formulario-caja',
@@ -41,14 +38,13 @@ export class FormularioCajaComponent implements OnInit {
     private centroCostosService: CentrocostoService,
     private fondoCajaService: FondoCajaService,
     private movimientoCajaService: MovimientoCajaService,
-    private medioTransferenciaService: MedioTransferenciaService,
-    private bancoService: BancoService,
-    private cuentaBancoService: CuentaBancoService,
     private formBuilder: FormBuilder,
     private estadosService: EstadosService,
     private notificacionService: NotificacionService,
     private _localeService: BsLocaleService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private entidadService: EntidadService,
+
 
   ) {
     this._localeService.use('es');
@@ -56,11 +52,12 @@ export class FormularioCajaComponent implements OnInit {
 
   ngOnInit(): void {
     this.setForm();
+    if (this.caja) this.setCaja();
     this.tipoForm();
     this.getEstadosCaja();
     this.getCentroCostos();
     this.getFondoCajas();
-    if (this.caja) this.setCaja();
+    this.getResponsables();
   }
 
   setForm() {
@@ -69,6 +66,7 @@ export class FormularioCajaComponent implements OnInit {
       nombre: [, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
       descripcion: [, [Validators.required]],
       responsable: [, [Validators.required]],
+      responsableId: [, [Validators.required]],
       centroCostoId: [, [Validators.required]],
       fondoCajaId: [, [Validators.required]],
     });
@@ -77,16 +75,17 @@ export class FormularioCajaComponent implements OnInit {
   tipoForm() {
     if (this.tipoMovimiento) {
       if (this.tipoMovimiento == 'APERT') {
-        this.getBancos();
-        this.getMedioTransferencias();
         this.formGroup.disable();
         this.addFormApertura();
       } else if (this.tipoMovimiento == 'CIERR') {
         this.formGroup.disable();
         this.addFormMovimiento();
         this.form.monto.disable();
+        this.form.monto.setValue(this.caja.saldo);
         this.form.centroCostoId.disable();
       }
+      this.form.descripcion.setValue(null);
+      this.form.descripcion.enable();
     }
   }
 
@@ -105,27 +104,16 @@ export class FormularioCajaComponent implements OnInit {
       descripcion: this.caja.descripcion,
       monto: this.caja.saldo,
       responsable: this.caja.responsable,
+      responsableId: this.caja.responsableId,
       centroCostoId: this.caja.centroCostoId,
       fondoCajaId: this.caja.fondoCajaId,
     });
   }
 
-  getBancos() {
-    this.bancoService.habilitados().subscribe(data => {
-      this.listaBancos = data.content;
-    }, error => this.notificacionService.alertError(error));
-  }
-
-  getMedioTransferencias() {
-    this.medioTransferenciaService.habilitados().subscribe(data => {
-      this.listaMedioTransferencias = data.content;
-    }, error => this.notificacionService.alertError(error));
-  }
   getEstadosCaja() {
     this.estadosService.habilitadosCajas().subscribe(data => {
       this.listaEstadosCaja = data.content;
       if (this.tipoMovimiento) this.form.estadoCajaId.setValue(this.listaEstadosCaja.find(e => e.codigo == this.tipoMovimiento).id);
-      //this.cambioEstado();
     }, error => this.notificacionService.alertError(error));
   }
 
@@ -134,16 +122,22 @@ export class FormularioCajaComponent implements OnInit {
       this.listaCentroCostos = data.content;
     }, error => this.notificacionService.alertError(error));
   }
+
   getFondoCajas() {
     this.fondoCajaService.habilitados().subscribe(data => {
       this.listaFondoCajas = data.content;
     }, error => this.notificacionService.alertError(error));
   }
 
+  getResponsables() {
+    this.entidadService.getEntidadesByTipo("EMPLEADO").subscribe(data => {
+      this.listaResponsables = data.content;
+    }, error => this.notificacionService.alertError(error));
+  }
 
   addFormApertura() {
-    this.formGroup.addControl('monto', new FormControl(null, [Validators.required]));
-    this.formGroup.addControl('operaciones', this.formBuilder.array([]));
+    this.formGroup.addControl('monto', new FormControl(null, [Validators.required, Validators.min(1)]));
+    this.formGroup.addControl('operaciones', this.formBuilder.array([], Validators.required));
     this.formGroup.addControl('estadoCajaId', new FormControl(null, Validators.required));
   }
 
@@ -151,20 +145,15 @@ export class FormularioCajaComponent implements OnInit {
     this.formGroup.addControl('monto', new FormControl(null, [Validators.required]));
     this.formGroup.addControl('estadoCajaId', new FormControl(null, Validators.required));
     if (this.caja.saldo != 0) {
-      this.formGroup.addControl('operaciones', this.formBuilder.array([]));
+      this.formGroup.addControl('operaciones', this.formBuilder.array([], Validators.required));
     }
   }
 
-  cambioBanco() {
-    this.listaCuentasBanco = [];
-    this.form.cuentaBancoId.setValue(null);
-    if (this.form.bancoId.value != null) {
-      this.cuentaBancoService.getCuentasBanco(1000, 1, 'id', false, '', this.form.bancoId.value).subscribe(data => {
-        this.listaCuentasBanco = data.content;
-      }, error => this.notificacionService.alertError(error));
-    } else {
-      this.listaCuentasBanco = [];
-      this.form.cuentaBancoId.setValue(null);
+
+  cambioResponsable() {
+    if (this.form.responsableId != null) {
+      this.form.responsable.setValue(this.listaResponsables.find(e => e.id == this.form.responsableId.value).entidad.nombre);
+      console.log('this.formGroup.getRawValue()', this.formGroup.getRawValue());
     }
   }
 
@@ -178,7 +167,7 @@ export class FormularioCajaComponent implements OnInit {
         data.origen = 'MOVIMIENTO CAJA';
         if (this.tipoMovimiento == 'APERT') {
           data.ingresoEgreso = 'INPUT';
-        } else if (this.tipoMovimiento == 'CIERR'){
+        } else if (this.tipoMovimiento == 'CIERR') {
           data.ingresoEgreso = 'OUT';
         }
         this.movimientoCajaService.register(data).subscribe(data => {
