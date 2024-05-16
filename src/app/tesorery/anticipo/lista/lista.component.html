@@ -39,14 +39,6 @@
 						<li
 							data-bs-toggle="tooltip"
 							data-bs-placement="top"
-							title="Editar"
-							*ngIf="!fila.anticipo"
-						>
-							<!--<button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila, modalEditar)"><i class="mdi mdi-pencil-outline"></i></button>-->
-						</li>
-						<li
-							data-bs-toggle="tooltip"
-							data-bs-placement="top"
 							title="Devolución Anticipo"
 							*ngIf="fila.saldo > 0"
 						>
@@ -54,7 +46,7 @@
 								class="btn btn-sm btn-light"
 								[disabled]="fila.deleted"
 								(click)="
-									aplicacionAnticipo(fila, modalGeneral, 'aplicacion', true)
+									aplicacionAnticipo(fila, modalGeneral, 'devolucion', true)
 								"
 							>
 								<i class="mdi mdi-transfer-down"></i>
