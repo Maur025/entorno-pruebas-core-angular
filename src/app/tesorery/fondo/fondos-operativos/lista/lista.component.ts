@@ -93,7 +93,7 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
     this.fondo = data;
     this.tipoDescargo = tipo;
     this.tipoTexto = tipoTexto;
-    this.titleModal = ' de Fondo Operativo';
+    this.titleModal = tipoTexto+' de Fondo Operativo';
     this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
   }
 

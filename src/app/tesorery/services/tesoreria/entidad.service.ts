@@ -113,4 +113,8 @@ export class EntidadService {
 			`${this.apiUrl}${this.prefix}/${this.apiName}/entidadReferencial/tipoEntidad/${id}`
 		)
 	}
+
+    getEntidadesByTipo(tipoEntidad: String){
+      return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/entidadReferencial/${tipoEntidad}/tipoEntidad`);
+    }
 }

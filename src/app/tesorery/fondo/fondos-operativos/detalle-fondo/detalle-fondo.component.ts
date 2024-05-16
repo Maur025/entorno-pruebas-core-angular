@@ -54,8 +54,10 @@ export class DetalleFondoComponent extends FuncionesComponent implements OnInit 
         /* "acciones": this.getOpcionesCabecera('Acciones', 12), */
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
         "nroReferencia": this.getOpcionesCabecera('Nro Referencia', 12),
+        "createdAt": this.getOpcionesCabecera('Fecha Registro', 12),
         "fechaMovimiento": this.getOpcionesCabecera('Fecha Movimiento', 12),
         "monto": this.getOpcionesCabecera('Monto', 12),
+        "saldo": this.getOpcionesCabecera('Saldo', 12),
         "centroCosto": this.getOpcionesCabecera('Centro de Costo', 6),
         "estadoFondo": this.getOpcionesCabecera('Estado Fondo', 12),
         "estadoContabilidad": this.getOpcionesCabecera('Estado Contabilidad', 6),

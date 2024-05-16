@@ -11,7 +11,7 @@ import { CajaService } from '../../services/tesoreria/caja.service'
   templateUrl: './operaciones.component.html',
   styleUrls: ['./operaciones.component.scss']
 })
-export class OperacionesComponent implements OnInit{
+export class OperacionesComponent implements OnInit {
 
   @Input() cajaIdNoUse;
   @Input() montoPagar = 0;
@@ -34,14 +34,13 @@ export class OperacionesComponent implements OnInit{
     private medioTransferenciaService: MedioTransferenciaService,
     private formBuilder: FormBuilder,
     private notificacionService: NotificacionService,
-
   ) {
 
   }
 
   ngOnChanges() {
     this.montoPagar;
-    if (this.operaciones.controls?.length > 0) this.calcularMontos();
+    if (this.montoPagar && this.operaciones.controls?.length > 0) this.calcularMontos();
   }
 
   ngOnInit(): void {
@@ -83,8 +82,7 @@ export class OperacionesComponent implements OnInit{
   newOperacion(): FormGroup {
     return this.formBuilder.group({
       tipoOperacion: [, Validators.required],
-      monto: [0, [Validators.required, Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
-      descripcion: [, Validators.required],
+      monto: [0, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
     })
   }
 
@@ -127,7 +125,7 @@ export class OperacionesComponent implements OnInit{
     this.operaciones.controls.forEach(operacion => {
       this.montoTotal += operacion['controls']['monto'].value;
     })
-    if (this.montoTotal != this.form.monto.value) {
+    if (this.montoTotal != this.montoPagar) {
       let indexUltimaOperacion = this.operaciones.controls.length - 1;
       this.operaciones.controls[indexUltimaOperacion]['controls']['monto'].setValue(this.operaciones.controls[indexUltimaOperacion]['controls']['monto'].value + (this.montoPagar - this.montoTotal))
       this.calcularMontos();

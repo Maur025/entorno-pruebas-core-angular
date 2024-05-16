@@ -91,11 +91,17 @@
                     </li> -->
                   </ul>
               </div>
+              <div *ngSwitchCase="'createdAt'">
+                {{fila.createdAt | date:"dd-MM-yyyy hh:mm "}}
+              </div>
               <div *ngSwitchCase="'fechaMovimiento'">
                 {{fila.fechaMovimiento | fechaSimple}}
               </div>
               <div *ngSwitchCase="'monto'" class="text-end">
                 {{fila.monto}}
+              </div>
+              <div *ngSwitchCase="'saldo'" class="text-end">
+                {{fila.saldo}}
               </div>
               <div *ngSwitchCase="'centroCosto'">
                 {{fila.centroCosto?.nombre}}

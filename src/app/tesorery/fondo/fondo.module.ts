@@ -18,6 +18,7 @@ import { ListaRendirComponent } from './fondos-rendir/lista/lista.component';
 import { FormularioRendirComponent } from './fondos-rendir/formulario/formulario.component';
 import { DetalleFondoRendirComponent } from './fondos-rendir/detalle-fondo/detalle-fondo.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ComponentesGeneralModule } from '../componentes-general/componentes-general.module';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     BsDatepickerModule.forRoot(),
     BsDropdownModule.forRoot(),
     HerramientasModule,
+    ComponentesGeneralModule,
   ],
   exports: [
     FormularioOperativoComponent,
