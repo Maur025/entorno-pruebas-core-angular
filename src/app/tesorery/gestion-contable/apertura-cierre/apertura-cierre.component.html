@@ -1,0 +1,83 @@
+<krn-tabla
+	#tabla
+	*ngIf="filterData && filterData.gestionId"
+	[titulo]="tableTitle"
+	[datosService]="aperturaCierreService"
+	getAll="filterRecords"
+	[isSubtable]="false"
+	[smallTable]="false"
+	[softDelete]="false"
+	(alCrear)="(null)"
+	(alImportar)="(null)"
+	(alFiltrar)="(null)"
+	[conOpciones]="false"
+	[botonExportar]="false"
+	[botonImportar]="false"
+	[botonPlantilla]="false"
+	[botonNuevo]="false"
+	[filtros]="filterData"
+	[templateFila]="rowTemplate"
+	[formato]="formatList"
+/>
+
+<ng-template #rowTemplate let-row="fila" let-headers="cabeceras">
+	<ng-template ngFor let-field [ngForOf]="headers">
+		<ng-template
+			*ngIf="formatList?.cabeceras[field]?.visibleCheck; then tempTd"
+		/>
+		<ng-template #tempTd>
+			<td [ngSwitch]="field">
+				<div *ngSwitchCase="'acciones'">
+					<ul class="list-unstyled hstack gap-1 mb-0">
+						<li
+							data-bs-toggle="tooltip"
+							data-bs-placement="top"
+							[title]="row.aperturado ? 'Cierre' : 'Apertura'"
+						>
+							<a
+								data-bs-toggle="modal"
+								class="btn btn-sm"
+								[ngClass]="
+									row.aperturado === true ? 'btn-success' : 'btn-danger'
+								"
+								(click)="toggleStatus(row)"
+							>
+								<i class="mdi mdi-power"></i>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<div *ngSwitchCase="'deleted'">
+					<span
+						class="badge font-size-10"
+						[ngClass]="{
+							'bg-danger': !row.aperturado,
+							'bg-success': row.aperturado
+						}"
+					>
+						<i
+							class="mdi me-1"
+							[ngClass]="{
+								'mdi-lock': !row.aperturado,
+								'mdi-lock-open': row.aperturado
+							}"
+						></i>
+						{{ row.aperturado ? 'APERTURADO' : 'SIN APERTURAR' }}
+					</span>
+				</div>
+
+				<div *ngSwitchCase="'fechaIni'">
+					{{ row.fechaIni | fechaSimple }}
+				</div>
+				<div *ngSwitchCase="'fechaFin'">
+					{{ row.fechaFin | fechaSimple }}
+				</div>
+
+				<div *ngSwitchDefault>
+					{{ row[field] }}
+				</div>
+			</td>
+		</ng-template>
+	</ng-template>
+</ng-template>
