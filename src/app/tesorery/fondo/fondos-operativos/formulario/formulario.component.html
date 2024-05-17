@@ -58,7 +58,7 @@
     </div>
     <div class="col-6 mb-3 px-1" *ngIf="form.monto">
       <label class="mb-2">(*) Monto de Reposición</label>
-      <input type="text" class="form-control text-end" formControlName="monto" (change)="cambioMonto()" placeholder="Bs." [ngClass]="{ 'is-invalid': submitted && form['monto'].errors}">
+      <input type="number" class="form-control text-end" formControlName="monto" (change)="cambioMonto()" placeholder="Bs." [ngClass]="{ 'is-invalid': submitted && form['monto'].errors}">
       <div *ngIf="submitted && form['monto'].errors" class="col-sm-12">
         <div *ngIf="form['monto'].errors['required']" class="text-danger mt-1 font-size-10">El monto de movimiento es obligatorio</div>
         <div *ngIf="form['monto'].errors['pattern']" class="text-danger mt-1 font-size-10">El monto de movimiento solo deben ser carácteres númericos</div>
