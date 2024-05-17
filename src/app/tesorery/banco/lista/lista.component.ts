@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core'
+import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal'
 import { NotificacionService } from 'src/app/core/services/notificacion.service'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -6,6 +6,7 @@ import { BancoService } from '../../services/tesoreria/banco.service'
 import { FormularioComponent } from '../formulario/formulario.component'
 import { CuentaFormularioComponent } from '../cuenta/cuenta-formulario/cuenta-formulario.component'
 import { FuncionesComponent } from 'src/app/tesorery/funciones.component'
+import { ErrorResponseStandard } from 'src/app/shared/interface/commonApiResponse'
 
 @Component({
 	selector: 'app-lista',
@@ -15,11 +16,10 @@ import { FuncionesComponent } from 'src/app/tesorery/funciones.component'
 export class ListaComponent extends FuncionesComponent implements OnInit {
 	@ViewChild('appFormBanco') appFormBanco: FormularioComponent
 	@ViewChild('appFormCuenta') appFormCuenta: CuentaFormularioComponent
-	breadCrumbItems: Array<{}>
+	breadCrumbItems: object[]
 	breadCrumbTitle: string = 'Bancos'
 	titulo: string = 'Lista de Bancos'
-	textoBuscar =
-		'Ingrese criterio de busqueda: nombre, sigla, descripcion, dirección y url'
+	textoBuscar = 'Ingrese criterio de búsqueda: Nombre, Descripción.'
 	@Input() rel_prefix: any
 	@Input() rel_field: any
 	@Input() rel_id: any
@@ -62,17 +62,13 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 				acciones: this.getOpcionesCabecera('Acciones', 12, 'text', true, false),
 				id: this.getOpcionesCabecera('id', 12, 'number', false),
 				nombre: this.getOpcionesCabecera('Nombre', 12),
-				sigla: this.getOpcionesCabecera('Sigla', 12),
 				descripcion: this.getOpcionesCabecera('Descripción', 12),
-				telefono: this.getOpcionesCabecera('Teléfono', 6),
-				direccion: this.getOpcionesCabecera('Dirección', 6),
-				url: this.getOpcionesCabecera('Correo Electrónico', 12),
 				deleted: this.getOpcionesCabecera('Estado', 6),
 			},
 		}
 	}
 
-	crear(template: any) {
+	crear(template: TemplateRef<void>) {
 		this.titleModal = 'Nuevo'
 		this.banco = undefined
 		this.modalRef = this.modalService.show(template, {
@@ -80,7 +76,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 		})
 	}
 
-	editar(template: any, data: any) {
+	editar(template: TemplateRef<void>, data: any) {
 		this.titleModal = 'Editar'
 		this.banco = data
 		this.modalRef = this.modalService.show(template, {
@@ -88,7 +84,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 		})
 	}
 
-	crearCuenta(template: any, data: any) {
+	crearCuenta(template: TemplateRef<void>, data: any) {
 		this.banco = data
 		this.modalRef = this.modalService.show(template, {
 			class: `modal-xl modal-scrollable`,
@@ -105,21 +101,19 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 	habilitar(data: any, component, texto) {
 		this.NotificacionService.inhabilitarAlerta(texto, (response: any) => {
 			if (response) {
-				this.BancoService.habilitar(data.id).subscribe(
-					data => {
-						let estado = ''
+				this.BancoService.habilitar(data.id).subscribe({
+					next: () => {
 						component.obtenerDatos()
-						texto == 'habilitar'
-							? (estado = 'habilitado')
-							: (estado = 'inhabilitado')
 						this.NotificacionService.successStandar(
-							'Registro ' + estado + ' exitosamente.'
+							`Registro ${
+								texto === 'habilitar' ? 'habilitado' : 'inhabilitado'
+							} exitosamente.`
 						)
 					},
-					error => {
+					error: (error: ErrorResponseStandard) => {
 						this.NotificacionService.alertError(error)
-					}
-				)
+					},
+				})
 			}
 		})
 	}
@@ -128,13 +122,13 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 		this.NotificacionService.alertaEliminacion(data.nombre, (response: any) => {
 			if (response) {
 				this.servicio.delete(data.id).subscribe(
-					data => {
+					() => {
 						component.obtenerDatos()
 						this.NotificacionService.successStandar(
 							'Registro eliminado exitosamente.'
 						)
 					},
-					error => {
+					(error: ErrorResponseStandard) => {
 						this.NotificacionService.alertError(error)
 					}
 				)
