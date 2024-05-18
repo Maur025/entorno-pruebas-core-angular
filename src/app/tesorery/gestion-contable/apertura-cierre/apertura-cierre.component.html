@@ -4,9 +4,16 @@
 	[titulo]="tableTitle"
 	[datosService]="aperturaCierreService"
 	getAll="filterRecords"
+	[filtros]="filterData"
+	[filtrosNoRefresh]="['gestionId']"
+	[formato]="formatList"
+	[templateFila]="rowTemplate"
 	[isSubtable]="false"
 	[smallTable]="false"
 	[softDelete]="false"
+	(crearNuevo)="(null)"
+	(alActualizar)="(null)"
+	(alRefrescar)="(null)"
 	(alCrear)="(null)"
 	(alImportar)="(null)"
 	(alFiltrar)="(null)"
@@ -15,9 +22,8 @@
 	[botonImportar]="false"
 	[botonPlantilla]="false"
 	[botonNuevo]="false"
-	[filtros]="filterData"
-	[templateFila]="rowTemplate"
-	[formato]="formatList"
+	campoEstado="estado"
+	valueEstado="habilitado"
 />
 
 <ng-template #rowTemplate let-row="fila" let-headers="cabeceras">

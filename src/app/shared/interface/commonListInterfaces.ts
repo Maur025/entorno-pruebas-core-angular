@@ -6,12 +6,12 @@ interface HeadersListInterface {
 	[key: string]: {
 		visible: boolean
 		buscable: boolean
-		buscableCheck?: boolean | null
-		visibleCheck?: boolean | null
-		sortable?: boolean | null
+		buscableCheck?: boolean
+		visibleCheck?: boolean
+		sortable?: boolean
 		filtrable: boolean
 		texto: string
-		colsize?: string | null
+		colsize?: number
 		filtrotipo: string
 		datos?: Array<any> | null
 	}

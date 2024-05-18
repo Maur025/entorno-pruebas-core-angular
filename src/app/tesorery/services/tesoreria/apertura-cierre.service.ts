@@ -32,4 +32,11 @@ export class AperturaCierreService {
 			filterData
 		)
 	}
+
+	toggleStatus = (data: object): Observable<ApiResponseStandard> => {
+		return this.apiService.tesoreria?.post(
+			`${this.prefix}/${this.API_NAME}/habilita`,
+			data
+		)
+	}
 }
