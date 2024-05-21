@@ -1,22 +1,22 @@
 <form [formGroup]="formGroup">
   <label class="mb-3 col-12">Los campos marcados con asterisco (*) son obligatorios.</label>
   <div class="nav">
-    <div class="col-6 mb-3 px-1">
+    <div class="col mb-3 px-1">
       <label class="mb-2">(*) Nombre </label>
       <input type="text" class="form-control uppercase" formControlName="nombre" [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors}">
       <div *ngIf="submitted && form['nombre'].errors" class="col-sm-12">
         <div *ngIf="form['nombre'].errors['required']" class="text-danger mt-1 font-size-10">El nombre es obligatorio</div>
       </div>
-    </div>
+    </div><!--
     <div class="col-6 mb-3 px-1" *ngIf="form.fondoCajaId">
       <label class="mb-2">(*) Grupo </label>
       <ng-select class="uppercase" formControlName="fondoCajaId" placeholder="Seleccione un grupo" [items]="listaFondoCajas" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['fondoCajaId'].errors != null }"></ng-select>
       <div *ngIf="submitted && form['fondoCajaId'].errors" class="col-sm-12">
         <div *ngIf="form['fondoCajaId'].errors['required']" class="text-danger mt-1 font-size-10">El grupo es obligatorio</div>
       </div>
-    </div>
+    </div> -->
     <div class="col-12 mb-3 px-1">
-      <label class="mb-2">(*) Descripción </label>
+      <label class="mb-2"><span *ngIf="tipoMovimiento">(*)</span> Descripción </label>
       <textarea class="form-control uppercase" formControlName="descripcion" rows="2" [ngClass]="{ 'is-invalid': submitted && form['descripcion'].errors}"></textarea>
       <div *ngIf="submitted && form['descripcion'].errors" class="col-sm-12">
         <div *ngIf="form['descripcion'].errors['required']" class="text-danger mt-1 font-size-10">La descripción es obligatorio</div>

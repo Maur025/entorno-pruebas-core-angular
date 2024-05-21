@@ -54,31 +54,42 @@
                         <div *ngIf="operaciones.controls[i]['controls']['medioTransferenciaId'].errors['required']" class="text-danger mt-1 font-size-10">El medio de transferencia es obligatoria</div>
                       </div>
                     </div>
-                    <div class="col-12 mb-3 px-1" *ngIf="operaciones.controls[i]['controls']['bancoId']['value'] != null">
+                    <div class="col mb-3 px-1" *ngIf="operaciones.controls[i]['controls']['bancoId']['value'] != null">
                       <label class="mb-2">(*) Cuenta Bancaria </label>
                       <ng-select class="uppercase" formControlName="cuentaBancoId" placeholder="Seleccione una cuenta" (change)="cambioCuentaBancaria(i)" [items]="this.listaOperaciones[i].listaCuentasBanco" bindLabel="nroCuenta" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && operaciones.controls[i]['controls']['cuentaBancoId'].errors != null }"></ng-select>
                       <div *ngIf="submitted && operaciones.controls[i]['controls']['cuentaBancoId'].errors" class="col-sm-12">
                         <div *ngIf="operaciones.controls[i]['controls']['cuentaBancoId'].errors['required']" class="text-danger mt-1 font-size-10">La cuenta bancaria es obligatoria</div>
                       </div>
                     </div>
+                    <div class="col-3 mb-3 px-1" *ngIf="operaciones.controls[i]['controls']['cuentaBancoId']['value'] != null">
+                      <label class="mb-2">Saldo </label>
+                      <input type="number" class="form-control uppercase text-end" formControlName="saldo"/>
+                    </div>
                   </div>
-                  <div class="col-9" *ngIf="operaciones.controls[i]['controls']['tipoOperacion']['value'] == 'CAJ'">
-                    <div class="col-12 mb-3 px-1">
+                  <div class="col-9 nav" *ngIf="operaciones.controls[i]['controls']['tipoOperacion']['value'] == 'CAJ'">
+                    <div class="col mb-3 px-1">
                       <label class="mb-2">(*) Caja </label>
                       <ng-select class="uppercase" formControlName="cajaId" (change)="cambioCaja(i)" placeholder="Seleccione una caja" [items]="listaCajas" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && operaciones.controls[i]['controls']['cajaId'].errors != null }"></ng-select>
                       <div *ngIf="submitted && operaciones.controls[i]['controls']['cajaId'].errors" class="col-sm-12">
                         <div *ngIf="operaciones.controls[i]['controls']['cajaId'].errors['required']" class="text-danger mt-1 font-size-10">La caja es obligatoria</div>
                       </div>
                     </div>
+                    <div class="col-3 mb-3 px-1" *ngIf="operaciones.controls[i]['controls']['cajaId']['value'] != null">
+                      <label class="mb-2">Saldo </label>
+                      <input type="number" class="form-control uppercase text-end" formControlName="saldo"/>
+                    </div>
                   </div>
                   <div class="col-3">
                     <div class="col-12 mb-3 px-1">
                       <label class="mb-2">(*) Monto Sub </label>
-                      <input type="number" class="form-control uppercase text-end" formControlName="monto" [ngClass]="{ 'is-invalid': submitted && operaciones.controls[i]['controls']['monto'].errors }" (change)="calcularMontos()"/>
+                      <input type="number" class="form-control uppercase text-end" formControlName="monto" [ngClass]="{ 'is-invalid': submitted && (operaciones.controls[i]['controls']['monto'].errors || (listaOperaciones[i].datos && operaciones.controls[i].errors && operaciones.controls[i].errors['montoNoMayorQueSaldo'])) }" (change)="calcularMontos()"/>
                       <div *ngIf="submitted && operaciones.controls[i]['controls']['monto'].errors" class="col-sm-12">
                         <div *ngIf="operaciones.controls[i]['controls']['monto'].errors['min']" class="text-danger mt-1 font-size-10">El monto debe ser mayor a 0</div>
                         <div *ngIf="operaciones.controls[i]['controls']['monto'].errors['required']" class="text-danger mt-1 font-size-10">El monto es obligatorio</div>
                         <div *ngIf="operaciones.controls[i]['controls']['monto'].errors['pattern']" class="text-danger mt-1 font-size-10">El monto solo acepta carácteres numéricos y un punto decimal</div>
+                      </div>
+                      <div *ngIf="submitted && operaciones.controls[i].errors" class="col-sm-12">
+                        <div *ngIf="listaOperaciones[i].datos && operaciones.controls[i].errors['montoNoMayorQueSaldo']" class="text-danger font-size-10 mt-1" >El monto no debe superar al saldo </div>
                       </div>
                     </div>
                   </div>

@@ -5,6 +5,7 @@ import { BancoService } from 'src/app/tesorery/services/tesoreria/banco.service'
 import { MedioTransferenciaService } from 'src/app/tesorery/services/tesoreria/medio-transferencia.service'
 import { NotificacionService } from 'src/app/core/services/notificacion.service'
 import { CajaService } from '../../services/tesoreria/caja.service'
+import { AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'app-operaciones',
@@ -83,7 +84,8 @@ export class OperacionesComponent implements OnInit {
     return this.formBuilder.group({
       tipoOperacion: [, Validators.required],
       monto: [0, [Validators.required, Validators.min(1), Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
-    })
+      saldo: [{ value: null, disabled: true }, Validators.required],
+    }, { validators: [this.montoNoMayorQueSaldo] })
   }
 
   addOperacion() {
@@ -135,11 +137,14 @@ export class OperacionesComponent implements OnInit {
 
   cambioCaja(index) {
     if (this.operaciones.controls[index]['controls']['cajaId'].value != null) {
+      this.operaciones.controls[index]['controls']['saldo'].setValue(this.listaCajas.find(fo => fo.id === this.operaciones.controls[index]['controls']['cajaId'].value).saldo)
       this.listaOperaciones[index].datos = this.listaCajas.find(fo => fo.id === this.operaciones.controls[index]['controls']['cajaId'].value);
       this.listaOperaciones[index].tituloDetalle = 'Detalle de Caja';
     } else {
       this.listaOperaciones[index].datos = undefined;
+      this.operaciones.controls[index]['controls']['saldo'].setValue(null);
     }
+    this.formGroup.updateValueAndValidity();
   }
 
   cambiaBanco(index) {
@@ -158,10 +163,20 @@ export class OperacionesComponent implements OnInit {
 
   cambioCuentaBancaria(index) {
     if (this.operaciones.controls[index]['controls']['cuentaBancoId'].value != null) {
+      this.operaciones.controls[index]['controls']['saldo'].setValue(this.listaOperaciones[index].listaCuentasBanco.find(fo => fo.id === this.operaciones.controls[index]['controls']['cuentaBancoId'].value).saldo)
       this.listaOperaciones[index].datos = this.listaOperaciones[index].listaCuentasBanco.find(lop => lop.id === this.operaciones.controls[index]['controls']['cuentaBancoId'].value)
       this.listaOperaciones[index].tituloDetalle = 'Detalle de Cuenta Bancaria'
     } else {
-      this.listaOperaciones[index].datos = undefined
+      this.listaOperaciones[index].datos = undefined;
+      this.operaciones.controls[index]['controls']['saldo'].setValue(null);
     }
+    this.formGroup.updateValueAndValidity();
   }
+
+  montoNoMayorQueSaldo(control: AbstractControl): ValidationErrors | null {
+    const saldo = control.get('saldo')?.value;
+    const monto = control.get('monto')?.value;
+    return  saldo < monto ? { montoNoMayorQueSaldo: "INVALID" } : null;
+  }
+
 }
