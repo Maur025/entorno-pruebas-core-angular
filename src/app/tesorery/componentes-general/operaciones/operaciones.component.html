@@ -42,21 +42,21 @@
                   <div class="col-9 nav" *ngIf="operaciones.controls[i]['controls']['tipoOperacion']['value'] == 'BN'">
                     <div class="col-6 mb-3 px-1">
                       <label class="mb-2">(*) Banco </label>
-                      <ng-select class="uppercase" formControlName="bancoId" placeholder="Seleccione un banco" (change)="cambiaBanco(i)" [items]="listaBancos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && operaciones.controls[i]['controls']['bancoId'].errors != null }"></ng-select>
+                      <ng-select appendTo="body" class="uppercase" formControlName="bancoId" placeholder="Seleccione un banco" (change)="cambiaBanco(i)" [items]="listaBancos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && operaciones.controls[i]['controls']['bancoId'].errors != null }"></ng-select>
                       <div *ngIf="submitted && operaciones.controls[i]['controls']['bancoId'].errors" class="col-sm-12">
                         <div *ngIf="operaciones.controls[i]['controls']['bancoId'].errors['required']" class="text-danger mt-1 font-size-10">El banco es obligatoria</div>
                       </div>
                     </div>
                     <div class="col-6 mb-3 px-1">
                       <label class="mb-2">(*) Medio Transferencia </label>
-                      <ng-select class="uppercase" formControlName="medioTransferenciaId" placeholder="Seleccione un medio de transferencia" [items]="listaMedioTransferencias" bindLabel="medio" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && operaciones.controls[i]['controls']['medioTransferenciaId'].errors != null }"></ng-select>
+                      <ng-select appendTo="body" class="uppercase" formControlName="medioTransferenciaId" placeholder="Seleccione un medio de transferencia" [items]="listaMedioTransferencias" bindLabel="medio" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && operaciones.controls[i]['controls']['medioTransferenciaId'].errors != null }"></ng-select>
                       <div *ngIf="submitted && operaciones.controls[i]['controls']['medioTransferenciaId'].errors" class="col-sm-12">
                         <div *ngIf="operaciones.controls[i]['controls']['medioTransferenciaId'].errors['required']" class="text-danger mt-1 font-size-10">El medio de transferencia es obligatoria</div>
                       </div>
                     </div>
                     <div class="col mb-3 px-1" *ngIf="operaciones.controls[i]['controls']['bancoId']['value'] != null">
                       <label class="mb-2">(*) Cuenta Bancaria </label>
-                      <ng-select class="uppercase" formControlName="cuentaBancoId" placeholder="Seleccione una cuenta" (change)="cambioCuentaBancaria(i)" [items]="this.listaOperaciones[i].listaCuentasBanco" bindLabel="nroCuenta" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && operaciones.controls[i]['controls']['cuentaBancoId'].errors != null }"></ng-select>
+                      <ng-select appendTo="body" class="uppercase" formControlName="cuentaBancoId" placeholder="Seleccione una cuenta" (change)="cambioCuentaBancaria(i)" [items]="this.listaOperaciones[i].listaCuentasBanco" bindLabel="nroCuenta" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && operaciones.controls[i]['controls']['cuentaBancoId'].errors != null }"></ng-select>
                       <div *ngIf="submitted && operaciones.controls[i]['controls']['cuentaBancoId'].errors" class="col-sm-12">
                         <div *ngIf="operaciones.controls[i]['controls']['cuentaBancoId'].errors['required']" class="text-danger mt-1 font-size-10">La cuenta bancaria es obligatoria</div>
                       </div>
@@ -69,7 +69,7 @@
                   <div class="col-9 nav" *ngIf="operaciones.controls[i]['controls']['tipoOperacion']['value'] == 'CAJ'">
                     <div class="col mb-3 px-1">
                       <label class="mb-2">(*) Caja </label>
-                      <ng-select class="uppercase" formControlName="cajaId" (change)="cambioCaja(i)" placeholder="Seleccione una caja" [items]="listaCajas" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && operaciones.controls[i]['controls']['cajaId'].errors != null }"></ng-select>
+                      <ng-select appendTo="body" class="uppercase" formControlName="cajaId" (change)="cambioCaja(i)" placeholder="Seleccione una caja" [items]="listaCajas" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && operaciones.controls[i]['controls']['cajaId'].errors != null }"></ng-select>
                       <div *ngIf="submitted && operaciones.controls[i]['controls']['cajaId'].errors" class="col-sm-12">
                         <div *ngIf="operaciones.controls[i]['controls']['cajaId'].errors['required']" class="text-danger mt-1 font-size-10">La caja es obligatoria</div>
                       </div>
