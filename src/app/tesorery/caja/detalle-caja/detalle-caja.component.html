@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="card card-body"  *ngIf="caja">
-    <h5 class="card-title mb-3 pb-3 border-bottom">Detalle de Fondo Operativo</h5>
+    <h5 class="card-title mb-3 pb-3 border-bottom">Detalle de Caja</h5>
     <div class="nav col-12 border-bottom">
       <div class="col-4 mb-2 px-1">
         <p class="ps-2">
@@ -88,7 +88,7 @@
               <div *ngSwitchCase="'fecha'">
                 {{fila.fecha | fechaSimple}}
               </div>
-              <div *ngSwitchCase="'monto'" class="text-end">
+              <div *ngSwitchCase="'monto'" class="text-end" [ngClass]="{'text-success': fila.ingresoEgreso == 'INPUT', 'text-danger': fila.ingresoEgreso == 'OUT'}">
                 {{fila.monto}}
               </div>
               <div *ngSwitchCase="'saldo'" class="text-end">

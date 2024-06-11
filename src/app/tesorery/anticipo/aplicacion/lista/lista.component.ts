@@ -10,13 +10,14 @@ import { UntypedFormGroup } from '@angular/forms'
 import { TablaComponent } from 'src/app/core/herramientas/tabla/tabla.component'
 import { EstadoAnticipoService } from 'src/app/tesorery/services/tesoreria/estadoanticipo.service'
 import { Location } from '@angular/common'
+import { FuncionesComponent } from 'src/app/tesorery/funciones.component'
 
 @Component({
 	selector: 'app-aplicacion-lista',
 	templateUrl: './lista.component.html',
 	styleUrls: ['./lista.component.scss'],
 })
-export class ListaComponent implements OnInit {
+export class ListaComponent extends FuncionesComponent implements OnInit{
 	breadCrumbTitle: string = 'Aplicación de Anticipos'
 	titulo: string = 'Lista de Movimientos de Anticipo'
 	@ViewChild('appFormAplicacion') appFormAplicacion: FormularioComponent
@@ -89,104 +90,36 @@ export class ListaComponent implements OnInit {
 		public centroCostoService: CentrocostoService,
 		public estadoAnticipoService: EstadoAnticipoService,
 		private location: Location
-	) {}
+	) {
+    super();
+  }
 
 	ngOnInit(): void {
 		this.getAnticipo(this.route.snapshot.paramMap.get('id'))
 		//this.id = this.route.snapshot.paramMap.get('id');
-		this.actualizarFiltros()
-
-		this.getEstadoAnticipo()
-
-		this.formato = {
-			cabeceras: {
-				// "acciones": { "visible": true, "buscable": true, "buscableCheck": true, "visibleCheck": true, "sortable": true, "filtrable": true, "texto": "Acciones", "colsize": "12", "filtrotipo": "number" },
-				id: {
-					visible: false,
-					buscable: true,
-					buscableCheck: true,
-					visibleCheck: false,
-					sortable: true,
-					filtrable: true,
-					texto: 'ID',
-					colsize: '12',
-					filtrotipo: 'text',
-				},
-				fecha: {
-					visible: true,
-					buscable: true,
-					buscableCheck: true,
-					visibleCheck: true,
-					sortable: true,
-					filtrable: true,
-					texto: 'Fecha',
-					colsize: '12',
-					filtrotipo: 'number',
-				},
-				movimiento: {
-					visible: true,
-					buscable: true,
-					buscableCheck: true,
-					visibleCheck: true,
-					sortable: true,
-					filtrable: true,
-					texto: 'Movimiento',
-					colsize: '12',
-					filtrotipo: 'number',
-				},
-				nroReferencia: {
-					visible: true,
-					buscable: true,
-					buscableCheck: true,
-					visibleCheck: true,
-					sortable: true,
-					filtrable: true,
-					texto: 'Nro Referencia',
-					colsize: '12',
-					filtrotipo: 'text',
-				},
-				estado: {
-					visible: true,
-					buscable: true,
-					buscableCheck: true,
-					visibleCheck: true,
-					sortable: true,
-					filtrable: true,
-					texto: 'Estado',
-					colsize: '12',
-					filtrotipo: 'number',
-				},
-				monto: {
-					visible: true,
-					buscable: true,
-					buscableCheck: true,
-					visibleCheck: true,
-					sortable: true,
-					filtrable: true,
-					texto: 'Monto',
-					colsize: '12',
-					filtrotipo: 'text',
-					class: 'text-end',
-				},
-				saldo: {
-					visible: true,
-					buscable: true,
-					buscableCheck: true,
-					visibleCheck: true,
-					sortable: true,
-					filtrable: true,
-					texto: 'Saldo',
-					colsize: '12',
-					filtrotipo: 'number',
-					class: 'text-end',
-				},
-			},
-		}
+		this.actualizarFiltros();
+		this.getEstadoAnticipo();
+    this.formato = this.getCabeceras();
 		if (this.rel_prefix && this.rel_field) {
 			this.formato.cabeceras[this.rel_field].visible = false
 			this.formato.cabeceras[this.rel_field].visibleCheck = false
 		}
 	}
+
+  getCabeceras() {
+    return {
+      cabeceras: {
+        "id": this.getOpcionesCabecera('id', 12, 'number', false),
+        "fecha": this.getOpcionesCabecera('Fecha', 12),
+        "movimiento": this.getOpcionesCabecera('Movimiento', 12),
+        "nroReferencia": this.getOpcionesCabecera('Nro Referencia', 12),
+        "estado": this.getOpcionesCabecera('Estado', 6),
+        "monto": this.getOpcionesCabecera('Monto', 12),
+        "saldo": this.getOpcionesCabecera('Saldo', 12),
+        "estadoContabilidad": this.getOpcionesCabecera('Estado Contabilidad', 12),
+      }
+    };
+  }
 
 	crear(template: any) {
 		this.modalRef = this.modalService.show(template, {

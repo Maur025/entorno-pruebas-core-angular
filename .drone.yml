@@ -9,6 +9,7 @@ steps:
       - npm config set registry https://registry.kernotec.com/repository/npm-central/
       - npm config set //registry.kernotec.com/repository/npm-central/:_auth=Z2l0aHViOnRST0NBVkxQcmVzcDVmaVBoZXBy
       - npm install -g @angular/cli
+      - npm install npm@latest
       - cp src/environments/environment.prod.ts src/environments/environment.ts
       - npm install
       - ng build --configuration=production

@@ -43,6 +43,12 @@
 				<div *ngSwitchCase="'fecha'">
 					{{ fila.fecha | fechaSimple }}
 				</div>
+        <div *ngSwitchCase="'monto'" class="text-end" [ngClass]="{'text-success': fila.ingresoEgreso == 'INPUT', 'text-danger': fila.ingresoEgreso == 'OUT'}">
+          {{fila.monto}}
+        </div>
+        <div *ngSwitchCase="'saldo'" class="text-end">
+          {{fila.saldo}}
+        </div>
 				<div *ngSwitchCase="'medioTransferencia'">
 					{{ fila.medioTransferencia?.medio || 'INICIALIZACION' }}
 				</div>

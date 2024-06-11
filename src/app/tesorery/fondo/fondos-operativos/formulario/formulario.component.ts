@@ -189,6 +189,7 @@ export class FormularioOperativoComponent implements OnInit {
       aperturado: this.fondo.aperturado,
       descripcion: this.fondo.descripcion,
       saldo: this.fondo.saldo,
+      responsable: this.fondo.responsable,
       responsableId: this.fondo.responsableId,
     });
   }
