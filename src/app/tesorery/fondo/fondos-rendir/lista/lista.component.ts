@@ -47,15 +47,14 @@ export class ListaRendirComponent extends FuncionesComponent implements OnInit {
       cabeceras: {
         "acciones": this.getOpcionesCabecera('Acciones', 12, 'text', true, false),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
-        "nombre": this.getOpcionesCabecera('Nombre', 12),
         "nroSolicitud": this.getOpcionesCabecera('Nro Solicitud', 12),
         "fechaSolicitud": this.getOpcionesCabecera('Fecha Solicitud', 12),
         "descripcion": this.getOpcionesCabecera('Descripción', 6),
         "importe": this.getOpcionesCabecera('Monto de Apertura', 12),
+        "saldo": this.getOpcionesCabecera('Saldo', 12),
         "reponsable": this.getOpcionesCabecera('Responsable', 12),
         "aperturado": this.getOpcionesCabecera('Aperturado', 12),
         "cierre": this.getOpcionesCabecera('Cerrado', 12),
-        "estadoContabilidad": this.getOpcionesCabecera('Estado Contabilidad', 6),
         "deleted": this.getOpcionesCabecera('Estado', 6),
       }
     };
@@ -65,21 +64,21 @@ export class ListaRendirComponent extends FuncionesComponent implements OnInit {
     this.fondo = undefined;
     this.tipoDescargo = 'DESE';
     this.titleModal = 'Nuevo Desembolso '//de Fondo a Rendir ';
-    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
+    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-dialog-scrollable` });
   }
 
   editar(data: any, template: any) {
     this.fondo = data;
     this.tipoDescargo = undefined;
     this.titleModal = 'Editar Fondo a Rendir';
-    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
+    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-dialog-scrollable` });
   }
 
   descargos(data: any, template: any, tipo, tipoTexto) {
     this.fondo = data;
     this.tipoDescargo = tipo;
     this.titleModal = tipoTexto+' de Fondo a Rendir ';
-    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
+    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-dialog-scrollable` });
   }
 
   detalleFondo(data: any) {

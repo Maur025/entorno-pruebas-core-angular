@@ -52,6 +52,7 @@ export class DetalleFondoRendirComponent extends FuncionesComponent implements O
         "nroReferencia": this.getOpcionesCabecera('Nro Referencia', 12),
         "fechaMovimiento": this.getOpcionesCabecera('Fecha Movimiento', 12),
         "monto": this.getOpcionesCabecera('Monto', 12),
+        "saldo": this.getOpcionesCabecera('Saldo', 12),
         "centroCosto": this.getOpcionesCabecera('Centro de Costo', 6),
         "estadoFondo": this.getOpcionesCabecera('Estado Fondo', 12),
         "estadoContabilidad": this.getOpcionesCabecera('Estado Contabilidad', 6),

@@ -145,7 +145,6 @@ export class FormularioOperativoComponent implements OnInit {
   cambioResponsable() {
     if (this.form.responsableId != null) {
       this.form.responsable.setValue(this.listaResponsables.find(e => e.id == this.form.responsableId.value).entidad.nombre);
-      console.log('this.formGroup.getRawValue()', this.formGroup.getRawValue());
     }
   }
 
@@ -228,11 +227,9 @@ export class FormularioOperativoComponent implements OnInit {
           }
         }
         this.detalleFontoOperativoService.register(data).subscribe(res => {
-          console.log('entro detalle',);
           this.notificacionService.successStandar('Movimiento de fondo operativo registrado exitosamente.');
           this.alActualizar.emit();
           if (this.tipoDescargo == 'CIERR' && data.monto > 0) {
-            console.log('entro detalle cierre',);
             data.estado = this.listaEstados.find(e => e.codigo == 'CIERR').id;
             data.monto = 0;
             data.operaciones = null;

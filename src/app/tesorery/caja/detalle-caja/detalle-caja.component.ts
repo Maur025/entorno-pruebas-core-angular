@@ -14,7 +14,7 @@ import { CajaService } from "src/app/tesorery/services/tesoreria/caja.service";
 export class DetalleCajaComponent extends FuncionesComponent implements OnInit {
 
   breadCrumbItems: Array<{}>;
-  breadCrumbTitle: string = 'Adminstrar movimientos caja';
+  breadCrumbTitle: string = 'Detalle Movimientos Caja';
   titulo: string = 'Lista de Movimientos de Caja'
   textoBuscar = 'Ingrese criterio de búsqueda: nro referencia';
   @Input() rel_prefix: any;
@@ -35,6 +35,7 @@ export class DetalleCajaComponent extends FuncionesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: this.titulo, active: true }];
     this.formato = this.getCabeceras();
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false; this.formato.cabeceras[this.rel_field].visibleCheck = false }
     if (this.route.snapshot.params["cajaId"]) {
@@ -50,6 +51,7 @@ export class DetalleCajaComponent extends FuncionesComponent implements OnInit {
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
         "nroReferencia": this.getOpcionesCabecera('Nro Referencia', 12),
         "descripcion": this.getOpcionesCabecera('Descripción', 12),
+        "createdAt": this.getOpcionesCabecera('Fecha Registro', 12),
         "fecha": this.getOpcionesCabecera('Fecha Movimiento', 12),
         "origen": this.getOpcionesCabecera('Origen', 12),
         "monto": this.getOpcionesCabecera('Monto', 12),

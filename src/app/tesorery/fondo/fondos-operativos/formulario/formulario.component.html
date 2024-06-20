@@ -27,7 +27,7 @@
       <label class="mb-2">(*) Responsable </label>
       <ng-select class="uppercase" formControlName="responsableId" (change)="cambioResponsable()" placeholder="Seleccione un responsable" [items]="listaResponsables" bindLabel="entidad.nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['responsableId'].errors != null }"></ng-select>
       <div *ngIf="submitted && form['responsableId'].errors" class="col-sm-12">
-        <div *ngIf="form['responsableId'].errors['required']" class="text-danger mt-1 font-size-10">El centro de costos es obligatorio</div>
+        <div *ngIf="form['responsableId'].errors['required']" class="text-danger mt-1 font-size-10">El responsable es obligatorio</div>
       </div>
     </div>
     <div class="col-12 mb-3 px-1">

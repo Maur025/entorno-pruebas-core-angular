@@ -2,12 +2,6 @@
   <div class="card card-body" *ngIf="fondo">
     <h5 class="card-title mb-3 pb-3 border-bottom">Detalle de Fondo a Rendir</h5>
     <div class="nav col-12 border-bottom" >
-      <div class="col-4 mb-2 px-1">
-        <p class="ps-2">
-          <span class="fw-semibold semi" >Nombre:</span>
-          <span class="text-primary"> {{fondo.nombre}}</span>
-        </p>
-      </div>
       <div class="col-4 mb-3 px-1">
         <p class="ps-2">
           <span class="fw-semibold semi" >Nro de Solicitud:</span>
@@ -28,14 +22,20 @@
       </div>
       <div class="col-4 mb-3 px-1">
         <p class="ps-2">
-          <span class="fw-semibold semi" >Monto de Solicitud:</span>
-          <span class="text-primary"> {{fondo.importe}}</span>
+          <span class="fw-semibold semi" >Responsable:</span>
+          <span class="text-primary"> {{fondo.reponsable}}</span>
         </p>
       </div>
       <div class="col-4 mb-3 px-1">
         <p class="ps-2">
-          <span class="fw-semibold semi" >Responsable:</span>
-          <span class="text-primary"> {{fondo.reponsable}}</span>
+          <span class="fw-semibold semi" >Monto de Solicitud:</span>
+          <span class="text-primary"> {{fondo.importe}}</span>
+        </p>
+      </div>
+      <div class="col-4 mb-2 px-1">
+        <p class="ps-2">
+          <span class="fw-semibold semi" >Saldo:</span>
+          <span class="text-primary"> {{fondo.saldo}}</span>
         </p>
       </div>
     </div>
@@ -95,6 +95,9 @@
               </div>
               <div *ngSwitchCase="'monto'" class="text-end">
                 {{fila.monto}}
+              </div>
+              <div *ngSwitchCase="'saldo'" class="text-end">
+                {{fila.saldo}}
               </div>
               <div *ngSwitchCase="'centroCosto'">
                 {{fila.centroCosto.nombre}}

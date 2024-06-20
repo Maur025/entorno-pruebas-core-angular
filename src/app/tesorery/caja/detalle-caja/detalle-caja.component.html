@@ -1,3 +1,4 @@
+<app-page-title	[title]="breadCrumbTitle"	[breadcrumbItems]="breadCrumbItems"></app-page-title>
 <div class="container-fluid">
   <div class="card card-body"  *ngIf="caja">
     <h5 class="card-title mb-3 pb-3 border-bottom">Detalle de Caja</h5>
@@ -84,6 +85,9 @@
                       <a  data-bs-toggle="modal" class="btn btn-sm btn-danger" (click)="habilitar(fila, tabla, 'inhabilitar')"><i class="mdi mdi-power"></i></a>
                     </li> -->
                   </ul>
+              </div>
+              <div *ngSwitchCase="'createdAt'">
+                {{fila.createdAt | fechaSimple}}
               </div>
               <div *ngSwitchCase="'fecha'">
                 {{fila.fecha | fechaSimple}}
