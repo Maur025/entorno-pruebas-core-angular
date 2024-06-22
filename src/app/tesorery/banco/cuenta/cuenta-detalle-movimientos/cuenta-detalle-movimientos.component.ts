@@ -50,8 +50,10 @@ export class CuentaDetalleMovimientosComponent  extends FuncionesComponent imple
       cabeceras: {
         //"acciones": this.getOpcionesCabecera('Acciones', 12),
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
+        "nroReferencia": this.getOpcionesCabecera('Nro Referencia', 12),
         "descripcion": this.getOpcionesCabecera('Descripción', 12),
-        "fecha": this.getOpcionesCabecera('fecha', 12),
+        "createdAt": this.getOpcionesCabecera('Fecha Registro', 12),
+        "fecha": this.getOpcionesCabecera('Fecha', 12),
         "origen": this.getOpcionesCabecera('Origen', 12),
         "monto": this.getOpcionesCabecera('Monto', 12),
         "saldo": this.getOpcionesCabecera('Saldo', 12),
@@ -64,7 +66,6 @@ export class CuentaDetalleMovimientosComponent  extends FuncionesComponent imple
   getCuentaBanco(){
     this.cuentaBancoService.find(this.cuentaBancoId).subscribe(data => {
       this.cuentaBanco = data.content;
-      this.titulo = this.titulo +' Nro. '+ this.cuentaBanco.nroCuenta +', '+ this.cuentaBanco.banco.nombre;
     }, (error) => {
       this.notificacionService.alertError(error);
     });

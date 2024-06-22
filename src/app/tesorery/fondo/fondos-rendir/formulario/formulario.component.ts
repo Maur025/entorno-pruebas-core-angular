@@ -75,8 +75,6 @@ export class FormularioRendirComponent implements OnInit {
     this.getEstados();
     if (this.tipoDescargo) {
       if (this.tipoDescargo == 'DESE') {
-        this.getBancos();
-        this.getMedioTransferencias();
         this.addFormApertura();
       } else if (this.tipoDescargo == 'CIERR') {
         this.formGroup.disable();
@@ -84,7 +82,6 @@ export class FormularioRendirComponent implements OnInit {
         this.saldo = this.fondo.saldo;
       } else {
         this.addFormDescargo();
-
       }
     }
     if (this.fondo) this.setFondo();
@@ -108,13 +105,13 @@ export class FormularioRendirComponent implements OnInit {
   }
 
   addFormApertura() {
-    this.formGroup.addControl('bancoId', new FormControl(null, Validators.required));
-    this.formGroup.addControl('cuentaBancoId', new FormControl(null, Validators.required));
-    this.formGroup.addControl('medioTransferenciaId', new FormControl(null, Validators.required));
+    console.log('addFormApertura', );
     this.formGroup.addControl('estado', new FormControl(null, Validators.required));
+    this.formGroup.addControl('operaciones', this.formBuilder.array([], [Validators.required]));
   }
 
   addFormDescargo() {
+    console.log('addFormDescargo', );
     this.formGroup.addControl('monto', new FormControl(null, [Validators.required]));
     this.formGroup.addControl('fechaMovimiento', new FormControl(null, [Validators.required, this.validatorFecha()]));
     this.formGroup.addControl('estado', new FormControl(null, Validators.required));
@@ -151,9 +148,9 @@ export class FormularioRendirComponent implements OnInit {
   getEstados() {
     this.estadosService.habilitadosFondoRendir().subscribe(data => {
       this.listaEstados = data.content;
-      console.log('lsi estados',this.listaEstados)
+      console.log('lsi estados', this.listaEstados)
       if (this.tipoDescargo) {
-        console.log('tipo descargo...',this.tipoDescargo)
+        console.log('tipo descargo...', this.tipoDescargo)
         this.form.estado.setValue(this.listaEstados.find(e => e.codigo == this.tipoDescargo).id);
         this.rendicion = this.listaEstados.find(e => e.nombre == 'RENDIDO');
         this.reposicion = this.listaEstados.find(e => e.nombre == 'REPOSICIÓN');
@@ -252,6 +249,10 @@ export class FormularioRendirComponent implements OnInit {
     return newDateObj
   }
 
+  cambioMontoApertura() {
+    this.montoPagar = this.form.importe.value;
+  }
+
   cambioMontoMovimiento() {
     if (this.form.monto.value == this.form.importe.value) {
       this.isPlanPagos = undefined;
@@ -293,7 +294,7 @@ export class FormularioRendirComponent implements OnInit {
   public guardar() {
     this.submitted = true;
     let data = this.formGroup.getRawValue();
-    console.log('DATA. FORM....-> ',data)
+    console.log('DATA. FORM....-> ', data)
     if (this.formGroup.valid) {
       data.nroReferencia = data.nroSolicitud;
       data.refId = null;
