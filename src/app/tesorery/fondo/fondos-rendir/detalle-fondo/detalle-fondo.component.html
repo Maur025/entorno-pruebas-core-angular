@@ -53,7 +53,7 @@
         [softDelete]="false"
         (crearNuevo)="(null)"
         (alCrear)="null"
-        (alActualizar)="(null)"
+        (alActualizar)="refrescar()"
         (alFiltrar)="(null)"
         (alEditar)="null"
         campoEstado="estado"
@@ -89,6 +89,9 @@
                       <a  data-bs-toggle="modal" class="btn btn-sm btn-danger" (click)="habilitar(fila, tabla, 'inhabilitar')"><i class="mdi mdi-power"></i></a>
                     </li> -->
                   </ul>
+              </div>
+              <div *ngSwitchCase="'createdAt'">
+                {{fila.createdAt | date:"dd-MM-yyyy hh:mm "}}
               </div>
               <div *ngSwitchCase="'fechaMovimiento'">
                 {{fila.fechaMovimiento | fechaSimple}}

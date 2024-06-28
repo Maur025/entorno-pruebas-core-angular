@@ -70,4 +70,8 @@ export class CuentaDetalleMovimientosComponent  extends FuncionesComponent imple
       this.notificacionService.alertError(error);
     });
   }
+
+  refrescar(){
+    this.getCuentaBanco();
+  }
 }

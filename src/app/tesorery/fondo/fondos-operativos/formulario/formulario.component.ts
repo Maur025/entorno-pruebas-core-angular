@@ -53,7 +53,7 @@ export class FormularioOperativoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setForm();
+    this.initForm();
     this.fechaMinima = new Date();
     this.getEstados();
     this.getCentroCostos();
@@ -63,7 +63,7 @@ export class FormularioOperativoComponent implements OnInit {
     this.tipoDescargoForm();
   }
 
-  setForm() {
+  initForm() {
     this.formGroup = this.formBuilder.group({
       id: [, []],
       nombre: [, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
@@ -218,26 +218,11 @@ export class FormularioOperativoComponent implements OnInit {
         if (this.tipoDescargo == 'APERT') {
           data.monto = data.importe;
         } else if (this.tipoDescargo == 'CIERR') {
-          if (this.fondo.saldo == 0) {
-            data.monto = data.saldo;
-            data.estado = this.listaEstados.find(e => e.codigo == 'CIERR').id;
-          } else {
-            data.estado = this.listaEstados.find(e => e.codigo == 'DEV').id;
-            data.monto = data.saldo;
-          }
+          data.monto = data.saldo;
         }
         this.detalleFontoOperativoService.register(data).subscribe(res => {
           this.notificacionService.successStandar('Movimiento de fondo operativo registrado exitosamente.');
           this.alActualizar.emit();
-          if (this.tipoDescargo == 'CIERR' && data.monto > 0) {
-            data.estado = this.listaEstados.find(e => e.codigo == 'CIERR').id;
-            data.monto = 0;
-            data.operaciones = null;
-            this.detalleFontoOperativoService.register(data).subscribe(res => {
-              this.notificacionService.successStandar('Movimiento de fondo operativo registrado exitosamente.');
-              this.alActualizar.emit();
-            }, error => this.notificacionService.alertError(error));
-          }
         }, error => this.notificacionService.alertError(error));
       } else {
         if (this.fondo && !this.transaccion) {

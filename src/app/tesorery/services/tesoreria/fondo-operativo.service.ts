@@ -34,6 +34,7 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
 
     getAll(size: number = 100, page: number = 1, sortBy:string = 'id', descending:false, keyword:any = '') {
       size = size <= 0? 100 : size;
+      console.log('asdasdasdasd', );
       return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`);
     }
 

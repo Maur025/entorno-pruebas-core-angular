@@ -35,7 +35,7 @@
       </div>
     </div>
     <div class="mb-3 nav col-12 px-1">
-      <label class="mb-2">Descripción</label>
+      <label class="mb-2"><span *ngIf="tipoDescargo && ['DEVO', 'CIERR'].includes(tipoDescargo)">(*) </span>Descripción</label>
       <textarea class="form-control uppercase" formControlName="descripcion" rows="2" [ngClass]="{ 'is-invalid': submitted && form['descripcion'].errors}"></textarea>
       <div *ngIf="submitted && form['descripcion'].errors" class="col-sm-12">
         <div *ngIf="form['descripcion'].errors['required']" class="text-danger mt-1 font-size-10">La descripción es obligatorio</div>
@@ -43,68 +43,40 @@
     </div>
     <div class="col-6 mb-3 px-1">
       <label class="mb-2">(*) Monto de Apertura </label>
-      <input type="text" class="form-control text-end" formControlName="importe" (change)="cambioMontoApertura()" placeholder="Bs." [ngClass]="{ 'is-invalid': submitted && form['importe'].errors}">
+      <input type="text" class="form-control text-end" formControlName="importe" (keyup)="cambioMontoApertura()" placeholder="Bs." [ngClass]="{ 'is-invalid': submitted && form['importe'].errors}">
       <div *ngIf="submitted && form['importe'].errors" class="col-sm-12">
         <div *ngIf="form['importe'].errors['required']" class="text-danger mt-1 font-size-10">El monto de solicitud es obligatorio</div>
         <div *ngIf="form['importe'].errors['pattern']" class="text-danger mt-1 font-size-10">El monto de solicitud solo acepta carácteres númericos</div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo && tipoDescargo != 'DESE'">
-      <label class="col-3 col-form-label">(*) Monto de Movimiento</label>
-      <div class="col-9">
-        <input type="number" class="form-control text-end" formControlName="monto" placeholder="Bs." [ngClass]="{ 'is-invalid': submitted && form['monto'].errors}" (change)="cambioMontoMovimiento()">
-        <div *ngIf="submitted && form['monto'].errors" class="col-sm-12">
-          <div *ngIf="form['monto'].errors['required']" class="text-danger mt-1 font-size-10">El monto de descargo es obligatorio</div>
-          <div *ngIf="form['monto'].errors['pattern']" class="text-danger mt-1 font-size-10">El monto de descargo solo deben ser carácteres númericos</div>
-        </div>
+    <div class="col-6 mb-3 px-1" *ngIf="form.saldo">
+      <label class="mb-2">(*) Saldo</label>
+      <input type="text" class="form-control text-end" formControlName="saldo" placeholder="Bs." [ngClass]="{ 'is-invalid': submitted && form['saldo'].errors}">
+      <div *ngIf="submitted && form['saldo'].errors" class="col-sm-12">
+        <div *ngIf="form['saldo'].errors['required']" class="text-danger mt-1 font-size-10">El saldo es obligatorio</div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo && tipoDescargo != 'DESE'">
-      <label class="col-3 col-form-label">(*) Fecha del Movimiento</label>
-      <div class="col-9">
-        <input type="text" placeholder="dd-mm-AA" formControlName="fechaMovimiento" [minDate]="fechaActual" class="form-control" bsDatepicker [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY'}" [ngClass]="{ 'is-invalid': submitted && form['fechaMovimiento'].errors}">
-        <div *ngIf="submitted && form['fechaMovimiento'].errors" class="col-sm-12">
-          <div *ngIf="form['fechaMovimiento'].errors['required']" class="text-danger mt-1 font-size-10">La fecha es obligatoria</div>
-          <div *ngIf="form['fechaMovimiento'].errors['fechaInvalida']" class="text-danger font-size-10 mt-1" >La fecha debe ser igual o mayor a la fecha actual</div>
-        </div>
-      </div>
-    </div><!--
-    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo && tipoDescargo == 'DESE'">
-      <label class="col-3 col-form-label">(*) Banco</label>
-      <div class="col-9">
-        <ng-select class="uppercase" formControlName="bancoId" appendTo="body"  placeholder="Seleccione un banco" (change)="cambioBanco()" [items]="listaBancos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['bancoId'].errors != null }"></ng-select>
-        <div *ngIf="submitted && form['bancoId'].errors" class="col-sm-12">
-          <div *ngIf="form['bancoId'].errors['required']" class="text-danger mt-1 font-size-10">El banco es obligatorio</div>
-        </div>
+    <div class="col-6 mb-3 px-1" *ngIf="form.monto && fondo?.saldo != 0">
+      <label class="mb-2">(*) Monto de Devolución</label>
+      <input type="number" class="form-control text-end" formControlName="monto" (change)="cambioMontoMovimiento()" placeholder="Bs." [ngClass]="{ 'is-invalid': submitted && form['monto'].errors}">
+      <div *ngIf="submitted && form['monto'].errors" class="col-sm-12">
+        <div *ngIf="form['monto'].errors['required']" class="text-danger mt-1 font-size-10">El monto es obligatorio</div>
+        <div *ngIf="form['monto'].errors['montoDevolucion']" class="text-danger font-size-10 mt-1" >El monto de devolución no debe superar el saldo {{fondo.saldo}}</div>
+        <div *ngIf="form['monto'].errors['min']" class="text-danger font-size-10 mt-1" >El monto de devolución debe ser mayor a 0</div>
       </div>
     </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo && tipoDescargo == 'DESE'">
-      <label class="col-3 col-form-label">(*) Cuenta</label>
-      <div class="col-9">
-        <ng-select class="uppercase" formControlName="cuentaBancoId" appendTo="body"  placeholder="Seleccione una cuenta" [items]="listaCuentasBanco" bindLabel="nroCuenta" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['cuentaBancoId'].errors != null }"></ng-select>
-        <div *ngIf="submitted && form['cuentaBancoId'].errors" class="col-sm-12">
-          <div *ngIf="form['cuentaBancoId'].errors['required']" class="text-danger mt-1 font-size-10">La cuenta es obligatoria</div>
-        </div>
-      </div>
-    </div>
-    <div class="mb-3 nav col-12 px-1" *ngIf="tipoDescargo && tipoDescargo == 'DESE'">
-      <label class="col-3 col-form-label">(*) Medio Transferencia</label>
-      <div class="col-9">
-        <ng-select class="uppercase" formControlName="medioTransferenciaId" placeholder="Seleccione un medio de transferencia" [items]="listaMedioTransferencias" bindLabel="medio" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['medioTransferenciaId'].errors != null }"></ng-select>
-        <div *ngIf="submitted && form['medioTransferenciaId'].errors" class="col-sm-12">
-          <div *ngIf="form['medioTransferenciaId'].errors['required']" class="text-danger mt-1 font-size-10">El medio de transferencia es obligatoria</div>
-        </div>
-      </div>
-    </div> -->
   </div>
-  <div *ngIf="tipoDescargo && tipoDescargo != 'DESE' && form.monto.value != null && form.monto.value > form.importe.value && isPlanPagos" class="col-12 px-2">
+  <div *ngIf="form.operaciones" class="w-100">
+    <app-operaciones #appOperaciones [montoPagar]="montoPagar" [submitted]="submitted" [formGroup]="formGroup"></app-operaciones>
+  </div>
+  <div *ngIf="form.planPagos" class="col-12 card card-body shadow-lg mt-3 mb-0">
     <h5 class="mb-3 pb-3 border-bottom">Plan de Pagos para Monto Excedente</h5>
     <div class="nav">
       <div class="col-6 mb-3 pe-1">
         <label>(*) Monto Excedente a Pagar</label>
-        <input [(ngModel)]="montoPagar" [ngModelOptions]="{standalone: true}" class="form-control text-end" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" [disabled]="true" [ngClass]="{ 'is-invalid': submitted && !montoPagar || submitted && montoPagar != importeTotalCredito}"/>
-        <div *ngIf="submitted && !montoPagar" class="text-danger font-size-10 ">Ingrese monto a pagar</div>
-        <div *ngIf="submitted && montoPagar != importeTotalCredito" class="text-danger font-size-10">El monto excedente a pagar no es igual al total de importes del crédito</div>
+        <input [(ngModel)]="montoExcedentePagar" [ngModelOptions]="{standalone: true}" class="form-control text-end" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" [disabled]="true" [ngClass]="{ 'is-invalid': submitted && !montoExcedentePagar || submitted && montoExcedentePagar != importeTotalCredito}"/>
+        <div *ngIf="submitted && !montoExcedentePagar" class="text-danger font-size-10 ">Ingrese monto a pagar</div>
+        <div *ngIf="submitted && montoExcedentePagar != importeTotalCredito" class="text-danger font-size-10">El monto excedente a pagar no es igual al total de importes del crédito</div>
       </div>
       <div class="col-6 mb-3 ps-1">
         <label>Tipo</label>
@@ -146,8 +118,8 @@
             </td>
             <td>{{i+1}}</td>
             <td>
-              <div class="input-group input-group-sm fecha-input">
-                <input type="text"formControlName="fechaPago" placeholder="dd-mm-AA" class="form-control" bsDatepicker  [minDate]="fechaActual" [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY', adaptivePosition: true}" [ngClass]="{ 'is-invalid': submitted && planPagos.controls[i]['controls']['fechaPago'].errors}">
+              <div class="input-group input-group fecha-input">
+                <input type="text" formControlName="fechaPago" placeholder="dd-mm-AA" class="form-control" bsDatepicker  [minDate]="fechaActual" [bsConfig]="{ isAnimated: true, dateInputFormat: 'DD-MM-YYYY', adaptivePosition: true}" [ngClass]="{ 'is-invalid': submitted && planPagos.controls[i]['controls']['fechaPago'].errors}">
                 <span class="input-group-text"><i class="mdi mdi-calendar-outline"></i></span>
               </div>
               <div *ngIf="submitted && planPagos.controls[i]['controls']['fechaPago'].errors" class="col-sm-12">
@@ -158,6 +130,7 @@
               <input type="number" formControlName="importe" (change)="calcularCuotas()" class="form-control text-end" [ngClass]="{ 'is-invalid': submitted && planPagos.controls[i]['controls']['importe'].errors}">
               <div *ngIf="submitted && planPagos.controls[i]['controls']['importe'].errors" class="col-sm-12">
                 <div *ngIf="planPagos.controls[i]['controls']['importe'].errors['required']" class="text-danger mt-1 font-size-10">El importe es obligatorio</div>
+                <div *ngIf="planPagos.controls[i]['controls']['importe'].errors['min']" class="text-danger mt-1 font-size-10">El importe debe ser mayor a 0</div>
               </div>
             </td>
           </tr>
@@ -173,40 +146,6 @@
         </tfoot>
       </table>
     </div>
-  </div>
-
-  <div *ngIf="tipoDescargo && tipoDescargo != 'DESE'  && form.monto.value != null && form.monto.value < form.importe.value && isDevolucion" class="col-12">
-    <h5 class="mb-3 pb-3 border-bottom">Datos para la Devolución</h5>
-    <div class="mb-3 nav col-12 px-1">
-      <label class="col-3 col-form-label">(*) Banco</label>
-      <div class="col-9">
-        <ng-select class="uppercase" formControlName="bancoId" appendTo="body" placeholder="Seleccione un banco" (change)="cambioBanco()" [items]="listaBancos" bindLabel="nombre" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['bancoId'].errors != null }"></ng-select>
-        <div *ngIf="submitted && form['bancoId'].errors" class="col-sm-12">
-          <div *ngIf="form['bancoId'].errors['required']" class="text-danger mt-1 font-size-10">El banco es obligatorio</div>
-        </div>
-      </div>
-    </div>
-    <div class="mb-3 nav col-12 px-1">
-      <label class="col-3 col-form-label">(*) Cuenta</label>
-      <div class="col-9">
-        <ng-select class="uppercase" formControlName="cuentaBancoId" appendTo="body" placeholder="Seleccione una cuenta" [items]="listaCuentasBanco" bindLabel="nroCuenta" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['cuentaBancoId'].errors != null }"></ng-select>
-        <div *ngIf="submitted && form['cuentaBancoId'].errors" class="col-sm-12">
-          <div *ngIf="form['cuentaBancoId'].errors['required']" class="text-danger mt-1 font-size-10">La cuenta es obligatoria</div>
-        </div>
-      </div>
-    </div>
-    <div class="mb-3 nav col-12 px-1">
-      <label class="col-3 col-form-label">(*) Medio Transferencia</label>
-      <div class="col-9">
-        <ng-select class="uppercase" formControlName="medioTransferenciaId" appendTo="body" placeholder="Seleccione un medio de transferencia" [items]="listaMedioTransferencias" bindLabel="medio" bindValue="id" [ngClass]="{ 'ngselect-invalid': submitted && form['medioTransferenciaId'].errors != null }"></ng-select>
-        <div *ngIf="submitted && form['medioTransferenciaId'].errors" class="col-sm-12">
-          <div *ngIf="form['medioTransferenciaId'].errors['required']" class="text-danger mt-1 font-size-10">El medio de transferencia es obligatoria</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="w-100">
-    <app-operaciones *ngIf="form.operaciones" #appOperaciones [montoPagar]="montoPagar" [submitted]="submitted" [formGroup]="formGroup"></app-operaciones>
   </div>
 </form>
 

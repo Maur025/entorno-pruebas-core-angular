@@ -155,8 +155,8 @@
 			<div class="mb-3 px-1">
 				<label class="mb-2" for="monto">(*) Monto </label>
 				<input
-					type="numeric"
-					class="form-control uppercase"
+					type="number"
+					class="form-control uppercase text-end"
 					formControlName="monto"
 					[ngClass]="{ 'is-invalid': submitted && form['monto'].errors }"
 				/>

@@ -40,7 +40,7 @@ export class DetalleFondoRendirComponent extends FuncionesComponent implements O
     if (this.rel_prefix && this.rel_field) { this.formato.cabeceras[this.rel_field].visible = false; this.formato.cabeceras[this.rel_field].visibleCheck = false }
     if (this.route.snapshot.params["id"]) {
       this.id = this.route.snapshot.params["id"];
-      this.setFondo();
+      this.getFondo();
     }
   }
 
@@ -50,6 +50,7 @@ export class DetalleFondoRendirComponent extends FuncionesComponent implements O
         /* "acciones": this.getOpcionesCabecera('Acciones', 12), */
         "id": this.getOpcionesCabecera('id', 12, 'number', false),
         "nroReferencia": this.getOpcionesCabecera('Nro Referencia', 12),
+        "createdAt": this.getOpcionesCabecera('Fecha Registro', 12),
         "fechaMovimiento": this.getOpcionesCabecera('Fecha Movimiento', 12),
         "monto": this.getOpcionesCabecera('Monto', 12),
         "saldo": this.getOpcionesCabecera('Saldo', 12),
@@ -61,12 +62,16 @@ export class DetalleFondoRendirComponent extends FuncionesComponent implements O
     };
   }
 
-  setFondo() {
+  getFondo() {
     this.fondoRendirService.find(this.id).subscribe(data => {
       this.fondo = data.content
     }, (err: any) => {
       this.notificacionService.alertError(err);
     });
+  }
+
+  refrescar(){
+    this.getFondo();
   }
 
   regresar() {
