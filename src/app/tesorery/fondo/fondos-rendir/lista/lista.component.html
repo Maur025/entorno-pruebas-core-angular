@@ -36,20 +36,20 @@
               <button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila, modalGeneral)"><i class="mdi mdi-pencil-outline"></i></button>
             </li>
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Operaciones">
-              <div class="btn-group" dropdown container="body" [isDisabled]="fila.cierre || fila.deleted || !fila.estadoContabilidad || fila.estadoContabilidad?.codigo != 'CONT'">
+              <div class="btn-group" dropdown container="body" [isDisabled]="fila.cierre || fila.deleted ">
                 <button id="button-basic" dropdownToggle type="button" class="btn btn-sm btn-light dropdown-toggle" aria-controls="dropdown-basic">
                   <i class="mdi mdi-cogs"></i><span class="mdi mdi-chevron-down"></span>
                 </button>
                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu text-center"role="menu" aria-labelledby="button-basic">
                   <!-- <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'RENDIDO')">Rendición <i class="mdi mdi-transfer-down"></i></button></li>
-                  <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'REPOSICIÓN')">Reposición <i class="mdi mdi-restore-alert"></i></button></li>
-                  <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'DEV','DEVOLUCIÓN')">Devolución <i class="mdi mdi-sync"></i></button></li>-->
+                  <li role="menuitem"><button class="dropdown-item" (click)="descargos(fila, modalGeneral, 'REPOSICIÓN')">Reposición <i class="mdi mdi-restore-alert"></i></button></li>-->
+                  <li role="menuitem"><button class="dropdown-item" [disabled]="fila.saldo <= 0 " (click)="descargos(fila, modalGeneral, 'DEVO','Devolución')">Devolución <i class="mdi mdi-sync"></i></button></li>
                   <li role="menuitem"><button class="dropdown-item bg-danger bg-opacity-75 rounded-4" (click)="descargos(fila, modalGeneral, 'CIERR','Cierre')">Cierre <i class="mdi mdi-lock"></i></button></li>
 
                 </ul>
               </div>
             </li>
-            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Detalle fondo" *ngIf="fila.aperturado">
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Detalle fondo">
               <button class="btn btn-sm btn-info" (click)="detalleFondo(fila)"><i class="mdi mdi-eye"></i></button>
             </li>
             <li data-bs-toggle="tooltip" data-bs-placement="top" title="Habilitar" *ngIf="fila.deleted">
@@ -89,7 +89,7 @@
 
 <ng-template #modalGeneral role="document" let-modal>
   <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">{{titleModal}} Fondo a Rendir</h5>
+    <h5 class="modal-title" id="exampleModalLabel">{{titleModal}}</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal"aria-label="Close"id="close-modal" (click)="modalRef.hide()"></button>
   </div>
   <div class="modal-body">

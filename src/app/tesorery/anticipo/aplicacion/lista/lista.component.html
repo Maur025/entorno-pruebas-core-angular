@@ -83,6 +83,7 @@
 			(crearNuevo)="(null)"
 			(alCrear)="crear(null)"
 			(alActualizar)="(null)"
+			(alRefrescar)="refrescar()"
 			(alFiltrar)="(null)"
 			(alEditar)="editar($event, modalEditar)"
 			campoEstado="estado"
@@ -212,6 +213,9 @@
 						<div *ngSwitchCase="'id'">
 							{{ fila[campo] }}
 						</div>
+            <div *ngSwitchCase="'createdAt'">
+              {{fila.createdAt | date:"dd-MM-yyyy hh:mm "}}
+            </div>
 						<div *ngSwitchCase="'fecha'">
 							{{ fila.fecha | date : 'dd-MM-yyyy' }}
 						</div>

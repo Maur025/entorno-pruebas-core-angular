@@ -65,28 +65,28 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
     this.fondo = undefined;
     this.tipoDescargo = undefined;
     this.titleModal = 'Nuevo Fondo Operativo ';
-    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
+    this.modalRef = this.modalService.show(template, { class: `modal-xl modal-scrollable` });
   }
 
   aperturarNuevo(template: any) {
     this.fondo = undefined;
     this.tipoDescargo = 'APERT';
     this.titleModal = 'Apertura de Nuevo Fondo Operativo ';
-    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
+    this.modalRef = this.modalService.show(template, { class: `modal-xl modal-scrollable` });
   }
 
   aperturar(data: any, template: any) {
     this.fondo = data;
     this.tipoDescargo = 'APERT';
     this.titleModal = 'Apertura de Fondo Operativo ';
-    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
+    this.modalRef = this.modalService.show(template, { class: `modal-xl modal-scrollable` });
   }
 
   editar(data: any, template: any) {
     this.fondo = data;
     this.tipoDescargo = undefined;
     this.titleModal = 'Editar Fondo Operativo';
-    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
+    this.modalRef = this.modalService.show(template, { class: `modal-xl modal-scrollable` });
   }
 
   descargos(data: any, template: any, tipo, tipoTexto) {
@@ -94,7 +94,7 @@ export class ListaOperativoComponent extends FuncionesComponent implements OnIni
     this.tipoDescargo = tipo;
     this.tipoTexto = tipoTexto;
     this.titleModal = tipoTexto+' de Fondo Operativo';
-    this.modalRef = this.modalService.show(template, { class: `modal-lg modal-scrollable` });
+    this.modalRef = this.modalService.show(template, { class: `modal-xl modal-scrollable` });
   }
 
   detalleFondo(data: any) {

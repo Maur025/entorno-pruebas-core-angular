@@ -75,7 +75,7 @@ export class OperacionesComponent implements OnInit {
 
   getMedioTransferencias() {
     this.medioTransferenciaService.habilitados().subscribe(data => {
-      this.listaMedioTransferencias = data.content;
+      this.listaMedioTransferencias = data.content.filter(item => item.medio !== 'EFECTIVO');
     }, error => this.notificacionService.alertError(error));
   }
 
