@@ -68,7 +68,7 @@ export class FormularioCajaComponent implements OnInit {
       responsable: [, [Validators.required]],
       responsableId: [, [Validators.required]],
       centroCostoId: [, [Validators.required]],
-      fondoCajaId: [, [Validators.required]],
+      fondoCajaId: [, []],
     });
   }
 
