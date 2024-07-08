@@ -10,6 +10,10 @@ import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/fo
 import { BsModalService } from "ngx-bootstrap/modal";
 import { EsquemaService } from "src/app/tesorery/services/tesoreria/esquema.service";
 import { EntidadService } from "src/app/tesorery/services/tesoreria/entidad.service";
+import { AperturaCierreService } from "src/app/tesorery/services/tesoreria/apertura-cierre.service";
+import { Router } from "@angular/router";
+import { GestionService } from "src/app/tesorery/services/tesoreria/gestion.service";
+import { BehaviorSubject } from "rxjs";
 
 @Component({
   selector: 'app-formulario-operativo',
@@ -36,6 +40,13 @@ export class FormularioOperativoComponent implements OnInit {
   listaResponsables: any;
   fechaMinima: any;
   montoPagar:any;
+  stateDate:boolean = false;
+	dateNow = new Date(new Date().setHours(23, 59, 59, 999))
+  gestionId = new BehaviorSubject("");
+
+  public arrayDiasHabilitados: any = []
+	public arrayMesesHabilitados: any = []
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -47,12 +58,16 @@ export class FormularioOperativoComponent implements OnInit {
     private notificacionService: NotificacionService,
     private _localeService: BsLocaleService,
     public esquemasService: EsquemaService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private aperturasCierresService: AperturaCierreService,
+    private router:Router,
+    private gestionService: GestionService
   ) {
     this._localeService.use('es');
   }
 
   ngOnInit(): void {
+    this.getGestionId();
     this.initForm();
     this.fechaMinima = new Date();
     this.getEstados();
@@ -61,6 +76,47 @@ export class FormularioOperativoComponent implements OnInit {
     if (this.fondo) this.setFondo();
     if (this.transaccion) this.setTransaccion();
     this.tipoDescargoForm();
+    setTimeout(()=>{
+      this.enabledDays();
+    },500)
+  }
+
+  getGestionId(){
+    this.gestionService.getRecordsEnabled().subscribe({
+      next:data=>{
+        this.gestionId.next(data.content[0].id);
+      }
+    })
+  }
+
+  public enabledDays() {
+		this.aperturasCierresService
+			.getAperturaCierreHabilitados(this.gestionId.getValue())
+			.subscribe(data => {
+        this.checkDateStatus(data);
+				data['content'].forEach(mes => {
+					let dia = new Date(mes.fechaIni)
+					dia = new Date(dia.setDate(dia.getDate() - 1))
+					let diaFinal = new Date(mes.fechaFin)
+					this.arrayMesesHabilitados.push([dia, diaFinal])
+					while (dia < diaFinal) {
+						this.arrayDiasHabilitados.push(dia)
+						dia = new Date(dia.setDate(dia.getDate() + 1))
+					}
+				})
+			})
+	}
+
+  checkDateStatus(data){
+    if(data['content'].length==0){
+      this.form.fechaSolicitud.disable();
+      this.stateDate = true;
+    }
+  }
+
+  enabledDate(){
+    this.cerrarModal();
+    this.router.navigate(["/gestion/aperturaCierre"]);
   }
 
   initForm() {
@@ -71,7 +127,7 @@ export class FormularioOperativoComponent implements OnInit {
       nroSolicitud: [, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       importe: [, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       aperturado: [],
-      descripcion: [, [Validators.required]],
+      descripcion: [],
       responsableId: [],
       responsable: [],
     });
@@ -191,6 +247,14 @@ export class FormularioOperativoComponent implements OnInit {
       responsable: this.fondo.responsable,
       responsableId: this.fondo.responsableId,
     });
+    this.checkOpening();
+  }
+
+  checkOpening(){
+    if(this.fondo.aperturado){
+      this.form.fechaSolicitud.disable();
+      this.form.importe.disable();
+    }
   }
 
   setTransaccion() {
