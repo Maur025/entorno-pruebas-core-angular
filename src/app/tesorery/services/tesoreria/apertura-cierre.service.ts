@@ -39,4 +39,9 @@ export class AperturaCierreService {
 			data
 		)
 	}
+
+  getAperturaCierreHabilitados(gestionId:string){
+    return this.apiService.tesoreria?.get(
+			`${this.prefix}/${this.API_NAME}/listarAperturados?gestionId=${gestionId}`)
+  }
 }
