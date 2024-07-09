@@ -53,21 +53,32 @@ export const MENU: MenuItem[] = [
 			},
 		],
 	},
-	{
+	/* {
+		id: 60,
+		label: 'Créditos',
+		icon: 'fa-hand-holding-usd fas',
+		subItems: [
+			{
+				id: 601,
+				label: 'Proveedores',
+				link: 'credito',
+			},
+			{
+				id: 602,
+				label: 'Clientes',
+				link: 'credito',
+			},
+		],
+	}, */
+  {
 		id: 50,
 		label: 'Devengados',
 		icon: 'mdi mdi-book-sync-outline',
 		link: 'devengado',
 	},
 	{
-		id: 60,
-		label: 'Créditos',
-		icon: 'fa-hand-holding-usd fas',
-		link: 'credito',
-	},
-	{
 		id: 4,
-		label: 'Transacciones',
+		label: 'Integración Módulos',
 		isTitle: true,
 	},
 	{
