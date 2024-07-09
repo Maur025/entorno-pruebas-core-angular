@@ -158,7 +158,8 @@ export class TablaComponent implements OnInit {
 						this.idRuta
 					).subscribe(
 						(result: any) => {
-							this.datos = result.content
+              let contenido = result.data ? result.data : result.content;
+							this.datos = contenido;
 							this.pagination.rowsNumber = result.pagination.rowsNumber
 							this.pagination.pages = result.pagination.pages
 							this.estaCargando = false
@@ -177,10 +178,11 @@ export class TablaComponent implements OnInit {
 						this.inputBuscar
 					).subscribe(
 						(result: any) => {
-							this.datos = result.content
+              let contenido = result.data ? result.data : result.content;
+							this.datos = contenido;
 							this.pagination.rowsNumber = result.pagination
 								? result.pagination.rowsNumber
-								: result.content.length
+								: contenido.length
 							this.pagination.pages = result.pagination
 								? result.pagination.pages
 								: 1
@@ -202,10 +204,11 @@ export class TablaComponent implements OnInit {
 					this.filtros
 				).subscribe(
 					(result: any) => {
-						this.datos = result.content
+            let contenido = result.data ? result.data : result.content;
+            this.datos = contenido;
 						this.pagination.rowsNumber = result.pagination
 							? result.pagination.rowsNumber
-							: result.content.length
+							: contenido.length
 						this.pagination.pages = result.pagination
 							? result.pagination.pages
 							: 1
@@ -220,10 +223,11 @@ export class TablaComponent implements OnInit {
 		} else {
 			this.datosService[this.getAll](this.inputBuscar, this.filtros).subscribe(
 				(result: any) => {
-					this.datos = result.content
+          let contenido = result.data ? result.data : result.content;
+          this.datos = contenido;
 					this.pagination.rowsNumber = result.pagination
 						? result.pagination.rowsNumber
-						: result.content.length
+						: contenido.length
 					this.pagination.pages = result.pagination
 						? result.pagination.pages
 						: 1
