@@ -19,11 +19,17 @@ export const MENU: MenuItem[] = [
 		icon: 'mdi mdi-cash-register',
 		link: 'caja',
 	},
-	{
+/* 	{
 		id: 20,
 		label: 'Entidades',
 		icon: 'mdi mdi-account-group',
 		link: 'entidad',
+	}, */
+  {
+		id: 20,
+		label: 'Empleado - Responsable',
+		icon: 'mdi mdi-account-group',
+		link: 'empleado',
 	},
 	{
 		id: 30,

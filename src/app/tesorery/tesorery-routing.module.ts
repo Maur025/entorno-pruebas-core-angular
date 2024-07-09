@@ -7,6 +7,10 @@ const routes: Routes = [
 	{ path: '', component: InicioComponent },
 	{ path: 'dashboard', component: InicioComponent },
 	{ path: '', component: PaneldecontrolComponent },
+  {
+		path: 'empleado',
+		loadChildren: () => import('./empleado/empleado.module').then(m => m.EmpleadoModule),
+	},
 	{
 		path: 'banco',
 		loadChildren: () => import('./banco/banco.module').then(m => m.BancoModule),
