@@ -1,5 +1,5 @@
 .box{
-  min-height: fit-content;
+  min-height: 83vh;
   width: 100%;
   background: #FFFEEE;  /* fallback for old browsers */
   background: -webkit-linear-gradient(to left, #ffffff, #fffcf8);  /* Chrome 10-25, Safari 5.1-6 */
@@ -10,7 +10,7 @@
 }
 
   .home-left{
-    height: 100%;
+    height: fit-content;
     padding: 1rem 3.5rem;
   }
   .left-content{
@@ -81,9 +81,6 @@
     }
   }
   @media(width>=1200px){
-    .box{
-      height: 83vh;
-    }
     .title-module {
       display: block;
       position: absolute;
@@ -112,8 +109,8 @@
       width: 250px;
     }
     .home-right{
+      min-height: 83vh;
       width: 450px;
-      height: 100%;
       background-color:#f4f6fd ;
     }
   }
