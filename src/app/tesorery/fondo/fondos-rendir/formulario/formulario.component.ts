@@ -97,9 +97,10 @@ export class FormularioRendirComponent implements OnInit {
         this.form.saldo.disable();
         if (this.tipoDescargo == 'CIERR') {
           if (this.fondo.saldo < 0) {
-            this.form.monto.setValue(this.form.saldo.value * -1);
+            this.form.monto.setValue(Math.abs(this.form.saldo.value));
             this.montoExcedentePagar = this.form.monto.value;
             this.form.monto.disable();
+            this.montoPagar = this.form.monto.value;
           } else if (this.fondo.saldo >= 0) {
             this.form.monto.setValue(this.form.saldo.value);
             this.montoPagar = this.form.monto.value;
@@ -124,8 +125,7 @@ export class FormularioRendirComponent implements OnInit {
     this.formGroup.addControl('saldo', new FormControl(null, [Validators.required]));
     //this.formGroup.addControl('fechaMovimiento', new FormControl(null, [Validators.required, this.validatorFecha()]));
     this.formGroup.addControl('estado', new FormControl(null, Validators.required));
-    if (this.fondo.saldo > 0) this.formGroup.addControl('operaciones', this.formBuilder.array([], [Validators.required]));
-    if (this.fondo.saldo < 0 && this.tipoDescargo == 'CIERR') this.formGroup.addControl('planPagos', this.formBuilder.array([], [Validators.required]));
+    this.formGroup.addControl('operaciones', this.formBuilder.array([], [Validators.required]))
     this.form.descripcion.setValidators([Validators.required]);
   }
 

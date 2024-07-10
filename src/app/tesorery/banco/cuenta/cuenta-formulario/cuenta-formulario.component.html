@@ -120,7 +120,7 @@
 			</div>
 			<div class="col-12">
 				<div class="mb-3 px-1">
-					<label class="mb-2">Descripción </label>
+					<label class="mb-2">(*) Descripción </label>
 					<textarea
 						class="form-control uppercase"
 						rows="2"
@@ -134,6 +134,9 @@
 						*ngIf="submitted && form['descripcion'].errors"
 						class="invalid-feedback"
 					>
+						<div *ngIf="formGroup.get('descripcion').errors?.required">
+							La descripción de cuenta es obligatoria
+						</div>
 						<div *ngIf="form['descripcion'].errors['maxlength']">
 							Debe tener menos de
 							{{

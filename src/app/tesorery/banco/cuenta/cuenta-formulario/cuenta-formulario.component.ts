@@ -91,7 +91,7 @@ export class CuentaFormularioComponent implements OnInit {
 					Validators.maxLength(255),
 				],
 			],
-			descripcion: [null, [Validators.minLength(2)]],
+			descripcion: [null, [Validators.required, Validators.minLength(2)]],
 			bancoId: [null, [Validators.required]],
 			monedaId: [null, [Validators.required]],
 			saldo: [null, [Validators.required]],

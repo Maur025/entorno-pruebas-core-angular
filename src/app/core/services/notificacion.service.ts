@@ -358,7 +358,7 @@ export class NotificacionService {
 			customClass: {
 				popup: 'swal2-popup',
 				confirmButton: 'btn btn-success ms-2',
-				cancelButton: 'btn btn-danger float-end',
+				cancelButton: 'btn btn-light',
 			},
 			width: 'auto',
 			padding: '1em',

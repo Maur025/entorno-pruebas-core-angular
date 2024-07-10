@@ -21,6 +21,9 @@ export class ConsumerApi implements IConsumer {
   put(url: string, params: any = []): Observable<any> {
     return this.getConfig().pipe(switchMap((data) => this.http.put(`${this.getURI(data)}${url}`, params)));
   }
+  patch(url: string, params: any = []): Observable<any> {
+		return this.getConfig().pipe(switchMap(data =>this.http?.patch(`${data[this.key_json]}${url}`, params)))
+  }
   private getConfig(): Observable<any> {
     return this.http.get<any>(this.url_json);
   }
@@ -28,7 +31,7 @@ export class ConsumerApi implements IConsumer {
     let path = data[this.key_json];
     if (!environment.production) {
       path = path.substring(path.search('/api/'),path.length);
-    } 
+    }
     return path;
   }
 

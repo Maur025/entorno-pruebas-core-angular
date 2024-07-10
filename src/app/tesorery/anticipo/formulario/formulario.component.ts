@@ -146,7 +146,6 @@ export class FormularioComponent implements OnInit {
 					estado: advanceStatusFound.id || null,
 				})
 				this.cambioEstado()
-				this.formGroup.removeControl('descripcion')
 				this.formGroup.removeControl('nroReferencia')
 				this.tipoOperacion = this.tipoOperacion.filter(
 					(row: { value: string }) => row.value !== 'FNDO'
