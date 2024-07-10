@@ -20,6 +20,7 @@ import {
 	ErrorResponseStandard,
 } from 'src/app/shared/interface/commonApiResponse'
 import { firstValueFrom } from 'rxjs'
+import { ProveedorService } from '../../services/compras/proveedor.service'
 @Component({
 	selector: 'app-formulario',
 	templateUrl: './formulario.component.html',
@@ -41,7 +42,7 @@ export class FormularioComponent implements OnInit {
 	public formGroup: FormGroup = null
 	public submitted: boolean = false
 
-	public listaEntidades: ResponseDataStandard[] = []
+	public listaProveedores: ResponseDataStandard[] = []
 	public listaCentroCostos: ResponseDataStandard[] = []
 	public listaEstadoAnticipo: ResponseDataStandard[] = []
 	public montoTotal: number = 0
@@ -64,7 +65,8 @@ export class FormularioComponent implements OnInit {
 		public tipoEntidadService: TipoEntidadService,
 		private estadoAnticipoService: EstadoAnticipoService,
 		private aplicacionAnticipoService: AplicacionAnticipoService,
-		private _localeService: BsLocaleService
+		private _localeService: BsLocaleService,
+    private _comprasProveedorService: ProveedorService
 	) {
 		this._localeService.use('es')
 	}
@@ -72,6 +74,7 @@ export class FormularioComponent implements OnInit {
 	ngOnInit(): void {
 		this.setForm()
 		this.setTipoAnticipo()
+    this.getProveedoresHabilitados('');
 
 		if (this.tipo === 'nuevo') {
 			this.formGroup
@@ -117,9 +120,7 @@ export class FormularioComponent implements OnInit {
 		if (this.tipo === 'nuevo') {
 			this.formGroup.removeControl('estado')
 			this.formGroup.removeControl('saldo')
-			this.getTipoEntidadId('PROVEEDOR').then(uuid => {
-				this.getEntidadReferencialTipoEntidad(uuid)
-			})
+			this.getProveedoresHabilitados('')
 		} else {
 			this.getEstadoAnticipo()
 			this.formGroup.removeControl('entidadReferencialId')
@@ -172,7 +173,17 @@ export class FormularioComponent implements OnInit {
 	getEntidadReferencialTipoEntidad = (id: string | number) => {
 		this.entidadService.listaEntidadReferencialTipoEntidad(id).subscribe({
 			next: (response: ApiResponseStandard) =>
-				(this.listaEntidades = response?.content || []),
+				(this.listaProveedores = response?.content || []),
+			error: (error: ErrorResponseStandard) =>
+				this.notificacionService.alertError(error),
+		})
+	}
+
+  getProveedoresHabilitados = (keyword:string) => {
+    this._comprasProveedorService.getAndFindProveedor(0,50,'id',false,keyword).subscribe({
+			next: (response: ApiResponseStandard) =>{
+				this.listaProveedores = response.content
+      },
 			error: (error: ErrorResponseStandard) =>
 				this.notificacionService.alertError(error),
 		})

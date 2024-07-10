@@ -27,4 +27,7 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
       return this.apiService.compras.get(`${this.apiUrl}${this.prefix}/${this.apiName}/habilitados`);
     }
 
+    getAndFindProveedor(page:number = 0, size:number = 50, sortBy:string = 'id', descending:boolean = false, keyword:string = ''){
+      return this.apiService.compras.get(`${this.apiUrl}${this.prefix}/tesorery/proveedores/habilitados?page=${page}&size=${size}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`)
+    }
   }
