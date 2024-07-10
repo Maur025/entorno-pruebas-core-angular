@@ -341,4 +341,36 @@ export class NotificacionService {
 		message = msg.join('<br>')
 		return message
 	}
+
+	confirmAndContinueAlert = (
+		dataImg,
+		functionCallback = null,
+		title: string = '¿Está seguro de enviar la información?',
+		text: string = 'La información expuesta será enviada y estará sujeta a validación.'
+	): void => {
+		Swal.fire({
+			title: title,
+			text: text || '',
+			html: `<div style="max-height: 80vh; overflow-y: auto;">
+			${text && `<p>${text}</p>`}<img src="${URL.createObjectURL(
+				dataImg || [0]
+			)}" alt="Captura de Pantalla" style="max-width: 100%; height: auto;" /></div>`,
+			customClass: {
+				popup: 'swal2-popup',
+				confirmButton: 'btn btn-success ms-2',
+				cancelButton: 'btn btn-danger float-end',
+			},
+			width: 'auto',
+			padding: '1em',
+			allowOutsideClick: false,
+			allowEscapeKey: false,
+			showCancelButton: true,
+			confirmButtonText: 'Continuar',
+			cancelButtonText: 'Cancelar',
+			reverseButtons: true,
+			buttonsStyling: false,
+		}).then(optionResponse => {
+			functionCallback(optionResponse?.value ?? false)
+		})
+	}
 }

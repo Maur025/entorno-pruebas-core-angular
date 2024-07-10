@@ -7,6 +7,7 @@ import { CuentaFormularioComponent } from '../cuenta-formulario/cuenta-formulari
 import { FuncionesComponent } from 'src/app/tesorery/funciones.component'
 import { ResponseDataStandard } from 'src/app/shared/interface/commonListInterfaces'
 import { ErrorResponseStandard } from 'src/app/shared/interface/commonApiResponse'
+import { ScreenshotService } from 'src/app/tesorery/services/tesoreria/screenshot.service'
 
 @Component({
 	selector: 'app-cuenta-lista',
@@ -33,12 +34,15 @@ export class CuentaListaComponent extends FuncionesComponent implements OnInit {
 	servicio = null
 	cuenta: any
 
+	public onSubmitFormStatus: boolean = false
+
 	constructor(
 		public CuentaBancoService: CuentaBancoService,
 		private modalService: BsModalService,
 		private notificacionService: NotificacionService,
 		private route: ActivatedRoute,
-		private router: Router
+		private router: Router,
+		protected screenshotService: ScreenshotService
 	) {
 		super()
 	}
@@ -72,13 +76,16 @@ export class CuentaListaComponent extends FuncionesComponent implements OnInit {
 
 	crear(template: string | TemplateRef<unknown>) {
 		this.modalRef = this.modalService.show(template, {
+			ignoreBackdropClick: true,
 			class: `modal-xl modal-scrollable`,
+			keyboard: false,
 		})
 	}
 
 	editar(data: object, template: string | TemplateRef<unknown>) {
 		this.cuenta = data
 		this.modalRef = this.modalService.show(template, {
+			ignoreBackdropClick: false,
 			class: `modal-lg modal-scrollable`,
 		})
 	}
@@ -132,5 +139,10 @@ export class CuentaListaComponent extends FuncionesComponent implements OnInit {
 
 	cerrarModal() {
 		this.modalService.hide()
+		this.onSubmitFormStatus = false
+	}
+
+	isChangeSubmitStatus = (): void => {
+		this.onSubmitFormStatus = !this.onSubmitFormStatus
 	}
 }

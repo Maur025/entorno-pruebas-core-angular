@@ -33,6 +33,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 	esModal: any
 	titleModal: any
 
+	public onSubmitFormStatus: boolean = false
+
 	constructor(
 		public BancoService: BancoService,
 		private modalService: BsModalService,
@@ -138,5 +140,10 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 
 	cerrarModal() {
 		this.modalService.hide()
+		this.onSubmitFormStatus = false
+	}
+
+	isChangeSubmitStatus = (): void => {
+		this.onSubmitFormStatus = !this.onSubmitFormStatus
 	}
 }

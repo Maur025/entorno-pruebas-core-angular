@@ -155,7 +155,7 @@
 					formControlName="typeAccountInitialize"
 					color="#556ee6"
 					size="small"
-					class="mb-3 ms-3 me-2"
+					class="mb-3 ms-3 me-2 include-in-screenshot"
 					uncheckedLabel="Saldo Inicial"
 					checkedLabel="Transferencia"
 					(change)="onChangeSwitchTransferType()"
@@ -194,12 +194,13 @@
 				*ngIf="!formGroup.get('typeAccountInitialize').value && !cuenta"
 			>
 				<div class="mb-3 px-1">
-					<label class="mb-2"> Saldo Inicial</label>
+					<label class="mb-2" for="initialBalance"> Saldo Inicial</label>
 					<input
+						id="initialBalance"
 						type="text"
-						class="form-control uppercase"
+						class="form-control text-end"
 						formControlName="saldo"
-						placeholder="SALDO INICIAL DE LA CUENTA"
+						placeholder="SALDO INICIAL Bs."
 						[ngClass]="{ 'is-invalid': submitted && form['saldo'].errors }"
 						(input)="utilityService.onlyNumbers('saldo', $event, formGroup)"
 					/>
@@ -229,10 +230,10 @@
 						class="col-12 justify-content-center d-flex"
 						*ngIf="!(transferMediumList.length > 0)"
 					>
-						<label class="fs-5 my-2 text-muted">
+						<span class="fs-5 my-2 text-muted">
 							<i class="mdi mdi-alert"></i> No se configuraron medios de
 							transferencia.
-						</label>
+						</span>
 					</div>
 				</div>
 			</div>

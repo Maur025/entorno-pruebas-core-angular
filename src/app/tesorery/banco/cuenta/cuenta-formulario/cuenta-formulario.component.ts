@@ -24,6 +24,7 @@ import {
 import { ResponseDataStandard } from 'src/app/shared/interface/commonListInterfaces'
 import { UtilityService } from 'src/app/shared/services/utilityService.service'
 import { BsModalService } from 'ngx-bootstrap/modal'
+import { ScreenshotService } from 'src/app/tesorery/services/tesoreria/screenshot.service'
 
 enum AccountInitializationTypeEnum {
 	SALDO_INICIAL = 'SALDO_INICIAL',
@@ -54,6 +55,8 @@ export class CuentaFormularioComponent implements OnInit {
 	public transferMediumList: ResponseDataStandard[] = []
 	public showModalChildren: boolean = false
 
+	@Output() isChangeSubmitStatus: EventEmitter<void> = new EventEmitter<void>()
+
 	constructor(
 		private FormBuilder: FormBuilder,
 		private notificacionService: NotificacionService,
@@ -61,7 +64,8 @@ export class CuentaFormularioComponent implements OnInit {
 		private bancoService: BancoService,
 		private monedaService: MonedaService,
 		protected utilityService: UtilityService,
-		protected modalService: BsModalService
+		protected modalService: BsModalService,
+		protected screenshotService: ScreenshotService
 	) {}
 
 	ngOnInit(): void {
@@ -187,76 +191,91 @@ export class CuentaFormularioComponent implements OnInit {
 		return errorFound
 	}
 
-	guardar = (): void => {
+	confirmAndContinue = async () => {
 		this.submitted = true
-		if (this.formGroup.valid) {
-			if (this.cuenta) {
-				this.cuentaBancoService.update(this.formGroup.getRawValue()).subscribe(
-					(response: ApiResponseStandard) => {
-						this.notificacionService.successStandar()
-						this.alActualizar.emit(response)
-					},
-					(error: ErrorResponseStandard) => {
-						this.notificacionService.alertError(error)
-					}
-				)
+		if (!this.formGroup?.valid) {
+			return
+		}
+		if (this.formGroup.get('typeAccountInitialize').value) {
+			if (this.transferMediumList?.length > 0) {
+				const errorFound: boolean = this.filterAndValidateTransferMediumList()
+				if (this.transferMediumList.length < 1) {
+					this.notificacionService?.alertError(null, {
+						message:
+							'Agregue al menos 1 registro valido a la tabla para continuar.',
+					})
+					return
+				}
+				if (errorFound) {
+					this.notificacionService?.alertError(null, {
+						message: 'Se requiere que complete los datos en la lista',
+					})
+					return
+				}
 			} else {
-				const jsonDataSend: { [key: string]: unknown } = {
-					...this.formGroup.value,
-					bancoId: this.formGroup.get('bancoId')?.value || this.idRuta || null,
-					tipoInicializacion: this.formGroup?.get('typeAccountInitialize')
-						?.value
-						? AccountInitializationTypeEnum.TRANSFERENCIA
-						: AccountInitializationTypeEnum.SALDO_INICIAL,
-				}
-				if (this.formGroup.get('typeAccountInitialize').value) {
-					if (this.transferMediumList?.length > 0) {
-						const errorFound: boolean =
-							this.filterAndValidateTransferMediumList()
-						if (!(this.transferMediumList.length > 0)) {
-							this.notificacionService?.alertError(null, {
-								message:
-									'Agregue al menos 1 registro valido a la tabla para continuar.',
-							})
-							return
-						}
-						if (errorFound) {
-							this.notificacionService?.alertError(null, {
-								message: 'Se requiere que complete los datos en la lista',
-							})
-							return
-						}
-					} else {
-						this.notificacionService?.alertError(null, {
-							message:
-								'Asigne al menos un medio de transferencia para continuar.',
-						})
-					}
-					jsonDataSend.mediosTransferenciaList = this.transferMediumList
-					jsonDataSend.saldo =
-						this.formGroup?.get('balanceTotalTransfer')?.value || 0
-					this.createAccount(jsonDataSend)
-				} else {
-					this.createAccount(jsonDataSend)
-				}
+				this.notificacionService?.alertError(null, {
+					message: 'Asigne al menos un medio de transferencia para continuar.',
+				})
+				return
+			}
+		}
+
+		this.isChangeSubmitStatus.emit()
+		const dataImg = await this.screenshotService?.takeScreenshot(
+			'form-create-edit-cuenta-formulario'
+		)
+		this.notificacionService?.confirmAndContinueAlert(dataImg, response =>
+			this.sweetAlertHandleResponse(response)
+		)
+	}
+
+	sweetAlertHandleResponse = (response: boolean): void => {
+		if (response) {
+			this.guardar()
+		}
+		this.isChangeSubmitStatus.emit()
+	}
+
+	guardar = (): void => {
+		if (this.cuenta) {
+			this.cuentaBancoService.update(this.formGroup.getRawValue()).subscribe({
+				next: (response: ApiResponseStandard) => {
+					this.notificacionService.successStandar()
+					this.alActualizar.emit(response)
+				},
+				error: (error: ErrorResponseStandard) => {
+					this.notificacionService.alertError(error)
+				},
+			})
+		} else {
+			const jsonDataSend: { [key: string]: unknown } = {
+				...this.formGroup.value,
+				bancoId: this.formGroup.get('bancoId')?.value || this.idRuta || null,
+				tipoInicializacion: this.formGroup?.get('typeAccountInitialize')?.value
+					? AccountInitializationTypeEnum.TRANSFERENCIA
+					: AccountInitializationTypeEnum.SALDO_INICIAL,
+			}
+			if (this.formGroup.get('typeAccountInitialize').value) {
+				jsonDataSend.mediosTransferenciaList = this.transferMediumList
+				jsonDataSend.saldo =
+					this.formGroup?.get('balanceTotalTransfer')?.value || 0
+				this.createAccount(jsonDataSend)
+			} else {
+				this.createAccount(jsonDataSend)
 			}
 		}
 	}
 
 	createAccount = (jsonDataSend: object): void => {
-		this.notificacionService.alertaSimpleConfirmacion((response: boolean) => {
-			if (response) {
-				this.cuentaBancoService.register(jsonDataSend).subscribe(
-					(response: ApiResponseStandard) => {
-						this.notificacionService.successStandar()
-						this.alGuardar.emit(response)
-					},
-					(error: ErrorResponseStandard) => {
-						this.notificacionService.alertError(error)
-					}
-				)
-			}
-		}, '¿Es correcta la información ingresada?... ¿Desea continuar el registro?')
+		this.cuentaBancoService.register(jsonDataSend).subscribe({
+			next: (response: ApiResponseStandard) => {
+				this.notificacionService.successStandar()
+				this.alGuardar.emit(response)
+			},
+			error: (error: ErrorResponseStandard) => {
+				this.notificacionService.alertError(error)
+			},
+		})
 	}
 
 	onlyNumbersAccount = (fieldName: string = '', event: Event): void => {

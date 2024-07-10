@@ -1,7 +1,9 @@
 <table class="table">
 	<thead>
 		<tr>
-			<th [width]="'6%'" class="text-center">Acciones</th>
+			<th [width]="'6%'" class="text-center no-include-in-screenshot">
+				Acciones
+			</th>
 			<th class="text-center">N°</th>
 			<th class="text-start">Medio Transferencia</th>
 			<th>Caja/Banco</th>
@@ -17,7 +19,7 @@
 			"
 			[ngClass]="{ 'bg-danger bg-opacity-10': rowTransferMediumData.errorRow }"
 		>
-			<td [width]="'10%'">
+			<td [width]="'10%'" class="no-include-in-screenshot">
 				<div class="btn-toolbar d-flex justify-content-center" role="toolbar">
 					<div class="btn-group me-2" role="group">
 						<button
