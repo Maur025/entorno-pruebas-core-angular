@@ -4,16 +4,16 @@ export interface FormatListInterface {
 
 interface HeadersListInterface {
 	[key: string]: {
-		visible: boolean
-		buscable: boolean
-		buscableCheck?: boolean
-		visibleCheck?: boolean
-		sortable?: boolean
-		filtrable: boolean
-		texto: string
+		visible?: boolean
+		buscable?: boolean
+		buscableCheck?: boolean | null
+		visibleCheck?: boolean | null
+		sortable?: boolean | null
+		filtrable?: boolean
+		texto?: string
 		colsize?: number
-		filtrotipo: string
-		datos?: Array<any> | null
+		filtrotipo?: string
+		datos?: any[] | null
 	}
 }
 

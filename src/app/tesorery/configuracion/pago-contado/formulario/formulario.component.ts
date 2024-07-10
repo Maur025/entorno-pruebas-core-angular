@@ -11,7 +11,9 @@ import { TipoPagoContadoService } from 'src/app/tesorery/services/tesoreria/tipo
 import {
 	ApiResponseStandard,
 	ErrorResponseStandard,
-} from 'src/app/shared/interface/commonApiResponse'
+} from 'src/app/shared/interface/common-api-response'
+import { ResponseHandlerService } from 'src/app/core/services/response-handler.service'
+import { ResponseDataStandard } from 'src/app/shared/interface/common-list-interface'
 
 @Component({
 	selector: 'app-formulario-pagos',
@@ -35,6 +37,7 @@ export class FormularioPagosComponent {
 	fondoId: any
 
 	constructor(
+		private responseHandlerService: ResponseHandlerService,
 		private FormBuilder: FormBuilder,
 		private bancoService: BancoService,
 		private cuentaContadoService: CuentaContadoService,
@@ -227,8 +230,10 @@ export class FormularioPagosComponent {
 				}
 				this.cuentaContadoService.register(dataCuentaCont).subscribe(
 					(response: ApiResponseStandard) => {
-						dataCuentaContMedio['cuentaContadoId'] =
-							response.content?.id || null
+						const responseData: ResponseDataStandard =
+							this.responseHandlerService?.handleResponseAsObject(response)
+
+						dataCuentaContMedio['cuentaContadoId'] = responseData?.id || null
 						dataCuentaContMedio['medioTransferenciaId'] =
 							this.form?.medioTransferenciaId?.value
 						this.cuentaContadoMedioService

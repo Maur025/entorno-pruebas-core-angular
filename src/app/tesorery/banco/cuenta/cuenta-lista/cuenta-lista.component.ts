@@ -5,8 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { CuentaBancoService } from 'src/app/tesorery/services/tesoreria/cuenta-banco.service'
 import { CuentaFormularioComponent } from '../cuenta-formulario/cuenta-formulario.component'
 import { FuncionesComponent } from 'src/app/tesorery/funciones.component'
-import { ResponseDataStandard } from 'src/app/shared/interface/commonListInterfaces'
-import { ErrorResponseStandard } from 'src/app/shared/interface/commonApiResponse'
+import { ResponseDataStandard } from 'src/app/shared/interface/common-list-interface'
+import { ErrorResponseStandard } from 'src/app/shared/interface/common-api-response'
 import { ScreenshotService } from 'src/app/tesorery/services/tesoreria/screenshot.service'
 
 @Component({
@@ -77,15 +77,16 @@ export class CuentaListaComponent extends FuncionesComponent implements OnInit {
 	crear(template: string | TemplateRef<unknown>) {
 		this.modalRef = this.modalService.show(template, {
 			ignoreBackdropClick: true,
-			class: `modal-xl modal-scrollable`,
 			keyboard: false,
+			class: `modal-xl modal-scrollable`,
 		})
 	}
 
 	editar(data: object, template: string | TemplateRef<unknown>) {
 		this.cuenta = data
 		this.modalRef = this.modalService.show(template, {
-			ignoreBackdropClick: false,
+			ignoreBackdropClick: true,
+			keyboard: false,
 			class: `modal-lg modal-scrollable`,
 		})
 	}

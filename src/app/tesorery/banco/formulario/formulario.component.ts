@@ -2,11 +2,11 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { NotificacionService } from 'src/app/core/services/notificacion.service'
 import { BancoService } from '../../services/tesoreria/banco.service'
-import { ResponseDataStandard } from 'src/app/shared/interface/commonListInterfaces'
+import { ResponseDataStandard } from 'src/app/shared/interface/common-list-interface'
 import {
 	ApiResponseStandard,
 	ErrorResponseStandard,
-} from 'src/app/shared/interface/commonApiResponse'
+} from 'src/app/shared/interface/common-api-response'
 
 @Component({
 	selector: 'app-formulario-de-banco',

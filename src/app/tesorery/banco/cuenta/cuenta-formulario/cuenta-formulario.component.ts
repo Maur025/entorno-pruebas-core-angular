@@ -20,11 +20,12 @@ import { MonedaService } from '../../../services/tesoreria/monedas.service'
 import {
 	ApiResponseStandard,
 	ErrorResponseStandard,
-} from 'src/app/shared/interface/commonApiResponse'
-import { ResponseDataStandard } from 'src/app/shared/interface/commonListInterfaces'
+} from 'src/app/shared/interface/common-api-response'
+import { ResponseDataStandard } from 'src/app/shared/interface/common-list-interface'
 import { UtilityService } from 'src/app/shared/services/utilityService.service'
 import { BsModalService } from 'ngx-bootstrap/modal'
 import { ScreenshotService } from 'src/app/tesorery/services/tesoreria/screenshot.service'
+import { ResponseHandlerService } from 'src/app/core/services/response-handler.service'
 
 enum AccountInitializationTypeEnum {
 	SALDO_INICIAL = 'SALDO_INICIAL',
@@ -58,6 +59,7 @@ export class CuentaFormularioComponent implements OnInit {
 	@Output() isChangeSubmitStatus: EventEmitter<void> = new EventEmitter<void>()
 
 	constructor(
+		private responseHandlerService: ResponseHandlerService,
 		private FormBuilder: FormBuilder,
 		private notificacionService: NotificacionService,
 		private cuentaBancoService: CuentaBancoService,
@@ -119,25 +121,27 @@ export class CuentaFormularioComponent implements OnInit {
 	}
 
 	getBancos = (): void => {
-		this.bancoService.habilitados().subscribe(
-			(data: ApiResponseStandard) => {
-				this.listaBancos = data.content
+		this.bancoService.habilitados().subscribe({
+			next: (response: ApiResponseStandard) => {
+				this.listaBancos =
+					this.responseHandlerService?.handleResponseAsArray(response)
 			},
-			(error: ErrorResponseStandard) => {
+			error: (error: ErrorResponseStandard) => {
 				this.notificacionService.alertError(error)
-			}
-		)
+			},
+		})
 	}
 
 	getMonedas = (): void => {
-		this.monedaService.habilitados().subscribe(
-			(data: ApiResponseStandard) => {
-				this.listaMonedas = data.content
+		this.monedaService.habilitados().subscribe({
+			next: (response: ApiResponseStandard) => {
+				this.listaMonedas =
+					this.responseHandlerService?.handleResponseAsArray(response)
 			},
-			(error: ErrorResponseStandard) => {
+			error: (error: ErrorResponseStandard) => {
 				this.notificacionService.alertError(error)
-			}
-		)
+			},
+		})
 	}
 
 	cambioMonto = (): void => {

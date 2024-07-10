@@ -3,15 +3,16 @@ import { GestionService } from '../../services/tesoreria/gestion.service'
 import {
 	ApiResponseStandard,
 	ErrorResponseStandard,
-} from 'src/app/shared/interface/commonApiResponse'
+} from 'src/app/shared/interface/common-api-response'
 import { NotificacionService } from 'src/app/core/services/notificacion.service'
 import { AperturaCierreService } from '../../services/tesoreria/apertura-cierre.service'
 import {
 	FormatListInterface,
 	ResponseDataStandard,
-} from 'src/app/shared/interface/commonListInterfaces'
+} from 'src/app/shared/interface/common-list-interface'
 import { FuncionesComponent } from '../../funciones.component'
 import { TablaComponent } from 'src/app/core/herramientas/tabla/tabla.component'
+import { ResponseHandlerService } from 'src/app/core/services/response-handler.service'
 
 @Component({
 	selector: 'app-apertura-cierre',
@@ -26,7 +27,7 @@ export class AperturaCierreComponent
 
 	public tableTitle: string = 'Listado de Meses'
 	public filterData: {
-		gestionId: string
+		gestionId: string | number
 		keyword: string
 		aperturado: boolean
 	} = null
@@ -34,6 +35,7 @@ export class AperturaCierreComponent
 	public accountingPeriodData: ResponseDataStandard[] = []
 
 	constructor(
+		private responseHandlerService: ResponseHandlerService,
 		private gestionService: GestionService,
 		protected aperturaCierreService: AperturaCierreService,
 		private notificacionService: NotificacionService
@@ -49,10 +51,12 @@ export class AperturaCierreComponent
 	getAccountingPeriod = (): void => {
 		this.gestionService.getRecordsEnabled().subscribe({
 			next: (response: ApiResponseStandard) => {
-				this.accountingPeriodData = response?.content || []
+				this.accountingPeriodData =
+					this.responseHandlerService?.handleResponseAsArray(response)
+
 				this.filterData = {
 					...this.filterData,
-					gestionId: response?.content[0]?.id || null,
+					gestionId: this.accountingPeriodData[0]?.id || null,
 				}
 			},
 			error: (error: ErrorResponseStandard) => {
