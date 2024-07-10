@@ -167,21 +167,23 @@
 
 <ng-template #modalCuentaNueva let-modal>
 	<div class="modal-header">
-		<h5 class="modal-title" id="exampleModalLabel">Crear Cuenta Nueva</h5>
+		<h5 class="modal-title" id="exampleModalLabel">Regitrar Nueva Cuenta</h5>
 		<button
 			type="button"
 			class="btn-close"
 			data-bs-dismiss="modal"
 			aria-label="Close"
 			id="close-modal"
-			(click)="modalRef.hide()"
+			(click)="cerrarModal()"
+			[disabled]="onSubmitFormStatus"
 		></button>
 	</div>
-	<div class="modal-body">
+	<div class="modal-body" id="form-create-edit-cuenta-formulario">
 		<app-cuenta-formulario
 			#appFormCuenta
 			[idRuta]="banco.id"
 			(alGuardar)="modalRef.hide(); tabla.obtenerDatos()"
+			(isChangeSubmitStatus)="isChangeSubmitStatus()"
 		/>
 	</div>
 	<div class="modal-footer">
@@ -191,15 +193,18 @@
 				class="btn btn-light"
 				data-bs-dismiss="modal"
 				(click)="cerrarModal()"
+				[disabled]="onSubmitFormStatus"
 			>
 				Cerrar
 			</button>
 			<button
 				type="button"
 				class="btn btn-success"
-				(click)="appFormCuenta.guardar()"
+				(click)="appFormCuenta.confirmAndContinue()"
+				[disabled]="onSubmitFormStatus"
 			>
-				Registrar
+				<app-simple-loader [isLoading]="onSubmitFormStatus" />
+				{{ onSubmitFormStatus ? ' Espere un momento...' : 'Registrar' }}
 			</button>
 		</div>
 	</div>

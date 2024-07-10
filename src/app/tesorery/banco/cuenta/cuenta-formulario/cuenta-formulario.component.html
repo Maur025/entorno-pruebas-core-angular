@@ -1,244 +1,245 @@
 <form (ngSubmit)="guardar()" [formGroup]="formGroup">
-  <label class="mb-3 col-12">
-    Los campos marcados con asterisco (*) son obligatorios.
-  </label>
-  <div
-    class="nav col-12"
-    id="accountFormModalBodyDiv"
-    style="position: relative"
-  >
-    <div class="row">
-      <div class="col-12 col-md-6">
-        <div class="mb-3 px-1">
-          <label class="mb-2">(*) N° de Cuenta </label>
-          <input
-            type="text"
-            class="form-control uppercase"
-            formControlName="nroCuenta"
-            placeholder="NÚMERO DE CUENTA"
-            [ngClass]="{ 'is-invalid': submitted && form['nroCuenta'].errors }"
-            (input)="onlyNumbersAccount('nroCuenta', $event)"
-          />
-          <div
-            *ngIf="submitted && form['nroCuenta'].errors"
-            class="invalid-feedback"
-          >
-            <div *ngIf="form['nroCuenta'].errors['required']">
-              El número de cuenta es obligatorio
-            </div>
-            <div *ngIf="form['nroCuenta'].errors['minlength']">
-              Debe tener al menos
-              {{
-                form["nroCuenta"].errors["minlength"]["requiredLength"]
-              }}carácteres
-            </div>
-            <div *ngIf="form['nroCuenta'].errors['maxlength']">
-              Debe tener menos de
-              {{
-                form["nroCuenta"].errors["maxlength"]["requiredLength"]
-              }}carácteres
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-6">
-        <div class="mb-3 px-1">
-          <label class="mb-2">(*) Banco </label>
-          <ng-select
-            class="uppercase"
-            formControlName="bancoId"
-            placeholder="Seleccione un banco"
-            [items]="listaBancos"
-            bindLabel="nombre"
-            bindValue="id"
-            [ngClass]="{
-              'ngselect-invalid': submitted && form['bancoId'].errors != null
-            }"
-          >
-          </ng-select>
-          <div *ngIf="submitted && form['bancoId'].errors">
-            <div
-              class="text-danger mt-1 font-size-10"
-              *ngIf="form['bancoId'].errors['required']"
-            >
-              Seleccionar un banco es obligatorio
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-6">
-        <div class="mb-3 px-1">
-          <label class="mb-2">(*) Moneda </label>
-          <ng-select
-            class="uppercase"
-            formControlName="monedaId"
-            placeholder="SELECCIONE UNA MONEDA"
-            [items]="listaMonedas"
-            bindLabel="nombre"
-            bindValue="id"
-            [ngClass]="{
-              'ngselect-invalid': submitted && form['monedaId'].errors != null
-            }"
-          >
-          </ng-select>
-          <div *ngIf="submitted && form['monedaId'].errors">
-            <div
-              class="text-danger mt-1 font-size-10"
-              *ngIf="form['monedaId'].errors['required']"
-            >
-              Seleccionar una moneda es obligatoria
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        class="col-12 col-md-6"
-        *ngIf="formGroup.get('typeAccountInitialize').value && !cuenta"
-      >
-        <div class="mb-3 px-1">
-          <label class="mb-2">Total saldo a transferir</label>
-          <input
-            type="text"
-            class="form-control"
-            formControlName="balanceTotalTransfer"
-            placeholder="TOTAL SALDO A TRANSFERIR"
-            [ngClass]="{
-              'is-invalid':
-                submitted && formGroup.get('balanceTotalTransfer').errors
-            }"
-            readonly="true"
-          />
-          <div
-            *ngIf="submitted && formGroup.get('balanceTotalTransfer').errors"
-            class="invalid-feedback"
-          >
-            <div *ngIf="formGroup.get('balanceTotalTransfer').errors?.required">
-              El número de cuenta es obligatorio
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12">
-        <div class="mb-3 px-1">
-          <label class="mb-2">(*) Descripción </label>
-          <textarea
-            class="form-control uppercase"
-            rows="2"
-            placeholder="Descripción de la cuenta"
-            formControlName="descripcion"
-            [ngClass]="{
-              'is-invalid': submitted && form['descripcion'].errors
-            }"
-          ></textarea>
-          <div
-            *ngIf="submitted && form['descripcion'].errors"
-            class="invalid-feedback"
-          >
-            <div *ngIf="formGroup.get('descripcion').errors?.required">
-              La descripción de cuenta es obligatoria
-            </div>
-            <div *ngIf="form['descripcion'].errors['maxlength']">
-              Debe tener menos de
-              {{
-                form["descripcion"].errors["maxlength"]["requiredLength"]
-              }}carácteres
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        class="col-12 mt-2 mb-4"
-        [ngClass]="{
-          'col-12 col-md-10': formGroup.get('typeAccountInitialize').value
-        }"
-        *ngIf="!cuenta"
-      >
-        <ui-switch
-          id="typeAccountInitializeswitch"
-          formControlName="typeAccountInitialize"
-          color="#556ee6"
-          size="small"
-          class="mb-3 ms-3 me-2"
-          uncheckedLabel="Saldo Inicial"
-          checkedLabel="Transferencia"
-          (change)="onChangeSwitchTransferType()"
-        />
-        <label
-          for="typeAccountInitializeswitch"
-          class="form-label mt-3 mt-md-0 ms-2 ms-md-0"
-        >
-          <i class="mdi mdi-information text-info fs-5"></i>
-          {{
-            formGroup.get("typeAccountInitialize").value
-              ? "Apertura de Cuenta, con transferencia de una cuenta existente."
-              : "Apertura de Cuenta, con saldo inicial."
-          }}
-        </label>
-      </div>
-      <div
-        class="col-12 col-md-2 mt-1 mb-4"
-        *ngIf="formGroup.get('typeAccountInitialize').value && !cuenta"
-      >
-        <div class="hstack gap-2 justify-content-end">
-          <button
-            class="btn btn-primary"
-            type="button"
-            ngbPopover="Asignar medios para la transferencia de saldo."
-            placement="left"
-            triggers="hover"
-            (click)="addRowTransferMedium()"
-          >
-            <i class="mdi mdi-plus"></i> Agregar
-          </button>
-        </div>
-      </div>
-      <div
-        class="col-12 col-md-6"
-        *ngIf="!formGroup.get('typeAccountInitialize').value && !cuenta"
-      >
-        <div class="mb-3 px-1">
-          <label class="mb-2"> Saldo Inicial</label>
-          <input
-            type="text"
-            class="form-control uppercase"
-            formControlName="saldo"
-            placeholder="SALDO INICIAL DE LA CUENTA"
-            [ngClass]="{ 'is-invalid': submitted && form['saldo'].errors }"
-            (input)="utilityService.onlyNumbers('saldo', $event, formGroup)"
-          />
-          <div
-            *ngIf="submitted && form['saldo'].errors"
-            class="invalid-feedback"
-          >
-            <div *ngIf="form['saldo'].errors['pattern']">
-              El monto solo deber contener carácteres númericos
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        class="col-12"
-        *ngIf="formGroup.get('typeAccountInitialize').value && !cuenta"
-      >
-        <div class="row">
-          <div class="table-responsive" *ngIf="transferMediumList.length > 0">
-            <app-medio-transferencia-cuenta-list-form
-              [transferMediumList]="transferMediumList"
-              (calculateTotalList)="calculateTotalTransferMedium()"
-              (removeItemList)="removeTransferMediumItem($event)"
-            />
-          </div>
-          <div
-            class="col-12 justify-content-center d-flex"
-            *ngIf="!(transferMediumList.length > 0)"
-          >
-            <label class="fs-5 my-2 text-muted">
-              <i class="mdi mdi-alert"></i> No se configuraron medios de
-              transferencia.
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+	<label class="mb-3 col-12">
+		Los campos marcados con asterisco (*) son obligatorios.
+	</label>
+	<div
+		class="nav col-12"
+		id="accountFormModalBodyDiv"
+		style="position: relative"
+	>
+		<div class="row">
+			<div class="col-12 col-md-6">
+				<div class="mb-3 px-1">
+					<label class="mb-2">(*) N° de Cuenta </label>
+					<input
+						type="text"
+						class="form-control uppercase"
+						formControlName="nroCuenta"
+						placeholder="NÚMERO DE CUENTA"
+						[ngClass]="{ 'is-invalid': submitted && form['nroCuenta'].errors }"
+						(input)="onlyNumbersAccount('nroCuenta', $event)"
+					/>
+					<div
+						*ngIf="submitted && form['nroCuenta'].errors"
+						class="invalid-feedback"
+					>
+						<div *ngIf="form['nroCuenta'].errors['required']">
+							El número de cuenta es obligatorio
+						</div>
+						<div *ngIf="form['nroCuenta'].errors['minlength']">
+							Debe tener al menos
+							{{
+								form['nroCuenta'].errors['minlength']['requiredLength']
+							}}carácteres
+						</div>
+						<div *ngIf="form['nroCuenta'].errors['maxlength']">
+							Debe tener menos de
+							{{
+								form['nroCuenta'].errors['maxlength']['requiredLength']
+							}}carácteres
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-md-6">
+				<div class="mb-3 px-1">
+					<label class="mb-2">(*) Banco </label>
+					<ng-select
+						class="uppercase"
+						formControlName="bancoId"
+						placeholder="Seleccione un banco"
+						[items]="listaBancos"
+						bindLabel="nombre"
+						bindValue="id"
+						[ngClass]="{
+							'ngselect-invalid': submitted && form['bancoId'].errors != null
+						}"
+					>
+					</ng-select>
+					<div *ngIf="submitted && form['bancoId'].errors">
+						<div
+							class="text-danger mt-1 font-size-10"
+							*ngIf="form['bancoId'].errors['required']"
+						>
+							Seleccionar un banco es obligatorio
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-md-6">
+				<div class="mb-3 px-1">
+					<label class="mb-2">(*) Moneda </label>
+					<ng-select
+						class="uppercase"
+						formControlName="monedaId"
+						placeholder="SELECCIONE UNA MONEDA"
+						[items]="listaMonedas"
+						bindLabel="nombre"
+						bindValue="id"
+						[ngClass]="{
+							'ngselect-invalid': submitted && form['monedaId'].errors != null
+						}"
+					>
+					</ng-select>
+					<div *ngIf="submitted && form['monedaId'].errors">
+						<div
+							class="text-danger mt-1 font-size-10"
+							*ngIf="form['monedaId'].errors['required']"
+						>
+							Seleccionar una moneda es obligatoria
+						</div>
+					</div>
+				</div>
+			</div>
+			<div
+				class="col-12 col-md-6"
+				*ngIf="formGroup.get('typeAccountInitialize').value && !cuenta"
+			>
+				<div class="mb-3 px-1">
+					<label class="mb-2">Total saldo a transferir</label>
+					<input
+						type="text"
+						class="form-control"
+						formControlName="balanceTotalTransfer"
+						placeholder="TOTAL SALDO A TRANSFERIR"
+						[ngClass]="{
+							'is-invalid':
+								submitted && formGroup.get('balanceTotalTransfer').errors
+						}"
+						readonly="true"
+					/>
+					<div
+						*ngIf="submitted && formGroup.get('balanceTotalTransfer').errors"
+						class="invalid-feedback"
+					>
+						<div *ngIf="formGroup.get('balanceTotalTransfer').errors?.required">
+							El número de cuenta es obligatorio
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12">
+				<div class="mb-3 px-1">
+					<label class="mb-2">(*) Descripción </label>
+					<textarea
+						class="form-control uppercase"
+						rows="2"
+						placeholder="Descripción de la cuenta"
+						formControlName="descripcion"
+						[ngClass]="{
+							'is-invalid': submitted && form['descripcion'].errors
+						}"
+					></textarea>
+					<div
+						*ngIf="submitted && form['descripcion'].errors"
+						class="invalid-feedback"
+					>
+						<div *ngIf="formGroup.get('descripcion').errors?.required">
+							La descripción de cuenta es obligatoria
+						</div>
+						<div *ngIf="form['descripcion'].errors['maxlength']">
+							Debe tener menos de
+							{{
+								form['descripcion'].errors['maxlength']['requiredLength']
+							}}carácteres
+						</div>
+					</div>
+				</div>
+			</div>
+			<div
+				class="col-12 mt-2 mb-4"
+				[ngClass]="{
+					'col-12 col-md-10': formGroup.get('typeAccountInitialize').value
+				}"
+				*ngIf="!cuenta"
+			>
+				<ui-switch
+					id="typeAccountInitializeswitch"
+					formControlName="typeAccountInitialize"
+					color="#556ee6"
+					size="small"
+					class="mb-3 ms-3 me-2 include-in-screenshot"
+					uncheckedLabel="Saldo Inicial"
+					checkedLabel="Transferencia"
+					(change)="onChangeSwitchTransferType()"
+				/>
+				<label
+					for="typeAccountInitializeswitch"
+					class="form-label mt-3 mt-md-0 ms-2 ms-md-0"
+				>
+					<i class="mdi mdi-information text-info fs-5"></i>
+					{{
+						formGroup.get('typeAccountInitialize').value
+							? 'Apertura de Cuenta, con transferencia de una cuenta existente.'
+							: 'Apertura de Cuenta, con saldo inicial.'
+					}}
+				</label>
+			</div>
+			<div
+				class="col-12 col-md-2 mt-1 mb-4"
+				*ngIf="formGroup.get('typeAccountInitialize').value && !cuenta"
+			>
+				<div class="hstack gap-2 justify-content-end">
+					<button
+						class="btn btn-primary"
+						type="button"
+						ngbPopover="Asignar medios para la transferencia de saldo."
+						placement="left"
+						triggers="hover"
+						(click)="addRowTransferMedium()"
+					>
+						<i class="mdi mdi-plus"></i> Agregar
+					</button>
+				</div>
+			</div>
+			<div
+				class="col-12 col-md-6"
+				*ngIf="!formGroup.get('typeAccountInitialize').value && !cuenta"
+			>
+				<div class="mb-3 px-1">
+					<label class="mb-2" for="initialBalance"> Saldo Inicial</label>
+					<input
+						id="initialBalance"
+						type="text"
+						class="form-control text-end"
+						formControlName="saldo"
+						placeholder="SALDO INICIAL Bs."
+						[ngClass]="{ 'is-invalid': submitted && form['saldo'].errors }"
+						(input)="utilityService.onlyNumbers('saldo', $event, formGroup)"
+					/>
+					<div
+						*ngIf="submitted && form['saldo'].errors"
+						class="invalid-feedback"
+					>
+						<div *ngIf="form['saldo'].errors['pattern']">
+							El monto solo deber contener carácteres númericos
+						</div>
+					</div>
+				</div>
+			</div>
+			<div
+				class="col-12"
+				*ngIf="formGroup.get('typeAccountInitialize').value && !cuenta"
+			>
+				<div class="row">
+					<div class="table-responsive" *ngIf="transferMediumList.length > 0">
+						<app-medio-transferencia-cuenta-list-form
+							[transferMediumList]="transferMediumList"
+							(calculateTotalList)="calculateTotalTransferMedium()"
+							(removeItemList)="removeTransferMediumItem($event)"
+						/>
+					</div>
+					<div
+						class="col-12 justify-content-center d-flex"
+						*ngIf="!(transferMediumList.length > 0)"
+					>
+						<span class="fs-5 my-2 text-muted">
+							<i class="mdi mdi-alert"></i> No se configuraron medios de
+							transferencia.
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </form>

@@ -46,6 +46,7 @@
     "echarts": "^5.4.1",
     "firebase": "^9.15.0",
     "flatpickr": "^4.6.13",
+    "html-to-image": "^1.11.11",
     "keycloak-angular": "^14.0.0",
     "keycloak-js": "^22.0.0",
     "leaflet": "^1.9.3",
