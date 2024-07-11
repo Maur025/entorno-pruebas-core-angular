@@ -14,6 +14,7 @@ import { AperturaCierreService } from "src/app/tesorery/services/tesoreria/apert
 import { Router } from "@angular/router";
 import { GestionService } from "src/app/tesorery/services/tesoreria/gestion.service";
 import { BehaviorSubject } from "rxjs";
+import { EmpleadoService } from "src/app/tesorery/services/tesoreria/empleado.service";
 
 @Component({
   selector: 'app-formulario-operativo',
@@ -61,7 +62,8 @@ export class FormularioOperativoComponent implements OnInit {
     private modalService: BsModalService,
     private aperturasCierresService: AperturaCierreService,
     private router:Router,
-    private gestionService: GestionService
+    private gestionService: GestionService,
+    private _empleadoService: EmpleadoService
   ) {
     this._localeService.use('es');
   }
@@ -128,7 +130,7 @@ export class FormularioOperativoComponent implements OnInit {
       importe: [, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       aperturado: [],
       descripcion: [],
-      responsableId: [],
+      empleadoId: [],
       responsable: [],
     });
   }
@@ -193,14 +195,17 @@ export class FormularioOperativoComponent implements OnInit {
   }
 
   getResponsables() {
-    this.entidadService.getEntidadesByTipo("EMPLEADO").subscribe(data => {
-      this.listaResponsables = data.content;
-    }, error => this.notificacionService.alertError(error));
+    this._empleadoService.listarHabilitados().subscribe({
+      next:data=>{
+        this.listaResponsables = data.data;
+      },
+      error:err=>this.notificacionService.alertError(err)
+    })
   }
 
   cambioResponsable() {
-    if (this.form.responsableId != null) {
-      this.form.responsable.setValue(this.listaResponsables.find(e => e.id == this.form.responsableId.value).entidad.nombre);
+    if (this.form.empleadoId != null) {
+      this.form.responsable.setValue(this.listaResponsables.find(e => e.id == this.form.empleadoId.value).entidad.nombre);
     }
   }
 
@@ -244,8 +249,7 @@ export class FormularioOperativoComponent implements OnInit {
       aperturado: this.fondo.aperturado,
       descripcion: this.fondo.descripcion,
       saldo: this.fondo.saldo,
-      responsable: this.fondo.responsable,
-      responsableId: this.fondo.responsableId,
+      empleadoId: this.fondo.empleadoId,
     });
     this.checkOpening();
   }
