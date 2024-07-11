@@ -1,8 +1,12 @@
+import { ResponseDataStandard } from './common-list-interface'
+
 export interface ApiResponseStandard {
 	code: number | null
 	message: number | string | object | null
-	[key: string]: any
 	pagination?: PaginatioResponse | null
+	data?: ResponseDataStandard[] | ResponseDataStandard | null
+	content?: ResponseDataStandard[] | ResponseDataStandard | null
+	[key: string]: any
 }
 
 interface PaginatioResponse {

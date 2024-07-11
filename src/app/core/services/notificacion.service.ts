@@ -7,7 +7,7 @@ import { Router } from '@angular/router'
 import {
 	ErrorDetailDataResponseStandard,
 	ErrorResponseStandard,
-} from 'src/app/shared/interface/commonApiResponse'
+} from 'src/app/shared/interface/common-api-response'
 import { environment } from 'src/environments/environment'
 
 @Injectable({ providedIn: 'root' })

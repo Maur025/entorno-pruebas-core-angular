@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { NotificacionService } from 'src/app/core/services/notificacion.service'
+import { ResponseHandlerService } from 'src/app/core/services/response-handler.service'
 import {
 	ApiResponseStandard,
 	ErrorResponseStandard,
-} from 'src/app/shared/interface/commonApiResponse'
-import { ResponseDataStandard } from 'src/app/shared/interface/commonListInterfaces'
+} from 'src/app/shared/interface/common-api-response'
+import { ResponseDataStandard } from 'src/app/shared/interface/common-list-interface'
 import { UtilityService } from 'src/app/shared/services/utilityService.service'
 import { BancoService } from 'src/app/tesorery/services/tesoreria/banco.service'
 import { CajaService } from 'src/app/tesorery/services/tesoreria/caja.service'
@@ -37,6 +38,7 @@ export class MedioTransferenciaCuentaListFormComponent implements OnInit {
 	}
 
 	constructor(
+		private responseHandlerService: ResponseHandlerService,
 		public utilityService: UtilityService,
 		private medioTransferenciaService: MedioTransferenciaService,
 		private notificacionService: NotificacionService,
@@ -52,7 +54,8 @@ export class MedioTransferenciaCuentaListFormComponent implements OnInit {
 	getTransferMediumData = (): void => {
 		this.medioTransferenciaService?.habilitados()?.subscribe(
 			(response: ApiResponseStandard) => {
-				this.transferMediumDataSelect = response?.content || []
+				this.transferMediumDataSelect =
+					this.responseHandlerService?.handleResponseAsArray(response)
 			},
 			(error: ErrorResponseStandard) => {
 				this.notificacionService?.alertError(error)
