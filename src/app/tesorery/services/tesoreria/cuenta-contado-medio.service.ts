@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { ConsumoApiService } from 'src/app/core/services/consumoApi.service'
-import { ApiResponseStandard } from 'src/app/shared/interface/commonApiResponse'
-import { ResponseDataStandard } from 'src/app/shared/interface/commonListInterfaces'
+import { ApiResponseStandard } from 'src/app/shared/interface/common-api-response'
+import { ResponseDataStandard } from 'src/app/shared/interface/common-list-interface'
 
 @Injectable({
 	providedIn: 'root',

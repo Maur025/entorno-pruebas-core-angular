@@ -6,7 +6,7 @@ import { BancoService } from '../../services/tesoreria/banco.service'
 import { FormularioComponent } from '../formulario/formulario.component'
 import { CuentaFormularioComponent } from '../cuenta/cuenta-formulario/cuenta-formulario.component'
 import { FuncionesComponent } from 'src/app/tesorery/funciones.component'
-import { ErrorResponseStandard } from 'src/app/shared/interface/commonApiResponse'
+import { ErrorResponseStandard } from 'src/app/shared/interface/common-api-response'
 
 @Component({
 	selector: 'app-lista',
@@ -86,11 +86,12 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 		})
 	}
 
-	crearCuenta(template: TemplateRef<void>, data: any) {
+	crearCuenta(template: TemplateRef<void>, data: object) {
 		this.banco = data
 		this.modalRef = this.modalService.show(template, {
 			class: `modal-xl modal-scrollable`,
-			backdrop: 'static',
+			ignoreBackdropClick: true,
+			keyboard: false,
 		})
 	}
 

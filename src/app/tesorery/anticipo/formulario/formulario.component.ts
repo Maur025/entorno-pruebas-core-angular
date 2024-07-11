@@ -14,13 +14,14 @@ import { TipoEntidadService } from '../../services/tesoreria/tipoentidad.service
 import { EstadoAnticipoService } from '../../services/tesoreria/estadoanticipo.service'
 import { AplicacionAnticipoService } from '../../services/tesoreria/aplicacion-anticipo.service'
 import { BsLocaleService } from 'ngx-bootstrap/datepicker'
-import { ResponseDataStandard } from 'src/app/shared/interface/commonListInterfaces'
+import { ResponseDataStandard } from 'src/app/shared/interface/common-list-interface'
 import {
 	ApiResponseStandard,
 	ErrorResponseStandard,
-} from 'src/app/shared/interface/commonApiResponse'
+} from 'src/app/shared/interface/common-api-response'
 import { firstValueFrom } from 'rxjs'
 import { ProveedorService } from '../../services/compras/proveedor.service'
+import { ResponseHandlerService } from 'src/app/core/services/response-handler.service'
 @Component({
 	selector: 'app-formulario',
 	templateUrl: './formulario.component.html',
@@ -57,6 +58,7 @@ export class FormularioComponent implements OnInit {
 	]
 
 	constructor(
+		private responseHandlerService: ResponseHandlerService,
 		private formBuilder: FormBuilder,
 		private notificacionService: NotificacionService,
 		private centroCostoService: CentrocostoService,
@@ -66,7 +68,7 @@ export class FormularioComponent implements OnInit {
 		private estadoAnticipoService: EstadoAnticipoService,
 		private aplicacionAnticipoService: AplicacionAnticipoService,
 		private _localeService: BsLocaleService,
-    private _comprasProveedorService: ProveedorService
+		private _comprasProveedorService: ProveedorService
 	) {
 		this._localeService.use('es')
 	}
@@ -74,7 +76,7 @@ export class FormularioComponent implements OnInit {
 	ngOnInit(): void {
 		this.setForm()
 		this.setTipoAnticipo()
-    this.getProveedoresHabilitados('');
+		this.getProveedoresHabilitados('')
 
 		if (this.tipo === 'nuevo') {
 			this.formGroup
@@ -164,7 +166,8 @@ export class FormularioComponent implements OnInit {
 	getCentroCostos = () => {
 		this.centroCostoService.habilitados().subscribe({
 			next: (response: ApiResponseStandard) =>
-				(this.listaCentroCostos = response?.content || []),
+				(this.listaCentroCostos =
+					this.responseHandlerService?.handleResponseAsArray(response)),
 			error: (error: ErrorResponseStandard) =>
 				this.notificacionService.alertError(error),
 		})
@@ -173,20 +176,24 @@ export class FormularioComponent implements OnInit {
 	getEntidadReferencialTipoEntidad = (id: string | number) => {
 		this.entidadService.listaEntidadReferencialTipoEntidad(id).subscribe({
 			next: (response: ApiResponseStandard) =>
-				(this.listaProveedores = response?.content || []),
+				(this.listaProveedores =
+					this.responseHandlerService?.handleResponseAsArray(response)),
 			error: (error: ErrorResponseStandard) =>
 				this.notificacionService.alertError(error),
 		})
 	}
 
-  getProveedoresHabilitados = (keyword:string) => {
-    this._comprasProveedorService.getAndFindProveedor(0,50,'id',false,keyword).subscribe({
-			next: (response: ApiResponseStandard) =>{
-				this.listaProveedores = response.content
-      },
-			error: (error: ErrorResponseStandard) =>
-				this.notificacionService.alertError(error),
-		})
+	getProveedoresHabilitados = (keyword: string) => {
+		this._comprasProveedorService
+			.getAndFindProveedor(0, 50, 'id', false, keyword)
+			.subscribe({
+				next: (response: ApiResponseStandard) => {
+					this.listaProveedores =
+						this.responseHandlerService?.handleResponseAsArray(response)
+				},
+				error: (error: ErrorResponseStandard) =>
+					this.notificacionService.alertError(error),
+			})
 	}
 
 	getTipoEntidadId = async (tipo: string) => {
@@ -211,7 +218,8 @@ export class FormularioComponent implements OnInit {
 	getEstadoAnticipo = () => {
 		this.estadoAnticipoService.habilitados().subscribe({
 			next: (response: ApiResponseStandard) => {
-				this.listaEstadoAnticipo = response?.content || []
+				this.listaEstadoAnticipo =
+					this.responseHandlerService?.handleResponseAsArray(response)
 				this.setByDefaultRefund()
 			},
 			error: (error: ErrorResponseStandard) =>
