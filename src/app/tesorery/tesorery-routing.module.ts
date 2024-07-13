@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { PaneldecontrolComponent } from '../tesoreria/paneldecontrol/paneldecontrol.component'
 import { InicioComponent } from './inicio/inicio.component'
+import { DefaultComponent } from './default/default.component'
 
 const routes: Routes = [
-	{ path: '', component: InicioComponent },
-	{ path: 'dashboard', component: InicioComponent },
-	{ path: '', component: PaneldecontrolComponent },
-  {
+	{ path: '', component: DefaultComponent },
+	{ path: 'inicio', component: InicioComponent },
+	{
 		path: 'empleado',
-		loadChildren: () => import('./empleado/empleado.module').then(m => m.EmpleadoModule),
+		loadChildren: () =>
+			import('./empleado/empleado.module').then(m => m.EmpleadoModule),
 	},
 	{
 		path: 'banco',
@@ -25,25 +25,8 @@ const routes: Routes = [
 			import('./anticipo/anticipo.module').then(m => m.AnticipoModule),
 	},
 	{
-		path: 'entidad',
-		loadChildren: () =>
-			import('./entidad/entidad.module').then(m => m.EntidadModule),
-	},
-	{
 		path: 'fondo',
 		loadChildren: () => import('./fondo/fondo.module').then(m => m.FondoModule),
-	},
-	{
-		path: 'configuracion',
-		loadChildren: () =>
-			import('./configuracion/configuracion.module').then(
-				m => m.ConfiguracionModule
-			),
-	},
-	{
-		path: 'devengado',
-		loadChildren: () =>
-			import('./devengado/devengado.module').then(m => m.DevengadoModule),
 	},
 	{
 		path: 'credito',

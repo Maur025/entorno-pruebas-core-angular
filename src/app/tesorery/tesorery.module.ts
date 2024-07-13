@@ -11,10 +11,11 @@ import { NgApexchartsModule } from 'ng-apexcharts'
 import { HerramientasModule } from '../core/herramientas/herramientas.module'
 
 import { PaneldecontrolComponent } from '../tesoreria/paneldecontrol/paneldecontrol.component'
-import { InicioComponent } from './inicio/inicio.component'
+import { InicioComponent } from './inicio/inicio.component';
+import { DefaultComponent } from './default/default.component'
 
 @NgModule({
-	declarations: [PaneldecontrolComponent, InicioComponent],
+	declarations: [PaneldecontrolComponent, InicioComponent, DefaultComponent],
 	imports: [
 		CommonModule,
 		TesoreryRoutingModule,
