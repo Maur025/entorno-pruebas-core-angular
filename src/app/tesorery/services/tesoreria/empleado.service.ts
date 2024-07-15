@@ -1,13 +1,13 @@
-import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { ConsumoApiService } from 'src/app/core/services/consumoApi.service'
+import { Injectable } from '@angular/core'
+import { Observable } from 'rxjs'
+import { ApiResponseStandard } from 'src/app/shared/interface/common-api-response'
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root',
 })
 export class EmpleadoService {
-  apiName: string = 'empleado'
+	apiName: string = 'empleado'
 	apiUrl: string = ''
 	prefix: string = ''
 	constructor(private apiService: ConsumoApiService) {}
@@ -16,40 +16,54 @@ export class EmpleadoService {
 		this.prefix = prefix
 	}
 
-	getAll(
+	getAll = (
 		size: number = 100,
 		page: number = 1,
 		sortBy: string = 'id',
-		descending: false,
-		keyword: any = ''
-	) {
+		descending: boolean = false,
+		keyword: string = ''
+	): Observable<ApiResponseStandard> => {
 		size = size <= 0 ? 100 : size
-		return this.apiService.tesoreria.get(
-			`${this.apiUrl}${this.prefix}/${this.apiName}?size=${size}&page=${page -1}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
+		return this.apiService?.tesoreria?.get(
+			`${this.apiUrl}${this.prefix}/${this.apiName}?size=${size}&page=${
+				page - 1
+			}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
 		)
 	}
 
-  register(datos: any) {
-    return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}`, datos);
-  }
+	register = (datos: object): Observable<ApiResponseStandard> => {
+		return this.apiService?.tesoreria?.post(
+			`${this.apiUrl}${this.prefix}/${this.apiName}`,
+			datos
+		)
+	}
 
-  update(datos: any): Observable<any> {
-    return this.apiService.tesoreria.put(`${this.apiUrl}${this.prefix}/${this.apiName}/${datos.id}`, datos);
-  }
+	update = (datos: { id: string }): Observable<ApiResponseStandard> => {
+		return this.apiService?.tesoreria?.put(
+			`${this.apiUrl}${this.prefix}/${this.apiName}/${datos.id}`,
+			datos
+		)
+	}
 
-  find(id:string = '') {
-    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/${id}`);
-  }
-  delete(id: string | number): Observable<any> {
-    return this.apiService.tesoreria.delete(`${this.apiUrl}${this.prefix}/${this.apiName}/${id}`);
-  }
+	find = (id: string = ''): Observable<ApiResponseStandard> => {
+		return this.apiService?.tesoreria?.get(
+			`${this.apiUrl}${this.prefix}/${this.apiName}/${id}`
+		)
+	}
+	delete = (id: string | number): Observable<ApiResponseStandard> => {
+		return this.apiService?.tesoreria?.delete(
+			`${this.apiUrl}${this.prefix}/${this.apiName}/${id}`
+		)
+	}
 
-  habilitar(id: string | number): Observable<any> {
-    return this.apiService.tesoreria.patch(`${this.apiUrl}${this.prefix}/${this.apiName}/${id}`);
-  }
-  listarHabilitados() {
-    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/listar_habilitados`);
-  }
-
-
+	habilitar = (id: string | number): Observable<ApiResponseStandard> => {
+		return this.apiService?.tesoreria?.patch(
+			`${this.apiUrl}${this.prefix}/${this.apiName}/${id}`
+		)
+	}
+	listarHabilitados = (): Observable<ApiResponseStandard> => {
+		return this.apiService?.tesoreria?.get(
+			`${this.apiUrl}${this.prefix}/${this.apiName}/listar_habilitados`
+		)
+	}
 }
