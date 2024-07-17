@@ -98,6 +98,7 @@
 			aria-label="Close"
 			id="close-modal"
 			(click)="closeModal()"
+			[disabled]="onSubmitFormStatus"
 		></button>
 	</div>
 	<div class="modal-body" id="form-create-edit-employee">

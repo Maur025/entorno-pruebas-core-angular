@@ -10,7 +10,7 @@ export class UtilityService {
 
 	onlyNumbers = (
 		name: string = '',
-		event: Event,
+		event: Event = null,
 		reactiveForm: UntypedFormGroup = null
 	): string => {
 		if (event) {
@@ -44,7 +44,7 @@ export class UtilityService {
 
 	convertUppercase = (
 		name: string = '',
-		event: Event,
+		event: Event = null,
 		reactiveForm: UntypedFormGroup = null
 	): string | void => {
 		const inputElement: HTMLInputElement = event.target as HTMLInputElement
