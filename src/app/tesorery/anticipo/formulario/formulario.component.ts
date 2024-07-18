@@ -19,9 +19,12 @@ import {
 	ApiResponseStandard,
 	ErrorResponseStandard,
 } from 'src/app/shared/interface/common-api-response'
-import { firstValueFrom } from 'rxjs'
+import { BehaviorSubject, firstValueFrom } from 'rxjs'
 import { ProveedorService } from '../../services/compras/proveedor.service'
 import { ResponseHandlerService } from 'src/app/core/services/response-handler.service'
+import { AperturaCierreService } from '../../services/tesoreria/apertura-cierre.service'
+import { Router } from '@angular/router'
+import { GestionService } from '../../services/tesoreria/gestion.service'
 @Component({
 	selector: 'app-formulario',
 	templateUrl: './formulario.component.html',
@@ -40,6 +43,12 @@ export class FormularioComponent implements OnInit {
 	routeApi = 'anticipo'
 	levelNavigate = 2
 	service = null
+  dateNow = new Date(new Date().setHours(23, 59, 59, 999))
+  stateDate:boolean = false;
+  gestionId = new BehaviorSubject("");
+  public arrayDiasHabilitados: any = []
+	public arrayMesesHabilitados: any = []
+
 	public formGroup: FormGroup = null
 	public submitted: boolean = false
 
@@ -68,13 +77,17 @@ export class FormularioComponent implements OnInit {
 		private estadoAnticipoService: EstadoAnticipoService,
 		private aplicacionAnticipoService: AplicacionAnticipoService,
 		private _localeService: BsLocaleService,
-		private _comprasProveedorService: ProveedorService
+		private _comprasProveedorService: ProveedorService,
+    private router:Router,
+    private _aperturasCierresService: AperturaCierreService,
+    private gestionService: GestionService,
 	) {
 		this._localeService.use('es')
 	}
 
 	ngOnInit(): void {
-		this.setForm()
+    this.getGestionId();
+    this.setForm()
 		this.setTipoAnticipo()
 		this.getProveedoresHabilitados('')
 
@@ -85,7 +98,18 @@ export class FormularioComponent implements OnInit {
 					this.setOnChangeOperations(newValue)
 				)
 		}
-	}
+    setTimeout(()=>{
+      this.enabledDays();
+    },500)
+  }
+
+  getGestionId(){
+    this.gestionService.getRecordsEnabled().subscribe({
+      next:data=>{
+        this.gestionId.next(data.content[0].id);
+      }
+    })
+  }
 
 	setOnChangeOperations = (value: object[]): void => {
 		const amountControl = this.formGroup.get('monto')
@@ -98,11 +122,40 @@ export class FormularioComponent implements OnInit {
 		}
 	}
 
+  public enabledDays() {
+		this._aperturasCierresService
+			.getAperturaCierreHabilitados(this.gestionId.getValue())
+			.subscribe(data => {
+        this.checkDateStatus(data);
+				data['content'].forEach(mes => {
+					let dia = new Date(mes.fechaIni)
+					dia = new Date(dia.setDate(dia.getDate() - 1))
+					let diaFinal = new Date(mes.fechaFin)
+					this.arrayMesesHabilitados.push([dia, diaFinal])
+					while (dia < diaFinal) {
+						this.arrayDiasHabilitados.push(dia)
+						dia = new Date(dia.setDate(dia.getDate() + 1))
+					}
+				})
+			})
+	}
+
+  checkDateStatus(data){
+    if(data['content'].length==0){
+      this.form.fecha.disable();
+      this.stateDate = true;
+    }
+  }
+
+  enabledDate(){
+    this.router.navigate(["/gestion/aperturaCierre"]);
+  }
+
 	setForm() {
 		this.formGroup = this.formBuilder.group({
 			id: [null, []],
 			fecha: [null, [Validators.required]],
-			entidadReferencialId: [null, [Validators.required]],
+			entidadReferencialId: [null],
 			centroCostoId: [null, [Validators.required]],
 			nroReferencia: [null, [Validators.required]],
 			descripcion: [null, [Validators.required]],
@@ -110,6 +163,8 @@ export class FormularioComponent implements OnInit {
 			saldo: [null, [Validators.required]],
 			monto: [null, []],
 			operaciones: this.formBuilder.array([]),
+      proveedorId:[],
+      proveedor:[]
 		})
 	}
 
@@ -196,6 +251,17 @@ export class FormularioComponent implements OnInit {
 			})
 	}
 
+  selectProveedor(event){
+    let proveedorNew= event;
+    proveedorNew.razonSocial = event.nombreComercial,
+    proveedorNew.nroDocumento = event.nitCi,
+    proveedorNew.nombreProveedor = event.nombre
+    this.formGroup.patchValue({
+      proveedor: event
+    })
+
+  }
+
 	getTipoEntidadId = async (tipo: string) => {
 		try {
 			const response: ApiResponseStandard = await firstValueFrom(
@@ -268,7 +334,7 @@ export class FormularioComponent implements OnInit {
 
 	guardar() {
 		this.submitted = true
-		if (!this.formGroup?.valid) return
+    if (!this.formGroup?.valid) return
 		this.calcularMontos()
 		const montoForm: number = parseFloat(
 			this.formGroup?.get('monto')?.value || 0
@@ -276,7 +342,6 @@ export class FormularioComponent implements OnInit {
 		const saldoForm: number = parseFloat(
 			this.formGroup.get('saldo')?.value || 0
 		)
-
 		if (montoForm <= 0) {
 			this.notificacionService.alertErrorOnlyMessage(
 				'Ingrese un monto valido para continuar.'
@@ -305,7 +370,7 @@ export class FormularioComponent implements OnInit {
 	}
 
 	private processWithRegistration = (dataSend: ResponseDataStandard) => {
-		switch (this.tipo) {
+    switch (this.tipo) {
 			case 'aplicacion':
 			case 'devolucion':
 				dataSend.movimiento = 'MOVIMIENTO DE PROVEEDOR'

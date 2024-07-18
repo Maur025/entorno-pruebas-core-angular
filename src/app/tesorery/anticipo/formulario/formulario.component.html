@@ -11,6 +11,8 @@
             type="text"
             placeholder="dd-mm-AA"
             class="form-control"
+            [maxDate]="this.dateNow"
+            [datesEnabled]="arrayDiasHabilitados"
             bsDatepicker
             required
             formControlName="fecha"
@@ -20,6 +22,19 @@
           <span class="input-group-text">
             <i class="mdi mdi-calendar-outline"></i>
           </span>
+          <div
+            *ngIf="stateDate"
+            class="col-sm-12 d-flex justify-content-between"
+          >
+            <div class="text-danger mt-1 font-size-10">
+              No existen meses aperturados
+            </div>
+            <span
+              class="badge text-bg-warning btn-aperturar d-flex align-items-center"
+              (click)="enabledDate()"
+              >Aperturar</span
+            >
+          </div>
           <div
             *ngIf="submitted && form['fecha'].errors"
             class="invalid-feedback"
@@ -36,22 +51,22 @@
         <label class="mb-2" for="entidadReferencialId">(*)Proveedor </label>
         <ng-select
           class="uppercase"
-          formControlName="entidadReferencialId"
+          formControlName="proveedorId"
           placeholder="Seleccione Proveedor"
           [items]="listaProveedores"
           bindLabel="nombre"
           bindValue="id"
+          (change)="selectProveedor($event)"
           [ngClass]="{
-            'ngselect-invalid':
-              submitted && form['entidadReferencialId'].errors != null
+            'ngselect-invalid': submitted && form['proveedorId'].errors != null
           }"
         />
-        <div *ngIf="submitted && form['entidadReferencialId'].errors">
+        <div *ngIf="submitted && form['proveedorId'].errors">
           <div
             class="text-danger mt-1 font-size-10"
-            *ngIf="form['entidadReferencialId'].errors['required']"
+            *ngIf="form['proveedorId'].errors['required']"
           >
-            La entidad de referencia es obligatoria
+            Proveedor es obligatorio
           </div>
         </div>
       </div>
