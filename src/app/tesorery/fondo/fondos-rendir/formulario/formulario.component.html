@@ -103,7 +103,11 @@
 		</div>
 		<div class="mb-3 nav col-12 px-1">
 			<label class="mb-2" for="description">
-				<span *ngIf="tipoDescargo && ['DEVO', 'CIERR'].includes(tipoDescargo)">
+				<span
+					*ngIf="
+						tipoDescargo && ['DEVO', 'CIERR', 'DESE'].includes(tipoDescargo)
+					"
+				>
 					(*)
 				</span>
 				Descripción
