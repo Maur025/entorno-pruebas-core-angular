@@ -1,105 +1,108 @@
-import { Component, EventEmitter, Input, Output, ViewChild, OnInit, } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
-import { FondoOperativoService } from "src/app/tesorery/services/tesoreria/fondo-operativo.service";
-import { NotificacionService } from "src/app/core/services/notificacion.service";
-import { BsLocaleService } from "ngx-bootstrap/datepicker";
-import { CentrocostoService } from "src/app/tesorery/services/tesoreria/centrocosto.service";
-import { DetalleFondoOperativoService } from "src/app/tesorery/services/tesoreria/detalle-fondo-operativo.service";
-import { EstadosService } from "src/app/tesorery/services/tesoreria/estados.service";
-import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
-import { BsModalService } from "ngx-bootstrap/modal";
-import { EsquemaService } from "src/app/tesorery/services/tesoreria/esquema.service";
-import { EntidadService } from "src/app/tesorery/services/tesoreria/entidad.service";
-import { AperturaCierreService } from "src/app/tesorery/services/tesoreria/apertura-cierre.service";
-import { Router } from "@angular/router";
-import { GestionService } from "src/app/tesorery/services/tesoreria/gestion.service";
-import { BehaviorSubject } from "rxjs";
-import { EmpleadoService } from "src/app/tesorery/services/tesoreria/empleado.service";
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core'
+import {
+	FormBuilder,
+	FormGroup,
+	Validators,
+	FormControl,
+	AbstractControl,
+} from '@angular/forms'
+import { FondoOperativoService } from 'src/app/tesorery/services/tesoreria/fondo-operativo.service'
+import { NotificacionService } from 'src/app/core/services/notificacion.service'
+import { BsLocaleService } from 'ngx-bootstrap/datepicker'
+import { CentrocostoService } from 'src/app/tesorery/services/tesoreria/centrocosto.service'
+import { DetalleFondoOperativoService } from 'src/app/tesorery/services/tesoreria/detalle-fondo-operativo.service'
+import { EstadosService } from 'src/app/tesorery/services/tesoreria/estados.service'
+import { BsModalService } from 'ngx-bootstrap/modal'
+import { EsquemaService } from 'src/app/tesorery/services/tesoreria/esquema.service'
+import { EntidadService } from 'src/app/tesorery/services/tesoreria/entidad.service'
+import { AperturaCierreService } from 'src/app/tesorery/services/tesoreria/apertura-cierre.service'
+import { Router } from '@angular/router'
+import { GestionService } from 'src/app/tesorery/services/tesoreria/gestion.service'
+import { BehaviorSubject } from 'rxjs'
+import { EmpleadoService } from 'src/app/tesorery/services/tesoreria/empleado.service'
 
 @Component({
-  selector: 'app-formulario-operativo',
-  templateUrl: './formulario.component.html',
-  styleUrls: ['./formulario.component.scss']
+	selector: 'app-formulario-operativo',
+	templateUrl: './formulario.component.html',
+	styleUrls: ['./formulario.component.scss'],
 })
 export class FormularioOperativoComponent implements OnInit {
+	@Input() transaccion
+	@Input() esquemaId
 
-  @Input() transaccion;
-  @Input() esquemaId;
-
-  @Input() fondo;
-  @Input() tipoDescargo;
-  @Output() alGuardar = new EventEmitter<any>();
-  @Output() alActualizar = new EventEmitter<any>();
-  @Output() alProcesar = new EventEmitter<any>();
-  formGroup: FormGroup;
-  submitted = false;
-  listaCentroCostos: any;
-  listaBancos: any;
-  listaCuentasBanco: any;
-  listaMedioTransferencias: any;
-  listaEstados: any;
-  listaResponsables: any;
-  fechaMinima: any;
-  montoPagar:any;
-  stateDate:boolean = false;
+	@Input() fondo
+	@Input() tipoDescargo
+	@Output() alGuardar = new EventEmitter<any>()
+	@Output() alActualizar = new EventEmitter<any>()
+	@Output() alProcesar = new EventEmitter<any>()
+	formGroup: FormGroup
+	submitted = false
+	listaCentroCostos: any
+	listaBancos: any
+	listaCuentasBanco: any
+	listaMedioTransferencias: any
+	listaEstados: any
+	listaResponsables: any
+	fechaMinima: any
+	montoPagar: any
+	stateDate: boolean = false
 	dateNow = new Date(new Date().setHours(23, 59, 59, 999))
-  gestionId = new BehaviorSubject("");
+	gestionId = new BehaviorSubject('')
 
-  public arrayDiasHabilitados: any = []
+	public arrayDiasHabilitados: any = []
 	public arrayMesesHabilitados: any = []
 
+	constructor(
+		private formBuilder: FormBuilder,
+		private fondoOperativoService: FondoOperativoService,
+		private entidadService: EntidadService,
+		private estadosService: EstadosService,
+		private detalleFontoOperativoService: DetalleFondoOperativoService,
+		private centroCostosService: CentrocostoService,
+		private notificacionService: NotificacionService,
+		private _localeService: BsLocaleService,
+		public esquemasService: EsquemaService,
+		private modalService: BsModalService,
+		private aperturasCierresService: AperturaCierreService,
+		private router: Router,
+		private gestionService: GestionService,
+		private _empleadoService: EmpleadoService
+	) {
+		this._localeService.use('es')
+	}
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private fondoOperativoService: FondoOperativoService,
-    private entidadService: EntidadService,
-    private estadosService: EstadosService,
-    private detalleFontoOperativoService: DetalleFondoOperativoService,
-    private centroCostosService: CentrocostoService,
-    private notificacionService: NotificacionService,
-    private _localeService: BsLocaleService,
-    public esquemasService: EsquemaService,
-    private modalService: BsModalService,
-    private aperturasCierresService: AperturaCierreService,
-    private router:Router,
-    private gestionService: GestionService,
-    private _empleadoService: EmpleadoService
-  ) {
-    this._localeService.use('es');
-  }
+	ngOnInit(): void {
+		this.getGestionId()
+		this.initForm()
+		this.fechaMinima = new Date()
+		this.getEstados()
+		this.getCentroCostos()
+		this.getResponsables()
+		if (this.fondo) this.setFondo()
+		if (this.transaccion) this.setTransaccion()
+		this.tipoDescargoForm()
+		setTimeout(() => {
+			this.enabledDays()
+		}, 500)
+	}
 
-  ngOnInit(): void {
-    this.getGestionId();
-    this.initForm();
-    this.fechaMinima = new Date();
-    this.getEstados();
-    this.getCentroCostos();
-    this.getResponsables();
-    if (this.fondo) this.setFondo();
-    if (this.transaccion) this.setTransaccion();
-    this.tipoDescargoForm();
-    setTimeout(()=>{
-      this.enabledDays();
-    },500)
-  }
+	getGestionId() {
+		this.gestionService.getRecordsEnabled().subscribe({
+			next: data => {
+				this.gestionId.next(data.content[0].id)
+			},
+		})
+	}
 
-  getGestionId(){
-    this.gestionService.getRecordsEnabled().subscribe({
-      next:data=>{
-        this.gestionId.next(data.content[0].id);
-      }
-    })
-  }
-
-  public enabledDays() {
+	public enabledDays() {
 		this.aperturasCierresService
 			.getAperturaCierreHabilitados(this.gestionId.getValue())
 			.subscribe(data => {
-        this.checkDateStatus(data);
+				this.checkDateStatus(data)
 				data['content'].forEach(mes => {
 					let dia = new Date(mes.fechaIni)
 					dia = new Date(dia.setDate(dia.getDate() - 1))
-					let diaFinal = new Date(mes.fechaFin)
+					const diaFinal = new Date(mes.fechaFin)
 					this.arrayMesesHabilitados.push([dia, diaFinal])
 					while (dia < diaFinal) {
 						this.arrayDiasHabilitados.push(dia)
@@ -109,236 +112,327 @@ export class FormularioOperativoComponent implements OnInit {
 			})
 	}
 
-  checkDateStatus(data){
-    if(data['content'].length==0){
-      this.form.fechaSolicitud.disable();
-      this.stateDate = true;
-    }
-  }
+	checkDateStatus(data) {
+		if (data['content'].length == 0) {
+			this.form.fechaSolicitud.disable()
+			this.stateDate = true
+		}
+	}
 
-  enabledDate(){
-    this.cerrarModal();
-    this.router.navigate(["/gestion/aperturaCierre"]);
-  }
+	enabledDate() {
+		this.cerrarModal()
+		this.router.navigate(['/gestion/aperturaCierre'])
+	}
 
-  initForm() {
-    this.formGroup = this.formBuilder.group({
-      id: [, []],
-      nombre: [, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
-      fechaSolicitud: [, [Validators.required]],
-      nroSolicitud: [, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
-      importe: [, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
-      aperturado: [],
-      descripcion: [],
-      empleadoId: [],
-      responsable: [],
-    });
-  }
+	initForm() {
+		this.formGroup = this.formBuilder.group({
+			id: [null, []],
+			nombre: [
+				null,
+				[
+					Validators.required,
+					Validators.minLength(2),
+					Validators.maxLength(255),
+				],
+			],
+			fechaSolicitud: [null, [Validators.required]],
+			nroSolicitud: [
+				null,
+				[Validators.required, Validators.pattern(/^[0-9]*$/)],
+			],
+			importe: [null, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
+			aperturado: [null],
+			descripcion: [null, [Validators.required]],
+			empleadoId: [null],
+			responsable: [null],
+		})
+	}
 
-  tipoDescargoForm() {
-    if (this.tipoDescargo) {
-      if (this.tipoDescargo == 'APERT') {
-        this.formGroup.disable();
-        this.addFormApertura();
-        this.montoPagar = this.fondo.importe;
-      } else if (this.tipoDescargo == 'CIERR') {
-        this.formGroup.disable();
-        this.addFormDescargo();
-        this.form.saldo.setValue(this.fondo.saldo);
-        this.form.saldo.disable();
-        this.montoPagar = this.fondo.saldo;
-        if (this.fondo.saldo == 0) {
-          this.formGroup.removeControl('centroCostoId');
-          this.formGroup.removeControl('operaciones');
-        } else {
-          this.form.centroCostoId.enable();
-        }
-        this.formGroup.addControl('documento', new FormControl(null, Validators.required));
-      } else {
-        this.formGroup.disable();
-        this.addFormDescargo();
-        this.form.saldo.setValue(this.fondo.saldo);
-        this.form.saldo.disable();
-        this.form.centroCostoId.enable();
-      }
-      this.form.descripcion.setValue(null);
-      this.form.descripcion.enable();
-    }
-  }
+	tipoDescargoForm() {
+		if (this.tipoDescargo) {
+			if (this.tipoDescargo == 'APERT') {
+				this.formGroup.disable()
+				this.addFormApertura()
+				this.montoPagar = this.fondo.importe
+			} else if (this.tipoDescargo == 'CIERR') {
+				this.formGroup.disable()
+				this.addFormDescargo()
+				this.form.saldo.setValue(this.fondo.saldo)
+				this.form.saldo.disable()
+				this.montoPagar = this.fondo.saldo
+				if (this.fondo.saldo == 0) {
+					this.formGroup.removeControl('centroCostoId')
+					this.formGroup.removeControl('operaciones')
+				} else {
+					this.form.centroCostoId.enable()
+				}
+				this.formGroup.addControl(
+					'documento',
+					new FormControl(null, Validators.required)
+				)
+			} else {
+				this.formGroup.disable()
+				this.addFormDescargo()
+				this.form.saldo.setValue(this.fondo.saldo)
+				this.form.saldo.disable()
+				this.form.centroCostoId.enable()
+			}
+			this.form.descripcion.setValue(null)
+			this.form.descripcion.enable()
+		}
+	}
 
-  addFormApertura() {
-    this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
-    this.formGroup.addControl('estado', new FormControl(null, Validators.required));
-    this.formGroup.addControl('operaciones', this.formBuilder.array([], [Validators.required]));
-  }
+	addFormApertura() {
+		this.formGroup.addControl(
+			'centroCostoId',
+			new FormControl(null, Validators.required)
+		)
+		this.formGroup.addControl(
+			'estado',
+			new FormControl(null, Validators.required)
+		)
+		this.formGroup.addControl(
+			'operaciones',
+			this.formBuilder.array([], [Validators.required])
+		)
+	}
 
-  addFormDescargo() {
-    this.formGroup.addControl('centroCostoId', new FormControl(null, Validators.required));
-    this.formGroup.addControl('saldo', new FormControl(null, Validators.required));
-    if (this.tipoDescargo != 'CIERR') this.formGroup.addControl('monto', new FormControl(null, [Validators.required]));
-    this.formGroup.addControl('estado', new FormControl(null, Validators.required));
-    this.formGroup.addControl('operaciones', this.formBuilder.array([], [Validators.required]));
-  }
+	addFormDescargo() {
+		this.formGroup.addControl(
+			'centroCostoId',
+			new FormControl(null, Validators.required)
+		)
+		this.formGroup.addControl(
+			'saldo',
+			new FormControl(null, Validators.required)
+		)
+		if (this.tipoDescargo != 'CIERR')
+			this.formGroup.addControl(
+				'monto',
+				new FormControl(null, [Validators.required])
+			)
+		this.formGroup.addControl(
+			'estado',
+			new FormControl(null, Validators.required)
+		)
+		this.formGroup.addControl(
+			'operaciones',
+			this.formBuilder.array([], [Validators.required])
+		)
+	}
 
-  getCentroCostos() {
-    this.centroCostosService.habilitados().subscribe(data => {
-      this.listaCentroCostos = data.content;
-    }, error => this.notificacionService.alertError(error));
-  }
+	getCentroCostos() {
+		this.centroCostosService.habilitados().subscribe(
+			data => {
+				this.listaCentroCostos = data.content
+			},
+			error => this.notificacionService.alertError(error)
+		)
+	}
 
-  getEstados() {
-    this.estadosService.habilitadosFondos().subscribe(data => {
-      this.listaEstados = data.content;
-      if (this.tipoDescargo) this.form.estado.setValue(this.listaEstados.find(e => e.codigo == this.tipoDescargo).id);
-      this.cambioEstado();
-    }, error => this.notificacionService.alertError(error));
-  }
+	getEstados() {
+		this.estadosService.habilitadosFondos().subscribe(
+			data => {
+				this.listaEstados = data.content
+				if (this.tipoDescargo)
+					this.form.estado.setValue(
+						this.listaEstados.find(e => e.codigo == this.tipoDescargo).id
+					)
+				this.cambioEstado()
+			},
+			error => this.notificacionService.alertError(error)
+		)
+	}
 
-  getResponsables() {
-    this._empleadoService.listarHabilitados().subscribe({
-      next:data=>{
-        this.listaResponsables = data.data;
-      },
-      error:err=>this.notificacionService.alertError(err)
-    })
-  }
+	getResponsables() {
+		this._empleadoService.listarHabilitados().subscribe({
+			next: data => {
+				this.listaResponsables = data.data
+			},
+			error: err => this.notificacionService.alertError(err),
+		})
+	}
 
-  cambioResponsable() {
-    if (this.form.empleadoId != null) {
-      this.form.responsable.setValue(this.listaResponsables.find(e => e.id == this.form.empleadoId.value).entidad.nombre);
-    }
-  }
+	cambioResponsable() {
+		if (this.form.empleadoId != null) {
+			this.form.responsable.setValue(
+				this.listaResponsables.find(e => e.id == this.form.empleadoId.value)
+					.entidad.nombre
+			)
+		}
+	}
 
-  cambioEstado() {
-    if (this.fondo && this.form.monto) {
-      if (this.form.monto == undefined) {
-        this.form.monto.setValidators([Validators.required]);
-      } else {
-        let estado = this.listaEstados.find(({ id }) => id === this.form.estado.value);
-        switch (estado.codigo) {
-          case "REND":
-            this.form.monto.setValidators([Validators.required, Validators.min(1)]);
-            break;
-          case "REP":
-            this.form.monto.setValidators([Validators.required, this.validatorMontoReposicion(this.fondo.importe - this.fondo.saldo), Validators.min(1)]);
-            break;
-          case "DEV":
-            this.form.monto.setValidators([Validators.required, Validators.max(this.fondo.saldo), Validators.min(1)]);
-            break;
-        }
-      }
-      this.form.monto.updateValueAndValidity()
-    }
-  }
+	cambioEstado() {
+		if (this.fondo && this.form.monto) {
+			if (this.form.monto == undefined) {
+				this.form.monto.setValidators([Validators.required])
+			} else {
+				const estado = this.listaEstados.find(
+					({ id }) => id === this.form.estado.value
+				)
+				switch (estado.codigo) {
+					case 'REND':
+						this.form.monto.setValidators([
+							Validators.required,
+							Validators.min(1),
+						])
+						break
+					case 'REP':
+						this.form.monto.setValidators([
+							Validators.required,
+							this.validatorMontoReposicion(
+								this.fondo.importe - this.fondo.saldo
+							),
+							Validators.min(1),
+						])
+						break
+					case 'DEV':
+						this.form.monto.setValidators([
+							Validators.required,
+							Validators.max(this.fondo.saldo),
+							Validators.min(1),
+						])
+						break
+				}
+			}
+			this.form.monto.updateValueAndValidity()
+		}
+	}
 
-  cambioMonto(){
-    this.montoPagar = this.form.monto.value;
-  }
+	cambioMonto() {
+		this.montoPagar = this.form.monto.value
+	}
 
-  get form() {
-    return this.formGroup.controls;
-  }
+	get form() {
+		return this.formGroup.controls
+	}
 
-  setFondo() {
-    this.formGroup.patchValue({
-      id: this.fondo.id,
-      nombre: this.fondo.nombre,
-      fechaSolicitud: new Date(this.fondo.fechaSolicitud),
-      nroSolicitud: this.fondo.nroSolicitud,
-      importe: this.fondo.importe,
-      aperturado: this.fondo.aperturado,
-      descripcion: this.fondo.descripcion,
-      saldo: this.fondo.saldo,
-      empleadoId: this.fondo.empleadoId,
-    });
-    this.checkOpening();
-  }
+	setFondo() {
+		this.formGroup.patchValue({
+			id: this.fondo.id,
+			nombre: this.fondo.nombre,
+			fechaSolicitud: new Date(this.fondo.fechaSolicitud),
+			nroSolicitud: this.fondo.nroSolicitud,
+			importe: this.fondo.importe,
+			aperturado: this.fondo.aperturado,
+			descripcion: this.fondo.descripcion,
+			saldo: this.fondo.saldo,
+			empleadoId: this.fondo.empleadoId,
+		})
+		this.checkOpening()
+	}
 
-  checkOpening(){
-    if(this.fondo.aperturado){
-      this.form.fechaSolicitud.disable();
-      this.form.importe.disable();
-    }
-  }
+	checkOpening() {
+		if (this.fondo.aperturado) {
+			this.form.fechaSolicitud.disable()
+			this.form.importe.disable()
+		}
+	}
 
-  setTransaccion() {
-    let fecha = this.transaccion.fechaMovimiento.substring(5, 7) + '-' + this.transaccion.fechaMovimiento.substring(8, 10) + '-' + this.transaccion.fechaMovimiento.substring(0, 4);
-    this.formGroup.patchValue({
-      monto: this.transaccion.monto,
-      centroCostoId: this.transaccion.centroCostoId,
-      fechaMovimiento: new Date(fecha),
-      estado: this.transaccion.estado,
-    });
-    this.formGroup.disable();
-    this.form.fechaMovimiento.enable();
-  }
+	setTransaccion() {
+		const fecha =
+			this.transaccion.fechaMovimiento.substring(5, 7) +
+			'-' +
+			this.transaccion.fechaMovimiento.substring(8, 10) +
+			'-' +
+			this.transaccion.fechaMovimiento.substring(0, 4)
+		this.formGroup.patchValue({
+			monto: this.transaccion.monto,
+			centroCostoId: this.transaccion.centroCostoId,
+			fechaMovimiento: new Date(fecha),
+			estado: this.transaccion.estado,
+		})
+		this.formGroup.disable()
+		this.form.fechaMovimiento.enable()
+	}
 
-  public guardar() {
-    this.submitted = true;
-    let data = this.formGroup.getRawValue();
-    this.cambioEstado();
-    if (this.formGroup.valid) {
-      if (this.tipoDescargo) {
-        data.nroReferencia = data.nroSolicitud;
-        data.refId = null;
-        data.fondoOperativoId = data.id;
-        data.fechaMovimiento = data.fechaSolicitud;
-        if (this.tipoDescargo == 'APERT') {
-          data.monto = data.importe;
-        } else if (this.tipoDescargo == 'CIERR') {
-          data.monto = data.saldo;
-        }
-        this.detalleFontoOperativoService.register(data).subscribe(res => {
-          this.notificacionService.successStandar('Movimiento de fondo operativo registrado exitosamente.');
-          this.alActualizar.emit();
-        }, error => this.notificacionService.alertError(error));
-      } else {
-        if (this.fondo && !this.transaccion) {
-          this.fondoOperativoService.update(data).subscribe(data => {
-            this.notificacionService.successStandar();
-            this.alActualizar.emit();
-          }, error => this.notificacionService.alertError(error));
-        } else {
-          this.fondoOperativoService.register(data).subscribe(data => {
-            this.notificacionService.successStandar();
-            this.alActualizar.emit();
-          }, error => this.notificacionService.alertError(error));
-        }
-      }
-    }
-  }
+	public guardar() {
+		this.submitted = true
+		const data = this.formGroup.getRawValue()
+		this.cambioEstado()
+		if (this.formGroup.valid) {
+			if (this.tipoDescargo) {
+				data.nroReferencia = data.nroSolicitud
+				data.refId = null
+				data.fondoOperativoId = data.id
+				data.fechaMovimiento = data.fechaSolicitud
+				if (this.tipoDescargo == 'APERT') {
+					data.monto = data.importe
+				} else if (this.tipoDescargo == 'CIERR') {
+					data.monto = data.saldo
+				}
+				this.detalleFontoOperativoService.register(data).subscribe(
+					res => {
+						this.notificacionService.successStandar(
+							'Movimiento de fondo operativo registrado exitosamente.'
+						)
+						this.alActualizar.emit()
+					},
+					error => this.notificacionService.alertError(error)
+				)
+			} else {
+				if (this.fondo && !this.transaccion) {
+					this.fondoOperativoService.update(data).subscribe(
+						data => {
+							this.notificacionService.successStandar()
+							this.alActualizar.emit()
+						},
+						error => this.notificacionService.alertError(error)
+					)
+				} else {
+					this.fondoOperativoService.register(data).subscribe(
+						data => {
+							this.notificacionService.successStandar()
+							this.alActualizar.emit()
+						},
+						error => this.notificacionService.alertError(error)
+					)
+				}
+			}
+		}
+	}
 
-  public validatorFecha() {
-    return (control: AbstractControl): any => {
-      let errores = 'invalido';
-      let diaActual = (new Date());
-      diaActual.setHours(0, 0, 0, 0);
-      if (control.value && control.value > diaActual || JSON.stringify(control.value) == JSON.stringify(diaActual)) errores = 'valido';
-      if (control.value && errores == 'invalido') return { fechaInvalida: "INVALID" }
-      else return null;
-    }
-  }
+	public validatorFecha() {
+		return (control: AbstractControl): any => {
+			let errores = 'invalido'
+			const diaActual = new Date()
+			diaActual.setHours(0, 0, 0, 0)
+			if (
+				(control.value && control.value > diaActual) ||
+				JSON.stringify(control.value) == JSON.stringify(diaActual)
+			)
+				errores = 'valido'
+			if (control.value && errores == 'invalido')
+				return { fechaInvalida: 'INVALID' }
+			else return null
+		}
+	}
 
-  validatorMontoReposicion(monto) {
-    return (control: AbstractControl): any => {
-      let errores = 'invalido';
-      if (control.value && control.value <= monto) errores = 'valido';
-      if (control.value && errores == 'invalido') return { montoReposicion: "INVALID" }
-      else return null;
-    }
-  }
+	validatorMontoReposicion(monto) {
+		return (control: AbstractControl): any => {
+			let errores = 'invalido'
+			if (control.value && control.value <= monto) errores = 'valido'
+			if (control.value && errores == 'invalido')
+				return { montoReposicion: 'INVALID' }
+			else return null
+		}
+	}
 
-  validatorFechaMovimiento() {
-    return (control: AbstractControl): any => {
-      let errores = 'invalido';
-      if (control.value && (new Date(control.value) >= new Date(this.fondo.fechaSolicitud))) errores = 'valido';
-      if (control.value && errores == 'invalido') return { fechaMovimientoInvalida: "INVALID" }
-      else return null;
-    }
-  }
+	validatorFechaMovimiento() {
+		return (control: AbstractControl): any => {
+			let errores = 'invalido'
+			if (
+				control.value &&
+				new Date(control.value) >= new Date(this.fondo.fechaSolicitud)
+			)
+				errores = 'valido'
+			if (control.value && errores == 'invalido')
+				return { fechaMovimientoInvalida: 'INVALID' }
+			else return null
+		}
+	}
 
-  cerrarModal() {
-    this.modalService.hide();
-  }
-
+	cerrarModal() {
+		this.modalService.hide()
+	}
 }

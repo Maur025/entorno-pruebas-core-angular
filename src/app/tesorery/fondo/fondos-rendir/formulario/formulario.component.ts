@@ -89,7 +89,7 @@ export class FormularioRendirComponent implements OnInit {
 			],
 			importe: [null, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
 			aperturado: [null],
-			descripcion: [null],
+			descripcion: [null, [Validators.required]],
 			empleadoId: [null, [Validators.required]],
 			centroCostoId: [null, [Validators.required]],
 		})
