@@ -1,0 +1,81 @@
+<div class="row my-3">
+	<div class="col-12">
+		<div class="row align-items-center mb-3">
+			<div class="col-4 col-xl-auto">
+				<div class="form-check form-check-reverse">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						value=""
+						id="duesCheckAll"
+					/>
+					<label class="form-check-label float-end" for="duesCheckAll">
+						Todos los pagos
+					</label>
+				</div>
+			</div>
+			<div class="col-4 col-sm-3 col-xl-3">
+				<input
+					type="text"
+					[readOnly]="true"
+					class="form-control-plaintext text-end"
+					value="Total a Pagar"
+				/>
+			</div>
+			<div class="col-4 col-xl-auto">
+				<input
+					type="text"
+					name=""
+					class="form-control form-control-sm text-end"
+					value="300"
+					[readOnly]="true"
+					[disabled]="true"
+				/>
+			</div>
+		</div>
+
+		<div
+			class="row align-items-center mb-1"
+			*ngFor="
+				let dueData of paymentData?.planPagos;
+				let checkboxDuesIndex = index
+			"
+		>
+			<div class="col-4 col-xl-auto">
+				<div class="form-check form-check-reverse">
+					<input
+						class="form-check-input"
+						type="checkbox"
+						[id]="'duesCheck' + checkboxDuesIndex"
+						[(ngModel)]="dueData.selected"
+					/>
+					<label
+						class="form-check-label float-end"
+						[for]="'duesCheck' + checkboxDuesIndex"
+					>
+						cuota {{ checkboxDuesIndex + 1 }}
+					</label>
+				</div>
+			</div>
+			<div class="col-4 col-sm-3 col-xl-3">
+				<input
+					type="text"
+					name=""
+					class="form-control form-control-sm text-end"
+					value="100"
+					[readOnly]="true"
+					[disabled]="true"
+				/>
+			</div>
+			<div class="col-4 col-xl-auto">
+				<input
+					*ngIf="dueData.selected"
+					type="text"
+					name=""
+					class="form-control form-control-sm text-end"
+					placeholder="Monto a Pagar Bs."
+				/>
+			</div>
+		</div>
+	</div>
+</div>

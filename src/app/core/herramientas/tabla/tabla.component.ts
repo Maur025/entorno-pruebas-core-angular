@@ -68,6 +68,9 @@ export class TablaComponent implements OnInit {
 	@Input() paginate = true
 	estaCargando = true
 	filtrosNuevo = {}
+	@Input() showOptionsButtonsTop: boolean = true
+
+	@Input() optionTableButtonTemplate: TemplateRef<unknown> = null
 
 	public pagination = {
 		size: 10,
@@ -92,7 +95,7 @@ export class TablaComponent implements OnInit {
 	config_autoclose: any = false
 	mostrarTodas() {
 		this.cabeceras.forEach(key => {
-			let campo = this.formato.cabeceras[key]
+			const campo = this.formato.cabeceras[key]
 			if (campo.buscable && campo.buscableCheck && campo.visible) {
 				campo.visibleCheck = true
 			}
@@ -158,8 +161,8 @@ export class TablaComponent implements OnInit {
 						this.idRuta
 					).subscribe(
 						(result: any) => {
-              let contenido = result.data ? result.data : result.content;
-							this.datos = contenido;
+							const contenido = result.data ? result.data : result.content
+							this.datos = contenido
 							this.pagination.rowsNumber = result.pagination.rowsNumber
 							this.pagination.pages = result.pagination.pages
 							this.estaCargando = false
@@ -178,8 +181,8 @@ export class TablaComponent implements OnInit {
 						this.inputBuscar
 					).subscribe(
 						(result: any) => {
-              let contenido = result.data ? result.data : result.content;
-							this.datos = contenido;
+							const contenido = result.data ? result.data : result.content
+							this.datos = contenido
 							this.pagination.rowsNumber = result.pagination
 								? result.pagination.rowsNumber
 								: contenido.length
@@ -204,8 +207,8 @@ export class TablaComponent implements OnInit {
 					this.filtros
 				).subscribe(
 					(result: any) => {
-            let contenido = result.data ? result.data : result.content;
-            this.datos = contenido;
+						const contenido = result.data ? result.data : result.content
+						this.datos = contenido
 						this.pagination.rowsNumber = result.pagination
 							? result.pagination.rowsNumber
 							: contenido.length
@@ -223,8 +226,8 @@ export class TablaComponent implements OnInit {
 		} else {
 			this.datosService[this.getAll](this.inputBuscar, this.filtros).subscribe(
 				(result: any) => {
-          let contenido = result.data ? result.data : result.content;
-          this.datos = contenido;
+					const contenido = result.data ? result.data : result.content
+					this.datos = contenido
 					this.pagination.rowsNumber = result.pagination
 						? result.pagination.rowsNumber
 						: contenido.length
@@ -242,7 +245,7 @@ export class TablaComponent implements OnInit {
 	}
 
 	resetButtons = event => {
-		let tableButtons: any = document.getElementsByClassName('colCabecera')
+		const tableButtons: any = document.getElementsByClassName('colCabecera')
 		;[...tableButtons].map(button => {
 			if (button !== event.target) {
 				button.removeAttribute('data-dir')
@@ -272,7 +275,7 @@ export class TablaComponent implements OnInit {
 	mascara(valor, data, campo) {
 		if (campo.mascara === undefined) return valor
 		else if (Array.isArray(data[campo.mascara.campo])) {
-			let arrValues = []
+			const arrValues = []
 			data[campo.mascara.campo].forEach(element =>
 				arrValues.push(element[campo.mascara.valor])
 			)
@@ -303,7 +306,7 @@ export class TablaComponent implements OnInit {
 	}
 
 	resetButtonsCabecera() {
-		let tableButtons: any = document.getElementsByClassName('colCabecera')
+		const tableButtons: any = document.getElementsByClassName('colCabecera')
 		;[...tableButtons].map(button => {
 			button.removeAttribute('data-dir')
 		})

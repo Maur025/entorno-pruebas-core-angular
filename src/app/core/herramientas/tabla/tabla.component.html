@@ -58,7 +58,7 @@
 					</div>
 				</div>
 				<div class="card-body pt-3">
-					<div class="row">
+					<div class="row" *ngIf="showOptionsButtonsTop">
 						<div class="form-group">
 							<div class="float-end">
 								<div
@@ -67,45 +67,59 @@
 									[insideClick]="true"
 									placement="top"
 								>
-									<button
-										type="button"
-										class="btn btn-sm btn-secondary dropdown-toggle"
-										*ngIf="botonExportar"
-										dropdownToggle
-									>
-										<i class="mdi mdi-download"></i> Exportar
-										<span class="bx bx-caret-down"></span>
-									</button>
-									<div class="dropdown-menu text-center" *dropdownMenu>
+									<ng-template
+										*ngIf="
+											optionTableButtonTemplate;
+											then tableButtonTemplate;
+											else noTableButtonTemplate
+										"
+									/>
+									<ng-template #tableButtonTemplate>
+										<ng-container
+											[ngTemplateOutlet]="optionTableButtonTemplate"
+										/>
+									</ng-template>
+									<ng-template #noTableButtonTemplate>
 										<button
-											class="dropdown-item py-1"
-											(click)="
-												alExportar.emit({
-													event: $event,
-													search: inputBuscar,
-													columnas: cabeceras
-												});
-												exportar('XLSX')
-											"
+											type="button"
+											class="btn btn-sm btn-secondary dropdown-toggle"
+											*ngIf="botonExportar"
+											dropdownToggle
 										>
-											<i class="mdi mdi-file-excel text-success"></i> Excel
-											<i class="mdi mdi-download"></i>
+											<i class="mdi mdi-download"></i> Exportar
+											<span class="bx bx-caret-down"></span>
 										</button>
-										<button
-											class="dropdown-item py-1"
-											(click)="
-												alExportar.emit({
-													event: $event,
-													search: inputBuscar,
-													columnas: cabeceras
-												});
-												exportar('PDF')
-											"
-										>
-											<i class="mdi mdi-file-pdf text-danger"></i> PDF
-											<i class="mdi mdi-download"></i>
-										</button>
-									</div>
+										<div class="dropdown-menu text-center" *dropdownMenu>
+											<button
+												class="dropdown-item py-1"
+												(click)="
+													alExportar.emit({
+														event: $event,
+														search: inputBuscar,
+														columnas: cabeceras
+													});
+													exportar('XLSX')
+												"
+											>
+												<i class="mdi mdi-file-excel text-success"></i> Excel
+												<i class="mdi mdi-download"></i>
+											</button>
+											<button
+												class="dropdown-item py-1"
+												(click)="
+													alExportar.emit({
+														event: $event,
+														search: inputBuscar,
+														columnas: cabeceras
+													});
+													exportar('PDF')
+												"
+											>
+												<i class="mdi mdi-file-pdf text-danger"></i> PDF
+												<i class="mdi mdi-download"></i>
+											</button>
+										</div>
+									</ng-template>
 								</div>
 								<div
 									class="btn-group"

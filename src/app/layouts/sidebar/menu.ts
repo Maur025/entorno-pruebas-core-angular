@@ -9,13 +9,13 @@ export const MENU: MenuItem[] = [
 	{
 		id: 11,
 		label: 'Inicio',
-		link: 'inicio',
+		link: '/inicio',
 		icon: 'bx bx-home',
 	},
 	{
 		id: 12,
 		label: 'Aperturas y Cierres',
-		link: 'gestion/aperturaCierre',
+		link: '/gestion/aperturaCierre',
 		icon: 'bx bx-calendar-check',
 	},
 	{
@@ -27,20 +27,20 @@ export const MENU: MenuItem[] = [
 		id: 21,
 		label: 'Bancos',
 		icon: 'bx bxs-bank',
-		link: 'banco',
+		link: '/banco',
 	},
 
 	{
 		id: 22,
 		label: 'Cajas',
 		icon: 'mdi mdi-cash-register',
-		link: 'caja',
+		link: '/caja',
 	},
 	{
 		id: 23,
 		label: 'Empleado - Responsable',
 		icon: 'mdi mdi-account-group',
-		link: 'empleado',
+		link: '/empleado',
 	},
 	{
 		id: 3,
@@ -55,12 +55,12 @@ export const MENU: MenuItem[] = [
 			{
 				id: 311,
 				label: 'Proveedor',
-				link: 'anticipo',
+				link: '/anticipo',
 			},
 			{
 				id: 312,
 				label: 'Cliente',
-				link: 'anticipo/cliente',
+				link: '/anticipo/cliente',
 			},
 		],
 	},
@@ -72,17 +72,34 @@ export const MENU: MenuItem[] = [
 			{
 				id: 321,
 				label: 'Fondos Operativos',
-				link: 'fondo/operativos',
+				link: '/fondo/operativos',
 			},
 			{
 				id: 322,
 				label: 'Fondos a Rendir',
-				link: 'fondo/rendir',
+				link: '/fondo/rendir',
 			},
 		],
 	},
 	{
 		id: 4,
+		label: 'OPERACIONES FINANCIERAS',
+		isTitle: true,
+	},
+	{
+		id: 41,
+		label: 'Efectuar Pago',
+		icon: 'mdi mdi-cash-minus',
+		link: '/operacion_financiera/efectuar_pago',
+	},
+	{
+		id: 42,
+		label: 'Efectuar Cobro',
+		icon: 'mdi mdi-cash-plus',
+		link: '/operacion_financiera/efectuar_cobro',
+	},
+	{
+		id: 9,
 		label: 'INTEGRACIÓN MÓDULOS',
 		isTitle: true,
 	},

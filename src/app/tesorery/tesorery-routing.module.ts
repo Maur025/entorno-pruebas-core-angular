@@ -47,6 +47,13 @@ const routes: Routes = [
 				module => module.GestionContableModule
 			),
 	},
+	{
+		path: 'operacion_financiera',
+		loadChildren: () =>
+			import('./financial-transaction/financial-transaction.module').then(
+				module => module.FinancialTransactionModule
+			),
+	},
 ]
 
 @NgModule({
