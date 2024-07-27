@@ -39,21 +39,35 @@
 						<div
 							class="nav justify-content-between border-bottom align-items-center"
 						>
-							<div class="col-1 border-end pb-3">
-								<span class="fw-semibold semi text-primary px-2"
-									>Nro. {{ i + 1 }}</span
+							<div class="col-3 col-lg-2 border-end pb-3">
+								<span
+									class="fw-semibold semi text-primary px-0 px-md-1 px-xl-2"
 								>
+									N° {{ i + 1 }}
+								</span>
 							</div>
-							<div class="col-8 ps-2">
-								<div class="nav pb-3">
-									<p class="col-3 col-form-label">(*) Transacción :</p>
+							<div class="col-9 col-lg-8 ps-2">
+								<div class="row pb-3">
+									<p
+										class="col-form-label"
+										[ngClass]="{
+											'col-12': simulateSmallWindow,
+											'col-12 col-lg-3': !simulateSmallWindow
+										}"
+									>
+										(*) Transacción :
+									</p>
 									<div
 										*ngFor="let tipoOp of tipoOperacion; let index = index"
 										class="form-check col nav align-items-center"
+										[ngClass]="{
+											'col-6': simulateSmallWindow,
+											'col-6 col-lg-3': !simulateSmallWindow
+										}"
 									>
 										<input
 											#radioButton
-											[id]="'transacctionOption' + index"
+											[id]="'transacctionOptionP' + i + 'C' + index"
 											class="custom-control-input"
 											style="transform: scale(1.3)"
 											type="radio"
@@ -63,14 +77,14 @@
 										/>
 										<label
 											class="form-check-label ps-2"
-											[for]="'transacctionOption' + index"
+											[for]="'transacctionOptionP' + i + 'C' + index"
 										>
 											{{ tipoOp.name }}
 										</label>
 									</div>
 								</div>
 							</div>
-							<div class="col pb-3">
+							<div class="col-1 pb-3">
 								<div
 									*ngIf="
 										submitted &&
@@ -88,7 +102,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="col pb-3">
+							<div class="col-1 pb-3">
 								<button
 									class="btn btn-sm btn-danger me-2 float-end"
 									(click)="removeOperacion(i)"
@@ -108,7 +122,11 @@
 						>
 							<div class="nav py-3">
 								<div
-									class="col-9 nav"
+									class="nav"
+									[ngClass]="{
+										'col-12': simulateSmallWindow,
+										'col-12 col-lg-9': !simulateSmallWindow
+									}"
 									*ngIf="
 										operaciones.controls[i]['controls']['tipoOperacion'][
 											'value'
@@ -251,7 +269,11 @@
 									</div>
 								</div>
 								<div
-									class="col-9 nav"
+									class="nav"
+									[ngClass]="{
+										'col-12': simulateSmallWindow,
+										'col-12 col-lg-9': !simulateSmallWindow
+									}"
 									*ngIf="
 										operaciones.controls[i]['controls']['tipoOperacion'][
 											'value'
@@ -310,7 +332,12 @@
 										/>
 									</div>
 								</div>
-								<div class="col-3">
+								<div
+									[ngClass]="{
+										'col-12': simulateSmallWindow,
+										'col-12 col-lg-3': !simulateSmallWindow
+									}"
+								>
 									<div class="col-12 mb-3 px-1">
 										<label class="mb-2">(*) Monto Sub </label>
 										<input

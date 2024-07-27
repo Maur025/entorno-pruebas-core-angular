@@ -42,6 +42,8 @@ export class OperacionesComponent implements OnInit {
 	]
 	montoTotal = 0
 
+	@Input() simulateSmallWindow: boolean = false
+
 	@ViewChildren('radioButton') radioButtons: QueryList<ElementRef>
 
 	constructor(
