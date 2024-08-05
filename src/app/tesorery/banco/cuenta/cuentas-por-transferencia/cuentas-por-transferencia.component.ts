@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { ResponseHandlerService } from 'src/app/core/services/response-handler.service';
@@ -17,6 +17,8 @@ import { MedioTransferenciaService } from 'src/app/tesorery/services/tesoreria/m
 })
 export class CuentasPorTransferenciaComponent {
   @Input() formCuentaBanco: UntypedFormGroup;
+  @ViewChild('tdBanco') tdBanco: ElementRef;
+  @ViewChild('thBanco') thBanco: ElementRef;
 	public transferMediumDataSelect: ResponseDataStandard[] = []
 
   constructor(
@@ -31,6 +33,7 @@ export class CuentasPorTransferenciaComponent {
 	) {}
 
 	ngOnInit(): void {
+
     this.getTransferMediumData();
     this.formDataCuenta().clear();
     this.agregarMedio();
@@ -94,21 +97,24 @@ export class CuentasPorTransferenciaComponent {
   selectCajaBancoList(event){
     console.log(event, this.destino)
 
-    this.cuentaBancoService
-				.getCuentasBanco(
-					1000,
-					1,
-					'nroCuenta',
-					false,
-					'',
-					event.id
-				).subscribe((response: ApiResponseStandard) => {
-						this.cuentasBancList = response?.content || [];
-					},(error: ErrorResponseStandard) => {
-						this.notificacionService?.alertError(error)
-					}
-				)
-
+    if(this.destino == "BANCO"){
+      this.tdBanco.nativeElement.style.display = 'block';
+      this.thBanco.nativeElement.style.display = 'block';
+      this.cuentaBancoService
+          .getCuentasBanco(
+            1000,
+            1,
+            'nroCuenta',
+            false,
+            '',
+            event.id
+          ).subscribe((response: ApiResponseStandard) => {
+              this.cuentasBancList = response?.content || [];
+            },(error: ErrorResponseStandard) => {
+              this.notificacionService?.alertError(error)
+            }
+          )
+        }
   }
 
 

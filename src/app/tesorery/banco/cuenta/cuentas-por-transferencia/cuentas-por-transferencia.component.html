@@ -7,7 +7,7 @@
                     <th></th>
                     <th class="select">(*)Medio Transferencia</th>
                     <th class="select">{{destino}}</th>
-                    <th class="select">N° de cuenta</th>
+                    <th class="select" style="display: none;" #thBanco>N° de cuenta</th>
                     <th class="inputSelect">N° referencia</th>
                     <th class="inputSelect">(*)Monto</th>
                   </tr>
@@ -17,7 +17,7 @@
                     <td>
                       <button *ngIf="i!== 0"
                       class="btn btn-sm btn-danger"
-                      tooltip="Quitar cuenta" 
+                      tooltip="Quitar cuenta"
                       (click)="eliminarItem(i)">
                         <i class="mdi mdi-close"></i>
                     </button>
@@ -34,7 +34,7 @@
                       </ng-select>
                     </td>
                     <td>
-                      <ng-select					
+                      <ng-select
                       placeholder="Seleccione {{destino}}"
                       [items]="cajaBancoList"
                       bindLabel="nombre"
@@ -43,8 +43,8 @@
                       (change)="selectCajaBancoList($event)">
                       </ng-select>
                     </td>
-                    <td>
-                      <ng-select					
+                    <td style="display: none;" #tdBanco>
+                      <ng-select
                       placeholder="Seleccione cuenta bancaria"
                       [items]="cuentasBancList"
                       bindLabel="nroCuenta"
@@ -54,13 +54,13 @@
                       </ng-select>
                     </td>
                     <td>
-                      <input					
+                      <input
                         type="text"
                         class="form-control text-end"
                         />
                     </td>
                     <td>
-                      <input					
+                      <input
                         type="text"
                         class="form-control text-end"
                         placeholder="Monto a transferir"
