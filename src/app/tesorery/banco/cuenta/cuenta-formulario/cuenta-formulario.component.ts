@@ -71,6 +71,7 @@ export class CuentaFormularioComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
+		console.log(this.idRuta);
 		this.setForm()
 		if (this.idRuta) this.form['bancoId'].disable()
 		this.getBancos()
