@@ -7,6 +7,8 @@ import { FormularioComponent } from '../formulario/formulario.component'
 import { CuentaFormularioComponent } from '../cuenta/cuenta-formulario/cuenta-formulario.component'
 import { FuncionesComponent } from 'src/app/tesorery/funciones.component'
 import { ErrorResponseStandard } from 'src/app/shared/interface/common-api-response'
+import { FormularioNewCuentaComponent } from '../cuenta/formulario-new-cuenta/formulario-new-cuenta.component'
+
 
 @Component({
 	selector: 'app-lista',
@@ -92,6 +94,19 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 			class: `modal-xl modal-scrollable`,
 			ignoreBackdropClick: true,
 			keyboard: false,
+		})
+	}
+
+	crearCuenta2(template: TemplateRef<void>, data: object) {
+		this.banco = data;
+		console.log(this.banco);
+		let idBanco = this.banco?.id;
+		let nombreBanco = this.banco?.nombre;
+		this.modalRef = this.modalService.show(FormularioNewCuentaComponent, {
+			class: `modal-xl modal-scrollable`,
+			ignoreBackdropClick: true,
+			keyboard: false,
+			initialState: { idBanco, nombreBanco },
 		})
 	}
 

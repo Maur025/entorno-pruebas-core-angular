@@ -30,7 +30,7 @@ export class EstadosService {
   habilitadosFondoRendir() {
     return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/fondos/rendir`);
   }
-  
+
 
   habilitadosDevengados() {
     return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/devengados`);
@@ -44,7 +44,7 @@ export class EstadosService {
     return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/integracion`);
   }
 
-  habilitadosCajas() {
+/*   habilitadosCajas() {
     return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/cajas`);
-  }
+  } */
 }

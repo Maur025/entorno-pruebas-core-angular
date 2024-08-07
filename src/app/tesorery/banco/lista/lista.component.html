@@ -63,6 +63,19 @@
 							<li
 								data-bs-toggle="tooltip"
 								data-bs-placement="top"
+								title="mas cuenta"
+							>
+								<button
+									class="btn btn-sm btn-success"
+									[disabled]="fila.deleted"
+									(click)="crearCuenta2(modalCuentaNueva, fila)"
+								>
+									<i class="mdi mdi-plus"></i>
+								</button>
+							</li>
+							<li
+								data-bs-toggle="tooltip"
+								data-bs-placement="top"
 								title="Ver Cuentas"
 							>
 								<button

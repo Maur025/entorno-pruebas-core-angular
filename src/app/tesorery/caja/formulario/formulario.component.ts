@@ -60,31 +60,22 @@ export class FormularioCajaComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+    console.log(this.caja);
+    this.getCentroCostos()
+		this.getEmployeesList()
+
 		this.setForm()
 		if (this.caja) this.setCaja()
 		this.tipoForm()
-		this.getEstadosCaja()
-		this.getCentroCostos()
-		this.getFondoCajas()
-		this.getEmployeesList()
+
 	}
 
 	setForm() {
 		this.formGroup = this.formBuilder.group({
 			id: [null, []],
-			nombre: [
-				null,
-				[
-					Validators.required,
-					Validators.minLength(2),
-					Validators.maxLength(255),
-				],
-			],
-			descripcion: [null, [Validators.required]],
-			responsable: [null, [Validators.required]],
-			responsableId: [null, [Validators.required]],
+			nombre: [null,[Validators.required,Validators.minLength(2),Validators.maxLength(255)]],
+			empleadoId: [null, [Validators.required]],
 			centroCostoId: [null, [Validators.required]],
-			fondoCajaId: [null],
 		})
 	}
 
@@ -100,16 +91,12 @@ export class FormularioCajaComponent implements OnInit {
 				this.form.monto.setValue(this.caja.saldo)
 				this.form.centroCostoId.disable()
 			}
-			this.form.descripcion.setValue(null)
-			this.form.descripcion.enable()
 		}
 	}
 
-	get form() {
-		return this.formGroup.controls
-	}
+	get form() {return this.formGroup.controls}
 
-	get operaciones(): FormArray {
+ 	get operaciones(): FormArray {
 		return this.formGroup.get('operaciones') as FormArray
 	}
 
@@ -117,27 +104,9 @@ export class FormularioCajaComponent implements OnInit {
 		this.formGroup.patchValue({
 			id: this.caja.id,
 			nombre: this.caja.nombre,
-			descripcion: this.caja.descripcion,
 			monto: this.caja.saldo,
-			responsable: this.caja.responsable,
-			responsableId: this.caja.responsableId,
-			centroCostoId: this.caja.centroCostoId,
-			fondoCajaId: this.caja.fondoCajaId,
-		})
-	}
-
-	getEstadosCaja() {
-		this.estadosService.habilitadosCajas().subscribe({
-			next: (response: ApiResponseStandard) => {
-				this.listaEstadosCaja =
-					this.responseHandlerService?.handleResponseAsArray(response)
-				if (this.tipoMovimiento)
-					this.form.estadoCajaId.setValue(
-						this.listaEstadosCaja.find(e => e.codigo == this.tipoMovimiento).id
-					)
-			},
-			error: (error: ErrorResponseStandard) =>
-				this.notificacionService.alertError(error),
+			empleadoId: this.caja['empleado']['id'],
+			centroCostoId: this.caja['centroCosto']['id'],
 		})
 	}
 
@@ -145,17 +114,6 @@ export class FormularioCajaComponent implements OnInit {
 		this.centroCostosService.habilitados().subscribe({
 			next: (response: ApiResponseStandard) => {
 				this.listaCentroCostos =
-					this.responseHandlerService?.handleResponseAsArray(response)
-			},
-			error: (error: ErrorResponseStandard) =>
-				this.notificacionService.alertError(error),
-		})
-	}
-
-	getFondoCajas() {
-		this.fondoCajaService.habilitados().subscribe({
-			next: (response: ApiResponseStandard) => {
-				this.listaFondoCajas =
 					this.responseHandlerService?.handleResponseAsArray(response)
 			},
 			error: (error: ErrorResponseStandard) =>
@@ -208,7 +166,7 @@ export class FormularioCajaComponent implements OnInit {
 	}
 
 	cambioResponsable = (): void => {
-		const employeeIdValue: string = this.formGroup?.get('responsableId')?.value
+		const employeeIdValue: string = this.formGroup?.get('empleadoId')?.value
 
 		if (!employeeIdValue) {
 			return
@@ -217,9 +175,9 @@ export class FormularioCajaComponent implements OnInit {
 			this.listaResponsables?.find(
 				rowEmployee => rowEmployee.id === employeeIdValue
 			)
-		this.formGroup?.patchValue({
+/* 		this.formGroup?.patchValue({
 			responsable: foundEmployeeData?.nombre || null,
-		})
+		}) */
 	}
 
 	confirmAndContinueSaving = async (): Promise<void> => {
@@ -246,7 +204,31 @@ export class FormularioCajaComponent implements OnInit {
 		this.isChangeSubmitStatus.emit()
 	}
 
-	guardar = (): void => {
+
+  guardar =(): void=>{
+    console.log(this.formGroup.value);
+    if (this.caja) {
+			this.cajaService.update(this.formGroup.value).subscribe({
+				next: () => {
+					this.notificacionService.successStandar()
+					this.alActualizar.emit()
+				},
+				error: (error: ErrorResponseStandard) =>
+					this.notificacionService.alertError(error),
+			})
+		} else {
+			 this.cajaService.register(this.formGroup.value).subscribe({
+				next: () => {
+					this.notificacionService.successStandar()
+					this.alActualizar.emit()
+				},
+				error: (error: ErrorResponseStandard) =>
+					this.notificacionService.alertError(error),
+			})
+		}
+  }
+
+/* 	guardar2 = (): void => {
 		const data = this.formGroup.getRawValue()
 
 		if (this.tipoMovimiento) {
@@ -288,5 +270,5 @@ export class FormularioCajaComponent implements OnInit {
 					this.notificacionService.alertError(error),
 			})
 		}
-	}
+	} */
 }

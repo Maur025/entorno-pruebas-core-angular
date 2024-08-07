@@ -16,6 +16,8 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
     prefix:string = '';
     constructor(private http: HttpClient, private apiService : ConsumoApiService) { }
 
+    /* Su tabla no existe - borrar el servicio */
+
     setPrefix(prefix: string){
       this.prefix = prefix;
     }

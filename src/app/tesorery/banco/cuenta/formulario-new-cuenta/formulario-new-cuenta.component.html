@@ -1,0 +1,194 @@
+<div id="accountFormModalBodyDiv">
+    <div class="col-xl-12 border-bottom p-4 pb-2">
+        <div class="float-end ms-2">
+            <!--<button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                id="close-modal"
+                (click)="cerrarModal()"
+            ></button>-->
+            <small>
+                Los campos marcados con asterisco (*) son requeridos.
+              </small>
+          </div>
+          <div class="d-flex">
+            <div>
+              <h6 class="fs-14 mb-2 ms-1 text-primary">{{nombreBanco}}</h6>
+              <p class="text-muted mb-0">Nueva cuenta de banco</p>
+            </div>
+          </div>        
+    </div>
+
+    <form [formGroup]="formCuentaBanco" class="m-4">
+        <div class="row mb-2" [ngClass]="valueInicializacion ? 'border-bottom': ''">
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3 px-1">
+                        <label class="mb-2">(*) Moneda </label>
+                        <ng-select
+                            class="uppercase"
+                            formControlName="monedaId"
+                            placeholder="SELECCIONE UNA MONEDA"
+                            [items]="listaMonedas"
+                            bindLabel="nombre"
+                            bindValue="id"
+                            [ngClass]="{
+                                'ngselect-invalid': submitted && form['monedaId'].errors != null
+                            }"
+                        >
+                        </ng-select>
+                        <div *ngIf="submitted && form['monedaId'].errors">
+                            <div
+                                class="text-danger mt-1 font-size-10"
+                                *ngIf="form['monedaId'].errors['required']"
+                            >
+                                Seleccionar una moneda es obligatoria
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="mb-3 px-1">
+                        <label class="mb-2">(*) N° de Cuenta </label>
+                        <input
+                            type="text"
+                            class="form-control uppercase"
+                            formControlName="nroCuenta"
+                            placeholder="NÚMERO DE CUENTA"
+                            [ngClass]="{ 'is-invalid': submitted && form['nroCuenta'].errors }"
+                            (input)="onlyNumbersAccount('nroCuenta', $event)"
+                        />
+                        <div
+                            *ngIf="submitted && form['nroCuenta'].errors"
+                            class="invalid-feedback"
+                        >
+                            <div *ngIf="form['nroCuenta'].errors['required']">
+                                El número de cuenta es obligatorio
+                            </div>
+                            <div *ngIf="form['nroCuenta'].errors['minlength']">
+                                Debe tener al menos
+                                {{
+                                    form['nroCuenta'].errors['minlength']['requiredLength']
+                                }}carácteres
+                            </div>
+                            <div *ngIf="form['nroCuenta'].errors['maxlength']">
+                                Debe tener menos de
+                                {{
+                                    form['nroCuenta'].errors['maxlength']['requiredLength']
+                                }}carácteres
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="d-flex">
+                    <label class=" col-4">(*) Apertura de cuenta con: </label>
+                    <ui-switch
+                        formControlName="inicializacion"
+                        color="#556ee6"
+                        size="small"
+                        class="ms-3 me-2 col-8 include-in-screenshot"
+                        uncheckedLabel="Saldo Inicial"
+                        checkedLabel="Transferencia"
+                        (change)="onChangeSwitchTransferType($event)"
+                    />
+                </div>
+            </div>
+
+        </div>
+        <div class="row ">
+            <div class="col-xl-12 mb-0">
+                <div class="float-end ms-2">
+                    <button *ngIf="valueInicializacion"
+                        class="btn btn-sm btn-success" 
+                        (click)="agregarMedio()"
+                        tooltip="Agregar medio de transferencia">
+                       Agregar medio de transferencia
+                    </button>
+                </div>
+               <!-- <div class="d-flex">
+                    <p class="text-muted"> 
+                        <small style="color:#46c899;">{{labelTipoApertura}}</small>
+                    </p>
+                </div>-->
+              </div>
+
+            <div class="row" *ngIf="valueInicializacion"_LLoKLLLLLLLLwe >                
+                <cuentas-por-transferencia
+                [formCuentaBanco]="formCuentaBanco"
+                ></cuentas-por-transferencia>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4" [ngClass]="valueInicializacion ? 'border-end': ''" >
+                    <ng-template *ngIf="valueInicializacion; then transferencia ; else inicializacion"/>
+                    <ng-template #transferencia>
+                        <h6 class="fs-14 mt-2 mb-2 ms-1 text-secondary"><b> MONTO TOTAL DE TRANFERENCIA </b></h6>
+                        <div class="hstack gap-2 justify-content-end">
+                            <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary"> <b>{{totalTransferencia}}</b></h5>
+                        </div>
+                    </ng-template>
+                    <ng-template #inicializacion>
+                        <h6 class="fs-14 mt-2 mb-2 ms-1 text-secondary"><b> MONTO APERTURA INICIAL </b></h6>
+                        <div class="hstack gap-2 justify-content-end">
+                            <input
+                                id="initialBalance"
+                                type="text"
+                                class="form-control text-end"                                
+                                placeholder="SALDO INICIAL Bs."
+                                [ngClass]="{ 'is-invalid': submitted && form['saldo'].errors }"
+                                (input)="utilityService.onlyNumbers('saldo', $event, formCuentaBanco)"
+                            />
+                        </div>
+                    </ng-template>
+                </div>
+                <div class="col-md-8">
+                    <label class="mb-2 mt-2">(*) Descripción </label>
+					<textarea
+						class="form-control form-control-sm uppercase"
+						rows="2"
+						placeholder="Descripción de la cuenta"						
+						[ngClass]="{'is-invalid': submitted && form['descripcion'].errors}"
+					></textarea>
+					<!--<div *ngIf="submitted && form['descripcion'].errors"class="invalid-feedback">
+						<div *ngIf="formCuentaBanco.get('descripcion').errors?.required">
+							La descripción de cuenta es obligatoria
+						</div>
+						<div *ngIf="form['descripcion'].errors['maxlength']">
+							Debe tener menos de {{ form['descripcion'].errors['maxlength']['requiredLength']}}carácteres
+						</div>
+					</div>-->
+                </div>
+            </div>            
+
+        </div>
+        <div class="row mt-3 mb-3 me-4">
+            <div class="hstack gap-2 justify-content-end">
+                <button
+                    type="button"
+                    class="btn btn-light"
+                    data-bs-dismiss="modal"
+                    (click)="cerrarModal()"
+                    [disabled]="onSubmitFormStatus"
+                >
+                    Cerrar
+                </button>
+                <!--<button
+                    type="button"
+                    class="btn btn-success"
+                    (click)="appFormCuenta.confirmAndContinue()"
+                    [disabled]="onSubmitFormStatus"
+                >
+                    <app-simple-loader [isLoading]="onSubmitFormStatus" />
+                    {{ onSubmitFormStatus ? ' Espere un momento...' : 'Registrar' }}
+                </button>-->
+            </div>
+        </div>
+    </form>
+
+</div>
