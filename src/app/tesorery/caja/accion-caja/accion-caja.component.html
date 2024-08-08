@@ -1,0 +1,99 @@
+<div id="accountFormModalBodyDiv">
+  <div class="col-xl-12 border-bottom p-4 pb-2">
+      <div class="float-end ms-2">
+          <small>
+              Los campos marcados con asterisco (*) son requeridos.
+            </small>
+        </div>
+        <div class="d-flex">
+          <div>
+            <h5 class="fs-14 mb-0 ms-1 text-primary">{{datosCaja['nombre']}}</h5>
+            <p class="text-muted ms-1 mb-0">{{labelOperacion}}</p>
+          </div>
+        </div>
+  </div>
+
+  <form [formGroup]="formAccionCaja" (ngSubmit)="guardarForm()"class="mt-2 m-4">
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="">
+          <label class="mb-0 text-secondary">Centro de Costos:</label>
+          <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary"><b> {{datosCaja['centroCosto']['nombre']}} </b></h6>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="">
+          <label class="mb-0 mt-2 text-secondary">Responsable:</label>
+          <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary"><b> {{datosCaja['empleado']['nombre']}} </b></h6>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <label class="mb-2 mt-2">(*) Monto apertura </label>
+<!--         <div class="hstack gap-2 justify-content-end">
+            <input
+                id="initialBalance"
+                type="text"
+                class="form-control text-end"
+                placeholder="Monto de apertura Bs."
+                [ngClass]="{ 'is-invalid': submitted && form['saldo'].errors }"
+                (input)="utilityService.onlyNumbers('saldo', $event, formAccionCaja)"
+            />
+        </div> -->
+
+        <div class="hstack gap-2 justify-content-end">
+          <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary"> <b>{{totalApertura}}</b></h5>
+        </div>
+      </div>
+      <div class="col-md-8">
+          <label class="mb-2 mt-2">(*) Descripción </label>
+          <textarea
+          formControlName="descripcionApertura"
+            class="form-control uppercase"
+            rows="2"
+            placeholder="Descripción para la apertura de caja"
+            [ngClass]="{'is-invalid': submitted && form['descripcionApertura'].errors}"
+          ></textarea>
+          <div *ngIf="submitted && form['descripcionApertura'].errors"class="invalid-feedback">
+            <div *ngIf="formAccionCaja.get('descripcionApertura').errors?.required">
+              La descripción para la apertura de caja es obligatoria
+            </div>
+            <div *ngIf="form['descripcionApertura'].errors['maxlength']">
+              Debe tener menos de {{ form['descripcionApertura'].errors['maxlength']['requiredLength']}}carácteres
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <transacciones-array
+      [formPadre]="formAccionCaja"
+      [bancoCajaId]="formAccionCaja.value['cajaId']"
+      (alIngresarMonto)="recibirMontoTotal($event)"
+      ></transacciones-array>
+    </div>
+
+
+  <div class="row mt-3 mb-3 me-4">
+    <div class="hstack gap-2 justify-content-end">
+        <button
+            type="button"
+            class="btn btn-light"
+            data-bs-dismiss="modal"
+            >
+            Cerrar
+        </button>
+        <button
+            type="submit"
+            class="btn btn-success">
+          Aperturar Caja
+        </button>
+    </div>
+  </div>
+
+  </form>
+
+</div>

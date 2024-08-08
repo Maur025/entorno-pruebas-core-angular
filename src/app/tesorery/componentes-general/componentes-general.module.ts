@@ -12,11 +12,13 @@ import { NgxMaskModule } from 'ngx-mask';
 
 import { ComponentesGeneralRoutingModule } from './componentes-general-routing.module';
 import { OperacionesComponent } from './operaciones/operaciones.component';
+import { TransaccionesArrayComponent } from './transacciones-array/transacciones-array.component';
 
 
 @NgModule({
   declarations: [
-    OperacionesComponent
+    OperacionesComponent,
+    TransaccionesArrayComponent
   ],
   imports: [
     CommonModule,
@@ -32,7 +34,8 @@ import { OperacionesComponent } from './operaciones/operaciones.component';
     NgxMaskModule.forRoot(),
   ],
   exports:[
-    OperacionesComponent
+    OperacionesComponent,
+    TransaccionesArrayComponent
   ]
 })
 export class ComponentesGeneralModule { }

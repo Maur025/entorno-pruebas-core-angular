@@ -1,14 +1,6 @@
 <div id="accountFormModalBodyDiv">
     <div class="col-xl-12 border-bottom p-4 pb-2">
         <div class="float-end ms-2">
-            <!--<button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-                id="close-modal"
-                (click)="cerrarModal()"
-            ></button>-->
             <small>
                 Los campos marcados con asterisco (*) son requeridos.
               </small>
@@ -18,7 +10,7 @@
               <h6 class="fs-14 mb-2 ms-1 text-primary">{{nombreBanco}}</h6>
               <p class="text-muted mb-0">Nueva cuenta de banco</p>
             </div>
-          </div>        
+          </div>
     </div>
 
     <form [formGroup]="formCuentaBanco" class="m-4">
@@ -105,20 +97,20 @@
             <div class="col-xl-12 mb-0">
                 <div class="float-end ms-2">
                     <button *ngIf="valueInicializacion"
-                        class="btn btn-sm btn-success" 
+                        class="btn btn-sm btn-success"
                         (click)="agregarMedio()"
                         tooltip="Agregar medio de transferencia">
                        Agregar medio de transferencia
                     </button>
                 </div>
                <!-- <div class="d-flex">
-                    <p class="text-muted"> 
+                    <p class="text-muted">
                         <small style="color:#46c899;">{{labelTipoApertura}}</small>
                     </p>
                 </div>-->
               </div>
 
-            <div class="row" *ngIf="valueInicializacion"_LLoKLLLLLLLLwe >                
+            <div class="row" *ngIf="valueInicializacion"_LLoKLLLLLLLLwe >
                 <cuentas-por-transferencia
                 [formCuentaBanco]="formCuentaBanco"
                 ></cuentas-por-transferencia>
@@ -139,7 +131,7 @@
                             <input
                                 id="initialBalance"
                                 type="text"
-                                class="form-control text-end"                                
+                                class="form-control text-end"
                                 placeholder="SALDO INICIAL Bs."
                                 [ngClass]="{ 'is-invalid': submitted && form['saldo'].errors }"
                                 (input)="utilityService.onlyNumbers('saldo', $event, formCuentaBanco)"
@@ -152,7 +144,7 @@
 					<textarea
 						class="form-control form-control-sm uppercase"
 						rows="2"
-						placeholder="Descripción de la cuenta"						
+						placeholder="Descripción de la cuenta"
 						[ngClass]="{'is-invalid': submitted && form['descripcion'].errors}"
 					></textarea>
 					<!--<div *ngIf="submitted && form['descripcion'].errors"class="invalid-feedback">
@@ -164,7 +156,7 @@
 						</div>
 					</div>-->
                 </div>
-            </div>            
+            </div>
 
         </div>
         <div class="row mt-3 mb-3 me-4">

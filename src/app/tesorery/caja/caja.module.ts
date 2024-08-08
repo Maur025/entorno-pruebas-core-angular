@@ -13,13 +13,15 @@ import { FormularioCajaComponent } from './formulario/formulario.component';
 import { ListaCajaComponent } from './lista/lista.component';
 import { DetalleCajaComponent } from './detalle-caja/detalle-caja.component';
 import { ComponentesGeneralModule } from '../componentes-general/componentes-general.module';
+import { AccionCajaComponent } from './accion-caja/accion-caja.component';
 
 
 @NgModule({
   declarations: [
     FormularioCajaComponent,
     ListaCajaComponent,
-    DetalleCajaComponent
+    DetalleCajaComponent,
+    AccionCajaComponent
   ],
   imports: [
     CommonModule,

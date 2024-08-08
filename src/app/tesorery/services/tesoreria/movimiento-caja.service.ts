@@ -59,4 +59,10 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
       size = size <= 0? 100 : size;
       return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/caja/${cajaId}?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`);
     }
+
+    registerApertura(datos: any) {
+
+      console.log("SERVICE", datos);
+      return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/saldo_inicial`, datos);
+    }
   }

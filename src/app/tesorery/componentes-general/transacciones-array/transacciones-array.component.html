@@ -1,0 +1,146 @@
+<form class="repeater" [formGroup]="formPadre">
+  <div formArrayName="transacciones">
+
+    <div class="row">
+      <div class="col-xl-12 mb-0 mt-3">
+        <div class="float-end ms-2">
+            <button
+                class="btn btn-sm btn-success"
+                (click)="agregarTransaccion()"
+                tooltip="Agregar transferencia">
+               Agregar transacción
+            </button>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+
+      <div *ngFor="let data1 of formData()?.controls; let i=index;">
+        <div [formGroupName]="i">
+          <div class="border-bottom">
+            <div class="row">
+              <div class="col-xl-12 mb-0 mt-3">
+                <div class="float-end ms-2">
+                    <button
+                        class="btn btn-sm btn-danger"
+                        (click)="eliminarTransaccion(i)"
+                        tooltip="Quitar transacción">
+                       <i class="mdi mdi-close"></i>
+                    </button>
+                </div>
+                <div class="row">
+
+                </div>
+                <div class="d-flex ms-4">
+                  <label class="mb-0  me-4">Transacción por:</label>
+                    <div
+                    *ngFor="let tipoOp of tipoOperacion; let index = index"
+                    class="form-check col nav align-items-center pb-2">
+                    <input
+                      #radioButton
+                      [id]="'transacctionOptionP' + i + 'C' + index"
+                      class="custom-control-input"
+                      style="transform: scale(1.3)"
+                      type="radio"
+                      formControlName = "destino"
+                      [value]="tipoOp.name"
+                      (change)="cambiaOperacion(i, tipoOp)"
+                      />
+                      <label class="form-check-label ps-2">{{ tipoOp.name }}</label>
+                    </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="table-responsive">
+                <table class="table table-borderless mb-0">
+                    <thead>
+                      <tr>
+                        <th class="selectElement"><p class="text-muted fs-14 mb-2">(*)Medio Transferencia</p></th>
+                        <th class="selectElement"><p class="text-muted fs-14 mb-2">(*){{formDataValue.controls[i].get('destino').value}}</p></th>
+                        <th class="selectElement" [id]="'thBanco_'+i" ><p class="text-muted fs-14 mb-2">(*)N° de cuenta</p></th>
+                        <th class="numberElement"><p class="text-muted fs-14 mb-2">(*)N° referencia</p></th>
+                        <th class="numberElement"><p class="text-muted fs-14 mb-2">(*)Monto</p></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                      <td>
+                        <ng-select
+                        formControlName="medioTrasferenciaId"
+                         [items]="transferMediumDataSelect"
+                         bindLabel="medio"
+                         bindValue="id"
+                         appendTo="#accountFormModalBodyDiv"
+                         class="input-sm">
+                        </ng-select>
+                      </td>
+
+                      <ng-template *ngIf="formDataValue.controls[i].get('destino').value=='CAJA'; then tdCaja ; else tdBanco" />
+                      <ng-template #tdBanco>
+                        <td>
+                          <ng-select
+                          placeholder="Seleccione un banco"
+                          [items]="bancoList"
+                          bindLabel="nombre"
+                          bindValue="id"
+                          appendTo="#accountFormModalBodyDiv"
+                          (change)="selectCajaBancoList($event)">
+                          </ng-select>
+                        </td>
+                        <td>
+                          <ng-select
+                          placeholder="Seleccione cuenta bancaria"
+                          [items]="cuentaBancoList"
+                          bindLabel="nroCuenta"
+                          bindValue="id"
+                          formControlName="cajaCuentaBancoId"
+                          appendTo="#accountFormModalBodyDiv"
+                          [notFoundText]="'Sin cuentas bancarias'">
+                          </ng-select>
+                        </td>
+                      </ng-template>
+                      <ng-template #tdCaja>
+                        <td>
+                          <ng-select
+                          placeholder="Seleccione una caja"
+                          [items]="cajaList"
+                          bindLabel="nombre"
+                          bindValue="id"
+                          formControlName="cajaCuentaBancoId"
+                          appendTo="#accountFormModalBodyDiv"
+                          [notFoundText]="'Sin cajas'"
+                          (change)="selectCaja($event, i)">
+                          </ng-select>
+                        </td>
+                      </ng-template>
+                      <td>
+                        <input
+                          type="text"
+                          class="form-control text-end"
+                          formControlName="nroReferencia"/>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          class="form-control text-end"
+                          formControlName="monto"
+                          placeholder="Bs"
+                          (change)="calcularTotalTransaccion()"/>
+                      </td>
+                      </tr>
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

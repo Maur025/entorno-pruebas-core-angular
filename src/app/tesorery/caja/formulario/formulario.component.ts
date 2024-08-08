@@ -54,7 +54,7 @@ export class FormularioCajaComponent implements OnInit {
 		private notificacionService: NotificacionService,
 		private _localeService: BsLocaleService,
 		private empleadoService: EmpleadoService,
-		protected utilityService: UtilityService
+		protected utilityService: UtilityService,
 	) {
 		this._localeService.use('es')
 	}
@@ -205,8 +205,7 @@ export class FormularioCajaComponent implements OnInit {
 	}
 
 
-  guardar =(): void=>{
-    console.log(this.formGroup.value);
+   guardar =(): void=>{
     if (this.caja) {
 			this.cajaService.update(this.formGroup.value).subscribe({
 				next: () => {
@@ -228,7 +227,7 @@ export class FormularioCajaComponent implements OnInit {
 		}
   }
 
-/* 	guardar2 = (): void => {
+ /* 	guardar = (): void => {
 		const data = this.formGroup.getRawValue()
 
 		if (this.tipoMovimiento) {
@@ -250,6 +249,9 @@ export class FormularioCajaComponent implements OnInit {
 			})
 			return
 		}
+
+
+    console.log("DATA", data);
 
 		if (this.caja) {
 			this.cajaService.update(data).subscribe({
