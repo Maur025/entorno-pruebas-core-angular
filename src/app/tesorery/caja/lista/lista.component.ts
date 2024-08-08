@@ -105,6 +105,13 @@ export class ListaCajaComponent extends FuncionesComponent implements OnInit {
 		this.modalRef = this.modalService.show(template, this.modalConfig)
 	}
 
+  dataCaja:any;
+  aperturarCaja(data: object, template: TemplateRef<unknown>){
+    console.log("DATA", data);
+    this.dataCaja=data;
+    this.modalRef = this.modalService.show(template, this.modalConfig)
+  }
+
 	cierre = (data: { id: string }, template: TemplateRef<unknown>): void => {
 		this.caja = data
 		this.tipoMovimiento = 'CIERR'

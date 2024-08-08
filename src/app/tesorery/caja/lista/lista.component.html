@@ -52,13 +52,21 @@
 							title="Aperturar"
 							*ngIf="!fila.aperturado"
 						>
-							<button
+						<!-- 	<button
 								class="btn btn-sm btn-primary"
 								[disabled]="fila.deleted"
 								(click)="aperturar(fila, modalGeneral)"
 							>
 								<i class="bx bx-lock-open-alt"></i>
-							</button>
+							</button> -->
+
+              <button
+                class="btn btn-sm btn-warning"
+                [disabled]="fila.deleted"
+                title="Aperturar Caja"
+                (click)="aperturarCaja(fila, aperturaCierre)">
+                <i class="bx bx-lock-open-alt"></i>
+              </button>
 						</li>
 						<li
 							data-bs-toggle="tooltip"
@@ -202,4 +210,11 @@
 			</button>
 		</div>
 	</div>
+</ng-template>
+
+<ng-template #aperturaCierre let-modal>
+  <accion-caja
+  [datosCaja]="dataCaja"
+  (alActualizar)="modalRef.hide(); tabla.obtenerDatos();"
+  ></accion-caja>
 </ng-template>
