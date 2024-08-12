@@ -60,13 +60,12 @@ export class FormularioCajaComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-    console.log(this.caja);
-    this.getCentroCostos()
-		this.getEmployeesList()
-
-		this.setForm()
-		if (this.caja) this.setCaja()
-		this.tipoForm()
+    this.getCentroCostos();
+	this.getEmployeesList();
+	this.setForm();
+	
+		/*if (this.caja) this.setCaja()
+		this.tipoForm()*/
 
 	}
 
@@ -79,7 +78,7 @@ export class FormularioCajaComponent implements OnInit {
 		})
 	}
 
-	tipoForm() {
+	/*tipoForm() {
 		if (this.tipoMovimiento) {
 			if (this.tipoMovimiento == 'APERT') {
 				this.formGroup.disable()
@@ -94,12 +93,12 @@ export class FormularioCajaComponent implements OnInit {
 		}
 	}
 
-	get form() {return this.formGroup.controls}
+	
 
  	get operaciones(): FormArray {
 		return this.formGroup.get('operaciones') as FormArray
-	}
-
+	}*/
+	get form() {return this.formGroup.controls}
 	setCaja() {
 		this.formGroup.patchValue({
 			id: this.caja.id,
@@ -133,7 +132,7 @@ export class FormularioCajaComponent implements OnInit {
 		})
 	}
 
-	addFormApertura() {
+	/*addFormApertura() {
 		this.formGroup.addControl(
 			'monto',
 			new FormControl(null, [Validators.required, Validators.min(1)])
@@ -175,10 +174,10 @@ export class FormularioCajaComponent implements OnInit {
 			this.listaResponsables?.find(
 				rowEmployee => rowEmployee.id === employeeIdValue
 			)
-/* 		this.formGroup?.patchValue({
+		this.formGroup?.patchValue({
 			responsable: foundEmployeeData?.nombre || null,
-		}) */
-	}
+		}) 
+	}*/
 
 	confirmAndContinueSaving = async (): Promise<void> => {
 		this.submitted = true

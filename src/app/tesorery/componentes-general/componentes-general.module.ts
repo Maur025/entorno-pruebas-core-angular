@@ -13,6 +13,8 @@ import { NgxMaskModule } from 'ngx-mask';
 import { ComponentesGeneralRoutingModule } from './componentes-general-routing.module';
 import { OperacionesComponent } from './operaciones/operaciones.component';
 import { TransaccionesArrayComponent } from './transacciones-array/transacciones-array.component';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+
 
 
 @NgModule({
@@ -32,6 +34,7 @@ import { TransaccionesArrayComponent } from './transacciones-array/transacciones
     BsDatepickerModule,
     CollapseModule.forRoot(),
     NgxMaskModule.forRoot(),
+    TooltipModule.forRoot(),
   ],
   exports:[
     OperacionesComponent,

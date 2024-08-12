@@ -69,11 +69,8 @@ export class ListaCajaComponent extends FuncionesComponent implements OnInit {
 				id: this.getOpcionesCabecera('id', 12, 'number', false),
 				nombre: this.getOpcionesCabecera('Nombre', 12),
 				responsable: this.getOpcionesCabecera('Responsable', 12),
-				descripcion: this.getOpcionesCabecera('Descripción', 6),
 				saldo: this.getOpcionesCabecera('Saldo', 12),
-				aperturado: this.getOpcionesCabecera('Aperturado', 12),
-				cierre: this.getOpcionesCabecera('Cerrado', 12),
-				deleted: this.getOpcionesCabecera('Estado', 6),
+				aperturaCierre: this.getOpcionesCabecera('Estado', 6),
 			},
 		}
 	}
@@ -107,7 +104,6 @@ export class ListaCajaComponent extends FuncionesComponent implements OnInit {
 
   dataCaja:any;
   aperturarCaja(data: object, template: TemplateRef<unknown>){
-    console.log("DATA", data);
     this.dataCaja=data;
     this.modalRef = this.modalService.show(template, this.modalConfig)
   }

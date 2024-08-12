@@ -17,6 +17,8 @@ import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap'
 import { MedioTransferenciaCuentaListFormComponent } from './cuenta/medio-transferencia-cuenta-list-form/medio-transferencia-cuenta-list-form.component';
 import { FormularioNewCuentaComponent } from './cuenta/formulario-new-cuenta/formulario-new-cuenta.component';
 import { CuentasPorTransferenciaComponent } from './cuenta/cuentas-por-transferencia/cuentas-por-transferencia.component'
+import { ComponentesGeneralModule } from '../componentes-general/componentes-general.module'
+import { TooltipModule } from 'ngx-bootstrap/tooltip'
 
 
 @NgModule({
@@ -29,7 +31,7 @@ import { CuentasPorTransferenciaComponent } from './cuenta/cuentas-por-transfere
 		CuentaDetalleMovimientosComponent,
 		MedioTransferenciaCuentaListFormComponent,
   		FormularioNewCuentaComponent,
-    CuentasPorTransferenciaComponent,
+    	CuentasPorTransferenciaComponent,
 	],
 	imports: [
 		CommonModule,
@@ -42,6 +44,8 @@ import { CuentasPorTransferenciaComponent } from './cuenta/cuentas-por-transfere
 		UIModule,
 		UiSwitchModule,
 		NgbPopoverModule,
+		ComponentesGeneralModule,
+		TooltipModule.forRoot(),
 	],
 	exports: [
 		ListaComponent,

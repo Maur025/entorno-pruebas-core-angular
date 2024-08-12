@@ -7,51 +7,51 @@
         </div>
         <div class="d-flex">
           <div>
-            <h5 class="fs-14 mb-0 ms-1 text-primary">{{datosCaja['nombre']}}</h5>
-            <p class="text-muted ms-1 mb-0">{{labelOperacion}}</p>
+            <h6 class="fs-14 mb-0 ms-1 text-primary">{{datosCaja['nombre']}}</h6>
+            <small class="text-muted ms-1 mb-0">{{labelOperacion}}</small>
           </div>
         </div>
   </div>
 
-  <form [formGroup]="formAccionCaja" (ngSubmit)="guardarForm()"class="mt-2 m-4">
+  <form [formGroup]="formAccionCaja" (ngSubmit)="confirmAndContinueSaving()">
 
-    <div class="row">
-      <div class="col-md-4">
-        <div class="">
-          <label class="mb-0 text-secondary">Centro de Costos:</label>
-          <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary"><b> {{datosCaja['centroCosto']['nombre']}} </b></h6>
+    <div class="ms-4 me-4 m-2">
+      <div class="row border-bottom mb-2">
+        <div class="col-md-4">
+          <div class="">
+            <label class="mb-0 text-secondary">Fecha de Apertura:</label>
+            <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary"><b> {{fechaActual}} </b></h6>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="">
+            <label class="mb-0 text-secondary">Centro de Costos:</label>
+            <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary"><b> {{datosCaja['centroCosto']['nombre']}} </b></h6>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="">
+            <label class="mb-0 text-secondary">Responsable:</label>
+            <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary"><b> {{datosCaja['empleado']['nombre']}} </b></h6>
+          </div>
         </div>
       </div>
-      <div class="col-md-8">
-        <div class="">
-          <label class="mb-0 mt-2 text-secondary">Responsable:</label>
-          <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary"><b> {{datosCaja['empleado']['nombre']}} </b></h6>
-        </div>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-md-4">
-        <label class="mb-2 mt-2">(*) Monto apertura </label>
-<!--         <div class="hstack gap-2 justify-content-end">
-            <input
-                id="initialBalance"
-                type="text"
-                class="form-control text-end"
-                placeholder="Monto de apertura Bs."
-                [ngClass]="{ 'is-invalid': submitted && form['saldo'].errors }"
-                (input)="utilityService.onlyNumbers('saldo', $event, formAccionCaja)"
-            />
-        </div> -->
-
-        <div class="hstack gap-2 justify-content-end">
-          <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary"> <b>{{totalApertura}}</b></h5>
-        </div>
+      <div class="row">
+        <transacciones-array
+        [formPadre]="formAccionCaja"
+        [labelTransferencia]="labelOperacion"
+        [submitted]="submitted"
+        [bancoCajaId]="formAccionCaja.value['cajaId']"
+        (alIngresarMonto)="recibirMontoTotal($event)"
+        ></transacciones-array>
       </div>
-      <div class="col-md-8">
+
+      <div class="row mt-2">
+        <div class="col-md-8">
           <label class="mb-2 mt-2">(*) Descripción </label>
           <textarea
-          formControlName="descripcionApertura"
+            formControlName="descripcionApertura"
             class="form-control uppercase"
             rows="2"
             placeholder="Descripción para la apertura de caja"
@@ -63,33 +63,36 @@
             </div>
             <div *ngIf="form['descripcionApertura'].errors['maxlength']">
               Debe tener menos de {{ form['descripcionApertura'].errors['maxlength']['requiredLength']}}carácteres
+            </div>            
+            <div *ngIf="form['descripcionApertura'].errors['minlength']">
+              Debe tener mas de {{ form['descripcionApertura'].errors['minlength']['requiredLength']}}carácteres
             </div>
           </div>
+        </div>
+        <div class="col-md-4 border p-3">
+          <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary"><b> (*) Monto apertura </b></h6>
+          <div class="hstack gap-2 justify-content-end me-4">
+            <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary"> <b>{{totalApertura}}</b></h5>
+          </div>          
+        </div>
       </div>
+
     </div>
 
-    <div class="row">
-      <transacciones-array
-      [formPadre]="formAccionCaja"
-      [bancoCajaId]="formAccionCaja.value['cajaId']"
-      (alIngresarMonto)="recibirMontoTotal($event)"
-      ></transacciones-array>
-    </div>
-
-
-  <div class="row mt-3 mb-3 me-4">
+  <div class="row mt-3 mb-3 me-3">
     <div class="hstack gap-2 justify-content-end">
         <button
             type="button"
             class="btn btn-light"
             data-bs-dismiss="modal"
-            >
+            (click)="this.cerrarModal.emit()">
             Cerrar
         </button>
         <button
             type="submit"
-            class="btn btn-success">
-          Aperturar Caja
+            class="btn btn-success">          
+          <app-simple-loader [isLoading]="onSubmitFormStatus" />
+          {{ onSubmitFormStatus ? ' Espere un momento...' : 'Aperturar Caja' }}
         </button>
     </div>
   </div>

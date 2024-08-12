@@ -88,26 +88,27 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 		})
 	}
 
-	crearCuenta(template: TemplateRef<void>, data: object) {
+/*	crearCuenta(template: TemplateRef<void>, data: object) {
 		this.banco = data
 		this.modalRef = this.modalService.show(template, {
 			class: `modal-xl modal-scrollable`,
 			ignoreBackdropClick: true,
 			keyboard: false,
 		})
+	}*/
+	private modalConfig: {
+		ignoreBackdropClick: boolean
+		keyboard: boolean
+		class: string
+	} = {
+		ignoreBackdropClick: true,
+		keyboard: false,
+		class: 'modal-xl modal-scrollable',
 	}
 
-	crearCuenta2(template: TemplateRef<void>, data: object) {
+	crearCuenta(template: TemplateRef<void>, data: object) {
 		this.banco = data;
-		console.log(this.banco);
-		let idBanco = this.banco?.id;
-		let nombreBanco = this.banco?.nombre;
-		this.modalRef = this.modalService.show(FormularioNewCuentaComponent, {
-			class: `modal-xl modal-scrollable`,
-			ignoreBackdropClick: true,
-			keyboard: false,
-			initialState: { idBanco, nombreBanco },
-		})
+		this.modalRef = this.modalService.show(template, this.modalConfig)
 	}
 
 	verCuentas(data: any) {

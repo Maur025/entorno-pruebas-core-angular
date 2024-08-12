@@ -87,4 +87,11 @@ export class CuentaBancoService {
 			`${this.apiUrl}${this.prefix}/${this.apiName}/banco/${id}?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
 		)
 	}
+
+
+	crearCuentaBanco(datos: any) {
+
+		console.log("SERVICE", datos);
+		return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/movimiento-inicio`, datos);
+	  }
 }
