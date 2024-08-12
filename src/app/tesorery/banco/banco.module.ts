@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { HerramientasModule } from 'src/app/core/herramientas/herramientas.module'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { WidgetModule } from 'src/app/shared/widget/widget.module'
 import { UIModule } from 'src/app/shared/ui/ui.module'
 import { NgSelectModule } from '@ng-select/ng-select'
 import { ListaComponent } from './lista/lista.component'
@@ -40,7 +39,6 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip'
 		HerramientasModule,
 		FormsModule,
 		ReactiveFormsModule,
-		WidgetModule,
 		UIModule,
 		UiSwitchModule,
 		NgbPopoverModule,

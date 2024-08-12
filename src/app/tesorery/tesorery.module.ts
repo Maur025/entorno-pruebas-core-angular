@@ -6,7 +6,6 @@ import { TesoreryRoutingModule } from './tesorery-routing.module'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { TabsModule } from 'ngx-bootstrap/tabs'
 import { UIModule } from 'src/app/shared/ui/ui.module'
-import { WidgetModule } from '../shared/widget/widget.module'
 import { NgApexchartsModule } from 'ng-apexcharts'
 import { HerramientasModule } from '../core/herramientas/herramientas.module'
 
@@ -24,7 +23,6 @@ import { DefaultComponent } from './default/default.component'
 		FormsModule,
 		ReactiveFormsModule,
 		TabsModule.forRoot(),
-		WidgetModule,
 		NgApexchartsModule,
 	],
 })

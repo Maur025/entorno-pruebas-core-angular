@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { WidgetModule } from 'src/app/shared/widget/widget.module';
 import { UIModule } from 'src/app/shared/ui/ui.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -37,7 +36,6 @@ import { ComponentesGeneralModule } from '../componentes-general/componentes-gen
     NgSelectModule,
     FormsModule,
     ReactiveFormsModule,
-    WidgetModule,
     UIModule,
     BsDatepickerModule.forRoot(),
     BsDropdownModule.forRoot(),
