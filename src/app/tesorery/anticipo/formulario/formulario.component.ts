@@ -389,14 +389,14 @@ export class FormularioComponent implements OnInit {
 				dataSend.saldo = dataSend.monto
 				dataSend.origen = 'ANTICIPO'
 				dataSend.ingresoEgreso = 'OUT'
-				this.anticipoService?.register(dataSend)?.subscribe({
+				/* this.anticipoService?.register(dataSend)?.subscribe({
 					next: (response: ApiResponseStandard) => {
 						this.notificacionService.successStandar()
 						this.alGuardar.emit(response)
 					},
 					error: (error: ErrorResponseStandard) =>
 						this.notificacionService.alertError(error),
-				})
+				}) */
 				break
 		}
 	}

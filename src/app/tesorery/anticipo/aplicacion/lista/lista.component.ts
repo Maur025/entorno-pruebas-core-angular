@@ -198,9 +198,9 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   }
 
   getAnticipo(id: string) {
-    this.anticipoService.find(id).subscribe(data => {
+  /*   this.anticipoService.find(id).subscribe(data => {
       this.anticipoData = data.content
-    })
+    }) */
   }
 
   refrescar() {

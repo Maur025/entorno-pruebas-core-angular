@@ -16,7 +16,8 @@ import { UIModule } from 'src/app/shared/ui/ui.module'
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker'
 import { CollapseModule } from 'ngx-bootstrap/collapse'
 import { NgxMaskModule } from 'ngx-mask'
-import { ComponentesGeneralModule } from '../componentes-general/componentes-general.module'
+import { ComponentesGeneralModule } from '../componentes-general/componentes-general.module';
+import { NuevoComponent } from './nuevo/nuevo.component'
 
 @NgModule({
 	declarations: [
@@ -24,6 +25,7 @@ import { ComponentesGeneralModule } from '../componentes-general/componentes-gen
 		FormularioComponent,
 		ListaAplicacionComponent,
 		FormularioAplicacionComponent,
+  NuevoComponent,
 	],
 	imports: [
 		CommonModule,

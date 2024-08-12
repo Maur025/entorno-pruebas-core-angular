@@ -14,13 +14,15 @@ import { ComponentesGeneralRoutingModule } from './componentes-general-routing.m
 import { OperacionesComponent } from './operaciones/operaciones.component';
 import { TransaccionesArrayComponent } from './transacciones-array/transacciones-array.component';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { InputFechaComponent } from './input-fecha/input-fecha.component';
 
 
 
 @NgModule({
   declarations: [
     OperacionesComponent,
-    TransaccionesArrayComponent
+    TransaccionesArrayComponent,
+    InputFechaComponent
   ],
   imports: [
     CommonModule,
@@ -31,14 +33,15 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     ReactiveFormsModule,
     WidgetModule,
     UIModule,
-    BsDatepickerModule,
+    BsDatepickerModule.forRoot(),
     CollapseModule.forRoot(),
     NgxMaskModule.forRoot(),
     TooltipModule.forRoot(),
   ],
   exports:[
     OperacionesComponent,
-    TransaccionesArrayComponent
+    TransaccionesArrayComponent,
+    InputFechaComponent
   ]
 })
 export class ComponentesGeneralModule { }
