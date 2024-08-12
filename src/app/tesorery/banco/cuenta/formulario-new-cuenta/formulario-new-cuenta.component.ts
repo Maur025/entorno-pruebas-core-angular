@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
@@ -14,7 +14,7 @@ import { ResponseHandlerService } from 'src/app/core/services/response-handler.s
 import { CuentasPorTransferenciaComponent } from '../cuentas-por-transferencia/cuentas-por-transferencia.component';
 
 @Component({
-  selector: 'app-formulario-new-cuenta',
+  selector: 'formulario-new-cuenta',
   templateUrl: './formulario-new-cuenta.component.html',
   styleUrls: ['./formulario-new-cuenta.component.scss']
 })
@@ -22,6 +22,9 @@ export class FormularioNewCuentaComponent {
 
   @Input() idBanco: string;
   @Input() nombreBanco: string;
+  @Input() datosBanco: any;
+  @Output() cerrarModal = new EventEmitter<void>();
+  @Output() alActualizar = new EventEmitter<void>();
   @ViewChild(CuentasPorTransferenciaComponent) appCuentaTransferencia: CuentasPorTransferenciaComponent;
 
   modalRef?: BsModalRef;
@@ -32,6 +35,8 @@ export class FormularioNewCuentaComponent {
   labelTipoApertura: string = 'Apertura de cuenta de banco con saldo inicial';
   valueInicializacion: boolean = false;
   totalTransferencia=0;
+  fechaActual2;
+  fechaActual;
 
   public transferMediumList: ResponseDataStandard[] = []
 
@@ -59,17 +64,28 @@ export class FormularioNewCuentaComponent {
   get form() {return this.formCuentaBanco.controls}
 
   setForm(){
+    let fechaActual = new Date();
+    this.fechaActual = fechaActual.getFullYear() + '-' + (fechaActual.getMonth() + 1).toString().padStart(2, '0') + '-' + fechaActual.getDate().toString().padStart(2, '0');
+    this.fechaActual2 = fechaActual.getFullYear() + '-' + (fechaActual.getMonth() + 1).toString().padStart(2, '0') + '-' + fechaActual.getDate().toString().padStart(2, '0') +'T'+fechaActual.getHours().toString().padStart(2, '0') + ":" + fechaActual.getMinutes().toString().padStart(2, '0')+":"+fechaActual.getSeconds().toString().padStart(2, '0');
     this.formCuentaBanco = this.formBuilder. group({
 			id: '',
-			nroCuenta: ['',	[Validators.required,
+			nroCuenta: ['',	[
+          Validators.required,
 					Validators.minLength(2),
 					Validators.maxLength(50),
 				],
 			],
-			bancoId: [null, [Validators.required]],
+			bancoId: [this.datosBanco['id'], [Validators.required]],
 			monedaId: [null, [Validators.required]],
-      inicializacion: '', //typeAccountInitialize
-      movimientosCuentaBanco: this.formBuilder.array([]),
+      inicializacion: [false],
+      montoCuenta: ['', [Validators.required]],
+      fechaCuenta: [this.fechaActual2, [Validators.required]],
+      descripcion:['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(255)
+      ]],
+      //transacciones: this.formBuilder.array([]),
 		})
   }
 
@@ -94,17 +110,44 @@ export class FormularioNewCuentaComponent {
     this.valueInicializacion = event;
     if(event){//transferencia
       this.labelTipoApertura = "Apertura de cuenta de banco con Transferencia de cuenta(s) existente(s)"; 
+      this.formCuentaBanco['addControl']('transacciones', this.formBuilder.array([]));      
     }else{//saldo inicial
       this.labelTipoApertura = "Apertura de cuenta de banco con saldo inicial";
     }
 	}
 
-
+  recibirMontoTotal(monto){
+    this.totalTransferencia = monto;
+    this.formCuentaBanco.get('montoCuenta').setValue(monto);
+   }
 
   onlyNumbersAccount(cuenta, event){}
 
-  cerrarModal() {
-		this.modalService.hide()
-		this.onSubmitFormStatus = false
+  confirmAndContinueSaving = async (): Promise<void> => {
+		this.submitted = true;
+    console.log(this.formCuentaBanco.valid);
+    console.log(this.formCuentaBanco.value);
+		if (!this.formCuentaBanco.valid) {
+      console.log("aqui");
+			return
+		}
+		const dataImg = await this.screenshotService?.takeScreenshot('accountFormModalBodyDiv');
+		this.notificacionService?.confirmAndContinueAlert(dataImg, response =>{
+			if(response) this.guardarForm();      
+    }
+		)
 	}
+
+  guardarForm(){
+    console.log(this.formCuentaBanco.value);
+    if(this.formCuentaBanco.valid){
+      this.formCuentaBanco.value['movimientosCuentaBanco']= this.formCuentaBanco.value['transacciones'] ? this.formCuentaBanco.value['transacciones'] :null ;
+      //console.log(this.formAccionCaja.value)
+      this.cuentaBancoService.crearCuentaBanco(this.formCuentaBanco.value).subscribe(data=>{
+          this.alActualizar.emit(data);
+            this.notificacionService.successStandar();
+      }, error=>this.notificacionService.alertError(error));
+    }
+    this.submitted = true;
+  }
 }

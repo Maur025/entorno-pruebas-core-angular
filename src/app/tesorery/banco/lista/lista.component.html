@@ -33,7 +33,7 @@
 			<td [ngSwitch]="campo">
 				<span *ngSwitchCase="'acciones'">
 					<td>
-						<ul class="list-unstyled hstack gap-1 mb-0">
+						<!--<ul class="list-unstyled hstack gap-1 mb-0">
 							<li
 								data-bs-toggle="tooltip"
 								data-bs-placement="top"
@@ -68,7 +68,7 @@
 								<button
 									class="btn btn-sm btn-success"
 									[disabled]="fila.deleted"
-									(click)="crearCuenta2(modalCuentaNueva, fila)"
+									(click)="crearCuenta(crearCuentaBanco, fila)"
 								>
 									<i class="mdi mdi-plus"></i>
 								</button>
@@ -113,7 +113,36 @@
 									<i class="mdi mdi-power"></i>
 								</a>
 							</li>
-						</ul>
+						</ul>-->
+						<button
+							class="btn btn-sm btn-soft-info me-1"
+							tooltip="Editar cuenta"
+							[disabled]="fila.deleted"
+							(click)="editar(modalGeneral, fila)">					
+							<i class="mdi mdi-pencil-outline"></i>
+						</button>
+						<button
+							class="btn btn-sm btn-success me-1"
+							tooltip="Crear cuenta"
+							[disabled]="fila.deleted"
+							(click)="crearCuenta(crearCuentaBanco, fila)">						
+							<i class="mdi mdi-plus"></i>
+						</button>
+						<button
+							class="btn btn-sm btn-info me-1"
+							tooltip="Ver cuentas"
+							[disabled]="fila.deleted"
+							(click)="verCuentas(fila)">						
+							<i class="mdi mdi-format-list-bulleted"></i>
+						</button>
+						<button
+							[tooltip]="fila.deleted ? 'Habilitar' : 'Inhabilitar' "
+							class="btn btn-sm me-1"
+							[ngClass]="fila.deleted ? 'btn-success' : 'btn-danger' "
+							(click)="habilitar(fila, tabla, fila.deleted ? 'Habilitar' : 'Inhabilitar' )"
+							><i class="mdi mdi-power"></i>
+						</button>						
+
 					</td>
 				</span>
 				<span *ngSwitchCase="'deleted'">
@@ -222,3 +251,11 @@
 		</div>
 	</div>
 </ng-template>
+
+<ng-template #crearCuentaBanco let-modal>
+	<formulario-new-cuenta
+	[datosBanco]="banco"
+	(alActualizar)="modalRef.hide(); tabla.obtenerDatos();"
+	(cerrarModal)="modalRef.hide()"
+	></formulario-new-cuenta>
+  </ng-template>
