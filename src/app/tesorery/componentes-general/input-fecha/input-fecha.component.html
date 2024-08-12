@@ -1,0 +1,38 @@
+<div [formGroup]="formPadre">
+  <div class="mb-3 px-1">
+    <label for="formrow-password-input">{{labelFecha}}</label>
+    <div class="input-group">
+      <input
+        type="text"
+        placeholder="dd-mm-AA"
+        class="form-control"
+        formControlName="fecha"
+        bsDatepicker
+        [bsConfig]="{
+          isAnimated: true,
+          dateInputFormat: 'DD-MM-YYYY'
+        }"
+        [ngClass]="{ 'is-invalid': submitted && form['fecha'].errors }"/>
+        <span class="input-group-text">
+          <i class="mdi mdi-calendar-outline"></i>
+        </span>
+        <div *ngIf="stateDate" class="col-sm-12 d-flex justify-content-between">
+          <div class="text-danger mt-1 font-size-10">
+            No existen meses aperturados
+          </div>
+          <span
+            class="badge text-bg-warning btn-aperturar d-flex align-items-center"
+            style=":hover {cursor: pointer;}"
+            (click)="enabledDate()">
+           Aperturar
+          </span>
+        </div>
+        <div *ngIf="submitted && form['fecha'].errors" class="invalid-feedback">
+          <div *ngIf="form['fecha'].errors['required']">
+            Ingrese la fecha
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+

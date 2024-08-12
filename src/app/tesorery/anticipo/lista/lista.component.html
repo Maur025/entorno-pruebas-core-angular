@@ -13,7 +13,7 @@
 	[smallTable]="false"
 	[softDelete]="false"
 	(crearNuevo)="(null)"
-	(alCrear)="crear(modalGeneral, 'nuevo')"
+	(alCrear)="crear(nuevoAnticipo, 'nuevo')"
 	(alActualizar)="(null)"
 	(alFiltrar)="(null)"
 	(alEditar)="(null)"
@@ -68,29 +68,15 @@
 					</ul>
 				</div>
 
-				<div *ngSwitchCase="'estado'">
-					<div *ngIf="!fila.deleted" class="badge bg-success font-size-10">
-						<i class="mdi mdi-lock-open me-1"></i> Habilitado
-					</div>
-					<div *ngIf="fila.deleted" class="badge bg-danger font-size-10">
-						<i class="mdi mdi-lock me-1"></i> Inhabilitado
-					</div>
-				</div>
 				<div *ngSwitchCase="'centroCosto'">
 					{{ fila.centroCosto.nombre }}
 				</div>
-				<div *ngSwitchCase="'entidadReferencial'">
-					{{ fila.entidadReferencial.entidad.nombre }}
+				<div *ngSwitchCase="'proveedor'">
+					{{ fila['proveedor']['razonSocial'] }}
 				</div>
 				<div *ngSwitchCase="'fecha'">
-					{{ fila.fecha | fechaSimple }}
+					{{ fila['createdAt'] | fechaSimple }}
 					<!--  fechasimple (pipe) -->
-				</div>
-				<div *ngSwitchCase="'monto'">
-					{{ fila.monto }}
-				</div>
-				<div *ngSwitchCase="'saldo'">
-					{{ fila.saldo }}
 				</div>
 				<div *ngSwitchDefault>
 					<td>{{ fila[campo] }}</td>
@@ -139,4 +125,11 @@
 			</button>
 		</div>
 	</div>
+</ng-template>
+
+<ng-template #nuevoAnticipo>
+  <nuevo-anticipo
+  (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
+  (alActualizar)="modalRef.hide(); tabla.obtenerDatos();"
+  ></nuevo-anticipo>
 </ng-template>

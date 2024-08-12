@@ -8,6 +8,20 @@ import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
 })
 export class AnticipoService {
 
+  apiName:string = 'anticipo_proveedor';
+  apiUrl:string = '' ;
+  prefix:string = '';
+  constructor(private http: HttpClient, private apiService : ConsumoApiService) { }
+
+  getAll(size: number = 100, page: number = 1, sortBy:string = 'id', descending:false, keyword:any = '') {
+    size = size <= 0? 100 : size;
+    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`);
+  }
+
+  crearAnticipo(datos: any) {
+    return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}`, datos);
+  }
+/*
     apiName:string = 'anticipo';
     entitys:string = 'Anticipos';
 
@@ -52,5 +66,5 @@ export class AnticipoService {
 
     habilitados(){
       return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/listarHabilitados`);
-    }
+    } */
 }

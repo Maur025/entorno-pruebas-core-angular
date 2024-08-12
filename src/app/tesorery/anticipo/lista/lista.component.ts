@@ -57,7 +57,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 		}
 	}
 
-	crear(template: any, tipo) {
+/*  	crear(template: any, tipo) {
 		this.anticipoTipo = tipo
 		this.anticipoData = undefined
 		this.isRefund = false
@@ -65,38 +65,32 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 		this.modalRef = this.modalService.show(template, {
 			class: `modal-xl modal-dialog-scrollable`,
 		})
-	}
+	} */
+
+    private modalConfig: {
+      ignoreBackdropClick: boolean
+      keyboard: boolean
+      class: string
+    } = {
+      ignoreBackdropClick: true,
+      keyboard: false,
+      class: 'modal-xl modal-scrollable',
+    }
+
+    crear(template: any, tipo){
+      console.log(tipo)
+      this.modalRef = this.modalService.show(template, this.modalConfig)
+    }
 
 	cabecera = () => {
 		return {
 			cabeceras: {
 				acciones: this.getOpcionesCabecera('Acciones', 12, 'text', true, false),
 				id: this.getOpcionesCabecera('ID', 0, 'text', false),
-				centroCosto: this.getOpcionesCabecera(
-					'Centro Costo',
-					12,
-					'text',
-					true,
-					true
-				),
-				entidadReferencial: this.getOpcionesCabecera(
-					'Proveedor',
-					12,
-					'text',
-					true,
-					true
-				),
-				nroReferencia: this.getOpcionesCabecera(
-					'Nro Referencia',
-					12,
-					'text',
-					true,
-					true
-				),
+				centroCosto: this.getOpcionesCabecera('Centro Costo',12,'text',true,true),
+				proveedor: this.getOpcionesCabecera('Proveedor',12,'text',true,true),
+				nroReferencia: this.getOpcionesCabecera('Nro Referencia',12,'text',true,true),
 				fecha: this.getOpcionesCabecera('Fecha', 12, 'text', true, true),
-				monto: this.getOpcionesCabecera('Monto', 12, 'text', true, true),
-				saldo: this.getOpcionesCabecera('Saldo', 12, 'text', true, true),
-				estado: this.getOpcionesCabecera('Estado', 12, 'text', true, false),
 			},
 		}
 	}
