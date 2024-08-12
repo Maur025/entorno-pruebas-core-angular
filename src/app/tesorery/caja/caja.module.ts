@@ -14,6 +14,7 @@ import { ListaCajaComponent } from './lista/lista.component';
 import { DetalleCajaComponent } from './detalle-caja/detalle-caja.component';
 import { ComponentesGeneralModule } from '../componentes-general/componentes-general.module';
 import { AccionCajaComponent } from './accion-caja/accion-caja.component';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { AccionCajaComponent } from './accion-caja/accion-caja.component';
     CajaRoutingModule,
     BsDropdownModule.forRoot(),
     WidgetModule,
-    UIModule
+    UIModule,
+    TooltipModule.forRoot(),
   ],
   exports: [
     ListaCajaComponent,

@@ -1,5 +1,5 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { FormControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ResponseHandlerService } from 'src/app/core/services/response-handler.service';
 import { UtilityService } from 'src/app/shared/services/utilityService.service';
 import { MedioTransferenciaService } from '../../services/tesoreria/medio-transferencia.service';
@@ -19,6 +19,8 @@ export class TransaccionesArrayComponent {
 
   @Input() formPadre: UntypedFormGroup;
   @Input() bancoCajaId: any;
+  @Input() labelTransferencia: string="";
+  @Input() submitted: boolean=false;
   @Output() alIngresarMonto: EventEmitter<any> = new EventEmitter()
   bancoList: any;
   cajaList: any[]=[];
@@ -64,17 +66,20 @@ export class TransaccionesArrayComponent {
     this.formData().push(
       this.fb.group({
         id:'',
-        monto:'',
-        nroReferencia: '',
-        medioTrasferenciaId: '',
-        cajaCuentaBancoId:'',
-        destino:this.tipoOperacion[0]['name'],
+        monto:['', [
+            Validators.required, 
+            Validators.min(1),
+            Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
+        nroReferencia: ['', [Validators.required]],
+        medioTrasferenciaId: ['', [Validators.required]],
+        cajaCuentaBancoId:['', [Validators.required]],
+        destino:[this.tipoOperacion[0]['name'], [Validators.required]],
       })
     );
 
   };
 
-  eliminarTransaccion(i){
+  eliminarTransferencia(i){
     this.formData().removeAt(i);
     this.calcularTotalTransaccion();
   }
@@ -103,17 +108,18 @@ export class TransaccionesArrayComponent {
 
           if(thBanco)thBanco.style.display = 'none';
           let transfer = this.transferMediumDataSelect.find(tm=>tm['destino']=="CAJA");
-          this.formData().at(indice).get('medioTrasferenciaId').patchValue(transfer['id']);
-          this.formData().at(indice).get('medioTrasferenciaId').disable();
+          //this.formDataValue.at(indice)['removeControl']('bancoId')
+
+          //this.formData().at(indice).get('medioTrasferenciaId').disable();
+          this.formData().at(indice).get('medioTrasferenciaId').setValue(transfer['id']);
           this.getCajas();
         }else if(this.destino == "BANCO"){
-
+          //this.formDataValue.at(indice)['addControl']('bancoId', this.fb.control('', Validators.required));      
           if(thBanco)thBanco.style.display = 'block';
           this.formData().at(indice).get('medioTrasferenciaId').reset();
           this.formData().at(indice).get('medioTrasferenciaId').enable();
           this,this.getBancosList();
         }
-
 			},
 			(error: ErrorResponseStandard) => {
 				this.notificacionService?.alertError(error)
@@ -121,10 +127,14 @@ export class TransaccionesArrayComponent {
 		)
   }
 
+ 
+
   selectCaja(event,i){
-    if(!this.formDataValue.at(i).value.medioTrasferenciaId){
+    /*if(!this.formDataValue.at(i).value.medioTrasferenciaId){
       this.formDataValue.at(i).value.medioTrasferenciaId=this.formDataValue.at(i).getRawValue().medioTrasferenciaId;
     }
+
+    console.log("medioId"+ this.formDataValue.at(i).value.medioTrasferenciaId);*/
   }
 
   getCajas(){

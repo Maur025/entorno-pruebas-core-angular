@@ -1,4 +1,3 @@
-aperturar/crear
 <form [formGroup]="formGroup">
 	<p class="mb-3 col-12">
 		Los campos marcados con asterisco (*) son obligatorios.
@@ -30,7 +29,6 @@ aperturar/crear
 				id="cashEmployeeId"
 				class="uppercase"
 				formControlName="empleadoId"
-				(change)="cambioResponsable()"
 				placeholder="SELECCIONE RESPONSABLE"
 				[items]="listaResponsables"
 				bindLabel="nombre"
@@ -71,47 +69,5 @@ aperturar/crear
 				</div>
 			</div>
 		</div>
-		<div class="col-6 mb-3 px-1" *ngIf="form.monto">
-			<label class="mb-2" for="movementAmount">
-				(*) Monto de
-				{{ tipoMovimiento == 'APERT' ? 'Apertura' : 'Cierre' }}
-			</label>
-			<input
-				id="movementAmount"
-				type="number"
-				class="form-control text-end"
-				formControlName="monto"
-				placeholder="Bs."
-				[ngClass]="{ 'is-invalid': submitted && form['monto'].errors }"
-			/>
-			<div *ngIf="submitted && form['monto'].errors" class="col-sm-12">
-				<div
-					*ngIf="form['monto'].errors['required']"
-					class="text-danger mt-1 font-size-10"
-				>
-					El monto es obligatorio
-				</div>
-				<div
-					*ngIf="form['monto'].errors['min']"
-					class="text-danger mt-1 font-size-10"
-				>
-					El monto debe ser mayor a 0
-				</div>
-				<div
-					*ngIf="form['monto'].errors['pattern']"
-					class="text-danger mt-1 font-size-10"
-				>
-					El monto solo acepta carácteres númericos
-				</div>
-			</div>
-		</div>
 	</div>
-	<app-operaciones
-		*ngIf="form.operaciones"
-		#appOperaciones
-		[montoPagar]="form.monto.value"
-		[cajaIdNoUse]="cajaIdNoUse"
-		[submitted]="submitted"
-		[formGroup]="formGroup"
-	/>
 </form>

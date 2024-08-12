@@ -31,7 +31,7 @@
 		<ng-template #tempTD>
 			<td [ngSwitch]="campo">
 				<div *ngSwitchCase="'acciones'">
-					<ul class="list-unstyled hstack gap-1 mb-0">
+		<!--			<ul class="list-unstyled hstack gap-1 mb-0">
 						<li
 							data-bs-toggle="tooltip"
 							data-bs-placement="top"
@@ -52,13 +52,13 @@
 							title="Aperturar"
 							*ngIf="!fila.aperturado"
 						>
-						<!-- 	<button
+						 	<button
 								class="btn btn-sm btn-primary"
 								[disabled]="fila.deleted"
 								(click)="aperturar(fila, modalGeneral)"
 							>
 								<i class="bx bx-lock-open-alt"></i>
-							</button> -->
+							</button> 
 
               <button
                 class="btn btn-sm btn-warning"
@@ -115,37 +115,52 @@
 								><i class="mdi mdi-power"></i
 							></a>
 						</li>
-					</ul>
+					</ul> -->
+
+					<button
+						class="btn btn-sm btn-soft-info me-2"
+						tooltip="Editar caja"
+						[disabled]="fila.deleted"
+						(click)="editar(fila, modalGeneral)">
+						<i class="mdi mdi-pencil-outline"></i>
+					</button>
+					<button
+						[tooltip]="fila.deleted ? 'Habilitar' : 'Inhabilitar' "
+						class="btn btn-sm me-2"
+						[ngClass]="fila.deleted ? 'btn-success' : 'btn-danger' "
+						(click)="habilitar(fila, tabla, fila.deleted ? 'Habilitar' : 'Inhabilitar' )"
+						><i class="mdi mdi-power"></i>
+					</button>
+					<button class="btn btn-sm btn-info me-2" 
+						tooltip="Detalle de la caja"
+						(click)="detalleCaja(fila)">
+						<i class="mdi mdi-eye"></i>
+					</button>
+					<button
+						class="btn btn-sm btn-primary me-2"
+						[disabled]="fila.deleted"
+						tooltip="Aperturar Caja"
+						(click)="aperturarCaja(fila, aperturaCierre)">
+						<i class="bx bx-lock-open-alt"></i>
+					</button>
+					<button
+						class="btn btn-sm btn-soft-dark me-2"
+						tooltip="Cierre de caja"
+						(click)="cierre(fila, modalGeneral)">					
+						<i class="mdi mdi-lock"></i>
+					</button>
+
 				</div>
-				<div *ngSwitchCase="'aperturado'" class="text-center">
-					<span
-						class="badge font-size-12"
-						style="width: 30px"
-						[ngClass]="{
-							'bg-success': fila.aperturado,
-							'bg-danger': !fila.aperturado
-						}"
-						>{{ fila.aperturado == true ? 'SI' : 'NO' }}</span
-					>
+				<div *ngSwitchCase="'responsable'" class="text-center">
+					{{fila['empleado']['nombre']}}
 				</div>
-				<div *ngSwitchCase="'cierre'" class="text-center">
-					<span
-						class="badge font-size-12"
-						style="width: 30px"
-						[ngClass]="{
-							'bg-danger': fila.cierre,
-							'bg-secondary': !fila.cierre
-						}"
-						>{{ fila.cierre == true ? 'SI' : 'NO' }}</span
-					>
-				</div>
-				<div *ngSwitchCase="'deleted'">
-					<span *ngIf="!fila.deleted" class="badge bg-success font-size-10"
-						><i class="mdi mdi-lock-open me-1"></i> Habilitado</span
-					>
-					<span *ngIf="fila.deleted" class="badge bg-danger font-size-10"
-						><i class="mdi mdi-lock me-1"></i> Inhabilitado</span
-					>
+				<div *ngSwitchCase="'aperturaCierre'">
+					<span *ngIf="!fila.aperturado" class="badge bg-secondary font-size-10">
+						Sin Aperturar
+					</span>
+					<span *ngIf="fila.aperturado" class="badge bg-primary font-size-10">
+						Aperturado
+					</span>					
 				</div>
 				<div *ngSwitchDefault>
 					{{ fila[campo] }}
@@ -216,5 +231,6 @@
   <accion-caja
   [datosCaja]="dataCaja"
   (alActualizar)="modalRef.hide(); tabla.obtenerDatos();"
+  (cerrarModal)="modalRef.hide()"
   ></accion-caja>
 </ng-template>
