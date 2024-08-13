@@ -8,13 +8,11 @@ import { TabsModule } from 'ngx-bootstrap/tabs'
 import { UIModule } from 'src/app/shared/ui/ui.module'
 import { NgApexchartsModule } from 'ng-apexcharts'
 import { HerramientasModule } from '../core/herramientas/herramientas.module'
-
-import { PaneldecontrolComponent } from '../tesoreria/paneldecontrol/paneldecontrol.component'
 import { InicioComponent } from './inicio/inicio.component';
 import { DefaultComponent } from './default/default.component'
 
 @NgModule({
-	declarations: [PaneldecontrolComponent, InicioComponent, DefaultComponent],
+	declarations: [ InicioComponent, DefaultComponent],
 	imports: [
 		CommonModule,
 		TesoreryRoutingModule,
