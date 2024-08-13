@@ -30,8 +30,9 @@ getAll="getAll"
           <button
           class="btn btn-sm btn-warning me-2"
           tooltip="Aperturar"
-          (click)="aperturarFondo(fila, nuevoFondoMod)">
-          <i class="mdi mdi-pencil-outline"></i>
+          [disabled]="fila['aperturado']"
+          (click)="aperturarFondo(fila, aperturaModal)">
+          <i class="bx bx-lock-open-alt"></i>
         </button>
         </div>
         <div *ngSwitchCase="'nombre'">
@@ -166,4 +167,12 @@ getAll="getAll"
         </div>
       </div>
     </form>
+</ng-template>
+
+<ng-template #aperturaModal>
+  <apertura-form
+  [datosFondo]="dataFondo"
+  (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
+  (alActualizar)="modalRef.hide(); tabla.obtenerDatos();">
+  </apertura-form>
 </ng-template>

@@ -24,4 +24,9 @@ export class FondoOperativoService {
   update(datos: any): Observable<any> {
     return this.apiService.tesoreria.put(`${this.apiUrl}${this.prefix}/${this.apiName}/${datos.id}`, datos);
   }
+
+  aperturarFondo(datos: any) {
+    return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/apertura`, datos);
+  }
+
 }

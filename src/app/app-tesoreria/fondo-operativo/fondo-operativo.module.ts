@@ -10,11 +10,14 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { HerramientasModule } from 'src/app/core/herramientas/herramientas.module';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { AperturaFormComponent } from './apertura-form/apertura-form.component';
+import { ComponentesCompartidosModule } from '../componentes-compartidos/componentes-compartidos.module';
 
 
 @NgModule({
   declarations: [
-    ListaComponent
+    ListaComponent,
+    AperturaFormComponent
   ],
   imports: [
     CommonModule,
@@ -27,6 +30,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     BsDropdownModule.forRoot(),
     HerramientasModule,
     TooltipModule.forRoot(),
+    ComponentesCompartidosModule
   ]
 })
 export class FondoOperativoModule { }

@@ -26,6 +26,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   submitted: boolean = false;
   formFondoCreate: UntypedFormGroup;
   listaResponsables: any[]=[];
+  dataFondo: any;
   protected onSubmitFormStatus: boolean = false;
 
   constructor(
@@ -103,7 +104,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   }
 
   aperturarFondo(fila,template){
-
+    this.dataFondo =fila;
+		this.modalRef = this.modalService.show(template, this.modalConfig);
   }
 
   getEmployeesList = (): void => {
