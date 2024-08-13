@@ -209,7 +209,8 @@ export class NotificacionService {
 		const swalWithBootstrapButtons = Swal.mixin({
 			customClass: {
 				confirmButton: 'btn btn-success',
-				cancelButton: 'btn btn-danger ms-2',
+				cancelButton: 'btn btn-danger me-2',
+        input:'ms-4'
 			},
 			buttonsStyling: false,
 		})
@@ -217,11 +218,12 @@ export class NotificacionService {
 			.fire({
 				icon: 'warning',
 				input: 'textarea',
-				inputLabel: 'Por favor, introduzca el motivo de ' + estado + '.',
+				inputLabel: 'Introduzca el motivo de ' + estado + '.',
 				inputPlaceholder: '...',
 				confirmButtonText: 'Si, registrar',
 				cancelButtonText: 'No, cancelar',
 				showCancelButton: true,
+        reverseButtons: true,
 				inputValidator: value => {
 					return (
 						(!value || value.length < 4) &&

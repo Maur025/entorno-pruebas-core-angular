@@ -165,7 +165,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
 	 */
 	initialize(): void {
 		this.menuItems = MENU
-		this.cargarModulos()
+		//this.cargarModulos()
 	}
 
 	abrirSubItem(uri) {
@@ -174,7 +174,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
 		})
 	}
 
-	cargarModulos() {
+/* 	cargarModulos() {
 		this.modulosService.getConfigurables().subscribe(
 			data => {
 				const arrayConfigurables = []
@@ -200,7 +200,7 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
 			},
 			err => {}
 		)
-	}
+	} */
 
 	/**
 	 * Returns true or false if given menu item has child or not
