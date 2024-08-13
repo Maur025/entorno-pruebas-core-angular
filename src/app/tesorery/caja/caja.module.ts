@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HerramientasModule } from 'src/app/core/herramientas/herramientas.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { WidgetModule } from 'src/app/shared/widget/widget.module';
 import { UIModule } from 'src/app/shared/ui/ui.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -33,7 +32,6 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     ReactiveFormsModule,
     CajaRoutingModule,
     BsDropdownModule.forRoot(),
-    WidgetModule,
     UIModule,
     TooltipModule.forRoot(),
   ],

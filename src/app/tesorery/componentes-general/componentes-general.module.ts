@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { HerramientasModule } from 'src/app/core/herramientas/herramientas.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { WidgetModule } from 'src/app/shared/widget/widget.module';
 import { UIModule } from 'src/app/shared/ui/ui.module';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -31,7 +30,6 @@ import { InputFechaComponent } from './input-fecha/input-fecha.component';
     HerramientasModule,
     FormsModule,
     ReactiveFormsModule,
-    WidgetModule,
     UIModule,
     BsDatepickerModule.forRoot(),
     CollapseModule.forRoot(),

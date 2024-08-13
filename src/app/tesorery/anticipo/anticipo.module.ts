@@ -11,7 +11,6 @@ import { FormularioComponent } from './formulario/formulario.component'
 import { NgSelectModule } from '@ng-select/ng-select'
 import { HerramientasModule } from 'src/app/core/herramientas/herramientas.module'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { WidgetModule } from 'src/app/shared/widget/widget.module'
 import { UIModule } from 'src/app/shared/ui/ui.module'
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker'
 import { CollapseModule } from 'ngx-bootstrap/collapse'
@@ -35,7 +34,6 @@ import { NuevoComponent } from './nuevo/nuevo.component'
 		ComponentesGeneralModule,
 		FormsModule,
 		ReactiveFormsModule,
-		WidgetModule,
 		UIModule,
 		BsDatepickerModule,
 		CollapseModule.forRoot(),

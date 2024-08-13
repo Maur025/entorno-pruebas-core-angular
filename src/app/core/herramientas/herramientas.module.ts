@@ -22,7 +22,6 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { LightboxModule } from 'ngx-lightbox';
-import { WidgetModule } from 'src/app/shared/widget/widget.module';
 import { UIModule } from 'src/app/shared/ui/ui.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -34,16 +33,15 @@ import { TablaBasicaComponent } from './tabla-basica/tabla-basica.component';
 import { TablaselectorComponent } from './tablaselector/tablaselector.component';
 import { UiSwitchModule } from 'ngx-ui-switch';
 
-import { ExportarComponent } from './exportar/exportar.component';
 import { ImportarComponent } from './importar/importar.component';
-import { SelectorAddComponent } from './selector-add/selector-add.component';
-import { SelectorImageComponent } from './selector-image/selector-image.component';
+//import { SelectorAddComponent } from './selector-add/selector-add.component';
+//import { SelectorImageComponent } from './selector-image/selector-image.component';
 import { FechasimplePipe } from 'src/app/core/pipes/fechasimple.pipe';
+import { ExportarComponent } from './exportar/exportar.component';
 
 @NgModule({
   declarations: [
     TablaComponent,
-    ExportarComponent,
     ImportarComponent,
     TablaselectorComponent,
     SubtablaComponent,
@@ -52,9 +50,8 @@ import { FechasimplePipe } from 'src/app/core/pipes/fechasimple.pipe';
     FormularioComponent,
     SubFormularioComponent,
     TablaBasicaComponent,
-    SelectorAddComponent,
-    SelectorImageComponent,
-    FechasimplePipe
+    FechasimplePipe,
+    ExportarComponent
   ],
   imports: [
     CommonModule,
@@ -64,7 +61,6 @@ import { FechasimplePipe } from 'src/app/core/pipes/fechasimple.pipe';
     ReactiveFormsModule,
 
     UIModule,
-    WidgetModule,
     FullCalendarModule,
     LightboxModule,
     SimplebarAngularModule,
@@ -84,13 +80,11 @@ import { FechasimplePipe } from 'src/app/core/pipes/fechasimple.pipe';
   exports: [
     CommonModule,
     TablaComponent,
-    ExportarComponent,
     TablaBasicaComponent,
     TablaselectorComponent,
-    SelectorAddComponent,
-    SelectorImageComponent,
     FechasimplePipe,
     CargandoDirective,
+    ExportarComponent
   ]
 })
 export class HerramientasModule { }
