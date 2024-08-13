@@ -1,15 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { UIModule } from './ui/ui.module';
+import { AppTesoreriaRoutingModule } from './app-tesoreria-routing.module';
 
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    UIModule,
-  ],
+    AppTesoreriaRoutingModule
+  ]
 })
-
-export class SharedModule { }
+export class AppTesoreriaModule { }

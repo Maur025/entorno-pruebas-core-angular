@@ -9,15 +9,30 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker'
 import { PagetitleComponent } from './pagetitle/pagetitle.component'
 import { LoaderComponent } from './loader/loader.component'
 import { SimpleLoaderComponent } from './simple-loader/simple-loader.component'
+import { TablaNewComponent } from './tabla-new/tabla-new.component'
+import { TooltipModule } from 'ngx-bootstrap/tooltip'
+import { PaginationModule } from 'ngx-bootstrap/pagination'
 @NgModule({
-	declarations: [PagetitleComponent, LoaderComponent, SimpleLoaderComponent],
+	declarations: [
+    PagetitleComponent,
+    LoaderComponent,
+    SimpleLoaderComponent,
+    TablaNewComponent
+  ],
 	imports: [
 		CommonModule,
 		FormsModule,
 		BsDatepickerModule.forRoot(),
 		TimepickerModule.forRoot(),
 		BsDropdownModule.forRoot(),
+    TooltipModule.forRoot(),
+    PaginationModule.forRoot(),
 	],
-	exports: [PagetitleComponent, LoaderComponent, SimpleLoaderComponent],
+	exports: [
+    PagetitleComponent,
+    LoaderComponent,
+    SimpleLoaderComponent,
+    TablaNewComponent
+  ],
 })
 export class UIModule {}
