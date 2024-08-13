@@ -6,6 +6,10 @@ const routes: Routes = [
 		path: 'fondo-operativo',
 		loadChildren: () => import('./fondo-operativo/fondo-operativo.module').then(m => m.FondoOperativoModule),
 	},
+  {
+		path: 'bancos',
+		loadChildren: () => import('./bancos/bancos.module').then(m => m.BancosModule),
+	},
 ];
 
 @NgModule({

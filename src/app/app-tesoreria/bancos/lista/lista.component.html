@@ -1,0 +1,150 @@
+<app-page-title title="Bancos" [breadcrumbItems]="breadCrumbItems" />
+<app-tabla-new
+#tabla
+[botonNuevo]="true"
+[smallTable]="false"
+[conOpciones]="false"
+[formato]="formato"
+[datosService]="bancoService"
+getAll="getAll"
+[templateFila]="templateFila"
+[botonNuevo]="true"
+(alCrear)="crearBanco(nuevoBanco)"
+></app-tabla-new>
+
+<ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">
+  <ng-template ngFor let-campo [ngForOf]="cabeceras">
+    <ng-template
+      *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"
+    ></ng-template>
+    <ng-template #tempTD>
+      <td [ngSwitch]="campo">
+        <div *ngSwitchCase="'acciones'">
+					<button
+						class="btn btn-sm btn-soft-info me-2"
+						tooltip="Editar"
+						[disabled]="fila.deleted"
+						(click)="editar(fila, nuevoBanco)">
+						<i class="mdi mdi-pencil-outline"></i>
+					</button>
+          <button
+            class="btn btn-sm btn-success me-2"
+            tooltip="Crear Cuenta de Banco"
+            (click)="crearCuentaBanco(fila, cuentaBancoModal)">
+            <i class="mdi mdi-plus"></i>
+          </button>
+          <button
+            class="btn btn-sm btn-info me-1"
+            tooltip="Ver cuentas"
+            [disabled]="fila.deleted"
+            (click)="verCuentas(fila)">
+            <i class="mdi mdi-format-list-bulleted"></i>
+          </button>
+        </div>
+        <div *ngSwitchCase="'nombre'">
+          {{fila['nombre']}}
+        </div>
+        <div *ngSwitchCase="'descripcion'">
+          {{fila['descripcion']}}
+        </div>
+      </td>
+    </ng-template>
+  </ng-template>
+</ng-template>
+
+
+<ng-template #nuevoBanco>
+  <div class="modal-header">
+		<h5 class="modal-title" id="exampleModalLabel">{{ titleModal }}</h5>
+		<button
+			type="button"
+			class="btn-close"
+			data-bs-dismiss="modal"
+			aria-label="Close"
+			id="close-modal"
+			(click)="cerrarModal()"
+			[disabled]="onSubmitFormStatus"
+		></button>
+	</div>
+    <form [formGroup]="formBancoCreate"(ngSubmit)="confirmAndContinueSaving()">
+      <div class="modal-body" id="form-create-edit-cash">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="mb-3 px-1">
+              <label class="mb-2" for="cashName">(*) Nombre </label>
+              <input
+                id="cashName"
+                type="text"
+                class="form-control"
+                formControlName="nombre"
+                [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }"
+                placeholder="Ingrese el nombre del fondo operativo"
+                (input)="utilityService?.convertUppercase('nombre', $event, formBancoCreate)"
+              />
+              <div *ngIf="submitted && form['nombre'].errors" class="col-sm-12">
+                <div
+                  *ngIf="form['nombre'].errors['required']"
+                  class="text-danger mt-1 font-size-10">
+                  El nombre es obligatorio
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="mb-3 px-1">
+              <label class="mb-2 mt-2">(*) Descripción </label>
+              <textarea
+                formControlName="descripcion"
+                class="form-control"
+                rows="2"
+                placeholder="Descripción de banco"
+                (input)="utilityService?.convertUppercase('descripcion', $event, formBancoCreate)"
+                [ngClass]="{'is-invalid': submitted && form['descripcion'].errors}"
+              ></textarea>
+              <div *ngIf="submitted && form['descripcion'].errors"class="invalid-feedback">
+                <div *ngIf="formBancoCreate.get('descripcion').errors?.required">
+                  La descripción para la apertura de caja es obligatoria
+                </div>
+                <div *ngIf="form['descripcion'].errors['maxlength']">
+                  Debe tener menos de {{ form['descripcion'].errors['maxlength']['requiredLength']}}carácteres
+                </div>
+                <div *ngIf="form['descripcion'].errors['minlength']">
+                  Debe tener mas de {{ form['descripcion'].errors['minlength']['requiredLength']}}carácteres
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="hstack gap-2 justify-content-end">
+          <button
+            type="button"
+            class="btn btn-light"
+            data-bs-dismiss="modal"
+            (click)="cerrarModal()"
+            [disabled]="onSubmitFormStatus">
+            Cerrar
+          </button>
+          <button
+            type="submit"
+            class="btn"
+            [class]="{'btn-warning': idBancoEdit,'btn-success': !idBancoEdit}"
+            [disabled]="onSubmitFormStatus"
+          >
+            <app-simple-loader [isLoading]="onSubmitFormStatus" />
+            {{onSubmitFormStatus? ' Espere un momento...'	:
+              idBancoEdit ? 'Editar banco':'Crear banco'}}
+          </button>
+        </div>
+      </div>
+    </form>
+</ng-template>
+
+<ng-template #cuentaBancoModal>
+<cuenta-banco-form
+  [datosBanco]="bancoData"
+	(alActualizar)="modalRef.hide(); tabla.obtenerDatos();"
+	(cerrarModal)="modalRef.hide()">
+</cuenta-banco-form>
+</ng-template>

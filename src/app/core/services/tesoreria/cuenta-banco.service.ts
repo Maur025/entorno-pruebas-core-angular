@@ -10,11 +10,13 @@ export class CuentaBancoService {
 
   constructor(private apiService: ConsumoApiService) {}
 
-  apiName: string = 'cuentaBanco'
+  apiName: string = 'banco/cuenta_banco'
 	apiUrl: string = ''
 	prefix: string = ''
 
-
+	register(datos: any) {
+		return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/movimiento-inicio`, datos);
+	  }
 
   getCuentasBanco = (
 		size: number = 100,
