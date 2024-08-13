@@ -100,7 +100,13 @@ export const MENU: MenuItem[] = [
 	},
 	{
 		id: 9,
-		label: 'INTEGRACIÓN MÓDULOS',
+		label: 'MOVIMIENTOS',
 		isTitle: true,
+	},
+  {
+		id: 42,
+		label: 'Fondos',
+		icon: 'mdi mdi-cash-plus',
+		link: '/fondo-operativo',
 	},
 ]

@@ -1,0 +1,178 @@
+<app-page-title title="Fondo Operativo" [breadcrumbItems]="breadCrumbItems" />
+<app-tabla-new
+#tabla
+[botonNuevo]="true"
+[smallTable]="false"
+[conOpciones]="false"
+[formato]="formato"
+[datosService]="fondoOperativoService"
+getAll="getAll"
+[templateFila]="templateFila"
+[botonNuevo]="true"
+(alCrear)="nuevoFondo(nuevoFondoMod)"
+></app-tabla-new>
+
+<ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">
+  <ng-template ngFor let-campo [ngForOf]="cabeceras">
+    <ng-template
+      *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"
+    ></ng-template>
+    <ng-template #tempTD>
+      <td [ngSwitch]="campo">
+        <div *ngSwitchCase="'acciones'">
+					<button
+						class="btn btn-sm btn-soft-info me-2"
+						tooltip="Editar"
+						[disabled]="fila.deleted"
+						(click)="editar(fila, nuevoFondoMod)">
+						<i class="mdi mdi-pencil-outline"></i>
+					</button>
+          <button
+          class="btn btn-sm btn-warning me-2"
+          tooltip="Aperturar"
+          [disabled]="fila['aperturado']"
+          (click)="aperturarFondo(fila, aperturaModal)">
+          <i class="bx bx-lock-open-alt"></i>
+        </button>
+        </div>
+        <div *ngSwitchCase="'nombre'">
+          {{fila['nombre']}}
+        </div>
+        <div *ngSwitchCase="'empleado'">
+          {{fila['empleado']['nombre']}}
+        </div>
+        <div *ngSwitchCase="'importe'">
+          {{fila['importe']}}
+        </div>
+        <div *ngSwitchCase="'estado'">
+          <span *ngIf="!fila.aperturado" class="badge bg-secondary font-size-10">
+						Sin Aperturar
+					</span>
+					<span *ngIf="fila.aperturado" class="badge bg-primary font-size-10">
+						Aperturado
+					</span>
+
+        </div>
+      </td>
+    </ng-template>
+  </ng-template>
+</ng-template>
+
+
+<ng-template #nuevoFondoMod>
+  <div class="modal-header">
+		<h5 class="modal-title" id="exampleModalLabel">{{ titleModal }}</h5>
+		<button
+			type="button"
+			class="btn-close"
+			data-bs-dismiss="modal"
+			aria-label="Close"
+			id="close-modal"
+			(click)="cerrarModal()"
+			[disabled]="onSubmitFormStatus"
+		></button>
+	</div>
+    <form [formGroup]="formFondoCreate"(ngSubmit)="confirmAndContinueSaving()">
+      <div class="modal-body" id="form-create-edit-cash">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="col mb-3 px-1">
+              <label class="mb-2" for="cashName">(*) Nombre </label>
+              <input
+                id="cashName"
+                type="text"
+                class="form-control"
+                formControlName="nombre"
+                [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }"
+                placeholder="Ingrese el nombre del fondo operativo"
+                (input)="utilityService?.convertUppercase('nombre', $event, formFondoCreate)"
+              />
+              <div *ngIf="submitted && form['nombre'].errors" class="col-sm-12">
+                <div
+                  *ngIf="form['nombre'].errors['required']"
+                  class="text-danger mt-1 font-size-10">
+                  El nombre es obligatorio
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class=" mb-3 px-1">
+              <label class="mb-2" for="cashEmployeeId">(*) Responsable </label>
+              <ng-select
+                id="cashEmployeeId"
+                class="uppercase"
+                formControlName="empleadoId"
+                placeholder="SELECCIONE RESPONSABLE"
+                [items]="listaResponsables"
+                bindLabel="nombre"
+                bindValue="id"
+                [ngClass]="{
+                  'ngselect-invalid': submitted && form['empleadoId'].errors != null
+                }"
+              />
+              <div *ngIf="submitted && form['empleadoId'].errors" class="col-sm-12">
+                <div
+                  *ngIf="form['empleadoId'].errors['required']"
+                  class="text-danger mt-1 font-size-10">
+                  El responsable es obligatorio
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <label class="mb-2" for="cashEmployeeId">(*) Monto </label>
+            <input
+            type="number"
+            class="form-control text-end"
+            formControlName="importe"
+            placeholder="Bs"
+            [ngClass]="{
+              'is-invalid':
+                submitted && formFondoCreate.controls['importe'].errors != null
+            }"/>
+            <div *ngIf="submitted && formFondoCreate.controls['importe'].errors">
+              <small class="text-danger" *ngIf="formFondoCreate.controls['importe'].errors?.required">
+                Agregue un monto para el fondo operativo
+              </small>
+              <small class="text-danger" *ngIf="formFondoCreate.controls['importe'].errors['pattern']">
+                El monto solo acepta carácteres numéricos y un punto decimal
+              </small>
+              <small  class="text-danger" *ngIf="formFondoCreate.controls['importe'].errors['min']">
+                El monto debe ser mayor a 0
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="hstack gap-2 justify-content-end">
+          <button
+            type="button"
+            class="btn btn-light"
+            data-bs-dismiss="modal"
+            (click)="cerrarModal()"
+            [disabled]="onSubmitFormStatus">
+            Cerrar
+          </button>
+          <button
+            type="submit"
+            class="btn"
+            [class]="{'btn-warning': idFondoEdit,'btn-success': !idFondoEdit}"
+            [disabled]="onSubmitFormStatus"
+          >
+            <app-simple-loader [isLoading]="onSubmitFormStatus" />
+            {{onSubmitFormStatus? ' Espere un momento...'	: idFondoEdit ? 'Editar fondo operativo':'Crear fondo operativo'}}
+          </button>
+        </div>
+      </div>
+    </form>
+</ng-template>
+
+<ng-template #aperturaModal>
+  <apertura-form
+  [datosFondo]="dataFondo"
+  (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
+  (alActualizar)="modalRef.hide(); tabla.obtenerDatos();">
+  </apertura-form>
+</ng-template>

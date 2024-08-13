@@ -1,0 +1,193 @@
+<form class="repeater" [formGroup]="formPadre">
+  <div formArrayName="transacciones">
+
+    <div class="row">
+      <div class="col-xl-12 mb-0 mt-3">
+        <div class="float-end ms-2">
+            <button
+                class="btn btn-sm btn-success"
+                (click)="agregarTransaccion()"
+                tooltip="Agregar transferencia">
+               Agregar transacción
+            </button>
+        </div>
+        <div class="d-flex">
+          <h6 class="fs-14 mb-2 ms-1 text-primary">Tranferencias para {{labelTransferencia}}</h6>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div *ngFor="let data1 of formData()?.controls; let i=index;">
+        <div [formGroupName]="i">
+          <div class="table-responsive">
+            <table class="table table-borderless mb-0">
+              <tbody>
+                <tr>
+                  <td [ngClass]="i==0? '' : 'border-end'" *ngIf="i!== 0">
+                    <button
+                    class="btn btn-sm btn-danger"
+                    tooltip="Quitar cuenta"
+                    (click)="eliminarTransferencia(i)">
+                    <i class="mdi mdi-close"></i>
+                  </button>
+                  </td>
+                  <td class="border-end transferencia">
+                    <small class="text-secondary mb-2">Tipo de transferencia</small>
+                    <div
+                    *ngFor="let tipoOp of tipoOperacion; let index = index"
+                    class="form-check col nav align-items-center pb-2">
+                    <input
+                      #radioButton
+                      [id]="'transacctionOptionP' + i + 'C' + index"
+                      class="custom-control-input"
+                      style="transform: scale(1.2)"
+                      type="radio"
+                      formControlName = "destino"
+                      [value]="tipoOp.name"
+                      (change)="cambiaOperacion(i, tipoOp)"
+                      />
+                      <small class="text-muted ms-1">{{ tipoOp.name }}</small>
+                    </div>
+                    <div *ngIf="submitted && formDataValue.controls[i].get('destino').errors">
+                      <small class="text-danger" *ngIf="formDataValue.controls[i].get('destino').errors?.required">
+                        Debe seleccionar un tipo de transferencia
+                      </small>
+                    </div>
+                  </td>
+                  <td class="medio">
+                    <small class="text-secondary mb-2">Medio de transferencia</small>
+                    <ng-select
+                        formControlName="medioTrasferenciaId"
+                         [items]="transferMediumDataSelect"
+                         bindLabel="medio"
+                         bindValue="id"
+                         appendTo="#accountFormModalBodyDiv"
+                         [ngClass]="{
+                          'ngselect-invalid':
+                            submitted && formDataValue.controls[i].get('medioTrasferenciaId').errors != null
+                         }">
+                        </ng-select>
+                        <div *ngIf="submitted && formDataValue.controls[i].get('medioTrasferenciaId').errors">
+                          <small class="text-danger" *ngIf="formDataValue.controls[i].get('medioTrasferenciaId').errors?.required">
+                            Seleccione un medio de transferencia
+                          </small>
+                        </div>
+                  </td>
+                  <ng-template *ngIf="formDataValue.controls[i].get('destino').value=='CAJA'; then tdCaja ; else tdBanco" />
+                      <ng-template #tdBanco>
+                        <td class="medio">
+                          <small class="text-secondary mb-2">Banco</small>
+                          <ng-select
+                          placeholder="Seleccione un banco"
+
+                          [items]="bancoList"
+                          bindLabel="nombre"
+                          bindValue="id"
+                          appendTo="#accountFormModalBodyDiv"
+                          (change)="selectCajaBancoList($event)"
+                      >
+                          </ng-select>
+                          <!--<div *ngIf="submitted && formDataValue.controls[i].get('bancoId')?.errors">
+                            <small class="text-danger" *ngIf="formDataValue.controls[i].get('bancoId')?.errors?.required">
+                              Seleccione un banco
+                            </small>
+                          </div>  -->
+                        </td>
+                        <td class="medio">
+                          <small class="text-secondary mb-2">Cuenta Bancaria</small>
+                          <ng-select
+                          placeholder="Seleccione cuenta bancaria"
+                          [items]="cuentaBancoList"
+                          bindLabel="nroCuenta"
+                          bindValue="id"
+                          formControlName="cajaCuentaBancoId"
+                          appendTo="#accountFormModalBodyDiv"
+                          [notFoundText]="'Sin cuentas bancarias'"
+                          [ngClass]="{
+                            'ngselect-invalid':
+                              submitted && formDataValue.controls[i].get('cajaCuentaBancoId').errors != null
+                          }">
+                          </ng-select>
+                          <div *ngIf="submitted && formDataValue.controls[i].get('cajaCuentaBancoId').errors">
+                            <small class="text-danger" *ngIf="formDataValue.controls[i].get('cajaCuentaBancoId').errors?.required">
+                              Seleccione una cuenta bancaria
+                            </small>
+                          </div>
+                        </td>
+                      </ng-template>
+                      <ng-template #tdCaja>
+                        <td class="medio">
+                          <small class="text-secondary mb-2">Caja</small>
+                          <ng-select
+                          placeholder="Seleccione una caja"
+                          [items]="cajaList"
+                          bindLabel="nombre"
+                          bindValue="id"
+                          formControlName="cajaCuentaBancoId"
+                          appendTo="#accountFormModalBodyDiv"
+                          [notFoundText]="'Sin cajas'"
+                          (change)="selectCaja($event, i)"
+                          [ngClass]="{
+                            'ngselect-invalid':
+                              submitted && formDataValue.controls[i].get('cajaCuentaBancoId').errors != null
+                          }">
+                          </ng-select>
+                          <div *ngIf="submitted && formDataValue.controls[i].get('cajaCuentaBancoId').errors">
+                            <small class="text-danger" *ngIf="formDataValue.controls[i].get('cajaCuentaBancoId').errors?.required">
+                              Seleccione una caja
+                            </small>
+                          </div>
+                        </td>
+                      </ng-template>
+                      <td class="transferencia">
+                        <small class="text-secondary mb-2">N° referencia</small>
+                        <input
+                          type="text"
+                          class="form-control text-end"
+                          formControlName="nroReferencia"
+                          [ngClass]="{
+                            'is-invalid':
+                              submitted && formDataValue.controls[i].get('nroReferencia').errors != null
+                          }"/>
+                          <div *ngIf="submitted && formDataValue.controls[i].get('nroReferencia').errors">
+                            <small class="text-danger" *ngIf="formDataValue.controls[i].get('nroReferencia').errors?.required">
+                              Agregue un nro de referencia
+                            </small>
+                          </div>
+                      </td>
+                      <td class="transferencia">
+                        <small class="text-secondary mb-2">Monto</small>
+                        <input
+                          type="number"
+                          class="form-control text-end"
+                          formControlName="monto"
+                          placeholder="Bs"
+                          (change)="calcularTotalTransaccion()"
+                          [ngClass]="{
+                            'is-invalid':
+                              submitted && formDataValue.controls[i].get('monto').errors != null
+                          }"/>
+                          <div *ngIf="submitted && formDataValue.controls[i].get('monto').errors">
+                            <small class="text-danger" *ngIf="formDataValue.controls[i].get('monto').errors?.required">
+                              Agregue un monto para la transferencia
+                            </small>
+                            <small class="text-danger" *ngIf="formDataValue.controls[i].get('monto').errors['pattern']">
+												      El monto solo acepta carácteres numéricos y un punto decimal
+                            </small>
+                            <small  class="text-danger" *ngIf="formDataValue.controls[i].get('monto').errors['min']">
+                              El monto debe ser mayor a 0
+                            </small>
+                          </div>
+
+                      </td>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
