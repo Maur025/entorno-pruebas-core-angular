@@ -1,0 +1,22 @@
+<div class="col-xl-12 border-bottom mb-2">
+  <div class="d-flex">
+    <div>
+      <h6 class="fs-14 mb-2 ms-1 text-primary" *ngIf="!nombreProveedor">
+        Compras por pagar al proveedor
+        <i>(Para listar compras seleccione antes un proveedor)</i>
+      </h6>
+      <h6 class="fs-14 mb-2 ms-1 text-primary" *ngIf="nombreProveedor">
+        Compras por pagar proveedor : {{ nombreProveedor }}
+      </h6>
+    </div>
+  </div>
+</div>
+
+<ng-template *ngIf="comprasProveedor.length; then listar; else mensaje" />
+<ng-template #listar> </ng-template>
+<ng-template #mensaje>
+  <span *ngIf="nombreProveedor" class="badge bg-warning"
+    >No se encontraron compras del proveedor seleccionado</span
+  >
+</ng-template>
+
