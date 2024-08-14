@@ -34,7 +34,9 @@ export class CuentasBancoComponent implements OnInit {
       this.id = this.route.snapshot.params["id"];
       this.bancoService.find(this.id).subscribe(data => {
         this.banco = data.content;
+        //this.banco = data['data']
         this.titulo = this.titulo + data.content.nombre;
+        //this.titulo = this.titulo + data.data.nombre;
       }, (error) => {
         this.notificacionService.alertError(error);
       });

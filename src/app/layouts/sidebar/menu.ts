@@ -103,10 +103,28 @@ export const MENU: MenuItem[] = [
 		label: 'MOVIMIENTOS',
 		isTitle: true,
 	},
+
+  {
+		id: 42,
+		label: 'Bancos',
+		icon: 'bx bxs-bank',
+		link: 'bancos',
+	},
   {
 		id: 42,
 		label: 'Fondos',
-		icon: 'mdi mdi-cash-plus',
-		link: '/fondo-operativo',
+		icon: 'mdi mdi-cube',
+    subItems: [
+			{
+				id: 321,
+				label: 'Fondos Operativos',
+				link: '/fondo-operativo',
+			},
+			{
+				id: 322,
+				label: 'Fondos a Rendir',
+				link: '#',
+			},
+		],
 	},
 ]
