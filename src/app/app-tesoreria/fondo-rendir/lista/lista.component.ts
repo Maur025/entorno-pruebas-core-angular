@@ -4,7 +4,7 @@ import { NotificacionService } from 'src/app/core/services/notificacion.service'
 import { ResponseHandlerService } from 'src/app/core/services/response-handler.service';
 import { TablaNewComponent } from 'src/app/shared/ui/tabla-new/tabla-new.component';
 import { FuncionesComponent } from '../../funciones.component';
-import { FondoRendirService } from 'src/app/tesorery/services/tesoreria/fondo-rendir.service';
+import { FondoRendirService } from 'src/app/core/services/tesoreria/fondo-rendir.service';
 
 @Component({
   selector: 'app-lista',

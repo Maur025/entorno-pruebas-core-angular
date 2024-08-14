@@ -157,7 +157,6 @@ export class TransaccionArrayComponent {
 
 
   getCuentaBancoList(idBanco){
-    console.log(idBanco);
     this.cuentaBancoService.getCuentasBanco(
       1000,
       0,
@@ -166,7 +165,6 @@ export class TransaccionArrayComponent {
       '',
      idBanco
     ).subscribe((response: ApiResponseStandard) => {
-      console.log("ver ver", response);
         this.cuentaBancoList = response?.data || [];
       },(error: ErrorResponseStandard) => {
         this.notificacionService?.alertError(error)

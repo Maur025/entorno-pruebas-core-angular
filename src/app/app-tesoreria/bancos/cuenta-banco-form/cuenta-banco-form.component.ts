@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { BsModalService } from 'ngx-bootstrap/modal';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { ResponseHandlerService } from 'src/app/core/services/response-handler.service';
 import { ScreenshotService } from 'src/app/core/services/screenshot.service';

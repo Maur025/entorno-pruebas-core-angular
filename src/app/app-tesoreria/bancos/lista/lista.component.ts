@@ -99,8 +99,8 @@ export class ListaComponent  extends FuncionesComponent implements OnInit{
   }
 
   crearCuentaBanco(fila,template){
-    console.log(fila);
     this.bancoData = fila;
+    this.modalConfig.class = `modal-xl modal-scrollable`;
 		this.modalRef = this.modalService.show(template, this.modalConfig);
   }
 
