@@ -3,11 +3,11 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { ResponseHandlerService } from 'src/app/core/services/response-handler.service';
 import { ScreenshotService } from 'src/app/core/services/screenshot.service';
+import { CentroCostosService } from 'src/app/core/services/tesoreria/centro-costos.service';
+import { EmpleadoService } from 'src/app/core/services/tesoreria/empleado.service';
 import { FondoRendirService } from 'src/app/core/services/tesoreria/fondo-rendir.service';
 import { ApiResponseStandard, ErrorResponseStandard } from 'src/app/shared/interface/common-api-response';
 import { UtilityService } from 'src/app/shared/services/utilityService.service';
-import { CentrocostoService } from 'src/app/tesorery/services/tesoreria/centrocosto.service';
-import { EmpleadoService } from 'src/app/tesorery/services/tesoreria/empleado.service';
 
 
 @Component({
@@ -31,7 +31,7 @@ export class DesembolsoFormComponent {
 		private notificacionService: NotificacionService,
     private formBuilder: UntypedFormBuilder,
     private empleadoService: EmpleadoService,
-		private centroCostoService: CentrocostoService,
+		private centroCostoService: CentroCostosService,
 		protected utilityService: UtilityService,
 		protected screenshotService: ScreenshotService,
     private responseHandlerService: ResponseHandlerService,

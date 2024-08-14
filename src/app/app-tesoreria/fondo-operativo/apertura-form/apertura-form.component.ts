@@ -3,9 +3,9 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { ResponseHandlerService } from 'src/app/core/services/response-handler.service';
 import { ScreenshotService } from 'src/app/core/services/screenshot.service';
+import { CentroCostosService } from 'src/app/core/services/tesoreria/centro-costos.service';
 import { FondoOperativoService } from 'src/app/core/services/tesoreria/fondo-operativo.service';
 import { ApiResponseStandard, ErrorResponseStandard } from 'src/app/shared/interface/common-api-response';
-import { CentrocostoService } from 'src/app/tesorery/services/tesoreria/centrocosto.service';
 
 @Component({
   selector: 'apertura-form',
@@ -29,7 +29,7 @@ export class AperturaFormComponent {
 		private notificacionService: NotificacionService,
     private screenshotService: ScreenshotService,
     private responseHandlerService: ResponseHandlerService,
-    private centroCostoService: CentrocostoService,
+    private centroCostoService: CentroCostosService,
     private fondoOperativoService: FondoOperativoService,
 	) {}
 

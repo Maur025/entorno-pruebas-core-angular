@@ -7,9 +7,9 @@ import { ScreenshotService } from 'src/app/core/services/screenshot.service';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { UtilityService } from 'src/app/shared/services/utilityService.service';
 import { ApiResponseStandard, ErrorResponseStandard } from 'src/app/shared/interface/common-api-response';
-import { EmpleadoService } from 'src/app/tesorery/services/tesoreria/empleado.service';
 import { ResponseHandlerService } from 'src/app/core/services/response-handler.service';
 import { TablaNewComponent } from 'src/app/shared/ui/tabla-new/tabla-new.component';
+import { EmpleadoService } from 'src/app/core/services/tesoreria/empleado.service';
 
 @Component({
   selector: 'app-lista',
