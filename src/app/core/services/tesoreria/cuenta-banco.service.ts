@@ -20,14 +20,14 @@ export class CuentaBancoService {
 
   getCuentasBanco = (
 		size: number = 100,
-		page: number = 1,
+		page: number = 0,
 		sortBy: string = 'id',
 		descending: boolean = false,
 		keyword: string = '',
 		id: string | number
 	): Observable<ApiResponseStandard> => {
 		return this.apiService.tesoreria.get(
-			`${this.apiUrl}${this.prefix}/${this.apiName}/banco/${id}?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
+			`${this.apiUrl}${this.prefix}/${this.apiName}/${id}?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
 		)
 	}
 
