@@ -67,7 +67,7 @@ export class TransaccionArrayComponent {
       this.fb.group({
         id:'',
         monto:['', [
-            Validators.required, 
+            Validators.required,
             Validators.min(1),
             Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
         nroReferencia: ['', [Validators.required]],
@@ -114,7 +114,7 @@ export class TransaccionArrayComponent {
           this.formData().at(indice).get('medioTrasferenciaId').setValue(transfer['id']);
           this.getCajas();
         }else if(this.destino == "BANCO"){
-          //this.formDataValue.at(indice)['addControl']('bancoId', this.fb.control('', Validators.required));      
+          //this.formDataValue.at(indice)['addControl']('bancoId', this.fb.control('', Validators.required));
           if(thBanco)thBanco.style.display = 'block';
           this.formData().at(indice).get('medioTrasferenciaId').reset();
           this.formData().at(indice).get('medioTrasferenciaId').enable();
@@ -127,7 +127,7 @@ export class TransaccionArrayComponent {
 		)
   }
 
- 
+
 
   selectCaja(event,i){
     /*if(!this.formDataValue.at(i).value.medioTrasferenciaId){
@@ -157,15 +157,17 @@ export class TransaccionArrayComponent {
 
 
   getCuentaBancoList(idBanco){
+    console.log(idBanco);
     this.cuentaBancoService.getCuentasBanco(
       1000,
-      1,
+      0,
       'nroCuenta',
       false,
       '',
      idBanco
     ).subscribe((response: ApiResponseStandard) => {
-        this.cuentaBancoList = response?.content || [];
+      console.log("ver ver", response);
+        this.cuentaBancoList = response?.data || [];
       },(error: ErrorResponseStandard) => {
         this.notificacionService?.alertError(error)
       }
