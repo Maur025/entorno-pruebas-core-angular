@@ -123,7 +123,7 @@ export const MENU: MenuItem[] = [
 			{
 				id: 322,
 				label: 'Fondos a Rendir',
-				link: '#',
+				link: '/fondo-rendir',
 			},
 		],
 	},
