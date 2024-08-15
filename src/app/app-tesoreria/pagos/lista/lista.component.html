@@ -1,0 +1,24 @@
+<app-page-title title="PAGOS" [breadcrumbItems]="breadCrumbItems" />
+<app-tabla-new
+#tabla
+[botonNuevo]="true"
+[smallTable]="false"
+[conOpciones]="false"
+[formato]="formato"
+[datosService]="pagoService"
+getAll="getAll"
+[templateFila]="templateFila"
+[botonNuevo]="true"
+labelNuevo="Pago Nuevo"
+(alCrear)="crearCaja(nuevoPago)"
+></app-tabla-new>
+
+<ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">
+</ng-template>
+
+<ng-template #nuevoPago>
+  <pago-form
+  (alActualizar)="modalRef.hide(); tabla.obtenerDatos();"
+  (cerrarModal)="modalRef.hide()"
+  ></pago-form>
+</ng-template>

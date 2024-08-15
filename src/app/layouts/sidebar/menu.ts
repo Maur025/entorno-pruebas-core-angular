@@ -36,6 +36,12 @@ export const MENU: MenuItem[] = [
 		isTitle: true,
 	},
   {
+    id:10,
+    label: 'Pagos',
+    icon: 'bx bxs-collection ',
+    link : 'pagos'
+  },
+  {
 		id: 42,
 		label: 'Fondos',
 		icon: 'mdi mdi-cube',

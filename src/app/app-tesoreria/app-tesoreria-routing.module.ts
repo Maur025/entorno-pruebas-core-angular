@@ -16,6 +16,10 @@ const routes: Routes = [
 		loadChildren: () => import('./cajas/cajas.module').then(m => m.CajasModule),
 	},
   {
+		path: 'pagos',
+		loadChildren: () => import('./pagos/pagos.module').then(m => m.PagosModule),
+	},
+  {
 		path: 'fondo-operativo',
 		loadChildren: () => import('./fondo-operativo/fondo-operativo.module').then(m => m.FondoOperativoModule),
 	},

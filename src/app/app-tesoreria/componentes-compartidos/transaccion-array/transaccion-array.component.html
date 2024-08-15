@@ -58,18 +58,18 @@
                   <td class="medio">
                     <small class="text-secondary mb-2">Medio de transferencia</small>
                     <ng-select
-                        formControlName="medioTrasferenciaId"
+                        formControlName="medioTransferenciaId"
                          [items]="transferMediumDataSelect"
                          bindLabel="medio"
                          bindValue="id"
                          appendTo="#accountFormModalBodyDiv"
                          [ngClass]="{
                           'ngselect-invalid':
-                            submitted && formDataValue.controls[i].get('medioTrasferenciaId').errors != null
+                            submitted && formDataValue.controls[i].get('medioTransferenciaId').errors != null
                          }">
                         </ng-select>
-                        <div *ngIf="submitted && formDataValue.controls[i].get('medioTrasferenciaId').errors">
-                          <small class="text-danger" *ngIf="formDataValue.controls[i].get('medioTrasferenciaId').errors?.required">
+                        <div *ngIf="submitted && formDataValue.controls[i].get('medioTransferenciaId').errors">
+                          <small class="text-danger" *ngIf="formDataValue.controls[i].get('medioTransferenciaId').errors?.required">
                             Seleccione un medio de transferencia
                           </small>
                         </div>
