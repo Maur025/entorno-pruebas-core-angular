@@ -4,7 +4,6 @@ import { FuncionesComponent } from '../../funciones.component';
 import { TablaNewComponent } from 'src/app/shared/ui/tabla-new/tabla-new.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
-import { ResponseHandlerService } from 'src/app/core/services/response-handler.service';
 import { EmpleadoService } from 'src/app/core/services/tesoreria/empleado.service';
 import { ErrorResponseStandard } from 'src/app/shared/interface/common-api-response';
 import { ScreenshotService } from 'src/app/core/services/screenshot.service';
@@ -20,7 +19,6 @@ export class EmpleadosComponent extends FuncionesComponent implements OnInit {
   breadCrumbItems: object[];
   formato: any;
   modalRef?: BsModalRef;
-  dataFondo: any;
   titleModal:string="";
   formEmpleado:UntypedFormGroup;
   submitted: boolean = true;
