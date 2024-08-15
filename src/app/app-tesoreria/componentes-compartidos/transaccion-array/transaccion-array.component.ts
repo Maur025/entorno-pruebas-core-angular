@@ -71,7 +71,7 @@ export class TransaccionArrayComponent {
             Validators.min(1),
             Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
         nroReferencia: ['', [Validators.required]],
-        medioTrasferenciaId: ['', [Validators.required]],
+        medioTransferenciaId: ['', [Validators.required]],
         cajaCuentaBancoId:['', [Validators.required]],
         destino:[this.tipoOperacion[0]['name'], [Validators.required]],
       })
@@ -110,14 +110,14 @@ export class TransaccionArrayComponent {
           let transfer = this.transferMediumDataSelect.find(tm=>tm['destino']=="CAJA");
           //this.formDataValue.at(indice)['removeControl']('bancoId')
 
-          //this.formData().at(indice).get('medioTrasferenciaId').disable();
-          this.formData().at(indice).get('medioTrasferenciaId').setValue(transfer['id']);
+          //this.formData().at(indice).get('medioTransferenciaId').disable();
+          this.formData().at(indice).get('medioTransferenciaId').setValue(transfer['id']);
           this.getCajas();
         }else if(this.destino == "BANCO"){
           //this.formDataValue.at(indice)['addControl']('bancoId', this.fb.control('', Validators.required));
           if(thBanco)thBanco.style.display = 'block';
-          this.formData().at(indice).get('medioTrasferenciaId').reset();
-          this.formData().at(indice).get('medioTrasferenciaId').enable();
+          this.formData().at(indice).get('medioTransferenciaId').reset();
+          this.formData().at(indice).get('medioTransferenciaId').enable();
           this,this.getBancosList();
         }
 			},
@@ -130,11 +130,11 @@ export class TransaccionArrayComponent {
 
 
   selectCaja(event,i){
-    /*if(!this.formDataValue.at(i).value.medioTrasferenciaId){
-      this.formDataValue.at(i).value.medioTrasferenciaId=this.formDataValue.at(i).getRawValue().medioTrasferenciaId;
+    /*if(!this.formDataValue.at(i).value.medioTransferenciaId){
+      this.formDataValue.at(i).value.medioTransferenciaId=this.formDataValue.at(i).getRawValue().medioTransferenciaId;
     }
 
-    console.log("medioId"+ this.formDataValue.at(i).value.medioTrasferenciaId);*/
+    console.log("medioId"+ this.formDataValue.at(i).value.medioTransferenciaId);*/
   }
 
   getCajas(){
