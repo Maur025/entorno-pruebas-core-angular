@@ -18,7 +18,7 @@ export class EmpleadoService {
 
 	getAll = (
 		size: number = 100,
-		page: number = 1,
+		page: number = 0,
 		sortBy: string = 'id',
 		descending: boolean = false,
 		keyword: string = ''
@@ -26,7 +26,7 @@ export class EmpleadoService {
 		size = size <= 0 ? 100 : size
 		return this.apiService?.tesoreria?.get(
 			`${this.apiUrl}${this.prefix}/${this.apiName}?size=${size}&page=${
-				page - 1
+				page
 			}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
 		)
 	}
