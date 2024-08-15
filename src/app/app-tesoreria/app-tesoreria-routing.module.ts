@@ -31,6 +31,10 @@ const routes: Routes = [
 		path: 'fondo-rendir',
 		loadChildren: () => import('./fondo-rendir/fondo-rendir.module').then(m => m.FondoRendirModule),
 	},
+  {
+		path: 'anticipos',
+		loadChildren: () => import('./anticipos/anticipos.module').then(m => m.AnticiposModule),
+	},
 ];
 
 @NgModule({

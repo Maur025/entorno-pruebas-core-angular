@@ -43,17 +43,6 @@ export const MENU: MenuItem[] = [
 		link: 'cajas',
 	},
   {
-		id: 9,
-		label: 'MOVIMIENTOS',
-		isTitle: true,
-	},
-  {
-    id:10,
-    label: 'Pagos',
-    icon: 'bx bxs-collection ',
-    link : 'pagos'
-  },
-  {
 		id: 42,
 		label: 'Fondos',
 		icon: 'mdi mdi-cube',
@@ -71,6 +60,28 @@ export const MENU: MenuItem[] = [
 		],
 	},
   {
+		id: 9,
+		label: 'MOVIMIENTOS',
+		isTitle: true,
+	},
+  {
+		id: 42,
+		label: 'Proveedores',
+		icon: 'bx bxs-collection',
+    subItems: [
+      {
+				id: 322,
+				label: 'Anticipos',
+				link: '/anticipos',
+			},
+			{
+				id: 321,
+				label: 'Pagos',
+				link: '/pagos',
+			},
+		],
+	},
+  /*  {
 		id: 1,
 		label: 'antiguo',
 		isTitle: true,
@@ -172,5 +183,5 @@ export const MENU: MenuItem[] = [
 		label: 'Efectuar Cobro',
 		icon: 'mdi mdi-cash-plus',
 		link: '/operacion_financiera/efectuar_cobro',
-	},
+	}, */
 ]
