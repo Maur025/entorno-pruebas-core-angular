@@ -87,13 +87,13 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 
   nuevoFondo(template){
     this.titleModal = 'Nuevo fondo operativo';
-		this.modalConfig.class = `modal-md modal-scrollable`
+		this.modalConfig.class = `modal-md modal-scrollable`;
 		this.modalRef = this.modalService.show(template, this.modalConfig)
   }
 
   editar(fila,template){
     this.titleModal = 'Editar fondo operativo';
-		this.modalConfig.class = `modal-md modal-scrollable`
+		this.modalConfig.class = `modal-md modal-scrollable`;
 		this.modalRef = this.modalService.show(template, this.modalConfig);
 
     this.idFondoEdit = fila['id'];
@@ -105,6 +105,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 
   aperturarFondo(fila,template){
     this.dataFondo =fila;
+    this.modalConfig.class = `modal-lg modal-scrollable`;
 		this.modalRef = this.modalService.show(template, this.modalConfig);
   }
 
