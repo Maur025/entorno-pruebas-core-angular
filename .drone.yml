@@ -76,3 +76,24 @@ steps:
         - KernoTec/${DRONE_REPO_NAME}
       event:
         - push
+
+  - name: deploy-k8s-sandbox
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: k8s_sandbox_host
+      username:
+        from_secret: k8s_sandbox_username
+      password:
+        from_secret: k8s_sandbox_password
+      port: 22
+      command_timeout: 2m
+      script:
+        - k8s-deployment kernotec kbi-tesoreria-ui
+    when:
+      branch:
+        - develop
+      repo:
+        - KernoTec/${DRONE_REPO_NAME}
+      event:
+        - push
