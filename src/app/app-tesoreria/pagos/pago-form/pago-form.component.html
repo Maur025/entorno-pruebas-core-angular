@@ -1,3 +1,4 @@
+<app-page-title title="PAGOS" [breadcrumbItems]="breadCrumbItems" />
 <div class="card">
   <div class="card-body">
     <div class="col-xl-12 border-bottom mb-2">
@@ -61,7 +62,65 @@
         </div>
         <div class="row">
           <list-compras-proveedor
+          [formPadre]="formPago"
           ></list-compras-proveedor>
+        </div>
+
+        <div class="row">
+          <transaccion-array
+          [formPadre]="formPago"
+          labelTransferencia="pago a proveedor"
+          [submitted]="submitted"
+          (alIngresarMonto)="recibirMontoTotal($event)"
+          ></transaccion-array>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-md-8">
+            <label class="mb-2 mt-2">(*) Descripción </label>
+            <textarea
+              formControlName="descripcion"
+              class="form-control uppercase"
+              rows="2"
+              placeholder="Descripción para la apertura de caja"
+              [ngClass]="{'is-invalid': submitted && form['descripcion'].errors}"
+            ></textarea>
+            <div *ngIf="submitted && form['descripcion'].errors"class="invalid-feedback">
+              <div *ngIf="formPago.get('descripcion').errors?.required">
+                La descripción para la apertura de caja es obligatoria
+              </div>
+              <div *ngIf="form['descripcion'].errors['maxlength']">
+                Debe tener menos de {{ form['descripcion'].errors['maxlength']['requiredLength']}}carácteres
+              </div>
+              <div *ngIf="form['descripcion'].errors['minlength']">
+                Debe tener mas de {{ form['descripcion'].errors['minlength']['requiredLength']}}carácteres
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 border p-3">
+            <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary"><b> (*) Monto total a pagar </b></h6>
+            <div class="hstack gap-2 justify-content-end me-4">
+              <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary"> <b>{{formPago.get('montoPagado').value}}</b></h5>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="row mt-3 mb-3 me-3 pt-4 border-top">
+        <div class="hstack gap-2 justify-content-end">
+            <button
+                type="button"
+                class="btn btn-light"
+                data-bs-dismiss="modal"
+                (click)="this.cerrarModal.emit()">
+                Cerrar
+            </button>
+            <button
+                type="submit"
+                class="btn btn-success">
+              <app-simple-loader [isLoading]="onSubmitFormStatus" />
+              {{ onSubmitFormStatus ? ' Espere un momento...' : 'Realizar Pago' }}
+            </button>
         </div>
       </div>
     </form>

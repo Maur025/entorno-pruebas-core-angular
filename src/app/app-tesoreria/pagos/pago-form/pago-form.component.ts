@@ -14,7 +14,7 @@ import { ApiResponseStandard, ErrorResponseStandard } from "src/app/shared/inter
 export class PagoFormComponent {
   @Output() alActualizar = new EventEmitter<void>();
   @Output() cerrarModal = new EventEmitter<void>();
-
+  breadCrumbItems: object[];
   protected onSubmitFormStatus: boolean = false;
 
   formPago: UntypedFormGroup;
@@ -30,6 +30,10 @@ export class PagoFormComponent {
   ) {}
 
   ngOnInit() {
+    this.breadCrumbItems = [
+      { label: "Pagos" },
+      { label: "Nuevo Pago", active: true },
+    ];
     this.setForm();
     this.getProveedoresHabilitados('');
   }
@@ -72,6 +76,10 @@ export class PagoFormComponent {
 
   selectProveedor(dato){
     console.log(dato);
+  }
+
+  recibirMontoTotal(totalTransaccion){
+    console.log(totalTransaccion);
   }
 
   confirmAndContinueSaving = async (): Promise<void> => {

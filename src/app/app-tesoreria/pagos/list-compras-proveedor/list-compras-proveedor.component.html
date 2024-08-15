@@ -1,4 +1,4 @@
-<div class="col-xl-12 border-bottom mb-2">
+<div class="col-xl-7 border-bottom mb-2">
   <div class="d-flex">
     <div>
       <h6 class="fs-14 mb-2 ms-1 text-primary" *ngIf="!nombreProveedor">
@@ -19,4 +19,157 @@
     >No se encontraron compras del proveedor seleccionado</span
   >
 </ng-template>
+
+<div class="row">
+  <div class="col-md-7">
+    <div class="table-responsive">
+      <table class="table mb-0">
+        <thead class="thead-dark">
+          <tr>
+            <th></th>
+            <th>Compra</th>
+            <th>Fecha</th>
+            <th>Credito</th>
+            <th>Pago</th>
+            <th>Saldo</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let compra of comprasProveedor ;let i=index">
+          <tr>
+            <td>
+              <div class="d-flex">
+                <input
+                type="checkbox"
+                name="selectDebt"
+                [id]="'SelectDebt'+i"
+                class="form-check-input ms-1"
+                style="width: 1.8em; height: 1.8em"
+                [(ngModel)]="compra.selected"
+                (change)="onChangeSelectedCheckbox(compra,$event)"
+                tooltip="Pagar"
+              />
+              <button
+              class="btn btn-secondary btn-sm ms-2 py-0 px-1"
+              tooltip="Ver pagos"
+              (click)="onClickToggleMoreInfo(compra)"
+              >
+              <i
+                class="mdi m-0 p-0"
+                [ngClass]="{'mdi-clipboard-plus':!compra.showForm,
+                'mdi-clipboard-minus':compra.showForm}"
+                style="font-size: 15px"
+              ></i>
+            </button>
+              </div>
+            </td>
+            <td>
+              <div>
+                <p class="mb-0 text-muted">
+                  {{ compra["tipo"] }}
+                </p>
+                <p class="text-muted mb-0"><b>{{ compra["nroFacturaRecibo"]}}</b></p>
+                <small>{{compra['centroCostoId']}}</small>
+              </div>
+            </td>
+            <td>{{compra['fechaCompra']}}</td>
+            <td class="text-end">{{compra['totalCredito']}}</td>
+            <td class="text-end">{{compra['totalPago']}}</td>
+            <td class="text-end">{{compra['totalSaldo']}}</td>
+          </tr>
+          <tr *ngIf="compra.showForm" class="sub-table no-bg">
+            <td align="center"> </td>
+            <td colspan="15" class="p-0">
+              <table class="table mb-0 table-striped">
+                <thead class="bg-dark text-white">
+                  <tr>
+                    <th></th>
+                    <th>Monto pagar</th>
+                    <th>Fecha limite</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      Couta {{i+1}}
+                      <input
+                      type="checkbox"
+                      name="selectCouta"
+                      [id]="'SelectCouta'+i"
+                      class="form-check-input ms-1"
+                      style="width: 1.8em; height: 1.8em"
+                      tooltip="Pagar couta"
+                      />
+                    </td>
+                    <td>500</td>
+                    <td>28/10/2024</td>
+                    <td>
+                      <small>
+                        Pendiente de <br> pago
+                      </small>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-md-5">
+    <h6 class="fs-14 mt-2 mb-2 ms-1 text-secondary"><b>Pagos a realizar </b></h6>
+
+    <div  [formGroup]="formPadre">
+      <div formArrayName="planPagos">
+        <div *ngFor="let data1 of formPagos?.controls; let i=index;">
+          <div  [formGroupName]="i">
+            <div class="border">
+              <div class="col-xl-12 border-bottom">
+                <div class="float-end ms-2">
+                  <p class="text-success mb-1">Factura : 78454321.0</p>
+                </div>
+                <h6 class="fs-14 mt-2 mb-2 ms-1 text-secondary"><b> {{i+1}}</b></h6>
+              </div>
+
+              <div class="d-flex mt-2">
+                <div class="col-5">
+                  <div>
+                    <p class="mb-0 text-muted">
+                      Couta 1
+                    </p>
+                    <p class="text-muted mb-0">Total : 900</p>
+                  </div>
+                </div>
+                <div class="col-7">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control text-end"
+                      id="floatingnameInput"
+                      placeholder="Enter Name"
+                     formControlName="montoPagado">
+                    <label for="floatingnameInput">Monto a pagar</label>
+                </div>
+                </div>
+
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="hstack gap-2 justify-content-end">
+          <div class="col-xl-8 border-bottom">
+            <div class="float-end ms-2">
+              <h6 class="mb-1 fs-14 text-primary">{{totalCoutas}}</h6>
+            </div>
+            <h6 class="fs-14 mt-2 mb-2 ms-1 text-primary"><b> TOTAL</b></h6>
+          </div>
+        </div>
+      </div>
+  </div>
+
+</div>
 
