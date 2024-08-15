@@ -13,6 +13,18 @@ export const MENU: MenuItem[] = [
     icon: 'mdi mdi-view-dashboard',
     link : ''
   },
+  {
+    id:10,
+    label: 'Apertura/Cierre',
+    icon: 'mdi mdi-calendar',
+    link : 'gestion/apertura-cierre'
+  },
+  {
+    id:10,
+    label: 'Empleados',
+    icon: 'mdi mdi-card-account-details',
+    link : 'gestion/empleado'
+  },
 	{
 		id: 1,
 		label: 'TESORERIA',

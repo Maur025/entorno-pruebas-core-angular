@@ -8,6 +8,10 @@ const routes: Routes = [
 		component: InicioComponent,
   },
   {
+		path: 'gestion',
+		loadChildren: () => import('./gestion/gestion.module').then(m => m.GestionModule),
+	},
+  {
 		path: 'bancos',
 		loadChildren: () => import('./bancos/bancos.module').then(m => m.BancosModule),
 	},
