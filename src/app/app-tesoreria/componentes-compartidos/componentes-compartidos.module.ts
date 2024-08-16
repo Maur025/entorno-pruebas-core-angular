@@ -10,11 +10,13 @@ import { NgxMaskModule } from 'ngx-mask';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { InputFechaComponent } from './input-fecha/input-fecha.component';
 import { TransaccionArrayComponent } from './transaccion-array/transaccion-array.component';
+import { FechaFormatPipe } from 'src/app/core/pipes/fechaFormat.pipe';
 
 
 
 @NgModule({
   declarations: [
+    FechaFormatPipe,
     TransaccionArrayComponent,
     InputFechaComponent
   ],
@@ -31,6 +33,7 @@ import { TransaccionArrayComponent } from './transaccion-array/transaccion-array
     TooltipModule.forRoot(),
   ],
   exports:[
+    FechaFormatPipe,
     TransaccionArrayComponent,
     InputFechaComponent
   ]
