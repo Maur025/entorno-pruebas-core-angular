@@ -52,7 +52,7 @@
           {{ fila["fecha"] }}
         </div>
         <div *ngSwitchCase="'monto'" class="text-end">
-          {{ fila["monto"] }}
+          {{ fila["monto"] |decimalAmount}}
         </div>
         <div *ngSwitchCase="'saldo'" class="text-end">
           <input type="hidden" [id]="'saldo_' + index" />
@@ -64,7 +64,7 @@
                 : 'text-danger'
             "
           >
-            {{ calcularSaldo(fila, content, index) }}
+            {{ calcularSaldo(fila, content, index)|decimalAmount }}
           </p>
         </div>
         <div *ngSwitchCase="'estado'">

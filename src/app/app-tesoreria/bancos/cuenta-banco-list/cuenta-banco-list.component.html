@@ -32,7 +32,7 @@
         <div *ngSwitchCase="'saldo'" class="hstack gap-2 justify-content-end">
           <div>
             <p class="mb-0" [ngClass]="fila['saldo'] > 0 ? 'text-success' : 'text-danger'">
-              {{ fila["saldo"] }}
+              {{ fila["saldo"]|decimalAmount }}
             </p>
             <small class="text-muted text-end mb-0">{{ fila["moneda"]["sigla"] }}</small>
         </div>

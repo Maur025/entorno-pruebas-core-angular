@@ -28,9 +28,9 @@ getAll="getAll"
 						<i class="mdi mdi-pencil-outline"></i>
 					</button>
           <button
+          *ngIf="!fila['aperturado']"
           class="btn btn-sm btn-warning me-2"
           tooltip="Aperturar"
-          [disabled]="fila['aperturado']"
           (click)="aperturarFondo(fila, aperturaModal)">
           <i class="bx bx-lock-open-alt"></i>
         </button>
@@ -41,8 +41,8 @@ getAll="getAll"
         <div *ngSwitchCase="'empleado'">
           {{fila['empleado']['nombre']}}
         </div>
-        <div *ngSwitchCase="'importe'">
-          {{fila['importe']}}
+        <div *ngSwitchCase="'importe'" class="text-end">
+          {{fila['importe']|decimalAmount}}
         </div>
         <div *ngSwitchCase="'estado'">
           <span *ngIf="!fila.aperturado" class="badge bg-secondary font-size-10">

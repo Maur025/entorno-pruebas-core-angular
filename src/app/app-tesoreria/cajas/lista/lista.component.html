@@ -53,7 +53,7 @@ getAll="getAll"
         </div>
         <div *ngSwitchCase="'saldo'" class="text-end">
           <p class="mb-0" [ngClass]="fila['saldoActual'] > 0 ? 'text-success':'text-danger'">
-            <b>{{fila['saldoActual']}}</b>
+            {{fila['saldoActual']|decimalAmount}}
           </p>
         </div>
       </td>
