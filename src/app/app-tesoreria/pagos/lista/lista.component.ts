@@ -53,9 +53,12 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
     return {
       cabeceras: {
         acciones: this.getOpcionesCabecera("Acciones", 12, "text", true, false),
-        nombre: this.getOpcionesCabecera("Nombre", 12),
-        centroCosto: this.getOpcionesCabecera("Centro de Costos", 12),
-        empleado: this.getOpcionesCabecera("Responsable", 12)
+        razonSocial: this.getOpcionesCabecera("Razón Social", 12),
+        nombreComercial: this.getOpcionesCabecera("Nombre Comercial", 12),
+        nroDocumento: this.getOpcionesCabecera("Nº Documento", 12),
+        totalCredito: this.getOpcionesCabecera("Credito total", 12),
+        totalPago: this.getOpcionesCabecera("Pago Total", 12),
+        totalSaldo: this.getOpcionesCabecera("Saldo", 12)
       },
     };
   }

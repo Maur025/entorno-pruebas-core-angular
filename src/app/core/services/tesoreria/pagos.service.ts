@@ -19,4 +19,8 @@ export class PagosService {
     return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}`, datos);
   }
 
+  comprasPorProveedor(idProveedor){
+    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/${idProveedor}`);
+  }
+
 }
