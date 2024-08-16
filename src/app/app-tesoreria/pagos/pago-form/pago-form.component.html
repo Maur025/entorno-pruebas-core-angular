@@ -1,6 +1,6 @@
 <app-page-title title="PAGOS" [breadcrumbItems]="breadCrumbItems" />
 <div class="card">
-  <div class="card-body">
+  <div class="card-body" id="accountFormModalBodyDiv">
     <div class="col-xl-12 border-bottom mb-2">
       <div class="float-end ms-2">
         <small class="mb-4" style="color: #f46a6a"
@@ -11,7 +11,7 @@
         <i class="mdi mdi-square-rounded text-primary"></i>
         <div>
           <h6 class="fs-14 mb-2 ms-1 text-primary">
-            DATOS PARA LA TRANSACCIÓN DE PAGO
+            DATOS PARA LA TRANSACCIÓN
           </h6>
         </div>
       </div>
@@ -27,13 +27,13 @@
               labelFecha="(*)Fecha de pago"
             ></input-fecha>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-4 mb-2">
             <p class="text-muted mb-1">(*)Proveedor</p>
             <ng-select
               formControlName="proveedorId"
               placeholder="Seleccione Proveedor"
               [items]="listaProveedores"
-              bindLabel="nombre"
+              bindLabel="razonSocial"
               bindValue="id"
               (change)="selectProveedor($event)"
               [ngClass]="{
@@ -46,30 +46,34 @@
                 class="text-danger mt-1 font-size-10"
                 *ngIf="form['proveedorId'].errors['required']"
               >
-                Proveedor es obligatorio
+              Seleccione proveedor.
               </div>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-4 mb-2">
             <p class="text-muted mb-1">Nº Referencia</p>
             <input
               type="text"
-              class="form-control uppercase"
-              placeholder="nº referencia"
+              class="form-control"
+              placeholder="Referencia documento"
               formControlName="nroReferencia"
+              (input)="utilityService?.convertUppercase('nroReferencia', $event, formPago)"
             />
           </div>
         </div>
         <div class="row">
           <list-compras-proveedor
           [formPadre]="formPago"
+          [dataProveedor]="datosProvedor"
+          [comprasProveedor]="comprasDelProveedor"
+          [submitted]="submitted"
+          (alSumarPagos)="recibirPagoTotal($event)"
           ></list-compras-proveedor>
         </div>
-
-        <div class="row">
+        <div class="row" [ngClass]="comprasDelProveedor.length <= 0?'disable-transacciones':''">
           <transaccion-array
           [formPadre]="formPago"
-          labelTransferencia="pago a proveedor"
+          labelTransferencia="realizar el pago"
           [submitted]="submitted"
           (alIngresarMonto)="recibirMontoTotal($event)"
           ></transaccion-array>
@@ -82,7 +86,7 @@
               formControlName="descripcion"
               class="form-control uppercase"
               rows="2"
-              placeholder="Descripción para la apertura de caja"
+              placeholder="Descripción del pago"
               [ngClass]="{'is-invalid': submitted && form['descripcion'].errors}"
             ></textarea>
             <div *ngIf="submitted && form['descripcion'].errors"class="invalid-feedback">
@@ -104,8 +108,8 @@
             </div>
           </div>
         </div>
-
       </div>
+
       <div class="row mt-3 mb-3 me-3 pt-4 border-top">
         <div class="hstack gap-2 justify-content-end">
             <button

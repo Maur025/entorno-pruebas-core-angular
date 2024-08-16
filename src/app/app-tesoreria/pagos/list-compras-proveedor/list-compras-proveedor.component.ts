@@ -1,9 +1,8 @@
-import { Component, Input} from '@angular/core';
+import { Component, EventEmitter, Input, Output} from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { PagosService } from 'src/app/core/services/tesoreria/pagos.service';
 import { ResponseDataStandard } from 'src/app/shared/interface/common-list-interface';
-import { PaymentSelectionService } from 'src/app/tesorery/services/tesoreria/financial-transaction/payment-selection.service';
+import { UtilityService } from 'src/app/shared/services/utilityService.service';
 @Component({
   selector: 'list-compras-proveedor',
   templateUrl: './list-compras-proveedor.component.html',
@@ -11,87 +10,111 @@ import { PaymentSelectionService } from 'src/app/tesorery/services/tesoreria/fin
 })
 export class ListComprasProveedorComponent {
 
-  comprasProveedor: any[]=[];
   nombreProveedor: string="";
   totalCoutas: number = 0;
   @Input() formPadre: UntypedFormGroup;
+  @Input() dataProveedor : any;
+  @Input() comprasProveedor : any;
+  @Output() alSumarPagos: EventEmitter<any> = new EventEmitter();
+  @Input() submitted;
 
   protected selectedPaymentList: ResponseDataStandard[] = []
 
   constructor(
     public pagoService: PagosService,
-    private paymentSelectionService: PaymentSelectionService,
     private formBuilder: UntypedFormBuilder,
-
+    protected utilityService: UtilityService,
   ){}
-
-  ngOnInit(){
-    let idProveedor = '5fcb696e-6a4c-41dc-91fe-dd4240d7ef99';
-    this.getComprasPorProveedor(idProveedor);
-    this.setPlanPagos();
-  }
 
   get formPagos(): UntypedFormArray {
     return this.formPadre.get('planPagos') as UntypedFormArray;
   }
 
-  setPlanPagos(){
+  setPlanPagos(planPago){
     this.formPagos.push(
       this.formBuilder.group({
-        planPagoId:'',
-        montoPagado: [0, [Validators.required]]
+        planPagoId:[planPago['id'], [Validators.required]],
+        montoPagado: ['', [Validators.required]]
       })
     );
   }
 
-
-  getComprasPorProveedor(idProveedor){
-    this.pagoService.comprasPorProveedor(idProveedor).subscribe(
-      data=>{
-        console.log(data);
-        this.comprasProveedor=data['data'];
-      }
-    );
+  onClickToggleMoreInfo= (paymentData): void => {
+    paymentData.showForm = !paymentData.showForm;
   }
+
+  selectPago(estado, i, pago, compra){
+
+    if(estado){
+      compra['checked']=true;
+      let nombreCouta = document.getElementById("nameCouta"+i).textContent;
+      this.setPlanPagos(pago);
+      this.dataPago(pago, compra, nombreCouta);
+    }else{
+      this.eliminarPago(pago)
+    }
+  }
+
+  eliminarPago(pago){
+    this.formPagos['value'].forEach((element, indice) => {
+      if(element['planPagoId'] == pago['id']){
+        this.formPagos.removeAt(indice);
+      }
+    });
+
+    this.calcularTotalPagar();
+  }
+
+    dataPago(pago, compra, nombreCouta){
+      let monto =nombreCouta + " : " + pago['saldoPagar'];
+      let compraData = compra['tipo'] + ":" + compra['nroFacturaRecibo'];
+      this.formPagos['value'].forEach((element, indice) => {
+        if(element['planPagoId'] == pago['id']){
+          setTimeout(() => {
+            document.getElementById("compra_"+indice).textContent = compraData;
+            document.getElementById("couta_"+indice).textContent = monto;
+          }, 50);
+
+        }
+      });
+    }
+
+    calcularTotalPagar(){
+      this.totalCoutas = 0;
+      this.formPagos['value'].forEach((element, indice)=>{
+        this.totalCoutas += element['montoPagado'];
+      })
+
+      this.alSumarPagos.emit(this.totalCoutas);
+    }
+
 
   getElementPaymentList = (paymentId: string): ResponseDataStandard => {
 		return this.selectedPaymentList.find(
 			paymentData => paymentData.id === paymentId
 		)
 	}
-  onClickToggleMoreInfo = (paymentData: ResponseDataStandard): void => {
-		const foundPaymentData: ResponseDataStandard = this.getElementPaymentList(
-			paymentData?.id?.toString()
-		)
-		paymentData.showForm = !paymentData.showForm
-	}
-
   onChangeSelectedCheckbox = (
 		payment: ResponseDataStandard,
 		event: Event
 	): void => {
-		const checkboxElement = event?.target as HTMLInputElement
-    console.log(payment, checkboxElement)
-		payment.selected = checkboxElement.checked
-
-    console.log(payment);
-
+		const checkboxElement = event?.target as HTMLInputElement;
+    payment.selected = checkboxElement.checked;
 
 		if (checkboxElement.checked) {
-			//
+			payment['planPagos'].forEach((element, indice) => {
+        element['checked'] = true;
+        let nombreCouta = "Couta "+indice+1;
+        this.setPlanPagos(element);
+        this.dataPago(element, payment, nombreCouta);
+      });
 		} else {
-			this.paymentSelectionService?.removeSelectedPayment(
-				payment?.id?.toString()
-			)
-			this.removeElementOfPaymentList(payment?.id?.toString())
+			payment['planPagos'].forEach((element, indice) => {
+        this.eliminarPago(element);
+        element['checked'] = false;
+      });
+
+
 		}
 	}
-
-  removeElementOfPaymentList = (paymentId: string): void => {
-		this.selectedPaymentList = this.selectedPaymentList?.filter(
-			rowPayData => rowPayData.id !== paymentId
-		)
-	}
-
-
 }

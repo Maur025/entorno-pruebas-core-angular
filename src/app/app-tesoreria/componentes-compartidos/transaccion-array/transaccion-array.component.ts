@@ -21,7 +21,7 @@ export class TransaccionArrayComponent {
   @Input() bancoCajaId: any;
   @Input() labelTransferencia: string="";
   @Input() submitted: boolean=false;
-  @Output() alIngresarMonto: EventEmitter<any> = new EventEmitter()
+  @Output() alIngresarMonto: EventEmitter<any> = new EventEmitter();
   bancoList: any;
   cajaList: any[]=[];
   cuentaBancoList: any;

@@ -36,7 +36,7 @@ export class InputFechaComponent implements OnInit{
     this.getGestionId();
     setTimeout(() => {
 			this.enabledDays()
-		}, 500)
+		}, 700)
   }
 
 
@@ -53,7 +53,8 @@ export class InputFechaComponent implements OnInit{
 	}
 
 public enabledDays() {
-  this.aperturasCierresService
+  if(this.gestionId.getValue()){
+    this.aperturasCierresService
     .getAperturaCierreHabilitados(this.gestionId.getValue())
     .subscribe(data => {
       this.checkDateStatus(data);
@@ -68,6 +69,9 @@ public enabledDays() {
         }
       })
     })
+  }else{
+    console.error("No se encontro la gestion");
+  }
 }
 
 checkDateStatus(data){

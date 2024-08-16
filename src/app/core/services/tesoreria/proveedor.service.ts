@@ -14,8 +14,8 @@ export class ProveedorService {
   apiUrl:string = '' ;
   prefix:string = '';
 
-	habilitados = (): Observable<ApiResponseStandard> => {
-		return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/habilitados`);
+	getProveedores = (): Observable<ApiResponseStandard> => {
+		return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}`);
 	}
 
 }
