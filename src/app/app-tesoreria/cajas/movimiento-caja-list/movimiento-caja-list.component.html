@@ -1,0 +1,78 @@
+<app-page-title
+  [title]="labelBanco"
+  [breadcrumbItems]="breadCrumbItems"
+  descripcion="Movimiento de cajas"
+></app-page-title>
+<app-tabla-new
+  #tabla
+  [botonNuevo]="true"
+  [smallTable]="false"
+  [conOpciones]="false"
+  [formato]="formato"
+  [datosService]="movimientoCajaService"
+  [idRuta]="idCaja"
+  getAll="movimientosPorCaja"
+  [templateFila]="templateFila"
+  [botonNuevo]="false"
+></app-tabla-new>
+
+<ng-template
+  #templateFila
+  let-fila="fila"
+  let-cabeceras="cabeceras"
+  let-index="index"
+  let-content="content"
+>
+  <ng-template ngFor let-campo [ngForOf]="cabeceras">
+    <ng-template
+      *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"
+    ></ng-template>
+    <ng-template #tempTD>
+      <td [ngSwitch]="campo">
+        <div *ngSwitchCase="'movimiento'">
+          <div>
+            <span
+              *ngIf="fila['ingresoEgreso']"
+              class="badge bg-success font-size-10"
+            >
+              INGRESO
+            </span>
+            <span
+              *ngIf="!fila['ingresoEgreso']"
+              class="badge bg-danger font-size-10"
+            >
+              EGRESO
+            </span>
+            <p class="ms-1 mb-0 text-secondary">
+              {{ fila["descripcion"] }}
+            </p>
+          </div>
+        </div>
+        <div *ngSwitchCase="'fecha'">
+          {{ fila["fecha"] }}
+        </div>
+        <div *ngSwitchCase="'monto'" class="text-end">
+          {{ fila["monto"] }}
+        </div>
+        <div *ngSwitchCase="'saldo'" class="text-end">
+          <input type="hidden" [id]="'saldo_' + index" />
+          <p
+            class="mt-3"
+            [ngClass]="
+              calcularSaldo(fila, content, index) > 0
+                ? 'text-succes'
+                : 'text-danger'
+            "
+          >
+            {{ calcularSaldo(fila, content, index) }}
+          </p>
+        </div>
+        <div *ngSwitchCase="'estado'">
+          <p class="mb-0 text-secondary">
+            {{ fila["estadoContabilidad"]["nombre"] }}
+          </p>
+        </div>
+      </td>
+    </ng-template>
+  </ng-template>
+</ng-template>

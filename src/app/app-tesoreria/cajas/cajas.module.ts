@@ -13,12 +13,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ListaComponent } from './lista/lista.component';
 import { AperturaCajaComponent } from './apertura-caja/apertura-caja.component';
+import { MovimientoCajaListComponent } from './movimiento-caja-list/movimiento-caja-list.component';
 
 
 @NgModule({
   declarations: [
     ListaComponent,
-    AperturaCajaComponent
+    AperturaCajaComponent,
+    MovimientoCajaListComponent
   ],
   imports: [
     CommonModule,

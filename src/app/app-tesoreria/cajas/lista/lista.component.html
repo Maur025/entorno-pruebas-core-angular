@@ -27,19 +27,19 @@ getAll="getAll"
 						(click)="editar(fila, nuevaCaja)">
 						<i class="mdi mdi-pencil-outline"></i>
 					</button>
-					<button
-						class="btn btn-sm btn-primary me-2"
-						[disabled]="fila.aperturado"
-						tooltip="Aperturar Caja"
-						(click)="aperturarCaja(fila, aperturaCierre)">
-						<i class="bx bx-lock-open-alt"></i>
-					</button>
           <button
             class="btn btn-sm btn-info me-1"
             tooltip="Ver detalle de la caja"
             [disabled]="fila.deleted"
             (click)="detalleCaja(fila)">
             <i class="mdi mdi-format-list-bulleted"></i>
+          </button>
+          <button
+            class="btn btn-sm btn-primary me-2"
+            *ngIf="!fila.aperturado"
+            tooltip="Aperturar Caja"
+            (click)="aperturarCaja(fila, aperturaCierre)">
+            <i class="bx bx-lock-open-alt"></i>
           </button>
         </div>
         <div *ngSwitchCase="'nombre'">
@@ -50,6 +50,11 @@ getAll="getAll"
         </div>
         <div *ngSwitchCase="'empleado'">
           {{fila['empleado']['nombre']}}
+        </div>
+        <div *ngSwitchCase="'saldo'" class="text-end">
+          <p class="mb-0" [ngClass]="fila['saldoActual'] > 0 ? 'text-success':'text-danger'">
+            <b>{{fila['saldoActual']}}</b>
+          </p>
         </div>
       </td>
     </ng-template>
