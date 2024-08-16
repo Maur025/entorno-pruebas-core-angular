@@ -3,6 +3,7 @@ import { FuncionesComponent } from '../../funciones.component';
 import { ActivatedRoute } from '@angular/router';
 import { CajaService } from 'src/app/core/services/tesoreria/caja.service';
 import { MovimientoCajaService } from 'src/app/core/services/tesoreria/movimiento-caja.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-movimiento-caja-list',
@@ -18,7 +19,8 @@ export class MovimientoCajaListComponent extends FuncionesComponent implements O
   constructor(
     private route: ActivatedRoute,
     private cajaService: CajaService,
-    public movimientoCajaService: MovimientoCajaService
+    public movimientoCajaService: MovimientoCajaService,
+    public location: Location
 
   ){
     super();
@@ -63,7 +65,6 @@ export class MovimientoCajaListComponent extends FuncionesComponent implements O
       var saldoInfo = document.getElementById(id);
       if(saldoInfo){
         saldoAnterior = parseInt(saldoInfo['value']);
-        console.log(saldoAnterior + (signoAmount*amount));
         saldo=saldoAnterior + (signoAmount*amount);
         document.getElementById("saldo_"+index)['value']=saldo;
       }
