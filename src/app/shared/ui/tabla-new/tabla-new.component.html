@@ -245,7 +245,7 @@
                     ></ng-container>
                   </ng-template>
                   <ng-template #noTemplatetbody>
-                    <tr *ngFor="let data of datos">
+                    <tr *ngFor="let data of datos; let i ='index'" let content = "datos">
                       <ng-template
                       {{templateFila}}
                         [ngIf]="templateFila !== undefined"
@@ -254,13 +254,16 @@
                         <ng-container
                           [ngTemplateOutlet]="templateFila"
                           [ngTemplateOutletContext]="{
+                            index: i,
                             fila: data,
+                            content: datos,
                             cabeceras: cabeceras
                           }"
                         ></ng-container>
                       </ng-template>
                       <ng-template #sintemplate>
                         <ng-template ngFor let-campo [ngForOf]="this.cabeceras">
+
                           <ng-template
                             *ngIf="
                               formato.cabeceras[campo].visibleCheck;

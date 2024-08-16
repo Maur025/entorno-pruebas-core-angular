@@ -80,7 +80,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
         acciones: this.getOpcionesCabecera("Acciones", 12, "text", true, false),
         nombre: this.getOpcionesCabecera("Nombre", 12),
         centroCosto: this.getOpcionesCabecera("Centro de Costos", 12),
-        empleado: this.getOpcionesCabecera("Responsable", 12)
+        empleado: this.getOpcionesCabecera("Responsable", 12),
+        saldo: this.getOpcionesCabecera("Saldo", 12),
       },
     };
   }
@@ -130,10 +131,9 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   }
 
   detalleCaja(caja) {
-    console.log(caja);
-    /* this.router.navigate(["./" + banco.id + "/cuenta-banco/", {}], {
+    this.router.navigate(["./" + caja.id + "/caja/", {}], {
       relativeTo: this.route,
-    }); */
+    });
   }
 
   getCentroCostos() {
