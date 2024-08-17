@@ -3,6 +3,7 @@ import { FuncionesComponent } from '../../funciones.component';
 import { ActivatedRoute } from '@angular/router';
 import { BancoService } from 'src/app/core/services/tesoreria/banco.service';
 import { CuentaBancoService } from 'src/app/core/services/tesoreria/cuenta-banco.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-cuenta-banco-list',
@@ -19,7 +20,8 @@ export class CuentaBancoListComponent extends FuncionesComponent implements OnIn
   constructor(
     private route: ActivatedRoute,
     private bancoService: BancoService,
-    public cuentaBancoService: CuentaBancoService
+    public cuentaBancoService: CuentaBancoService,
+    public location: Location
 
   ){
     super();
