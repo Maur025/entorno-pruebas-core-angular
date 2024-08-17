@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { AppTesoreriaRoutingModule } from './app-tesoreria-routing.module';
 
 @NgModule({
@@ -8,6 +8,9 @@ import { AppTesoreriaRoutingModule } from './app-tesoreria-routing.module';
   imports: [
     CommonModule,
     AppTesoreriaRoutingModule
+  ],
+  providers: [
+		DecimalPipe,
   ]
 })
 export class AppTesoreriaModule { }

@@ -11,12 +11,14 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { InputFechaComponent } from './input-fecha/input-fecha.component';
 import { TransaccionArrayComponent } from './transaccion-array/transaccion-array.component';
 import { FechaFormatPipe } from 'src/app/core/pipes/fechaFormat.pipe';
+import { DecimalAmountPipe } from 'src/app/core/pipes/decimal-amount.pipe';
 
 
 
 @NgModule({
   declarations: [
     FechaFormatPipe,
+    DecimalAmountPipe,
     TransaccionArrayComponent,
     InputFechaComponent
   ],
@@ -34,8 +36,10 @@ import { FechaFormatPipe } from 'src/app/core/pipes/fechaFormat.pipe';
   ],
   exports:[
     FechaFormatPipe,
+    DecimalAmountPipe,
     TransaccionArrayComponent,
-    InputFechaComponent
+    InputFechaComponent,
+
   ]
 })
 export class ComponentesCompartidosModule { }

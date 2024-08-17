@@ -24,13 +24,15 @@ labelNuevo="Pago Nuevo"
 					<td>{{ fila[campo] }}</td>
 				</div>
         <div *ngSwitchCase="'totalCredito'" class="text-end">
-					{{ fila['totalCredito']}}
+					{{ fila['totalCredito']|decimalAmount}}
 				</div>
         <div *ngSwitchCase="'totalPago'" class="text-end">
-					{{ fila['totalPago']}}
+					{{ fila['totalPago']|decimalAmount}}
 				</div>
         <div *ngSwitchCase="'totalSaldo'" class="text-end">
-					{{ fila['totalSaldo']}}
+          <p [ngClass]="fila['totalSaldo'] >= 0?'text-success':'text-danger'">
+            {{ fila['totalSaldo']|decimalAmount}}
+          </p>
 				</div>
       </td>
     </ng-template>

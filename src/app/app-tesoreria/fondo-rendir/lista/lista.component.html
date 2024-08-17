@@ -1,16 +1,16 @@
 <app-page-title title="Fondo a rendir" [breadcrumbItems]="breadCrumbItems" />
 <app-tabla-new
-#tabla
-[botonNuevo]="true"
-[smallTable]="false"
-[conOpciones]="false"
-[formato]="formato"
-[datosService]="fondoRendirService"
-getAll="getAll"
-[templateFila]="templateFila"
-[botonNuevo]="true"
-labelNuevo="Nuevo desembolso"
-(alCrear)="nuevoDesembolso(desembolsoModal)"
+  #tabla
+  [botonNuevo]="true"
+  [smallTable]="false"
+  [conOpciones]="false"
+  [formato]="formato"
+  [datosService]="fondoRendirService"
+  getAll="getAll"
+  [templateFila]="templateFila"
+  [botonNuevo]="true"
+  labelNuevo="Nuevo desembolso"
+  (alCrear)="nuevoDesembolso(desembolsoModal)"
 ></app-tabla-new>
 
 <ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">
@@ -21,51 +21,53 @@ labelNuevo="Nuevo desembolso"
     <ng-template #tempTD>
       <td [ngSwitch]="campo">
         <div *ngSwitchCase="'acciones'">
-          <button
-          class="btn btn-sm btn-warning me-2"
-          tooltip="opcion"
-          >
-          <i class="bx bx-lock-open-alt"></i>
-        </button>
+<!--           <button class="btn btn-sm btn-warning me-2" tooltip="opcion">
+            <i class="bx bx-lock-open-alt"></i>
+          </button> -->
         </div>
-        <div *ngSwitchCase="'nombre'" style="width: 180px;">
+        <div *ngSwitchCase="'nombre'" style="width: 180px">
           <div>
             <p class="mb-0 text-muted">
               {{ fila["nombre"] }}
             </p>
-            <small class="text-muted text-end mb-0">NIT / CI: <b>{{ fila["nitCi"]}}</b></small>
+            <small class="text-muted text-end mb-0"
+              >NIT / CI: <b>{{ fila["nitCi"] }}</b></small
+            >
           </div>
         </div>
         <div *ngSwitchCase="'asignado'" class="text-end">
-          {{fila['totalAsignado']}}
+          {{ fila["totalAsignado"] | decimalAmount }}
         </div>
         <div *ngSwitchCase="'rendido'" class="text-end">
-          {{fila['totalRendido']}}
+          {{ fila["totalRendido"] | decimalAmount }}
         </div>
         <div *ngSwitchCase="'porRendir'" class="text-end">
-          {{fila['saldoPorRendir']}}
+          {{ fila["saldoPorRendir"] | decimalAmount }}
         </div>
         <div *ngSwitchCase="'reembolso'" class="text-end">
-          {{fila['totalReembolso']}}
+          {{ fila["totalReembolso"] | decimalAmount }}
         </div>
         <div *ngSwitchCase="'pagoReembolso'" class="text-end">
-          {{fila['totalPagoReembolso']}}
+          {{ fila["totalPagoReembolso"] | decimalAmount }}
         </div>
         <div *ngSwitchCase="'reembolsar'" class="text-end">
-          {{fila['saldoReembolsar']}}
+          {{ fila["saldoReembolsar"] | decimalAmount }}
         </div>
         <div *ngSwitchCase="'saldoNeto'" class="text-end">
-          {{fila['saldoNeto']}}
+          <p
+            [ngClass]="fila['saldoNeto'] >= 0 ? 'text-success' : 'text-danger'"
+          >
+            {{ fila["saldoNeto"] | decimalAmount }}
+          </p>
         </div>
       </td>
     </ng-template>
   </ng-template>
 </ng-template>
 
-
 <ng-template #desembolsoModal>
   <desembolso-form
-  (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
-  (alActualizar)="modalRef.hide(); tabla.obtenerDatos();"
+    (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
+    (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"
   ></desembolso-form>
 </ng-template>

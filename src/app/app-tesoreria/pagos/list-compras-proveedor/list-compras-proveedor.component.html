@@ -72,8 +72,8 @@
                 <td class="text-end">
                   {{ compra["fechaCompra"] | fechaFormat }}
                 </td>
-                <td class="text-end">{{ compra["total"] }}</td>
-                <td class="text-end">{{ compra["saldo"] }}</td>
+                <td class="text-end">{{ compra["total"]|decimalAmount }}</td>
+                <td class="text-end">{{ compra["saldo"]|decimalAmount }}</td>
               </tr>
               <tr *ngIf="compra.showForm" class="sub-table no-bg">
                 <td align="center"></td>
@@ -115,8 +115,8 @@
                           />
                         </td>
                         <td>{{ pago["fechaLimitePago"] | fechaFormat }}</td>
-                        <td class="text-end">{{ pago["monto"] }}</td>
-                        <td class="text-end">{{ pago["saldoPagar"] }}</td>
+                        <td class="text-end">{{ pago["monto"]|decimalAmount }}</td>
+                        <td class="text-end">{{ pago["saldoPagar"]|decimalAmount }}</td>
                         <td class="text-center">
                           <small *ngIf="pago['conSaldo']" class="text-danger"
                             >Pendiente de pago</small
@@ -134,7 +134,7 @@
           </table>
         </div>
       </div>
-      <div class="col-md-5">  {{ formPagos?.length }}
+      <div class="col-md-5">
         <div class="card">
           <div class="card-body">
             <h6 class="fs-14 mt-2 mb-2 ms-1 text-secondary">
