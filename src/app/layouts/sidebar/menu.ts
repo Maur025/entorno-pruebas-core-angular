@@ -72,7 +72,7 @@ export const MENU: MenuItem[] = [
       {
 				id: 322,
 				label: 'Anticipos',
-				link: '/anticipos',
+				link: '/anticipo-proveedor',
 			},
 			{
 				id: 321,

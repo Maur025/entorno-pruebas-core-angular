@@ -5,7 +5,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { ResponseHandlerService } from 'src/app/core/services/response-handler.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AnticipoProveedorService } from 'src/app/core/services/tesoreria/anticipoProveedor.service';
+import { AnticipoProveedorService } from 'src/app/core/services/tesoreria/anticipo-proveedor.service';
 
 
 @Component({
@@ -60,5 +60,12 @@ export class ListaComponent extends FuncionesComponent{
 
   crearAnticipo(template: any){
     this.modalRef = this.modalService.show(template, this.modalConfig)
+  }
+
+  dataProveedor: any;
+  realizarDevolucion(template, proveedor){
+    this.dataProveedor = proveedor;
+    console.log(proveedor);
+    this.modalRef = this.modalService.show(template, this.modalConfig);
   }
 }

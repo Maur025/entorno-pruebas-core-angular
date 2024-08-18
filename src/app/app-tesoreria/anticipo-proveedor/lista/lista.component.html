@@ -20,11 +20,12 @@ getAll="getAll"
 		<ng-template #tempTD>
 			<td [ngSwitch]="campo">
 				<div *ngSwitchCase="'acciones'">
-         <!--  <button
-          class="btn btn-sm btn-light"
-        >
-          <i class="mdi mdi-transfer-down"></i>
-        </button> -->
+         <button
+          class="btn btn-sm btn-warning me-2"
+          tooltip="Devolucion"
+          (click)="realizarDevolucion(devolucionAnticipo, fila)">
+          <i class="mdi mdi-keyboard-backspace"></i>
+        </button>
 				</div>
         <div *ngSwitchCase="'proveedor'">
           {{ fila['proveedor']['razonSocial'] }}
@@ -43,8 +44,16 @@ getAll="getAll"
 
 
 <ng-template #nuevoAnticipo>
-  <anticipo-form
+  <form-anticipo
   (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
   (alActualizar)="modalRef.hide(); tabla.obtenerDatos();"
-  ></anticipo-form>
+  ></form-anticipo>
+</ng-template>
+
+<ng-template #devolucionAnticipo>
+  <form-devolucion
+  [datosProveedor]="dataProveedor"
+  (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
+  (alActualizar)="modalRef.hide(); tabla.obtenerDatos();"
+  ></form-devolucion>
 </ng-template>

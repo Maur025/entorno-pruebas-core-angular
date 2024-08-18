@@ -19,4 +19,12 @@ export class AnticipoProveedorService {
   crearAnticipo(datos: any) {
     return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}`, datos);
   }
+
+  crearDevolucionAnticipo(datos: any) {
+    return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/devolucion`, datos);
+  }
+
+  findAnticipoProveedor(idProveedor){
+    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/${idProveedor}`);
+  }
 }
