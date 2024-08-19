@@ -125,12 +125,13 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 		this.modalRef = this.modalService.show(template, this.modalConfig);
   }
 
-  cierreFondo
-  (fila,template){
-    this.operacionFondo="CIE";
-    this.dataFondo =fila;
-    this.modalConfig.class = `modal-lg modal-scrollable`;
-		this.modalRef = this.modalService.show(template, this.modalConfig);
+  cierreFondo(fila,template){
+    if(fila['saldo'] !> 0){
+      this.operacionFondo="CIE";
+      this.dataFondo =fila;
+      this.modalConfig.class = `modal-lg modal-scrollable`;
+      this.modalRef = this.modalService.show(template, this.modalConfig);
+    }
   }
 
   getEmployeesList = (): void => {

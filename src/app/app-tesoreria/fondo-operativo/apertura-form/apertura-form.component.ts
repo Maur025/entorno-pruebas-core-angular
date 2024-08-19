@@ -29,9 +29,10 @@ export class AperturaFormComponent {
   labelFecha:string = "";
   labelTransferencias:string = "";
   labelMonto:string = "";
+  labelAlert:string = "";
   labelPlaceholder = "";
   montoPendienteReponer = 0;
-  montoTotalDeReposicion = 0;
+  montoTotalTransferencia = 0;
 
   constructor(
 		private formBuilder: UntypedFormBuilder,
@@ -75,12 +76,12 @@ export class AperturaFormComponent {
 	}
 
   recibirMontoTotal(monto){
-    this.montoTotalDeReposicion = monto;
+    this.montoTotalTransferencia = monto;
   }
 
   confirmAndContinueSaving = async (): Promise<void> => {
 		this.submitted = true;
-    let verificacion = this.operacion == "REPO" ? this.verificarMontos() : true;
+    let verificacion = this.verificarMontos();
 		if (!this.formAperturaFondo.valid || verificacion==false) {
 			return
 		}
@@ -92,20 +93,44 @@ export class AperturaFormComponent {
 	}
 
   verificarMontos() {
-    const totalsCero = this.montoTotalDeReposicion == 0;
-    if (totalsCero) {
-      this.notificacionService.warningMessage(
-        "El monto total de reposición no debe ser 0"
-      );
+    let totalCero = false;
+    let mensaje = "";
+    let totalDiference = false;
+    let mensajeDiference = "";
+    switch(this.operacion){
+      case "APER":
+          if(this.montoTotalTransferencia == 0 ) totalCero=true;
+          mensaje = "El monto total de apertura no debe ser 0";
+
+          if(this.montoPendienteReponer !== this.montoTotalTransferencia ) totalDiference=true;
+          mensajeDiference = "El monto total de apertura no debe ser diferente al importe del fondo";
+        break;
+      case "REPO":
+        if(this.montoTotalTransferencia == 0 ) totalCero=true;
+        mensaje = "El monto total de apertura no debe ser 0";
+        if(this.montoPendienteReponer !== this.montoTotalTransferencia ) totalDiference =true;
+        mensajeDiference = "El monto total de reposición no debe ser diferente al Pendiente a reposición";
+        break;
+      case "CIE":
+        if(this.montoTotalTransferencia == 0 ) totalCero=true;
+        mensaje = "El monto total de cierre no debe ser 0";
+
+        if(this.montoPendienteReponer !== this.montoTotalTransferencia ) totalDiference=true;
+        mensajeDiference = "El monto total de cierre no debe ser diferente al Pendiente a reposición";
+        break;
+      default:
+        console.error("No se encontro la operacion");
+      }
+
+    const totalsCero = totalCero;
+    const totalDiferences = totalDiference;
+     if (totalsCero) {
+      this.notificacionService.warningMessage(mensaje);
       return false;
     }
 
-    if (
-      this.montoPendienteReponer !== this.montoTotalDeReposicion
-    ) {
-      this.notificacionService.warningMessage(
-        "El monto total de reposición no debe ser diferente al Pendiente a reposición "
-      );
+    if (totalDiferences) {
+      this.notificacionService.warningMessage(mensajeDiference);
       return false;
     }
     return true;
@@ -129,13 +154,21 @@ export class AperturaFormComponent {
 }
 
 variablesOperacion(){
+  this.fondoOperativoService.getMontoPorRendir(this.datosFondo['id']).subscribe(data=>{
+    let monto = data['data']['montoPorRendir'];
+    if(monto == 0 && this.datosFondo['aperturado'])  this.montoPendienteReponer  = this.datosFondo['importe'];
+    if(monto == 0 && !this.datosFondo['aperturado'])  this.montoPendienteReponer  = this.datosFondo['importe'];
+    else this.montoPendienteReponer = monto;
+  });
+
   switch(this.operacion){
     case "APER":
       this.labelOperacion = "Apertura de Fondo Operativo";
       this.labelFecha="(*)Fecha Apertura";
       this.labelTransferencias="la apertura de fondo";
       this.labelMonto="Monto total de apertura";
-      this.labelPlaceholder ="Descripción para la apertura de fondo"
+      this.labelPlaceholder ="Descripción para la apertura de fondo";
+      this.labelAlert = "Importe de fondo operativo";
       break;
     case "REPO":
       this.labelOperacion = "Reposición de Fondo Operativo";
@@ -143,9 +176,7 @@ variablesOperacion(){
       this.labelTransferencias="la reposición";
       this.labelMonto="Monto total de reposición";
       this.labelPlaceholder ="Descripción para la reposición de fondo";
-      this.fondoOperativoService.getMontoPorRendir(this.datosFondo['id']).subscribe(data=>{
-        this.montoPendienteReponer = data['data']? data['data']['montoPorRendir'] : 0;
-      });
+      this.labelAlert = "Pendiente a reposicion";
       break;
       case "CIE":
         this.labelOperacion = "Cierre de Fondo Operativo";
@@ -153,6 +184,7 @@ variablesOperacion(){
         this.labelTransferencias="el cierre de fondo";
         this.labelMonto="Monto total para el cierre";
         this.labelPlaceholder ="Descripción para la cierre de fondo"
+        this.labelAlert = "Pendiente a reposicion";
         break;
     default:
       console.error("No se encontro la operacion");
@@ -178,7 +210,7 @@ guardar(){
 guardarApertura(){
   let transacciones = this.formAperturaFondo.value['transacciones'];
   const { movimientoCajas, movimientoCuentaBancos } = this.separarTransacciones(transacciones);
-  this.formAperturaFondo.get('monto').setValue(this.montoTotalDeReposicion);
+  this.formAperturaFondo.get('monto').setValue(this.montoTotalTransferencia);
   this.formAperturaFondo.value['movimientoCajas']= movimientoCajas;
   this.formAperturaFondo.value['movimientoCuentaBancos']= movimientoCuentaBancos;
 
@@ -194,7 +226,7 @@ guardarReposicion(){
     centroCostoId:this.formAperturaFondo.value['centroCostoId'],
     nroReferencia:this.formAperturaFondo.value['nroReferencia'],
     descripcionReposicion: this.formAperturaFondo.value['descripcion'],
-    montoTotal: this.montoTotalDeReposicion,
+    montoTotal: this.montoTotalTransferencia,
     fondoOperativoId:this.formAperturaFondo.value['fondoOperativoId'],
     movimientos:this.formAperturaFondo.value['transacciones']
   }
@@ -211,7 +243,7 @@ guardarCierre(){
     centroCostoId:this.formAperturaFondo.value['centroCostoId'],
     nroReferencia:this.formAperturaFondo.value['nroReferencia'],
     descripcionCierre: this.formAperturaFondo.value['descripcion'],
-    montoTotal: this.montoTotalDeReposicion,
+    montoTotal: this.montoTotalTransferencia,
     fondoOperativoId:this.formAperturaFondo.value['fondoOperativoId'],
     movimientos:this.formAperturaFondo.value['transacciones']
   }
