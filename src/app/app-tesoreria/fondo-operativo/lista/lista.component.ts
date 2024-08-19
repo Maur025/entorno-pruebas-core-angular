@@ -28,6 +28,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   listaResponsables: any[]=[];
   dataFondo: any;
   protected onSubmitFormStatus: boolean = false;
+  operacionFondo: string ="";
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -54,10 +55,12 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 		ignoreBackdropClick: boolean
 		keyboard: boolean
 		class: string
+
 	} = {
 		ignoreBackdropClick: true,
 		keyboard: false,
 		class: 'modal-xl modal-scrollable',
+
 	}
 
   getCabeceras() {
@@ -104,6 +107,15 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   }
 
   aperturarFondo(fila,template){
+    this.operacionFondo="APER";
+
+    this.dataFondo =fila;
+    this.modalConfig.class = `modal-lg modal-scrollable`;
+		this.modalRef = this.modalService.show(template, this.modalConfig);
+  }
+
+  reposicionFondo(fila,template){
+    this.operacionFondo="REPO";
     this.dataFondo =fila;
     this.modalConfig.class = `modal-lg modal-scrollable`;
 		this.modalRef = this.modalService.show(template, this.modalConfig);

@@ -6,6 +6,7 @@ import { ScreenshotService } from 'src/app/core/services/screenshot.service';
 import { CentroCostosService } from 'src/app/core/services/tesoreria/centro-costos.service';
 import { FondoOperativoService } from 'src/app/core/services/tesoreria/fondo-operativo.service';
 import { ApiResponseStandard, ErrorResponseStandard } from 'src/app/shared/interface/common-api-response';
+import { UtilityService } from 'src/app/shared/services/utilityService.service';
 
 @Component({
   selector: 'apertura-form',
@@ -15,14 +16,22 @@ import { ApiResponseStandard, ErrorResponseStandard } from 'src/app/shared/inter
 export class AperturaFormComponent {
 
   @Input() datosFondo;
+  @Input() operacion;
   @Output() cerrarModal = new EventEmitter<void>();
   @Output() alActualizar = new EventEmitter<void>();
+
   submitted: boolean = false;
-  labelOperacion:string = "";
   formAperturaFondo: UntypedFormGroup;
   listaCentroCostos: any[]=[];
   public onSubmitFormStatus: boolean = false;
 
+  labelOperacion:string = "";
+  labelFecha:string = "";
+  labelTransferencias:string = "";
+  labelMonto:string = "";
+  labelPlaceholder = "";
+  montoPendienteReponer = 0;
+  montoTotalDeReposicion = 0;
 
   constructor(
 		private formBuilder: UntypedFormBuilder,
@@ -31,12 +40,11 @@ export class AperturaFormComponent {
     private responseHandlerService: ResponseHandlerService,
     private centroCostoService: CentroCostosService,
     private fondoOperativoService: FondoOperativoService,
+    protected utilityService: UtilityService,
 	) {}
 
   ngOnInit(){
-    if(this.datosFondo){
-      this.labelOperacion = !this.datosFondo['aperturado'] ? "Apertura de Fondo Operativo" : "Cierre de Fondo Operativo";
-    }
+    this.variablesOperacion();
     this.setForm();
     this.getCentroCostos();
   }
@@ -53,6 +61,7 @@ export class AperturaFormComponent {
       transacciones: this.formBuilder.array([])
     });
   }
+
   get form() {return this.formAperturaFondo.controls}
 
   getCentroCostos = () => {
@@ -66,37 +75,41 @@ export class AperturaFormComponent {
 	}
 
   recibirMontoTotal(monto){
-    this.formAperturaFondo.get('monto').setValue(monto);
+    this.montoTotalDeReposicion = monto;
   }
 
   confirmAndContinueSaving = async (): Promise<void> => {
-		this.submitted = true
-
-		if (!this.formAperturaFondo.valid) {
+		this.submitted = true;
+    let verificacion = this.verificarMontos();
+		if (!this.formAperturaFondo.valid || verificacion==false) {
 			return
 		}
 		const dataImg = await this.screenshotService?.takeScreenshot('accountFormModalBodyDiv');
 		this.notificacionService?.confirmAndContinueAlert(dataImg, response =>{
-			if(response) this.guardarForm();
+			if(response) this.guardar();
       }
 		);
 	}
 
-  guardarForm(){
-    if(this.formAperturaFondo.valid){
-      let transacciones = this.formAperturaFondo.value['transacciones'];
-      const { movimientoCajas, movimientoCuentaBancos } = this.separarTransacciones(transacciones);
-      this.formAperturaFondo.value['movimientoCajas']= movimientoCajas;
-      this.formAperturaFondo.value['movimientoCuentaBancos']= movimientoCuentaBancos;
-      console.log(this.formAperturaFondo.value);
-       this.fondoOperativoService.aperturarFondo(this.formAperturaFondo.value).subscribe(data=>{
-        this.alActualizar.emit(data);
-        this.notificacionService.successStandar();
-      }, error=>this.notificacionService.alertError(error));
+  verificarMontos() {
+    const totalsCero = this.montoTotalDeReposicion == 0;
+    if (totalsCero) {
+      this.notificacionService.warningMessage(
+        "El monto total de reposición no debe ser 0"
+      );
+      return false;
     }
-    this.submitted = true;
-  }
 
+    if (
+      this.montoPendienteReponer !== this.montoTotalDeReposicion
+    ) {
+      this.notificacionService.warningMessage(
+        "El monto total de reposición no debe ser diferente al Pendiente a reposición "
+      );
+      return false;
+    }
+    return true;
+  }
 
  separarTransacciones(transacciones: any[]){
   let movimientoCajas: any[] = [];
@@ -109,11 +122,78 @@ export class AperturaFormComponent {
       movimientoCuentaBancos.push(element);
     }
   });
-
   return {
     movimientoCajas,
     movimientoCuentaBancos
   };
 }
+
+variablesOperacion(){
+  switch(this.operacion){
+    case "APER":
+      this.labelOperacion = "Apertura de Fondo Operativo";
+      this.labelFecha="(*)Fecha Apertura";
+      this.labelTransferencias="la apertura de fondo";
+      this.labelMonto="Monto total de apertura";
+      this.labelPlaceholder ="Descripción para la apertura de fondo"
+      break;
+    case "REPO":
+      this.labelOperacion = "Reposición de Fondo Operativo";
+      this.labelFecha="(*)Fecha de Reposición";
+      this.labelTransferencias="la reposición";
+      this.labelMonto="Monto total de reposición";
+      this.labelPlaceholder ="Descripción para la reposición de fondo";
+      this.fondoOperativoService.getMontoPorRendir(this.datosFondo['id']).subscribe(data=>{
+        this.montoPendienteReponer = data['data']? data['data']['montoPorRendir'] : 0;
+      });
+      break;
+    default:
+      console.error("No se encontro la operacion");
+  }
+}
+
+guardar(){
+  switch(this.operacion){
+    case "APER":
+      this.guardarApertura();
+      break;
+    case "REPO":
+      this.guardarReposicion();
+      break;
+    default:
+      console.error("No se encontro la operacion a guardar");
+  }
+}
+
+guardarApertura(){
+  let transacciones = this.formAperturaFondo.value['transacciones'];
+  const { movimientoCajas, movimientoCuentaBancos } = this.separarTransacciones(transacciones);
+  this.formAperturaFondo.value['movimientoCajas']= movimientoCajas;
+  this.formAperturaFondo.value['movimientoCuentaBancos']= movimientoCuentaBancos;
+  this.formAperturaFondo.get('monto').setValue(this.montoTotalDeReposicion);
+  this.fondoOperativoService.aperturarFondo(this.formAperturaFondo.value).subscribe(data=>{
+    this.alActualizar.emit(data);
+    this.notificacionService.successStandar();
+  }, error=>this.notificacionService.alertError(error));
+}
+
+guardarReposicion(){
+  let request = {
+    fechaReposicion: this.formAperturaFondo.value['fecha'],
+    centroCostoId:this.formAperturaFondo.value['centroCostoId'],
+    nroReferencia:this.formAperturaFondo.value['nroReferencia'],
+    descripcionReposicion: this.formAperturaFondo.value['descripcion'],
+    montoTotal: this.montoTotalDeReposicion,
+    fondoOperativoId:this.formAperturaFondo.value['fondoOperativoId'],
+    movimientos:this.formAperturaFondo.value['transacciones']
+  }
+
+  this.fondoOperativoService.reposicionFondo(request).subscribe(data=>{
+    this.alActualizar.emit(data);
+    this.notificacionService.successStandar();
+  }, error=>this.notificacionService.alertError(error));
+}
+
+
 
 }

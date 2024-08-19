@@ -29,4 +29,12 @@ export class FondoOperativoService {
     return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/apertura`, datos);
   }
 
+  reposicionFondo(datos: any) {
+    return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/reposiciones`, datos);
+  }
+
+  getMontoPorRendir(fondoOperativoId){
+    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/${fondoOperativoId}/monto/porRendir`);
+  }
+
 }
