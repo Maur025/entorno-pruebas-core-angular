@@ -16,22 +16,14 @@
     <form [formGroup]="formDevolucionAnticipo" (ngSubmit)="confirmAndContinueSaving()">
         <div class="ms-4 me-4 m-2">
             <div class="row mb-2">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <input-fecha
                     [formPadre]="formDevolucionAnticipo"
                     [submitted]="submitted"
-                    labelFecha="Fecha devolucion"
+                    labelFecha="(*)Fecha devolucion"
                     (alRedirigir)="alAperturar()"
                     ></input-fecha>
                   </div>
-              <div class="col-md-6">
-                <p class="text-muted mb-1">(*) Nº devolucion</p>
-                <input
-                  type="text"
-                  class="form-control text-end"
-                  formControlName="nroReferencia"
-                  />
-              </div>
             </div>
             <div class="row">
                 <list-anticipos
@@ -50,17 +42,18 @@
         
               <div class="row mt-2">
                 <div class="col-md-8">
-                  <label class="mb-2 mt-2">(*) Descripción </label>
+                  <p class="text-muted mb-1">(*) Descripción</p>
                   <textarea
                     formControlName="descripcion"
                     class="form-control"
                     rows="2"
-                    placeholder="Descripción para la apertura de caja"
+                    placeholder="Descripción para la devolucion"
                     [ngClass]="{'is-invalid': submitted && form['descripcion'].errors}"
+                    (input)="utilityService?.convertUppercase('descripcion', $event, formDevolucionAnticipo)"
                   ></textarea>
                   <div *ngIf="submitted && form['descripcion'].errors"class="invalid-feedback">
                     <div *ngIf="formDevolucionAnticipo.get('descripcion').errors?.required">
-                      La descripción para la apertura de caja es obligatoria
+                      La descripción para devolucion es obligatoria
                     </div>
                     <div *ngIf="form['descripcion'].errors['maxlength']">
                       Debe tener menos de {{ form['descripcion'].errors['maxlength']['requiredLength']}}carácteres

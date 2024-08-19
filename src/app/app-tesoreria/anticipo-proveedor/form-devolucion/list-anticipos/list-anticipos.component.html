@@ -1,5 +1,5 @@
 <div class="seccion-anticipos">
-    <div class="col-xl-12 border-bottom mb-2">
+    <div class="col-xl-12 mb-2">
       <div class="d-flex">
         <div>
           <h6 class="fs-14 mb-2 ms-1 text-primary">
@@ -9,34 +9,36 @@
       </div>
     </div>
 
+
+    
     <div class="table-responsive">
-        <table class="table m-0 table-sm">
-          <thead class="thead-dark">
-            <tr>
-              <th></th>
-              <th>N° anticipo</th>
-              <th>Centro costos</th>
-              <th>Monto</th>
-              <th>Saldo</th>
-            </tr>
-          </thead>
-          <tbody *ngFor="let anticipo of listaAnticipos; let i = index">
-            <tr>
-                <td>
-                    <div class="form-check form-radio-primary mb-3">
-                        <input 
-                            class="form-check-input" 
-                            type="radio" 
-                            name="formRadioColor1"
-                            (change)="selectAnticipo(anticipo)"
-                            style="width: 1.3em; height: 1.3em">
-                    </div>
-                </td>
-                <td>{{anticipo['nroReferencia']}}</td>
-                <td>{{anticipo['centroCosto']['nombre']}}</td>
-                <td>{{anticipo['monto']|decimalAmount}}</td>
-                <td>{{anticipo['saldo']|decimalAmount}}</td>                
-            </tr>
-          </tbody>
-        </table>
-</div>
+      <table class="table table-sm m-0">
+        <thead>
+          <tr>
+            <th [width]="50"></th>
+            <th>N° anticipo</th>
+            <th>Centro costos</th>
+            <th>Monto</th>
+            <th>Saldo</th>            
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let anticipo of listaAnticipos; let i = index">
+            <td class="text-center">
+                <div class="form-check form-radio-primary">
+                    <input 
+                        class="form-check-input ms-2 me-2" 
+                        type="radio" 
+                        name="anticipoId"
+                        (change)="selectAnticipo(anticipo)"
+                        style="transform: scale(1.2)">
+                </div>
+            </td>
+            <td class="text-center">{{anticipo['nroReferencia']}}</td>
+            <td>{{anticipo['centroCosto']['nombre']}}</td>
+            <td class="text-end">{{anticipo['monto']|decimalAmount}}</td>
+            <td class="text-end">{{anticipo['saldo']|decimalAmount}}</td>                
+        </tr>       
+        </tbody>
+      </table>
+    </div>

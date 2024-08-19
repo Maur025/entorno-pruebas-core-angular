@@ -52,9 +52,10 @@
           <label class="mb-2 mt-2">(*) Descripción </label>
           <textarea
             formControlName="descripcionApertura"
-            class="form-control uppercase"
+            class="form-control "
             rows="2"
             placeholder="Descripción para la apertura de caja"
+            (input)="utilityService?.convertUppercase('descripcionApertura', $event, formAccionCaja)"
             [ngClass]="{'is-invalid': submitted && form['descripcionApertura'].errors}"
           ></textarea>
           <div *ngIf="submitted && form['descripcionApertura'].errors"class="invalid-feedback">

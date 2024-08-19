@@ -21,21 +21,18 @@ export class ListAnticiposComponent {
   ){}
 
   ngOnInit(){
-    console.log("list", this.proveedorId);
     this.listAnticipos();
   }
 
   listAnticipos(){
     this.anticipoProveedorService.findAnticipoProveedor(this.proveedorId).subscribe(
       data=>{
-        console.log(data);
         this.listaAnticipos = data['data'];
-      }
+      },error=>this.notificacionService.alertError(error)
     );
   }
 
   selectAnticipo(data){
-
     let anticipo = {
       id: data['id'],
       saldo: data['saldo']

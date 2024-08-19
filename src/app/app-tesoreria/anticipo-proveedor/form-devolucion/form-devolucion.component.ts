@@ -7,6 +7,7 @@ import {
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { ScreenshotService } from "src/app/core/services/screenshot.service";
 import { AnticipoProveedorService } from "src/app/core/services/tesoreria/anticipo-proveedor.service";
+import { UtilityService } from "src/app/shared/services/utilityService.service";
 
 @Component({
   selector: "form-devolucion",
@@ -26,7 +27,8 @@ export class FormDevolucionComponent {
     private formBuilder: UntypedFormBuilder,
     private notificacionService: NotificacionService,
     private screenshotService: ScreenshotService,
-    private anticipoProveedorService: AnticipoProveedorService
+    private anticipoProveedorService: AnticipoProveedorService,
+    protected utilityService: UtilityService, 
   ) {}
 
   ngOnInit() {
@@ -37,7 +39,6 @@ export class FormDevolucionComponent {
     this.formDevolucionAnticipo = this.formBuilder.group({
       id: "",
       fecha: ["", [Validators.required]],
-      nroReferencia: [""],
       descripcion: [
         "",
         [
@@ -55,6 +56,7 @@ export class FormDevolucionComponent {
           Validators.maxLength(255),
         ],
       ],
+      compraId:[''],
       transacciones: this.formBuilder.array([]),
     });
   }
@@ -84,16 +86,16 @@ export class FormDevolucionComponent {
       this.formDevolucionAnticipo.controls["monto"].value == 0;
     if (totalsCero) {
       this.notificacionService.warningMessage(
-        "No ha seleccionado un anticipo y el monto devolucion es 0."
+        "No ha seleccionado ningun anticipo y el monto devolucion es 0."
       );
       return false;
     }
 
     if (
-      this.saldoAnticipo !== this.formDevolucionAnticipo.controls["monto"].value
+        this.formDevolucionAnticipo.controls["monto"].value > this.saldoAnticipo
     ) {
       this.notificacionService.warningMessage(
-        "El saldo del anticipo seleccionado no coindice con el monto devolucion"
+        "El monto de devolucion no debe sobre pasar al monto del saldo del anticipo"
       );
       return false;
     }
