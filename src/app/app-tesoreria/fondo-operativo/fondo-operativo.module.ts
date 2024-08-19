@@ -12,7 +12,7 @@ import { HerramientasModule } from 'src/app/core/herramientas/herramientas.modul
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { AperturaFormComponent } from './apertura-form/apertura-form.component';
 import { ComponentesCompartidosModule } from '../componentes-compartidos/componentes-compartidos.module';
-
+import { AlertModule } from 'ngx-bootstrap/alert';
 
 @NgModule({
   declarations: [
@@ -30,6 +30,7 @@ import { ComponentesCompartidosModule } from '../componentes-compartidos/compone
     BsDropdownModule.forRoot(),
     HerramientasModule,
     TooltipModule.forRoot(),
+    AlertModule.forRoot(),
     ComponentesCompartidosModule
   ]
 })

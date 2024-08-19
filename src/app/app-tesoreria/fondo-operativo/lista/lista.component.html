@@ -28,12 +28,19 @@ getAll="getAll"
 						<i class="mdi mdi-pencil-outline"></i>
 					</button>
           <button
-          *ngIf="!fila['aperturado']"
-          class="btn btn-sm btn-warning me-2"
-          tooltip="Aperturar"
-          (click)="aperturarFondo(fila, aperturaModal)">
-          <i class="bx bx-lock-open-alt"></i>
-        </button>
+            *ngIf="!fila['aperturado']"
+            class="btn btn-sm btn-warning me-2"
+            tooltip="Aperturar"
+            (click)="aperturarFondo(fila, aperturaModal)">
+            <i class="bx bx-lock-open-alt"></i>
+          </button>
+          <button
+            *ngIf="fila['aperturado']"
+            class="btn btn-sm btn-secondary me-2"
+            tooltip="Reposición de fondo"
+            (click)="reposicionFondo(fila, aperturaModal)">
+            <i class="mdi  mdi-archive-arrow-down"></i>
+          </button>
         </div>
         <div *ngSwitchCase="'nombre'">
           {{fila['nombre']}}
@@ -172,6 +179,7 @@ getAll="getAll"
 <ng-template #aperturaModal>
   <apertura-form
   [datosFondo]="dataFondo"
+  [operacion]="operacionFondo"
   (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
   (alActualizar)="modalRef.hide(); tabla.obtenerDatos();">
   </apertura-form>

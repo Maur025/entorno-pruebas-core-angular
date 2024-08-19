@@ -12,6 +12,12 @@
         </div>
       </div>
   </div>
+  <div class="mt-1 ms-4 me-4" *ngIf="operacion =='REPO'">
+    <alert type="info" [dismissible]="true"  role="alert">
+      <i class="mdi mdi-alert-circle-outline me-2"></i>
+     Pendiente a reposicion: {{montoPendienteReponer}}
+    </alert>
+  </div>
 
   <form [formGroup]="formAperturaFondo" (ngSubmit)="confirmAndContinueSaving()">
     <div class="ms-4 me-4 m-2">
@@ -20,13 +26,13 @@
           <input-fecha
           [formPadre]="formAperturaFondo"
           [submitted]="submitted"
-          labelFecha="(*)Fecha de apertura"
+          [labelFecha]="labelFecha"
           (alRedirigir)="this.cerrarModal.emit()"
           ></input-fecha>
         </div>
         <div class="col-md-4">
           <div class="mb-3 px-1">
-            <label class="mb-2" for="centroCostoId">(*) Centro Costos </label>
+            <p class="text-muted mb-1">(*) Centro Costos</p>
             <ng-select
               class="uppercase"
               formControlName="centroCostoId"
@@ -50,7 +56,7 @@
         </div>
         <div class="col-md-4">
           <div class="">
-            <label class="mb-2">Nº referencia </label>
+            <p class="text-muted mb-1">Nº referencia </p>
             <input
               type="text"
               class="form-control text-end"
@@ -62,20 +68,21 @@
       <div class="row">
         <transaccion-array
         [formPadre]="formAperturaFondo"
-        labelTransferencia="la apertura de fondo"
+        [labelTransferencia]="labelTransferencias"
         [submitted]="submitted"
         (alIngresarMonto)="recibirMontoTotal($event)"
         ></transaccion-array>
       </div>
       <div class="row mt-2">
         <div class="col-md-8">
-          <label class="mb-2 mt-2">(*) Descripción </label>
+          <p class="text-muted mb-1">(*) Descripción </p>
           <textarea
             formControlName="descripcion"
-            class="form-control uppercase"
+            class="form-control"
             rows="2"
-            placeholder="Descripción para la apertura de caja"
+            [placeholder]="labelPlaceholder"
             [ngClass]="{'is-invalid': submitted && form['descripcion'].errors}"
+            (input)="utilityService?.convertUppercase('descripcion', $event, formAperturaFondo)"
           ></textarea>
           <div *ngIf="submitted && form['descripcion'].errors"class="invalid-feedback">
             <div *ngIf="formAperturaFondo.get('descripcion').errors?.required">
@@ -90,9 +97,9 @@
           </div>
         </div>
         <div class="col-md-4 border p-3">
-          <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary"><b> (*) Monto total de Apertura </b></h6>
+          <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary"><b>{{labelMonto}} </b></h6>
           <div class="hstack gap-2 justify-content-end me-4">
-            <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary"> <b>{{formAperturaFondo.get('monto').value}}</b></h5>
+            <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary"> <b>{{montoTotalDeReposicion}}</b></h5>
           </div>
         </div>
       </div>
@@ -109,7 +116,9 @@
                 type="submit"
                 class="btn btn-success">
               <app-simple-loader [isLoading]="onSubmitFormStatus" />
-              {{ onSubmitFormStatus ? ' Espere un momento...' : 'Aperturar Fondo' }}
+              {{ onSubmitFormStatus ? ' Espere un momento...' :
+                operacion=="APER" ? 'Apertura de Fondo' : 'Realizar reposición'
+              }}
             </button>
         </div>
       </div>
