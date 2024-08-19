@@ -21,6 +21,7 @@ getAll="getAll"
       <td [ngSwitch]="campo">
         <div *ngSwitchCase="'acciones'">
 					<button
+            *ngIf="fila['estadoFondo'] !== 'CIE'"
 						class="btn btn-sm btn-soft-info me-2"
 						tooltip="Editar"
 						[disabled]="fila.deleted"
@@ -28,35 +29,60 @@ getAll="getAll"
 						<i class="mdi mdi-pencil-outline"></i>
 					</button>
           <button
-            *ngIf="!fila['aperturado']"
+            *ngIf="fila['estadoFondo'] == 'SN-APER'"
             class="btn btn-sm btn-warning me-2"
             tooltip="Aperturar"
             (click)="aperturarFondo(fila, aperturaModal)">
             <i class="bx bx-lock-open-alt"></i>
           </button>
           <button
-            *ngIf="fila['aperturado']"
+            *ngIf="fila['estadoFondo'] == 'APER'"
             class="btn btn-sm btn-secondary me-2"
             tooltip="Reposición de fondo"
             (click)="reposicionFondo(fila, aperturaModal)">
             <i class="mdi  mdi-archive-arrow-down"></i>
           </button>
+          <button
+            *ngIf="fila['estadoFondo'] == 'APER'"
+            class="btn btn-sm btn-dark me-2"
+            tooltip="Cierre de fondo"
+            (click)="cierreFondo(fila, aperturaModal)">
+            <i class="bx bx-lock-open-alt"></i>
+          </button>
         </div>
         <div *ngSwitchCase="'nombre'">
-          {{fila['nombre']}}
+          <div>
+            <p class="mb-0 text-muted">
+              {{ fila["nombre"] }}
+            </p>
+            <small class="text-muted text-end mb-0"
+              >Responsable: <b>{{ fila["empleado"]["nombre"] }}</b></small>
+          </div>
         </div>
-        <div *ngSwitchCase="'empleado'">
-          {{fila['empleado']['nombre']}}
-        </div>
-        <div *ngSwitchCase="'importe'" class="text-end">
+        <div *ngSwitchCase="'importe'">
           {{fila['importe']|decimalAmount}}
         </div>
+        <div *ngSwitchCase="'montoApertura'">
+          {{fila['montoApertura']|decimalAmount}}
+        </div>
+        <div *ngSwitchCase="'totalDescargos'">
+          {{fila['totalDescargos']|decimalAmount}}
+        </div>
+        <div *ngSwitchCase="'totalReposicion'">
+          {{fila['totalReposicion']|decimalAmount}}
+        </div>
+        <div *ngSwitchCase="'saldo'" [ngClass]="fila['saldo'] >= 0 ? 'text-success':'text-danger' ">
+          {{fila['saldo']|decimalAmount}}
+        </div>
         <div *ngSwitchCase="'estado'">
-          <span *ngIf="!fila.aperturado" class="badge bg-secondary font-size-10">
-						Sin Aperturar
-					</span>
-					<span *ngIf="fila.aperturado" class="badge bg-primary font-size-10">
+          <span *ngIf="fila['estadoFondo'] == 'APER'" class="badge bg-primary font-size-10">
 						Aperturado
+					</span>
+					<span *ngIf="fila['estadoFondo'] == 'CIE'" class="badge bg-dark font-size-10">
+						Cerrado
+					</span>
+          <span *ngIf="fila['estadoFondo'] == 'SN-APER'" class="badge bg-secondary font-size-10">
+						Sin aperturar
 					</span>
 
         </div>

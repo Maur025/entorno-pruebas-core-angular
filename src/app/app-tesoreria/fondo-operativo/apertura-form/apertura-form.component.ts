@@ -80,7 +80,7 @@ export class AperturaFormComponent {
 
   confirmAndContinueSaving = async (): Promise<void> => {
 		this.submitted = true;
-    let verificacion = this.verificarMontos();
+    let verificacion = this.operacion == "REPO" ? this.verificarMontos() : true;
 		if (!this.formAperturaFondo.valid || verificacion==false) {
 			return
 		}
@@ -147,6 +147,13 @@ variablesOperacion(){
         this.montoPendienteReponer = data['data']? data['data']['montoPorRendir'] : 0;
       });
       break;
+      case "CIE":
+        this.labelOperacion = "Cierre de Fondo Operativo";
+        this.labelFecha="(*)Fecha Cierre";
+        this.labelTransferencias="el cierre de fondo";
+        this.labelMonto="Monto total para el cierre";
+        this.labelPlaceholder ="Descripción para la cierre de fondo"
+        break;
     default:
       console.error("No se encontro la operacion");
   }
@@ -160,6 +167,9 @@ guardar(){
     case "REPO":
       this.guardarReposicion();
       break;
+    case "CIE":
+      this.guardarCierre();
+      break;
     default:
       console.error("No se encontro la operacion a guardar");
   }
@@ -168,9 +178,10 @@ guardar(){
 guardarApertura(){
   let transacciones = this.formAperturaFondo.value['transacciones'];
   const { movimientoCajas, movimientoCuentaBancos } = this.separarTransacciones(transacciones);
+  this.formAperturaFondo.get('monto').setValue(this.montoTotalDeReposicion);
   this.formAperturaFondo.value['movimientoCajas']= movimientoCajas;
   this.formAperturaFondo.value['movimientoCuentaBancos']= movimientoCuentaBancos;
-  this.formAperturaFondo.get('monto').setValue(this.montoTotalDeReposicion);
+
   this.fondoOperativoService.aperturarFondo(this.formAperturaFondo.value).subscribe(data=>{
     this.alActualizar.emit(data);
     this.notificacionService.successStandar();
@@ -194,6 +205,21 @@ guardarReposicion(){
   }, error=>this.notificacionService.alertError(error));
 }
 
+guardarCierre(){
+  let request = {
+    fechaCierre: this.formAperturaFondo.value['fecha'],
+    centroCostoId:this.formAperturaFondo.value['centroCostoId'],
+    nroReferencia:this.formAperturaFondo.value['nroReferencia'],
+    descripcionCierre: this.formAperturaFondo.value['descripcion'],
+    montoTotal: this.montoTotalDeReposicion,
+    fondoOperativoId:this.formAperturaFondo.value['fondoOperativoId'],
+    movimientos:this.formAperturaFondo.value['transacciones']
+  }
 
+  this.fondoOperativoService.cierreFondo(request).subscribe(data=>{
+    this.alActualizar.emit(data);
+    this.notificacionService.successStandar();
+  }, error=>this.notificacionService.alertError(error));
+}
 
 }

@@ -66,10 +66,13 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   getCabeceras() {
     return {
       cabeceras: {
-        "acciones": this.getOpcionesCabecera('Acciones', 12, 'text', true, false),
-        "nombre": this.getOpcionesCabecera('Nombre', 12),
+        "acciones": this.getOpcionesCabecera('Acciones', 12,'text', true, false),
+        "nombre": this.getOpcionesCabecera('Nombre', 12, 'text-end'),
         "importe": this.getOpcionesCabecera('Importe', 12),
-        "empleado": this.getOpcionesCabecera('Responsable', 12),
+        "montoApertura": this.getOpcionesCabecera('Monto Apertura', 12),
+        "totalDescargos": this.getOpcionesCabecera('Total Descargos', 12),
+        "totalReposicion": this.getOpcionesCabecera('Total Reposición', 12),
+        "saldo": this.getOpcionesCabecera('Saldo', 12),
         "estado":this.getOpcionesCabecera('Estado', 12),
       }
     };
@@ -86,6 +89,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
         Validators.pattern('^[0-9]+(.[0-9]*)?$')]],
 		})
   }
+
   get form() {return this.formFondoCreate.controls}
 
   nuevoFondo(template){
@@ -116,6 +120,14 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 
   reposicionFondo(fila,template){
     this.operacionFondo="REPO";
+    this.dataFondo =fila;
+    this.modalConfig.class = `modal-lg modal-scrollable`;
+		this.modalRef = this.modalService.show(template, this.modalConfig);
+  }
+
+  cierreFondo
+  (fila,template){
+    this.operacionFondo="CIE";
     this.dataFondo =fila;
     this.modalConfig.class = `modal-lg modal-scrollable`;
 		this.modalRef = this.modalService.show(template, this.modalConfig);
