@@ -4,6 +4,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { ScreenshotService } from 'src/app/core/services/screenshot.service';
 import { MovimientoCajaService } from 'src/app/core/services/tesoreria/movimiento-caja.service';
+import { UtilityService } from 'src/app/shared/services/utilityService.service';
 
 @Component({
   selector: 'apertura-caja',
@@ -29,6 +30,7 @@ export class AperturaCajaComponent {
 		private formBuilder: UntypedFormBuilder,
 		private notificacionService: NotificacionService,
     private screenshotService: ScreenshotService,
+    protected utilityService: UtilityService,
 	) {}
 
   ngOnInit(){
@@ -61,10 +63,8 @@ export class AperturaCajaComponent {
   }
 
   guardarForm(){
-    //console.log("fuera valid",this.formAccionCaja.value)
     if(this.formAccionCaja.valid){
-      this.formAccionCaja.value['movimientoCajas']= this.formAccionCaja.value['transacciones'];
-      //console.log(this.formAccionCaja.value)
+      this.formAccionCaja.value['movimientoCajas']= this.formAccionCaja.value['transacciones'];      
       this.movimientoCajaService.movimientoApertura(this.formAccionCaja.value).subscribe(data=>{
         this.alActualizar.emit(data);
         this.notificacionService.successStandar();

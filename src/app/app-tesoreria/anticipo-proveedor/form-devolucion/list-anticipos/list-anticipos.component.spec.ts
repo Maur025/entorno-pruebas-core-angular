@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AnticipoFormComponent } from './anticipo-form.component';
+import { ListAnticiposComponent } from './list-anticipos.component';
 
-describe('AnticipoFormComponent', () => {
-  let component: AnticipoFormComponent;
-  let fixture: ComponentFixture<AnticipoFormComponent>;
+describe('ListAnticiposComponent', () => {
+  let component: ListAnticiposComponent;
+  let fixture: ComponentFixture<ListAnticiposComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AnticipoFormComponent ]
+      declarations: [ ListAnticiposComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AnticipoFormComponent);
+    fixture = TestBed.createComponent(ListAnticiposComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

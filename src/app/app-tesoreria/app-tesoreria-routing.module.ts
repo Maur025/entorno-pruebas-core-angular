@@ -32,8 +32,8 @@ const routes: Routes = [
 		loadChildren: () => import('./fondo-rendir/fondo-rendir.module').then(m => m.FondoRendirModule),
 	},
   {
-		path: 'anticipos',
-		loadChildren: () => import('./anticipos/anticipos.module').then(m => m.AnticiposModule),
+		path: 'anticipo-proveedor',
+		loadChildren: () => import('./anticipo-proveedor/anticipo-proveedor.module').then(m => m.AnticipoProveedorModule),
 	},
 ];
 

@@ -4,18 +4,18 @@ import { ProveedorService } from 'src/app/core/services/compras/proveedor.servic
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { ResponseHandlerService } from 'src/app/core/services/response-handler.service';
 import { ScreenshotService } from 'src/app/core/services/screenshot.service';
-import { AnticipoProveedorService } from 'src/app/core/services/tesoreria/anticipoProveedor.service';
+import { AnticipoProveedorService } from 'src/app/core/services/tesoreria/anticipo-proveedor.service';
 import { BancoService } from 'src/app/core/services/tesoreria/banco.service';
 import { CentroCostosService } from 'src/app/core/services/tesoreria/centro-costos.service';
 import { ApiResponseStandard, ErrorResponseStandard } from 'src/app/shared/interface/common-api-response';
 import { UtilityService } from 'src/app/shared/services/utilityService.service';
 
 @Component({
-  selector: 'anticipo-form',
-  templateUrl: './anticipo-form.component.html',
-  styleUrls: ['./anticipo-form.component.scss']
+  selector: 'form-anticipo',
+  templateUrl: './form-anticipo.component.html',
+  styleUrls: ['./form-anticipo.component.scss']
 })
-export class AnticipoFormComponent {
+export class FormAnticipoComponent {
   formAnticipo: UntypedFormGroup;
   submitted:boolean=false;
   totalAnticipo: number=0;
