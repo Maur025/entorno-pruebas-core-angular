@@ -33,6 +33,10 @@ export class FondoOperativoService {
     return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/reposiciones`, datos);
   }
 
+  cierreFondo(datos: any) {
+    return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/cierres`, datos);
+  }
+
   getMontoPorRendir(fondoOperativoId){
     return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/${fondoOperativoId}/monto/porRendir`);
   }

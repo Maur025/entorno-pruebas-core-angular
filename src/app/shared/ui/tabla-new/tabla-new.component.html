@@ -191,7 +191,7 @@
                         "
                       ></ng-template>
                       <ng-template #tempTH>
-                        <th>
+                        <th>{{cabeceras[campo]|json}}
                           <button
                             *ngIf="
                               formato.cabeceras[campo].sortable === undefined
@@ -200,6 +200,7 @@
                             "
                             (click)="ordenar($event)"
                             class="colCabecera"
+                            [ngClass]="formato.cabeceras[campo].textAlingTh"
                             id="{{ campo }}"
                           >
                             {{ formato.cabeceras[campo].texto }}
