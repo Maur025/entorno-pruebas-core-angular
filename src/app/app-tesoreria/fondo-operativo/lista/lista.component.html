@@ -37,15 +37,16 @@ getAll="getAll"
           </button>
           <button
             *ngIf="fila['estadoFondo'] == 'APER'"
-            class="btn btn-sm btn-secondary me-2"
+            class="btn btn-sm btn-info me-2"
             tooltip="Reposición de fondo"
             (click)="reposicionFondo(fila, aperturaModal)">
             <i class="mdi  mdi-archive-arrow-down"></i>
           </button>
           <button
             *ngIf="fila['estadoFondo'] == 'APER'"
+            [ngClass]="fila['saldo'] < 0 ? 'deshabilitarBoton':''"
             class="btn btn-sm btn-dark me-2"
-            tooltip="Cierre de fondo"
+            [tooltip]="fila['saldo'] < 0 ? 'El saldo del fondo es negativo, no puede realizar el cierre.': 'Cierre de fondo'"
             (click)="cierreFondo(fila, aperturaModal)">
             <i class="bx bx-lock-open-alt"></i>
           </button>
