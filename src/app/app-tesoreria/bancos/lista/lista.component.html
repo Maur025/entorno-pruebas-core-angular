@@ -78,7 +78,7 @@ getAll="getAll"
                 class="form-control"
                 formControlName="nombre"
                 [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }"
-                placeholder="Ingrese el nombre del fondo operativo"
+                placeholder="Ingrese el nombre de banco"
                 (input)="utilityService?.convertUppercase('nombre', $event, formBancoCreate)"
               />
               <div *ngIf="submitted && form['nombre'].errors" class="col-sm-12">

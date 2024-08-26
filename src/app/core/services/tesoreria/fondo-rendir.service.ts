@@ -18,4 +18,12 @@ export class FondoRendirService {
   desembolso(datos: any) {
     return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}`, datos);
   }
+
+  reembolsosPendientes(empleadoId) {
+    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/reembolso/empleado/${empleadoId}`);
+  }
+
+  pagoReembolso(datos: any) {
+    return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/pago_reembolso`, datos);
+  }
 }

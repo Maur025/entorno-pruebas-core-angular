@@ -128,9 +128,9 @@
                 <label class="mb-2 mt-2">(*) Descripción </label>
                 <textarea
                   formControlName="descripcion"
-                  class="form-control uppercase"
+                  class="form-control"
                   rows="2"
-                  placeholder="Descripción para la apertura de caja"
+                  placeholder="Descripción para la cuenta de banco"
                   [ngClass]="{'is-invalid': submitted && form['descripcion'].errors}"
                 ></textarea>
                 <div *ngIf="submitted && form['descripcion'].errors"class="invalid-feedback">

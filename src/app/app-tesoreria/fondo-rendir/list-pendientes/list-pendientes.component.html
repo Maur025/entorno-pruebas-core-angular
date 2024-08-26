@@ -1,0 +1,58 @@
+<div class="seccion-pendientes">
+    <div class="col-xl-12 mb-2">
+      <div class="d-flex">
+        <div>
+          <h6 class="fs-14 mb-2 ms-1 text-primary">
+            Reembolsos Pendientes
+          </h6>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-sm m-0">
+        <thead>
+          <tr>
+            <th [width]="50"></th>
+            <th>Fecha desembolso</th>
+            <th>Nº referencia</th>
+            <th>Descripción</th>
+            <th>Monto</th>
+            <th>Saldo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let pendiente of listaReembolsos; let i = index">
+            <td>
+              <div class="form-check form-radio-primary">
+                <input
+                    class="form-check-input ms-2 me-2"
+                    type="radio"
+                    name="radioPendiente"
+                    (change)="selectPendiente(pendiente, i)"
+                    style="transform: scale(1.5)">
+            </div>
+            </td>
+            <td>{{pendiente['fechaDesembolso']|fechaFormat}}</td>
+            <td>{{pendiente['nroReferencia']}}</td>
+            <td>{{pendiente['descripcion']}}</td>
+            <td>{{pendiente['montoExcedente']|decimalAmount}}</td>
+            <td class="text-end">
+              <input
+              disabled
+              [id] ="'input_pagar_' + i"
+              style="width: 100px;"
+              type="text"
+              class="form-control form-control-sm text-end"
+              placeholder="0"
+              name="inputsPendiente"
+              (change)="changeInputPagar($event['target']['value'], i, pendiente)"
+              />
+            </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+</div>
+
+

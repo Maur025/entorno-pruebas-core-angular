@@ -21,9 +21,12 @@
     <ng-template #tempTD>
       <td [ngSwitch]="campo">
         <div *ngSwitchCase="'acciones'">
-<!--           <button class="btn btn-sm btn-warning me-2" tooltip="opcion">
-            <i class="bx bx-lock-open-alt"></i>
-          </button> -->
+          <button
+            class="btn btn-sm btn-warning me-2"
+            tooltip="Pagar reembolso"
+            (click)="pagoReemblosoForm(fila,pagoModal)">
+            <i class="mdi mdi-contactless-payment"></i>
+          </button>
         </div>
         <div *ngSwitchCase="'nombre'" style="width: 180px">
           <div>
@@ -42,7 +45,9 @@
           {{ fila["totalRendido"] | decimalAmount }}
         </div>
         <div *ngSwitchCase="'porRendir'" class="text-end">
-          {{ fila["saldoPorRendir"] | decimalAmount }}
+          <p [ngClass]="fila['saldoPorRendir'] >= 0 ? 'text-success' : 'text-danger'">
+            {{ fila["saldoPorRendir"] | decimalAmount }}
+          </p>
         </div>
         <div *ngSwitchCase="'reembolso'" class="text-end">
           {{ fila["totalReembolso"] | decimalAmount }}
@@ -51,10 +56,12 @@
           {{ fila["totalPagoReembolso"] | decimalAmount }}
         </div>
         <div *ngSwitchCase="'reembolsar'" class="text-end">
-          {{ fila["saldoReembolsar"] | decimalAmount }}
+          <p [ngClass]="fila['saldoReembolsar'] >= 0 ? 'text-success' : 'text-danger'">
+            {{ fila["saldoReembolsar"] | decimalAmount }}
+          </p>
         </div>
         <div *ngSwitchCase="'saldoNeto'" class="text-end">
-          <p
+          <p class="fw-bold"
             [ngClass]="fila['saldoNeto'] >= 0 ? 'text-success' : 'text-danger'"
           >
             {{ fila["saldoNeto"] | decimalAmount }}
@@ -66,8 +73,17 @@
 </ng-template>
 
 <ng-template #desembolsoModal>
-  <desembolso-form
+  <form-desembolso
     (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
     (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"
-  ></desembolso-form>
+  ></form-desembolso>
 </ng-template>
+
+<ng-template #pagoModal>
+  <form-pago
+  [fondoRendirData]="dataFondoRendir"
+  (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
+  (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"
+  ></form-pago>
+</ng-template>
+

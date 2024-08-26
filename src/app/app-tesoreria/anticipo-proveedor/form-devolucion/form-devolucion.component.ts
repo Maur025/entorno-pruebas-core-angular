@@ -28,7 +28,7 @@ export class FormDevolucionComponent {
     private notificacionService: NotificacionService,
     private screenshotService: ScreenshotService,
     private anticipoProveedorService: AnticipoProveedorService,
-    protected utilityService: UtilityService, 
+    protected utilityService: UtilityService,
   ) {}
 
   ngOnInit() {
@@ -120,7 +120,6 @@ export class FormDevolucionComponent {
   guardarForm() {
     if(this.formDevolucionAnticipo.valid){
       this.formDevolucionAnticipo.value['movimientos']= this.formDevolucionAnticipo.value['transacciones'];
-      //console.log(this.formAccionCaja.value)
       this.anticipoProveedorService.crearDevolucionAnticipo(this.formDevolucionAnticipo.value).subscribe(data=>{
         this.alActualizar.emit(data);
         this.notificacionService.successStandar();

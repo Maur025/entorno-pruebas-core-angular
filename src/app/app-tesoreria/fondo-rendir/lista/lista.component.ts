@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { NotificacionService } from 'src/app/core/services/notificacion.service';
-import { ResponseHandlerService } from 'src/app/core/services/response-handler.service';
 import { TablaNewComponent } from 'src/app/shared/ui/tabla-new/tabla-new.component';
 import { FuncionesComponent } from '../../funciones.component';
 import { FondoRendirService } from 'src/app/core/services/tesoreria/fondo-rendir.service';
@@ -16,14 +14,12 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
   breadCrumbItems: object[];
   formato: any;
   modalRef?: BsModalRef;
-  dataFondo: any;
+  dataFondoRendir: any;
   protected onSubmitFormStatus: boolean = false;
 
   constructor(
     public fondoRendirService: FondoRendirService,
-    private modalService: BsModalService,
-    private notificacionService: NotificacionService,
-    private responseHandlerService: ResponseHandlerService,
+    private modalService: BsModalService
     ){super()}
 
   ngOnInit(): void {
@@ -62,6 +58,11 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
 
   nuevoDesembolso(template){
 		this.modalRef = this.modalService.show(template, this.modalConfig)
+  }
+
+  pagoReemblosoForm(descargo, template){
+    this.dataFondoRendir = descargo;
+    this.modalRef = this.modalService.show(template,this.modalConfig);
   }
 
   cerrarModal = (): void => {

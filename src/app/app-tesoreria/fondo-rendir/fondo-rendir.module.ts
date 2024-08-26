@@ -10,13 +10,19 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ComponentesCompartidosModule } from '../componentes-compartidos/componentes-compartidos.module';
 import { ListaComponent } from './lista/lista.component';
-import { DesembolsoFormComponent } from './desembolso-form/desembolso-form.component';
+
+import { FormPagoComponent } from './form-pago/form-pago.component';
+import { FormDesembolsoComponent } from './form-desembolso/form-desembolso.component';
+import { ListPendientesComponent } from './list-pendientes/list-pendientes.component';
+
 
 
 @NgModule({
   declarations: [
     ListaComponent,
-    DesembolsoFormComponent
+    FormDesembolsoComponent,
+    FormPagoComponent,
+    ListPendientesComponent
   ],
   imports: [
     CommonModule,

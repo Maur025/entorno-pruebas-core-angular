@@ -14,7 +14,7 @@
         "logLevel": "debug"
     },
     "/api/compras/*": {
-        "target": "https://sandbox-kbi-compras-api.kernotec.com",
+        "target": "http://localhost:18082",
         "secure": false,
         "changeOrigin": true,
         "rejectUnauthorized": false,
