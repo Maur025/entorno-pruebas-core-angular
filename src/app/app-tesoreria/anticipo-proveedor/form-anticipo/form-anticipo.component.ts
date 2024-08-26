@@ -96,7 +96,7 @@ export class FormAnticipoComponent {
 	}
 
   searchProveedores(event){
-
+    if(typeof(event) !== 'undefined'){
     if (event?.term?.length > 2) {
       this.comprasProveedorService?.searchProviers(0, 10, 'nombre', false, event?.term, false)
       .subscribe({
@@ -106,24 +106,20 @@ export class FormAnticipoComponent {
 				},
 				error: (error: ErrorResponseStandard) =>
 					this.notificacionService.alertError(error),
-			})
-
-
-    /*     data=>{
-        this.listaProveedores = data['content'];
-      }, error => this.notificacionService.alertError(error)); */
+			  })
+      }
 		}
   }
 
   selectProveedor(data){
-    console.log(data)
+    if(typeof(event) !== 'undefined'){
     let proveedor = {};
     proveedor['id'] = data['id'];
     proveedor['nombreComercial'] =data['nombreComercial'];
     proveedor['razonSocial'] = data['nombre'];
     proveedor['nroDocumento'] = data['nitCi'];
     this.formAnticipo.controls['proveedor'].setValue(proveedor);
-    console.log(proveedor);
+    }
   }
 
   confirmAndContinueSaving = async (): Promise<void> => {
