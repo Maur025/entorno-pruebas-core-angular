@@ -95,6 +95,26 @@ export class FormAnticipoComponent {
 			})
 	}
 
+  searchProveedores(event){
+
+    if (event?.term?.length > 2) {
+      this.comprasProveedorService?.searchProviers(0, 10, 'nombre', false, event?.term, false)
+      .subscribe({
+        next: (response: ApiResponseStandard) => {
+					this.listaProveedores =
+						this.responseHandlerService?.handleResponseAsArray(response)
+				},
+				error: (error: ErrorResponseStandard) =>
+					this.notificacionService.alertError(error),
+			})
+
+
+    /*     data=>{
+        this.listaProveedores = data['content'];
+      }, error => this.notificacionService.alertError(error)); */
+		}
+  }
+
   selectProveedor(data){
     console.log(data)
     let proveedor = {};
