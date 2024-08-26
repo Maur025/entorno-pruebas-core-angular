@@ -11,11 +11,11 @@ import { UtilityService } from 'src/app/shared/services/utilityService.service';
 
 
 @Component({
-  selector: 'desembolso-form',
-  templateUrl: './desembolso-form.component.html',
-  styleUrls: ['./desembolso-form.component.scss']
+  selector: 'form-desembolso',
+  templateUrl: './form-desembolso.component.html',
+  styleUrls: ['./form-desembolso.component.scss']
 })
-export class DesembolsoFormComponent {
+export class FormDesembolsoComponent {
   formDesembolso: UntypedFormGroup;
   submitted:boolean=false;
   totalAnticipo: number=0;

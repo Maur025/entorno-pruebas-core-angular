@@ -16,7 +16,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
   breadCrumbItems: object[];
   formato: any;
   modalRef?: BsModalRef;
-  dataFondo: any;
+  dataFondoRendir: any;
   protected onSubmitFormStatus: boolean = false;
 
   constructor(
@@ -62,6 +62,12 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
 
   nuevoDesembolso(template){
 		this.modalRef = this.modalService.show(template, this.modalConfig)
+  }
+
+  pagoReemblosoForm(descargo, template){
+    console.log(descargo);
+    this.dataFondoRendir = descargo;
+    this.modalRef = this.modalService.show(template,this.modalConfig);
   }
 
   cerrarModal = (): void => {

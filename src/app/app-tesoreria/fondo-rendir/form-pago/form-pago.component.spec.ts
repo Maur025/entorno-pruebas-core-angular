@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DesembolsoFormComponent } from './desembolso-form.component';
+import { FormPagoComponent } from './form-pago.component';
 
-describe('DesembolsoFormComponent', () => {
-  let component: DesembolsoFormComponent;
-  let fixture: ComponentFixture<DesembolsoFormComponent>;
+describe('FormPagoComponent', () => {
+  let component: FormPagoComponent;
+  let fixture: ComponentFixture<FormPagoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DesembolsoFormComponent ]
+      declarations: [ FormPagoComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DesembolsoFormComponent);
+    fixture = TestBed.createComponent(FormPagoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

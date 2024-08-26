@@ -1,0 +1,90 @@
+<div id="accountFormModalBodyDiv">
+    <div class="col-xl-12 border-bottom p-4 pb-2">
+        <div class="float-end ms-2">
+            <small>
+                Los campos marcados con asterisco (*) son requeridos.
+              </small>
+          </div>
+          <div class="d-flex">
+            <div>
+              <h6 class="fs-14 mb-0 ms-1 text-primary">{{fondoRendirData['nombre']}}</h6>
+              <small class="text-muted mb-0 ms-1">Pago por reembolso al empleado</small>
+            </div>
+          </div>
+    </div>
+    <form [formGroup]="formPagoReembolso" (ngSubmit)="confirmAndContinueSaving()">
+      <div class="ms-4 me-4 m-2 mt-3">
+        <div class="row">
+            <div class="col-md-4">
+                <input-fecha
+                [formPadre]="formPagoReembolso"
+                [submitted]="submitted"
+                labelFecha="(*)Fecha pago"
+                (alRedirigir)="alAperturar()"
+                ></input-fecha>
+              </div>
+        </div>
+        <div class="row">
+          <list-pendientes></list-pendientes>
+        </div>
+        <div class="row">
+            <transaccion-array
+            [formPadre]="formPagoReembolso"
+            labelTransferencia="el pago"
+            [submitted]="submitted"
+            (alIngresarMonto)="recibirMontoPago($event)"
+            ></transaccion-array>
+          </div>
+        <div class="row mt-2">
+            <div class="col-md-8">
+              <p class="text-muted mb-1">(*) Descripción</p>
+              <textarea
+                formControlName="descripcion"
+                class="form-control"
+                rows="2"
+                placeholder="Descripción para el pago por reembolso al empleado"
+                [ngClass]="{'is-invalid': submitted && form['descripcion'].errors}"
+                (input)="utilityService?.convertUppercase('descripcion', $event, formPagoReembolso)"
+              ></textarea>
+              <div *ngIf="submitted && form['descripcion'].errors"class="invalid-feedback">
+                <div *ngIf="formPagoReembolso.get('descripcion').errors?.required">
+                  La descripción para el pago es obligatorio
+                </div>
+                <div *ngIf="form['descripcion'].errors['maxlength']">
+                  Debe tener menos de {{ form['descripcion'].errors['maxlength']['requiredLength']}}carácteres
+                </div>
+                <div *ngIf="form['descripcion'].errors['minlength']">
+                  Debe tener mas de {{ form['descripcion'].errors['minlength']['requiredLength']}}carácteres
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 border p-3">
+              <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary"><b> (*) Monto total por reembolso </b></h6>
+              <div class="hstack gap-2 justify-content-end me-4">
+                <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary"> <b>{{formPagoReembolso.get('montoReembolso').value}}</b></h5>
+              </div>
+            </div>
+          </div>
+      </div>
+
+      <div class="ms-4 me-4 m-2 mt-3">
+        <div class="row mt-3 mb-3 me-3 pt-4 border-top">
+            <div class="hstack gap-2 justify-content-end">
+                <button
+                    type="button"
+                    class="btn btn-light"
+                    data-bs-dismiss="modal"
+                    (click)="this.cerrarModal.emit()">
+                    Cerrar
+                </button>
+                <button
+                    type="submit"
+                    class="btn btn-success">
+                  <app-simple-loader [isLoading]="onSubmitFormStatus" />
+                  {{ onSubmitFormStatus ? ' Espere un momento...' : 'Realizar pago' }}
+                </button>
+            </div>
+        </div>
+      </div>
+    </form>
+</div>  
