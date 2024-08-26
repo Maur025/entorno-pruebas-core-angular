@@ -1,10 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
-import { ResponseHandlerService } from 'src/app/core/services/response-handler.service';
 import { ScreenshotService } from 'src/app/core/services/screenshot.service';
-import { CentroCostosService } from 'src/app/core/services/tesoreria/centro-costos.service';
-import { EmpleadoService } from 'src/app/core/services/tesoreria/empleado.service';
 import { FondoRendirService } from 'src/app/core/services/tesoreria/fondo-rendir.service';
 import { UtilityService } from 'src/app/shared/services/utilityService.service';
 
@@ -16,7 +13,7 @@ import { UtilityService } from 'src/app/shared/services/utilityService.service';
 export class FormPagoComponent {
   formPagoReembolso: UntypedFormGroup;
   submitted:boolean=false;
-  totalAnticipo: number=0;
+  montoReembolsoSelect: number=0;
   listaResponsables:any[]=[];
   listaCentroCostos: any[]=[];
   @Input() fondoRendirData: any;
@@ -27,11 +24,8 @@ export class FormPagoComponent {
   constructor(
 		private notificacionService: NotificacionService,
     private formBuilder: UntypedFormBuilder,
-    private empleadoService: EmpleadoService,
-		private centroCostoService: CentroCostosService,
 		protected utilityService: UtilityService,
 		protected screenshotService: ScreenshotService,
-    private responseHandlerService: ResponseHandlerService,
     public fondoRendirService: FondoRendirService,
 	) {}
 
@@ -44,7 +38,7 @@ export class FormPagoComponent {
 
   setForm(){
     this.formPagoReembolso = this.formBuilder. group({
-			id: '',
+			id:[],
       fecha:['', [Validators.required]],
       fondoRendirId:['', [Validators.required]],
       descripcion: [
@@ -68,12 +62,18 @@ export class FormPagoComponent {
     this.cerrarModal.emit()
   }
   recibirMontoPago(monto){
-    console.log(monto);
+    this.formPagoReembolso.controls['montoReembolso'].setValue(monto);
+  }
+
+  recibirMontoReembolsar(reembolsar){
+    this.formPagoReembolso.controls['fondoRendirId'].setValue(reembolsar['fondoRendirId']);
+    this.montoReembolsoSelect=reembolsar['montoPagar'];
   }
 
   confirmAndContinueSaving = async (): Promise<void> => {
 		this.submitted = true;
-		if (!this.formPagoReembolso.valid) {
+    let verificar = this.verificarMontos();
+		if (!this.formPagoReembolso.valid || verificar == false) {
 			return
 		}
 		const dataImg = await this.screenshotService?.takeScreenshot('accountFormModalBodyDiv');
@@ -84,7 +84,31 @@ export class FormPagoComponent {
 		)
 	}
 
+  verificarMontos() {
+    const totalsCero =
+     Number( this.montoReembolsoSelect) === 0 &&
+      this.formPagoReembolso.controls["montoReembolso"].value == 0;
+    if (totalsCero) {
+      this.notificacionService.warningMessage(
+        "No ha seleccionado ningun reeembolso pendiente y el monto total de reembolso es 0.");
+      return false;
+    }
 
-  guardar(){}
+    if( this.formPagoReembolso.controls["montoReembolso"].value!==Number(this.montoReembolsoSelect)){
+      this.notificacionService.warningMessage(
+        "El monto total de reembolso en monto ingresado para el fondo a rendir a reembolsar deben coincidir");
+      return false;
+    }
+    return true;
+  }
 
+  guardar(){
+    this.formPagoReembolso.value['fechaPagoReembolso']= this.formPagoReembolso.value['fecha'];
+    this.formPagoReembolso.value['movimientos']= this.formPagoReembolso.value['transacciones'];
+
+    this.fondoRendirService.pagoReembolso(this.formPagoReembolso.value).subscribe(data=>{
+     this.alActualizar.emit(data);
+        this.notificacionService.successStandar();
+      }, error=>this.notificacionService.alertError(error));
+  }
 }

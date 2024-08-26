@@ -24,10 +24,14 @@
                 ></input-fecha>
               </div>
         </div>
-        <div class="row">
-          <list-pendientes></list-pendientes>
+        <div class="row mb-3">
+          <list-pendientes
+          [empleadoId]="fondoRendirData['id']"
+          (alSelectPendiente)="recibirMontoReembolsar($event)"
+          ></list-pendientes>
         </div>
-        <div class="row">
+
+        <div class="row" [ngClass]="formPagoReembolso.get('fondoRendirId').value == '' && montoReembolsoSelect==0 ? 'transacciones' : ''">
             <transaccion-array
             [formPadre]="formPagoReembolso"
             labelTransferencia="el pago"
@@ -87,4 +91,4 @@
         </div>
       </div>
     </form>
-</div>  
+</div>

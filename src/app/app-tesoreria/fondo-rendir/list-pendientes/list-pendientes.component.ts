@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
+import { FondoRendirService } from 'src/app/core/services/tesoreria/fondo-rendir.service';
+import { UtilityService } from 'src/app/shared/services/utilityService.service';
 
 @Component({
   selector: 'list-pendientes',
@@ -8,14 +10,16 @@ import { NotificacionService } from 'src/app/core/services/notificacion.service'
 })
 export class ListPendientesComponent {
   @Input() empleadoId;
-  @Output() alSelectAnticipo: EventEmitter<any> = new EventEmitter();
+  @Output() alSelectPendiente: EventEmitter<any> = new EventEmitter();
   listaReembolsos: any[];
-  anticipoId:string;
-  
+  fondoRendirId:string;
+  totalARemmbolsar:number=0;
+
 
   constructor(
-
-    private notificacionService: NotificacionService
+    private fondoRendirService: FondoRendirService,
+    private notificacionService: NotificacionService,
+    protected utilityService: UtilityService,
   ){}
 
   ngOnInit(){
@@ -23,19 +27,33 @@ export class ListPendientesComponent {
   }
 
   listPendientesReembolso(){
-    /*this.anticipoProveedorService.findAnticipoProveedor(this.empleadoId).subscribe(
+    this.fondoRendirService.reembolsosPendientes(this.empleadoId).subscribe(
       data=>{
-        this.listaReembolso = data['data'];
+        this.listaReembolsos = data['data'];
       },error=>this.notificacionService.alertError(error)
-    );*/
+    );
   }
 
-  selectAnticipo(data){
-    let anticipo = {
-      id: data['id'],
-      saldo: data['saldo']
+  selectPendiente(data,i){
+    const inputs = document.querySelectorAll('input[name="inputsPendiente"]');
+    let id = "input_pagar_"+i;
+    var inputPagar = document.getElementById(id);
+    if(inputPagar)inputPagar.removeAttribute("disabled");
+    inputs.forEach(input => {
+      if(input['id'] !== inputPagar['id'])
+        input.setAttribute("disabled", "true");
+    });
+  }
+
+
+  changeInputPagar(monto, i, data){
+    if( data['fondoRendirId']!== data['montoExcedente'])console.error("validar")
+     let reembolsoPendiente = {
+      fondoRendirId: data['fondoRendirId'],
+      montoPagar: monto
     }
 
-    this.alSelectAnticipo.emit(anticipo);
+    this.alSelectPendiente.emit(reembolsoPendiente);
   }
+
 }
