@@ -38,15 +38,15 @@
             >
           </div>
         </div>
-        <div *ngSwitchCase="'asignado'" class="text-end">
-          {{ fila["totalAsignado"] | decimalAmount }}
+        <div *ngSwitchCase="'desembolso'" class="text-end">
+          {{ fila["totalDesembolso"] | decimalAmount }}
         </div>
-        <div *ngSwitchCase="'rendido'" class="text-end">
-          {{ fila["totalRendido"] | decimalAmount }}
+        <div *ngSwitchCase="'descargo'" class="text-end">
+          {{ fila["totalDescargo"] | decimalAmount }}
         </div>
-        <div *ngSwitchCase="'porRendir'" class="text-end">
-          <p [ngClass]="fila['saldoPorRendir'] >= 0 ? 'text-success' : 'text-danger'">
-            {{ fila["saldoPorRendir"] | decimalAmount }}
+        <div *ngSwitchCase="'saldoDesembolso'" class="text-end">
+          <p [ngClass]="fila['saldoDesembolso'] > 0 ? 'text-success' : 'text-danger'">
+            {{ fila["saldoDesembolso"] | decimalAmount }}
           </p>
         </div>
         <div *ngSwitchCase="'reembolso'" class="text-end">
@@ -55,8 +55,8 @@
         <div *ngSwitchCase="'pagoReembolso'" class="text-end">
           {{ fila["totalPagoReembolso"] | decimalAmount }}
         </div>
-        <div *ngSwitchCase="'reembolsar'" class="text-end">
-          <p [ngClass]="fila['saldoReembolsar'] >= 0 ? 'text-success' : 'text-danger'">
+        <div *ngSwitchCase="'saldoReembolso'" class="text-end">
+          <p [ngClass]="fila['saldoReembolsar'] > 0 ? 'text-danger' : 'text-success'">
             {{ fila["saldoReembolsar"] | decimalAmount }}
           </p>
         </div>
