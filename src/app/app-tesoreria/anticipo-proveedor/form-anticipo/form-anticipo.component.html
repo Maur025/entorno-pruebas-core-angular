@@ -27,6 +27,7 @@
               bindLabel="nombre"
               bindValue="id"
               (change)="selectProveedor($event)"
+              (search)="searchProveedores($event)"
               [ngClass]="{
                 'ngselect-invalid': submitted && form['proveedorId'].errors != null
               }"

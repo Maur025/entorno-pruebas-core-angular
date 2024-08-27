@@ -37,4 +37,18 @@ export class ProveedorService {
 			`${this.apiUrl}${this.prefix}/tesorery/proveedores/habilitados?page=${page}&size=${size}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
 		)
 	}
+
+  searchProviers = (
+		page: number = 1,
+		size: number = 10,
+		sortBy: string = 'nombre',
+		descending: boolean = false,
+		keyword: string = null,
+		isEnabledOnly: boolean = null
+	): Observable<ApiResponseStandard> => {
+		let queryParams: string = `?page=${page}&size=${size}&sortBy=${sortBy}&descending=${descending}`
+		if (keyword) queryParams += `&keyword=${keyword}`
+		if (isEnabledOnly) queryParams += `&isEnableOnly=${isEnabledOnly}`
+		return this.apiService?.compras?.get(`${this.apiUrl}${this.prefix}/${this.apiName}/habilitado/paginado${queryParams}`);
+	}
 }
