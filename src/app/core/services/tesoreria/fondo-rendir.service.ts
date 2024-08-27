@@ -26,4 +26,8 @@ export class FondoRendirService {
   pagoReembolso(datos: any) {
     return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/pago_reembolso`, datos);
   }
+
+  pagoDevolucion(datos: any) {
+    return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/pago/devolucion_empresa`, datos);
+  }
 }

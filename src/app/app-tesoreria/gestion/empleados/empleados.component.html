@@ -131,7 +131,7 @@ getAll="getAll"
             class="btn"
             [class]="{
               'btn-warning': empleado,
-              'btn-success': empleado
+              'btn-success': !empleado
             }"[disabled]="onSubmitFormStatus"
           >
             <app-simple-loader [isLoading]="onSubmitFormStatus" />

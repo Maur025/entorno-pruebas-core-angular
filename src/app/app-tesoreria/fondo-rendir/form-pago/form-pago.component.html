@@ -8,18 +8,18 @@
           <div class="d-flex">
             <div>
               <h6 class="fs-14 mb-0 ms-1 text-primary">{{fondoRendirData['nombre']}}</h6>
-              <small class="text-muted mb-0 ms-1">Pago por reembolso al empleado</small>
+              <small class="text-muted mb-0 ms-1">{{labelTitle}}</small>
             </div>
           </div>
     </div>
-    <form [formGroup]="formPagoReembolso" (ngSubmit)="confirmAndContinueSaving()">
+    <form [formGroup]="formPago" (ngSubmit)="confirmAndContinueSaving()">
       <div class="ms-4 me-4 m-2 mt-3">
         <div class="row">
             <div class="col-md-4">
                 <input-fecha
-                [formPadre]="formPagoReembolso"
+                [formPadre]="formPago"
                 [submitted]="submitted"
-                labelFecha="(*)Fecha pago"
+                [labelFecha]="labelFecha"
                 (alRedirigir)="alAperturar()"
                 ></input-fecha>
               </div>
@@ -27,13 +27,14 @@
         <div class="row mb-3">
           <list-pendientes
           [empleadoId]="fondoRendirData['id']"
-          (alSelectPendiente)="recibirMontoReembolsar($event)"
+          [operacionPadre]="operacion"
+          (alSelectPendiente)="recibirMontoReembolsaDevolucion($event)"
           ></list-pendientes>
         </div>
 
-        <div class="row" [ngClass]="formPagoReembolso.get('fondoRendirId').value == '' && montoReembolsoSelect==0 ? 'transacciones' : ''">
+        <div class="row" [ngClass]="formPago.get('fondoRendirId').value == '' && montoPagarSelect==0 ? 'transacciones' : ''">
             <transaccion-array
-            [formPadre]="formPagoReembolso"
+            [formPadre]="formPago"
             labelTransferencia="el pago"
             [submitted]="submitted"
             (alIngresarMonto)="recibirMontoPago($event)"
@@ -46,12 +47,12 @@
                 formControlName="descripcion"
                 class="form-control"
                 rows="2"
-                placeholder="Descripción para el pago por reembolso al empleado"
+                placeholder="Descripción para el pago"
                 [ngClass]="{'is-invalid': submitted && form['descripcion'].errors}"
-                (input)="utilityService?.convertUppercase('descripcion', $event, formPagoReembolso)"
+                (input)="utilityService?.convertUppercase('descripcion', $event, formPago)"
               ></textarea>
               <div *ngIf="submitted && form['descripcion'].errors"class="invalid-feedback">
-                <div *ngIf="formPagoReembolso.get('descripcion').errors?.required">
+                <div *ngIf="formPago.get('descripcion').errors?.required">
                   La descripción para el pago es obligatorio
                 </div>
                 <div *ngIf="form['descripcion'].errors['maxlength']">
@@ -63,9 +64,9 @@
               </div>
             </div>
             <div class="col-md-4 border p-3">
-              <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary"><b> (*) Monto total por reembolso </b></h6>
+              <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary fw-bold">{{labelMonto}}</h6>
               <div class="hstack gap-2 justify-content-end me-4">
-                <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary"> <b>{{formPagoReembolso.get('montoReembolso').value}}</b></h5>
+                <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary"> <b>{{formPago.get('montoPagar').value}}</b></h5>
               </div>
             </div>
           </div>

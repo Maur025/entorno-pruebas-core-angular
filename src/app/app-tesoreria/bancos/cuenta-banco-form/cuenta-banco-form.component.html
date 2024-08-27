@@ -132,6 +132,7 @@
                   rows="2"
                   placeholder="Descripción para la cuenta de banco"
                   [ngClass]="{'is-invalid': submitted && form['descripcion'].errors}"
+                  (input)="utilityService?.convertUppercase('descripcion', $event, formCuentaBanco)"
                 ></textarea>
                 <div *ngIf="submitted && form['descripcion'].errors"class="invalid-feedback">
                   <div *ngIf="formCuentaBanco.get('descripcion').errors?.required">
