@@ -14,11 +14,12 @@
         <thead>
           <tr>
             <th [width]="50"></th>
-            <th>Fecha desembolso</th>
-            <th>Nº referencia</th>
-            <th>Descripción</th>
-            <th>Monto</th>
-            <th>Saldo</th>
+            <th class="text-muted fs-14 mb-2">Fecha desembolso</th>
+            <th class="text-muted fs-14 mb-2">Detalle</th>
+<!--             <th>Nº referencia</th>
+            <th>Descripción</th> -->
+            <th class="text-muted fs-14 mb-2">Monto por reembolsar</th>
+            <th class="text-muted fs-14 mb-2">Saldo</th>
           </tr>
         </thead>
         <tbody>
@@ -34,9 +35,17 @@
             </div>
             </td>
             <td>{{pendiente['fechaDesembolso']|fechaFormat}}</td>
-            <td>{{pendiente['nroReferencia']}}</td>
-            <td>{{pendiente['descripcion']}}</td>
-            <td>{{pendiente['montoExcedente']|decimalAmount}}</td>
+            <td>
+              <div>
+                <p class="mb-0 text-muted"><b>Nº ref:</b> {{pendiente['nroReferencia']}}</p>
+                <small class="text-muted text-end mb-0"><b>Descripción:</b>
+                  {{pendiente['descripcion']}}
+                </small>
+              </div>
+            </td>
+<!--             <td>{{pendiente['nroReferencia']}}</td>
+            <td>{{pendiente['descripcion']}}</td> -->
+            <td class="text-center">{{pendiente['saldoReembolso']|decimalAmount}}</td>
             <td class="text-end">
               <input
               disabled

@@ -45,6 +45,22 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
       cabeceras: {
         "acciones": this.getOpcionesCabecera('Acciones', 12, 'text', true, false),
         "nombre": this.getOpcionesCabecera('Empleado', 12),
+        "desembolso": this.getOpcionesCabecera('Asignado', 12),
+        "descargo":this.getOpcionesCabecera('Rendido', 12),
+        "saldoDesembolso": this.getOpcionesCabecera('Saldo Desembolso', 12),
+        "reembolso":this.getOpcionesCabecera('Reembolso', 12),
+        "pagoReembolso": this.getOpcionesCabecera('Pago Reembolso', 12),
+        "saldoReembolso":this.getOpcionesCabecera('Saldo Reembolso', 12),
+        "saldoNeto": this.getOpcionesCabecera('Saldo Neto', 12),
+      }
+    };
+  }
+
+/*   getCabeceras() {
+    return {
+      cabeceras: {
+        "acciones": this.getOpcionesCabecera('Acciones', 12, 'text', true, false),
+        "nombre": this.getOpcionesCabecera('Empleado', 12),
         "asignado": this.getOpcionesCabecera('Asignado', 12),
         "rendido":this.getOpcionesCabecera('Rendido', 12),
         "porRendir": this.getOpcionesCabecera('Por Rendir', 12),
@@ -54,7 +70,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
         "saldoNeto": this.getOpcionesCabecera('Saldo Neto', 12),
       }
     };
-  }
+  } */
 
   nuevoDesembolso(template){
 		this.modalRef = this.modalService.show(template, this.modalConfig)

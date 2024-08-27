@@ -73,6 +73,9 @@ export class FormPagoComponent {
   confirmAndContinueSaving = async (): Promise<void> => {
 		this.submitted = true;
     let verificar = this.verificarMontos();
+    console.log(!this.formPagoReembolso.valid || verificar == false);
+    console.log(this.formPagoReembolso.valid , verificar );
+    console.log(this.formPagoReembolso.value);
 		if (!this.formPagoReembolso.valid || verificar == false) {
 			return
 		}

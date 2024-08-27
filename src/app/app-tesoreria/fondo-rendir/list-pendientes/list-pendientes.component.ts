@@ -27,9 +27,10 @@ export class ListPendientesComponent {
   }
 
   listPendientesReembolso(){
-    this.fondoRendirService.reembolsosPendientes(this.empleadoId).subscribe(
+    this.fondoRendirService.fondosRendirEmpleado(this.empleadoId).subscribe(
       data=>{
         this.listaReembolsos = data['data'];
+        this.listaReembolsos = this.listaReembolsos.filter(r=>{return r['saldoReembolso'] >0});
       },error=>this.notificacionService.alertError(error)
     );
   }
@@ -47,9 +48,9 @@ export class ListPendientesComponent {
 
 
   changeInputPagar(monto, i, data){
-    if( data['fondoRendirId']!== data['montoExcedente'])console.error("validar")
+    if( data['id']!== data['montoExcedente'])console.error("validar")
      let reembolsoPendiente = {
-      fondoRendirId: data['fondoRendirId'],
+      fondoRendirId: data['id'],
       montoPagar: monto
     }
 
