@@ -22,10 +22,18 @@
       <td [ngSwitch]="campo">
         <div *ngSwitchCase="'acciones'">
           <button
+            *ngIf="fila['saldoReembolsar'] > 0"
             class="btn btn-sm btn-warning me-2"
             tooltip="Pagar reembolso"
             (click)="pagoReemblosoForm(fila,pagoModal)">
             <i class="mdi mdi-contactless-payment"></i>
+          </button>
+          <button
+            *ngIf="fila['saldoDesembolso'] > 0"
+            class="btn btn-sm btn-primary me-2"
+            tooltip="Pago por devolución"
+            (click)="pagoDevolucionForm(fila,pagoModal)">
+            <i class="mdi mdi-keyboard-backspace"></i>
           </button>
         </div>
         <div *ngSwitchCase="'nombre'" style="width: 180px">
@@ -45,7 +53,7 @@
           {{ fila["totalDescargo"] | decimalAmount }}
         </div>
         <div *ngSwitchCase="'saldoDesembolso'" class="text-end">
-          <p [ngClass]="fila['saldoDesembolso'] > 0 ? 'text-success' : 'text-danger'">
+          <p [ngClass]="fila['saldoDesembolso'] >= 0 ? 'text-success' : 'text-danger'">
             {{ fila["saldoDesembolso"] | decimalAmount }}
           </p>
         </div>
@@ -74,16 +82,17 @@
 
 <ng-template #desembolsoModal>
   <form-desembolso
-    (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
-    (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"
+    (cerrarModal)="cerrarModal()"
+    (alActualizar)="cerrarModal()"
   ></form-desembolso>
 </ng-template>
 
 <ng-template #pagoModal>
   <form-pago
+  [operacion]="operacion"
   [fondoRendirData]="dataFondoRendir"
-  (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
-  (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"
+  (cerrarModal)="cerrarModal()"
+  (alActualizar)="cerrarModal()"
   ></form-pago>
 </ng-template>
 

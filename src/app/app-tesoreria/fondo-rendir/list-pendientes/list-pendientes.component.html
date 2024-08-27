@@ -18,7 +18,7 @@
             <th class="text-muted fs-14 mb-2">Detalle</th>
 <!--             <th>Nº referencia</th>
             <th>Descripción</th> -->
-            <th class="text-muted fs-14 mb-2">Monto por reembolsar</th>
+            <th class="text-muted fs-14 mb-2">{{labelMontoTh}}</th>
             <th class="text-muted fs-14 mb-2">Saldo</th>
           </tr>
         </thead>
@@ -45,7 +45,7 @@
             </td>
 <!--             <td>{{pendiente['nroReferencia']}}</td>
             <td>{{pendiente['descripcion']}}</td> -->
-            <td class="text-center">{{pendiente['saldoReembolso']|decimalAmount}}</td>
+            <td class="text-center">{{pendiente['pagar_saldo']|decimalAmount}}</td>
             <td class="text-end">
               <input
               disabled
