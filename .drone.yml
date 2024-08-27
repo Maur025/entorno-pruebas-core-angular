@@ -52,7 +52,7 @@ steps:
     when:
       branch:
         - develop
-        - sandbox
+        - staging
       repo:
         - KernoTec/${DRONE_REPO_NAME}
       event:

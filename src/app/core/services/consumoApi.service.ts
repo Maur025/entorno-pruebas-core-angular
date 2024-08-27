@@ -11,10 +11,10 @@ import {ConsumerApi} from "./ApiConfigJson/ConsumerApi";
 export class ConsumoApiService {
   /* parametros json */
   public url_json: string = "assets/config/config.json"
-  private key_config: string = 'accountApiKerno';
-  private key_compras: string = 'comprasApiKerno';
-  private key_tesoreria: string = 'tesoreriaApiKerno';
-  private key_contabilidad: string = 'contabilidadApiKerno';
+  private key_config: string = 'configApi';
+  private key_compras: string = 'comprasApi';
+  private key_tesoreria: string = 'tesoreriaApi';
+  private key_contabilidad: string = 'contabilidadApi';
 
   /*Objetos para peticion*/
   public config: ConsumerApi;

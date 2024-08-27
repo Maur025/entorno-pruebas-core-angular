@@ -1,8 +1,0 @@
-{
-  "production": false,
-  "comprasApiKerno": "https://sandbox-kbi-compras-api.kernotec.com/api/compras",
-  "contabilidadApiKerno": "https://sandbox-kbi-contabilidad-api.kernotec.com/api/contabilidad",
-  "inventariosApiKerno": "https://sandbox-kbi-inventarios-api.kernotec.com/api/v1",
-  "tesoreriaApiKerno": "https://sandbox-kbi-tesoreria-api.kernotec.com/api/tesoreria",
-  "accountApiKerno": "https://sandbox-kbi-account-api.kernotec.com/api/account"
-}
