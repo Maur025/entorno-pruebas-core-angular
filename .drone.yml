@@ -77,7 +77,7 @@ steps:
       event:
         - push
 
-  - name: deploy-k8s-sandbox
+  - name: deploy-sandbox-tesoreria-ui
     image: appleboy/drone-ssh
     settings:
       host:
@@ -89,10 +89,31 @@ steps:
       port: 22
       command_timeout: 2m
       script:
-        - k8s-deployment kernotec kbi-tesoreria-ui
+        - k8s-service-deploy sandbox-kbi tesoreria-ui
     when:
       branch:
         - develop
+      repo:
+        - KernoTec/${DRONE_REPO_NAME}
+      event:
+        - push
+
+  - name: deploy-staging-tesoreria-ui
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: k8s_staging_host
+      username:
+        from_secret: k8s_staging_username
+      password:
+        from_secret: k8s_staging_password
+      port: 22
+      command_timeout: 3m
+      script:
+        - k8s-service-deploy staging tesoreria-ui
+    when:
+      branch:
+        - staging
       repo:
         - KernoTec/${DRONE_REPO_NAME}
       event:
