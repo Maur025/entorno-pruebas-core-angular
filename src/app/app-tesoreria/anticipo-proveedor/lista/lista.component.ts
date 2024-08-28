@@ -54,6 +54,8 @@ export class ListaComponent extends FuncionesComponent{
 				proveedor: this.getOpcionesCabecera('Proveedor',12,'text',true,true),
 				centroCosto: this.getOpcionesCabecera('Centro Costo',12,'text',true,true),
 				nroReferencia: this.getOpcionesCabecera('Nro Referencia',12,'text',true,true),
+        monto: this.getOpcionesCabecera('Monto Anticipo',12,'text',true,true, 'text-end'),
+        saldo: this.getOpcionesCabecera('Saldo',12,'text',true,true, 'text-end'),
 			},
 		}
 	}

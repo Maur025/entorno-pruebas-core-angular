@@ -34,6 +34,12 @@ getAll="getAll"
 				<div *ngSwitchCase="'centroCosto'">
 					{{ fila.centroCosto.nombre }}
 				</div>
+        <div class="text-end" *ngSwitchCase="'monto'" [ngClass]="fila['monto'] >= 0 ? 'text-success':'text-danger' ">
+          {{fila['monto']|decimalAmount}}
+        </div>
+        <div class="text-end" *ngSwitchCase="'saldo'" [ngClass]="fila['saldo'] >= 0 ? 'text-success':'text-danger' ">
+          {{fila['saldo']|decimalAmount}}
+        </div>
 				<div *ngSwitchDefault>
 					<td>{{ fila[campo] }}</td>
 				</div>
