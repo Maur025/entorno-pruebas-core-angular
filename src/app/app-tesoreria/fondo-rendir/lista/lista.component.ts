@@ -3,6 +3,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { TablaNewComponent } from 'src/app/shared/ui/tabla-new/tabla-new.component';
 import { FuncionesComponent } from '../../funciones.component';
 import { FondoRendirService } from 'src/app/core/services/tesoreria/fondo-rendir.service';
+import { EstadosFondoRendir } from 'src/app/core/models/estados-tesoreria.model';
 
 @Component({
   selector: 'app-lista',
@@ -15,6 +16,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
   formato: any;
   modalRef?: BsModalRef;
   dataFondoRendir: any;
+  operacion: any;
   protected onSubmitFormStatus: boolean = false;
 
   constructor(
@@ -45,12 +47,12 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
       cabeceras: {
         "acciones": this.getOpcionesCabecera('Acciones', 12, 'text', true, false),
         "nombre": this.getOpcionesCabecera('Empleado', 12),
-        "asignado": this.getOpcionesCabecera('Asignado', 12),
-        "rendido":this.getOpcionesCabecera('Rendido', 12),
-        "porRendir": this.getOpcionesCabecera('Por Rendir', 12),
+        "desembolso": this.getOpcionesCabecera('Asignado', 12),
+        "descargo":this.getOpcionesCabecera('Rendido', 12),
+        "saldoDesembolso": this.getOpcionesCabecera('Saldo Desembolso', 12),
         "reembolso":this.getOpcionesCabecera('Reembolso', 12),
         "pagoReembolso": this.getOpcionesCabecera('Pago Reembolso', 12),
-        "reembolsar":this.getOpcionesCabecera('Saldo Reembolso', 12),
+        "saldoReembolso":this.getOpcionesCabecera('Saldo Reembolso', 12),
         "saldoNeto": this.getOpcionesCabecera('Saldo Neto', 12),
       }
     };
@@ -61,11 +63,19 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
   }
 
   pagoReemblosoForm(descargo, template){
+    this.operacion = EstadosFondoRendir.PAGO_REEMBOLSO;
     this.dataFondoRendir = descargo;
+    this.modalRef = this.modalService.show(template,this.modalConfig);
+  }
+
+  pagoDevolucionForm(fondoRendir, template){
+    this.operacion = EstadosFondoRendir.DEVOLUCION;
+    this.dataFondoRendir = fondoRendir;
     this.modalRef = this.modalService.show(template,this.modalConfig);
   }
 
   cerrarModal = (): void => {
 		this.modalService.hide();
+    this.tabla.obtenerDatos();
 	}
 }

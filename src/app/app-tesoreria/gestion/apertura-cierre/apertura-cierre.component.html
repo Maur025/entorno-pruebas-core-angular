@@ -61,10 +61,10 @@ getAll="filterRecords"
 				</div>
 
 				<div *ngSwitchCase="'fechaIni'">
-					{{ row.fechaIni }}
+					{{ row.fechaIni|fechaFormat }}
 				</div>
 				<div *ngSwitchCase="'fechaFin'">
-					{{ row.fechaFin }}
+					{{ row.fechaFin|fechaFormat }}
 				</div>
 
 				<div *ngSwitchDefault>

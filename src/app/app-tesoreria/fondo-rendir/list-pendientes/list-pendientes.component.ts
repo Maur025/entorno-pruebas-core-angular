@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { EstadosFondoRendir } from 'src/app/core/models/estados-tesoreria.model';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { FondoRendirService } from 'src/app/core/services/tesoreria/fondo-rendir.service';
 import { UtilityService } from 'src/app/shared/services/utilityService.service';
@@ -10,6 +11,7 @@ import { UtilityService } from 'src/app/shared/services/utilityService.service';
 })
 export class ListPendientesComponent {
   @Input() empleadoId;
+  @Input() operacionPadre;
   @Output() alSelectPendiente: EventEmitter<any> = new EventEmitter();
   listaReembolsos: any[];
   fondoRendirId:string;
@@ -23,13 +25,42 @@ export class ListPendientesComponent {
   ){}
 
   ngOnInit(){
-    this.listPendientesReembolso();
+    //this.listPendientesReembolso();
+    console.log(this.operacionPadre)
+    this.fieldByOperation();
+  }
+  labelMontoTh = "";
+  fieldByOperation(){
+    if(this.operacionPadre == EstadosFondoRendir.PAGO_REEMBOLSO){
+      this.labelMontoTh="Monto por reembolsar";
+      this.listPendientesReembolso();
+    }
+    if(this.operacionPadre == EstadosFondoRendir.DEVOLUCION){
+      this.labelMontoTh="Saldo a devolver";
+      this.listPendienteDevolucion();
+    }
   }
 
   listPendientesReembolso(){
-    this.fondoRendirService.reembolsosPendientes(this.empleadoId).subscribe(
+    this.fondoRendirService.fondosRendirEmpleado(this.empleadoId).subscribe(
       data=>{
         this.listaReembolsos = data['data'];
+        this.listaReembolsos = this.listaReembolsos.filter(r=>{
+          r['pagar_saldo'] = r['saldoReembolso'];
+          return r['saldoReembolso'] >0;
+        });
+      },error=>this.notificacionService.alertError(error)
+    );
+  }
+
+  listPendienteDevolucion(){
+    this.fondoRendirService.fondosRendirEmpleado(this.empleadoId).subscribe(
+      data=>{
+        this.listaReembolsos = data['data'];
+        this.listaReembolsos = this.listaReembolsos.filter(r=>{
+          r['pagar_saldo'] = r['saldoDesembolso'];
+          return r['saldoDesembolso'] >0;
+        });
       },error=>this.notificacionService.alertError(error)
     );
   }
@@ -47,13 +78,12 @@ export class ListPendientesComponent {
 
 
   changeInputPagar(monto, i, data){
-    if( data['fondoRendirId']!== data['montoExcedente'])console.error("validar")
-     let reembolsoPendiente = {
-      fondoRendirId: data['fondoRendirId'],
+     let pendiente = {
+      fondoRendirId: data['id'],
       montoPagar: monto
     }
 
-    this.alSelectPendiente.emit(reembolsoPendiente);
+    this.alSelectPendiente.emit(pendiente);
   }
 
 }

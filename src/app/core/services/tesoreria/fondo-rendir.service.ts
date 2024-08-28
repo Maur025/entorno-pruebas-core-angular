@@ -12,18 +12,22 @@ export class FondoRendirService {
   prefix:string = '';
 
   getAll(size: number = 100, page: number = 0, sortBy:string = 'id', descending:false, keyword:any = '') {
-    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`);
+    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/listar?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`);
   }
 
   desembolso(datos: any) {
     return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}`, datos);
   }
 
-  reembolsosPendientes(empleadoId) {
-    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/reembolso/empleado/${empleadoId}`);
+  fondosRendirEmpleado(empleadoId) {
+    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/detail/empleado/${empleadoId}`);
   }
 
   pagoReembolso(datos: any) {
     return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/pago_reembolso`, datos);
+  }
+
+  pagoDevolucion(datos: any) {
+    return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/pago/devolucion_empresa`, datos);
   }
 }
