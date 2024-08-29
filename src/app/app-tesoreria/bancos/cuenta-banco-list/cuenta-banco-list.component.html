@@ -23,7 +23,15 @@
     ></ng-template>
     <ng-template #tempTD>
       <td [ngSwitch]="campo">
+
         <div *ngSwitchCase="'nroCuenta'">
+          <button
+            class="btn btn-sm btn-secondary me-1"
+            tooltip="Ver movimientos"
+            [disabled]="fila.deleted"
+            (click)="verMovimientos(fila, modalMovimientos)">
+              <i class="mdi mdi-chart-timeline-variant"></i>
+          </button>
           {{ fila["nroCuenta"] }}
         </div>
         <div *ngSwitchCase="'moneda'">
@@ -53,3 +61,10 @@
     </button>
   </div>
 </div>
+
+<ng-template #modalMovimientos>
+  <list-movimiento-cuenta-banco
+  [cuentaBanco]="cuentaBancoData"
+  (cerrarModal)="modalRef.hide()"
+  ></list-movimiento-cuenta-banco>
+</ng-template>

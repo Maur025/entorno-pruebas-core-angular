@@ -32,5 +32,10 @@ export class BancoService {
   habilitados(){
     return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/listarHabilitados`);
   }
+  /* Movimientos */
+
+  movimientoCuentaBanco(cuentaBancoId,filtros={}){
+    return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/cuenta_banco/detail/${cuentaBancoId}`, filtros);
+  }
 
 }

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BancoService } from 'src/app/core/services/tesoreria/banco.service';
 import { CuentaBancoService } from 'src/app/core/services/tesoreria/cuenta-banco.service';
 import { Location } from '@angular/common';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-cuenta-banco-list',
@@ -16,17 +17,29 @@ export class CuentaBancoListComponent extends FuncionesComponent implements OnIn
   breadCrumbItems: object[];
   labelBanco: string="";
   formato: any;
+  modalRef?: BsModalRef;
+  cuentaBancoData: any;
 
   constructor(
     private route: ActivatedRoute,
     private bancoService: BancoService,
     public cuentaBancoService: CuentaBancoService,
-    public location: Location
-
+    public location: Location,
+    private modalService: BsModalService,
   ){
     super();
     this.idBanco = this.route.snapshot.paramMap.get('id');
   }
+
+  private modalConfig: {
+		ignoreBackdropClick: boolean
+		keyboard: boolean
+		class: string
+	} = {
+		ignoreBackdropClick: true,
+		keyboard: false,
+		class: 'modal-xl modal-scrollable',
+	}
 
   ngOnInit(): void {
     this.bancoService.find(this.idBanco).subscribe(data=>{
@@ -45,6 +58,11 @@ export class CuentaBancoListComponent extends FuncionesComponent implements OnIn
         "saldo": this.getOpcionesCabecera('Saldo', 12),
       }
     };
+  }
+
+  verMovimientos(cuentaBanco, modalMovimientos){
+    this.cuentaBancoData=cuentaBanco;
+    this.modalRef = this.modalService.show(modalMovimientos, this.modalConfig)
   }
 
 }

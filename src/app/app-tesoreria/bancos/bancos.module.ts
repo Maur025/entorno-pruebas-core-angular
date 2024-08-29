@@ -13,13 +13,15 @@ import { ComponentesCompartidosModule } from '../componentes-compartidos/compone
 import { CuentaBancoFormComponent } from './cuenta-banco-form/cuenta-banco-form.component';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { CuentaBancoListComponent } from './cuenta-banco-list/cuenta-banco-list.component';
+import { ListMovimientoCuentaBancoComponent } from './list-movimiento-cuenta-banco/list-movimiento-cuenta-banco.component';
 
 
 @NgModule({
   declarations: [
     ListaComponent,
     CuentaBancoFormComponent,
-    CuentaBancoListComponent
+    CuentaBancoListComponent,
+    ListMovimientoCuentaBancoComponent
   ],
   imports: [
     CommonModule,
