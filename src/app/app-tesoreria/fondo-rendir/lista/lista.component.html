@@ -35,6 +35,12 @@
             (click)="pagoDevolucionForm(fila,pagoModal)">
             <i class="mdi mdi-keyboard-backspace"></i>
           </button>
+          <button
+            class="btn btn-sm btn-secondary me-1"
+            tooltip="Ver movimientos"
+            (click)="verMovimientos(fila, modalMovimientos)">
+              <i class="mdi mdi-chart-timeline-variant"></i>
+        </button>
         </div>
         <div *ngSwitchCase="'nombre'" style="width: 180px">
           <div>
@@ -94,5 +100,9 @@
   (cerrarModal)="cerrarModal()"
   (alActualizar)="cerrarModal()"
   ></form-pago>
+</ng-template>
+
+<ng-template #modalMovimientos>
+
 </ng-template>
 
