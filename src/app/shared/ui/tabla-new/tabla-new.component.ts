@@ -45,6 +45,7 @@ export class TablaNewComponent implements OnChanges {
   @Input() labelNuevo: string = "Nuevo";
   @Input() opcionesPage: any = [];
 
+
   @Output() alCrear: EventEmitter<any> = new EventEmitter();
   @Output() alEditar: EventEmitter<any> = new EventEmitter();
   @Output() alDeshabilitar: EventEmitter<any> = new EventEmitter();
@@ -58,11 +59,14 @@ export class TablaNewComponent implements OnChanges {
   @Output() onFilterChange: EventEmitter<any> = new EventEmitter<any>();
   @Output() onHeadersChange: EventEmitter<any> = new EventEmitter<any>();
 
+
   inputBuscar: string = "";
   cabeceras: any;
   datos: any;
   estaCargando = true;
   flagEncontrado;
+  verBusquedaAvanzada = false;
+  viewTools: boolean=false;
   objectKeys = Object.keys;
 
   public pagination = {
@@ -72,6 +76,7 @@ export class TablaNewComponent implements OnChanges {
     descending: false,
     rowsNumber: 0,
     pages: 0,
+    limit:0
   };
   constructor(
     private responseHandlerService: ResponseHandlerService,
@@ -146,18 +151,21 @@ export class TablaNewComponent implements OnChanges {
       descending: false,
       rowsNumber: 0,
       pages: 0,
+      limit:0
     };
   }
 
-  ordenar(e) {}
+
 
   pageChanged(event: PageChangedEvent) {
     this.pagination.page = event.page;
     this.obtenerDatos();
   }
 
-
   verOpcionesPagina() {
+    this.viewTools = !this.viewTools;
+  }
+  /* verOpcionesPagina() {
     const opcionesGroup = document.getElementById("opciones_page");
 
     const verData = document
@@ -175,9 +183,12 @@ export class TablaNewComponent implements OnChanges {
       opcionesGroup.setAttribute("hidden", "true");
     }
   }
+ */
+  verSeccionBusqueda(){
+    this.verBusquedaAvanzada = !this.verBusquedaAvanzada;
+  }
 
-  verBusquedaAvanzada = false;
-  verSeccionBusqueda() {
+  /* verSeccionBusqueda2() {
     const seccion = document.getElementById("seccionBuscar");
     const valueBtn = document
       .getElementById("btnBusquedaAvanzada")
@@ -193,7 +204,7 @@ export class TablaNewComponent implements OnChanges {
         .setAttribute("data-content", "0");
       this.verBusquedaAvanzada = false;
     }
-  }
+  } */
 
   mostrarTodas() {
     this.cabeceras.forEach((key) => {
@@ -231,9 +242,9 @@ export class TablaNewComponent implements OnChanges {
           ).subscribe(
             (result: any) => {
 							const contenido = result.data ? result.data : result.content
-							this.datos = contenido
-							this.pagination.rowsNumber = result.pagination.rowsNumber
-							this.pagination.pages = result.pagination.pages
+							this.datos = contenido;
+							this.pagination.limit = result.pagination.limit;
+							this.pagination.pages = result.pagination.pages;
 							this.estaCargando = false
 							this.alCargar.emit(this.datos)
             },
@@ -242,6 +253,7 @@ export class TablaNewComponent implements OnChanges {
             }
           );
         } else {
+
           this.datosService[this.getAll](
             this.pagination.size,
             this.pagination.page,
@@ -250,15 +262,13 @@ export class TablaNewComponent implements OnChanges {
             this.inputBuscar
           ).subscribe(
             (result: any) => {
-              const contenido = result.data ? result.data : result.content
-							this.datos = contenido
-							this.pagination.rowsNumber = result.pagination
-								? result.pagination.rowsNumber
-								: contenido.length
-							this.pagination.pages = result.pagination
-								? result.pagination.pages
-								: 1
-							this.estaCargando = false
+
+              const contenido = result.data ? result.data : result.content;
+
+							this.datos = contenido;
+							this.pagination.limit = result.pagination ? result.pagination.limit : contenido.length;
+              this.pagination.pages = result.pagination ? result.pagination.pages : 0;
+							this.estaCargando = false;
 							this.alCargar.emit(this.datos)
             },
             (error) => {
@@ -279,40 +289,24 @@ export class TablaNewComponent implements OnChanges {
           this.filtros
         ).subscribe(
           (result: any) => {
-            const contenido = result.data ? result.data : result.content
-            this.datos = contenido
-            this.pagination.rowsNumber = result.pagination
-              ? result.pagination.rowsNumber
-              : contenido.length
-            this.pagination.pages = result.pagination
-              ? result.pagination.pages
-              : 1
-            this.estaCargando = false
+            const contenido = result.data ? result.data : result.content;
+            this.datos = contenido;
+            this.pagination.limit = result.pagination? result.pagination.limit : contenido.length;
+            this.pagination.pages = result.pagination ? result.pagination.pages : 0;
+            this.estaCargando = false;
             this.alCargar.emit(this.datos)
-          },
-          (error) => {
-            this.notificacionService.alertError(error);
-          }
-        );
+          },error => this.notificacionService.alertError(error));
       }
     } else {
       this.datosService[this.getAll](this.inputBuscar, this.filtros).subscribe(
         (result: any) => {
-          const contenido = result.data ? result.data : result.content
-          this.datos = contenido
-          this.pagination.rowsNumber = result.pagination
-            ? result.pagination.rowsNumber
-            : contenido.length
-          this.pagination.pages = result.pagination
-            ? result.pagination.pages
-            : 1
-          this.estaCargando = false
+          const contenido = result.data ? result.data : result.content;
+          this.datos = contenido;
+          this.pagination.limit = result.pagination ? result.pagination.limit : contenido.length;
+          this.pagination.pages = result.pagination ? result.pagination.pages: 0;
+          this.estaCargando = false;
           this.alCargar.emit(this.datos)
-        },
-        (error) => {
-          this.notificacionService.alertError(error);
-        }
-      );
+        },error => this.notificacionService.alertError(error));
     }
   }
 

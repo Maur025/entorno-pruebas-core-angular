@@ -13,11 +13,13 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { AperturaFormComponent } from './apertura-form/apertura-form.component';
 import { ComponentesCompartidosModule } from '../componentes-compartidos/componentes-compartidos.module';
 import { AlertModule } from 'ngx-bootstrap/alert';
+import { ListMovimientoFondoOperativoComponent } from './list-movimiento-fondo-operativo/list-movimiento-fondo-operativo.component';
 
 @NgModule({
   declarations: [
     ListaComponent,
-    AperturaFormComponent
+    AperturaFormComponent,
+    ListMovimientoFondoOperativoComponent
   ],
   imports: [
     CommonModule,

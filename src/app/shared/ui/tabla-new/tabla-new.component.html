@@ -28,11 +28,7 @@
               </div>
             </div>
             <div class="col-md-8">
-              <div
-                class="bg-transparent position-relative"
-                hidden
-                id="opciones_page"
-              >
+              <div *ngIf="viewTools" class="bg-transparent position-relative">
                 <div
                   class="contact-links d-flex font-size-20 position-absolute end-0 border-bottom"
                 >
@@ -79,13 +75,10 @@
                     type="button"
                     data-content="0"
                     class="btn btn-sm btn-rounded btn-dark"
-                    id="btn_verOpciones"
                     tooltip="Herramientas"
                     (click)="verOpcionesPagina()"
                   >
-                    <i
-                      class="bx bxs-widget bx-spin font-size-18 align-middle"
-                    ></i>
+                    <i class="bx bxs-widget bx-spin font-size-18 align-middle"></i>
                   </button>
                 </ng-template>
                 <ng-template #columnas>
@@ -101,10 +94,7 @@
                   data-bs-placement="top"
                   tooltip="Refrescar Tabla"
                 >
-                  <i
-                    class="bx bx-rotate-left font-size-16"
-                    id="refrescar_icon"
-                  ></i>
+                  <i class="bx bx-rotate-left font-size-16"></i>
                 </button>
               </div>
             </div>
@@ -128,15 +118,13 @@
                 </div>
                 <div class="col-1" style="margin-left: -10px">
                   <button
+                    *ngIf="templateFiltrar"
                     type="button"
                     class="btn btn-sm btn-outline-primary btn-rounded"
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
                     tooltip="Busqueda Avanzada"
-                    data-content="0"
-                    id="btnBusquedaAvanzada"
-                    (click)="verSeccionBusqueda()"
-                  >
+                    (click)="verSeccionBusqueda()">
                     <i class="mdi mdi-filter-plus font-size-16"></i>
                   </button>
                 </div>
@@ -145,19 +133,12 @@
           </div>
 
           <div class="row mb-2">
-            <!-- Filtros -->
             <div class="col-xl-12">
-              <ng-template
-                *ngIf="
-                  templateFiltrar !== undefined && verBusquedaAvanzada;
-                  then isTemplateFiltrar
-                "
-              ></ng-template>
+              <ng-template *ngIf=" templateFiltrar !== undefined && verBusquedaAvanzada; then isTemplateFiltrar"/>
               <ng-template #isTemplateFiltrar>
                 <ng-container [ngTemplateOutlet]="templateFiltrar">
                   <p class="text-secondary mb-0"><b>Busqueda Avanzada</b></p>
                 </ng-container>
-                <br />
               </ng-template>
             </div>
           </div>
@@ -169,14 +150,9 @@
                 <ng-container [ngTemplateOutlet]="tabsEstado"> </ng-container>
               </ng-template>
             </div>
-            <!-- tabla -->
-            <div
-              class="table-responsive mt-2"
-              *ngIf="datos"
-              [class]="{
-                'container-scroll': paginate == false && datos.length > 10
-              }"
-            >
+
+            <div  *ngIf="datos" class="table-responsive mt-2"
+              [class]="{'container-scroll': paginate == false && datos.length > 10}">
               <table
                 class="table mb-0 table-hover align-middle nowrap data-table table-condensed"
                 [ngClass]="{ 'table-sm': smallTable }"
@@ -198,7 +174,6 @@
                                 ? true
                                 : formato.cabeceras[campo].sortable
                             "
-                            (click)="ordenar($event)"
                             class="colCabecera"
                             [ngClass]="formato.cabeceras[campo].textAlingTh"
                             id="{{ campo }}"
@@ -356,7 +331,6 @@
                     </tr>
                   </ng-template>
                 </tbody>
-                <!-- Footer -->
                 <ng-template
                   *ngIf="templateTfooter !== undefined; then isTemplatetfooter"
                 ></ng-template>
@@ -369,30 +343,27 @@
               </table>
             </div>
           </div>
-          <!-- Paginacion -->
+
           <div *ngIf="paginate">
-            <div
-              class="row justify-content-between align-items-center"
-              *ngIf="datos"
-            >
+            <div class="row justify-content-between align-items-center"
+              *ngIf="datos">
               <div class="col-auto me-auto">
-                <small class="text-secondary"
-                  >Mostrando {{ datos.length }} de
-                  {{ pagination.rowsNumber }} registros</small
-                >
+                <small class="text-secondary">Mostrando {{ datos.length }} de {{ datos.length }} registros</small>
               </div>
+
               <div class="col-auto me-auto">
                 <select
                   class="form-select"
                   [value]="10"
                   [(ngModel)]="pagination.size"
-                  (click)="obtenerDatos()"
+                  (change)="obtenerDatos()"
                 >
-                  <option value="10">Mostrar 10</option>
+                  <option value="10">Mostrar 10</option>4n
                   <option value="20">Mostrar 20</option>
                   <option value="1000">Mostrar Todo</option>
                 </select>
               </div>
+
               <div class="col-auto">
                 <div class="card d-inline-block ms-auto mb-0">
                   <div class="card-body p-2">

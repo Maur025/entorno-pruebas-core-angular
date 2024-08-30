@@ -41,4 +41,8 @@ export class FondoOperativoService {
     return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/${fondoOperativoId}/monto/porRendir`);
   }
 
+  movimientoFondoRendir(fondoOperativoId,filtros){
+    return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/detail/${fondoOperativoId}`, filtros);
+  }
+
 }
