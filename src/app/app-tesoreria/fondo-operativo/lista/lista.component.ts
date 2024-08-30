@@ -134,6 +134,12 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     }
   }
 
+  verMovimientos(fila, modalMovimientos){
+    this.dataFondo =fila;
+    this.modalConfig.class = `modal-lg modal-scrollable`;
+    this.modalRef = this.modalService.show(modalMovimientos, this.modalConfig);
+  }
+
   getEmployeesList = (): void => {
 		this.empleadoService?.listarHabilitados().subscribe({
 			next: (response: ApiResponseStandard) => {
