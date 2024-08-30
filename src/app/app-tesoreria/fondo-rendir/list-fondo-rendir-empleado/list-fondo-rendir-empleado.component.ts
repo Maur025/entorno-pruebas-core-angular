@@ -66,9 +66,9 @@ export class ListFondoRendirEmpleadoComponent extends FuncionesComponent{
       }
     };
   }
-
-  verMovimientos(cuentaBanco, modalMovimientos){
-    this.empleadoFondoData=cuentaBanco;
+  fondoRendirData: any;
+  verMovimientos(fondoRendir, modalMovimientos){
+    this.fondoRendirData=fondoRendir;
     this.modalRef = this.modalService.show(modalMovimientos, this.modalConfig)
   }
 }
