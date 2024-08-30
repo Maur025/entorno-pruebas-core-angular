@@ -4,6 +4,7 @@ import { TablaNewComponent } from 'src/app/shared/ui/tabla-new/tabla-new.compone
 import { FuncionesComponent } from '../../funciones.component';
 import { FondoRendirService } from 'src/app/core/services/tesoreria/fondo-rendir.service';
 import { EstadosFondoRendir } from 'src/app/core/models/estados-tesoreria.model';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-lista',
@@ -21,7 +22,9 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
 
   constructor(
     public fondoRendirService: FondoRendirService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private router: Router,
+    private route: ActivatedRoute,
     ){super()}
 
   ngOnInit(): void {
@@ -72,6 +75,12 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
     this.operacion = EstadosFondoRendir.DEVOLUCION;
     this.dataFondoRendir = fondoRendir;
     this.modalRef = this.modalService.show(template,this.modalConfig);
+  }
+
+  verMovimientos(empleado, modalMovimientos){
+		this.router.navigate(['./' + empleado.id + '/desembolso-list/', {}], {
+			relativeTo: this.route,
+		})
   }
 
   cerrarModal = (): void => {

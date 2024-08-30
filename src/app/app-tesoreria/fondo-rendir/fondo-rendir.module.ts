@@ -14,6 +14,7 @@ import { ListaComponent } from './lista/lista.component';
 import { FormPagoComponent } from './form-pago/form-pago.component';
 import { FormDesembolsoComponent } from './form-desembolso/form-desembolso.component';
 import { ListPendientesComponent } from './list-pendientes/list-pendientes.component';
+import { ListFondoRendirEmpleadoComponent } from './list-fondo-rendir-empleado/list-fondo-rendir-empleado.component';
 
 
 
@@ -22,7 +23,8 @@ import { ListPendientesComponent } from './list-pendientes/list-pendientes.compo
     ListaComponent,
     FormDesembolsoComponent,
     FormPagoComponent,
-    ListPendientesComponent
+    ListPendientesComponent,
+    ListFondoRendirEmpleadoComponent
   ],
   imports: [
     CommonModule,
