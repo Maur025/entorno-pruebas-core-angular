@@ -1,18 +1,15 @@
-<app-page-title
-  title="Anticipo Proveedor"
-  [breadcrumbItems]="breadCrumbItems"
-/>
+<app-page-title title="Anticipo Cliente" [breadcrumbItems]="breadCrumbItems" />
 <app-tabla-new
   #tabla
   [botonNuevo]="true"
   [smallTable]="false"
   [conOpciones]="false"
   [formato]="formato"
-  [datosService]="anticipoProveedorService"
+  [datosService]="_anticipoClienteService"
   getAll="getAll"
   [templateFila]="templateFila"
   [botonNuevo]="true"
-  (alCrear)="crearAnticipo(nuevoAnticipo)"
+  (alCrear)="crearAnticipo()"
 ></app-tabla-new>
 
 <ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">
@@ -23,11 +20,7 @@
     <ng-template #tempTD>
       <td [ngSwitch]="campo">
         <div *ngSwitchCase="'acciones'">
-          <button
-            class="btn btn-sm btn-warning me-2"
-            tooltip="Devolucion"
-            (click)="realizarDevolucion(devolucionAnticipo, fila)"
-          >
+          <button class="btn btn-sm btn-warning me-2" tooltip="Devolucion">
             <i class="mdi mdi-keyboard-backspace"></i>
           </button>
         </div>
@@ -61,16 +54,8 @@
 </ng-template>
 
 <ng-template #nuevoAnticipo>
-  <form-anticipo
+  <app-form-anticipo
     (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
     (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"
-  ></form-anticipo>
-</ng-template>
-
-<ng-template #devolucionAnticipo>
-  <form-devolucion
-    [datosProveedor]="dataProveedor"
-    (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
-    (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"
-  ></form-devolucion>
+  ></app-form-anticipo>
 </ng-template>
