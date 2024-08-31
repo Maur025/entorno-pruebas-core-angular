@@ -22,45 +22,53 @@
     ></ng-template>
     <ng-template #tempTD>
       <td [ngSwitch]="campo">
-      <div *ngSwitchCase="'fechaDesembolso'">
-        {{ fila["fechaDesembolso"]|fechaFormat }}
-      </div>
-      <div *ngSwitchCase="'desembolso'">
-        {{ fila["desembolso"]}}
-      </div>
-      <div *ngSwitchCase="'descargo'">
-        {{ fila["descargo"]}}
-      </div>
-      <div *ngSwitchCase="'saldoDesembolso'" class="text-end">
-        <div>
-          <p class="mb-0" [ngClass]="fila['saldoDesembolso'] > 0 ? 'text-success' : 'text-danger'">
-            {{ fila["saldoDesembolso"]|decimalAmount }}
-          </p>
+        <div *ngSwitchCase="'acciones'">
+          <button
+            class="btn btn-sm btn-secondary me-1"
+            tooltip="Ver movimientos"
+            (click)="verMovimientos(fila, modalMovimientos)">
+              <i class="mdi mdi-chart-timeline-variant"></i>
+          </button>
         </div>
-      </div>
-      <div *ngSwitchCase="'reembolso'">
-        {{ fila["reembolso"]}}
-      </div>
-      <div *ngSwitchCase="'pagoReembolso'">
-        {{ fila["pagoReembolso"]}}
-      </div>
-      <div *ngSwitchCase="'saldoReembolso'" class="text-end">
-        <div>
-          <p class="mb-0" [ngClass]="fila['saldoReembolso'] > 0 ? 'text-success' : 'text-danger'">
-            {{ fila["saldoReembolso"]|decimalAmount }}
-          </p>
+        <div *ngSwitchCase="'fechaDesembolso'">
+          {{ fila["fechaDesembolso"]|fechaFormat }}
         </div>
-      </div>
-      <div *ngSwitchCase="'saldoNeto'" class="text-end">
-        <div>
-          <p class="mb-0" [ngClass]="fila['saldoNeto'] >= 0 ? 'text-success' : 'text-danger'">
-            {{ fila["saldoNeto"]|decimalAmount }}
-          </p>
+        <div *ngSwitchCase="'desembolso'">
+          {{ fila["desembolso"]}}
         </div>
-      </div>
-      <div *ngSwitchDefault>
-        <td>{{ fila[campo] }}</td>
-      </div>
+        <div *ngSwitchCase="'descargo'">
+          {{ fila["descargo"]}}
+        </div>
+        <div *ngSwitchCase="'saldoDesembolso'" class="text-end">
+          <div>
+            <p class="mb-0" [ngClass]="fila['saldoDesembolso'] > 0 ? 'text-success' : 'text-danger'">
+              {{ fila["saldoDesembolso"]|decimalAmount }}
+            </p>
+          </div>
+        </div>
+        <div *ngSwitchCase="'reembolso'">
+          {{ fila["reembolso"]}}
+        </div>
+        <div *ngSwitchCase="'pagoReembolso'">
+          {{ fila["pagoReembolso"]}}
+        </div>
+        <div *ngSwitchCase="'saldoReembolso'" class="text-end">
+          <div>
+            <p class="mb-0" [ngClass]="fila['saldoReembolso'] > 0 ? 'text-success' : 'text-danger'">
+              {{ fila["saldoReembolso"]|decimalAmount }}
+            </p>
+          </div>
+        </div>
+        <div *ngSwitchCase="'saldoNeto'" class="text-end">
+          <div>
+            <p class="mb-0" [ngClass]="fila['saldoNeto'] >= 0 ? 'text-success' : 'text-danger'">
+              {{ fila["saldoNeto"]|decimalAmount }}
+            </p>
+          </div>
+        </div>
+        <div *ngSwitchDefault>
+          <td>{{ fila[campo] }}</td>
+        </div>
       </td>
     </ng-template>
   </ng-template>
@@ -77,3 +85,9 @@
     </button>
   </div>
 </div>
+<ng-template #modalMovimientos>
+<list-movimiento-fondo-rendir
+[fondoRendirData]="fondoRendirData"
+(cerrarModal)="modalRef.hide()"
+></list-movimiento-fondo-rendir>
+</ng-template>

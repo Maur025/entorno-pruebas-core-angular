@@ -27,6 +27,10 @@ export class FondoRendirService {
     return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/desembolsos/empleado/${empleadoId}?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`);
   }
 
+  getFondoRendirMovimiento(fondoRendirId, datos) {
+    return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/movimiento/detail/${fondoRendirId}`, datos);
+  }
+
   pagoReembolso(datos: any) {
     return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/pago_reembolso`, datos);
   }

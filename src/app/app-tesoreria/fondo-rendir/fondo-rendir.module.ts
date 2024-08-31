@@ -15,6 +15,7 @@ import { FormPagoComponent } from './form-pago/form-pago.component';
 import { FormDesembolsoComponent } from './form-desembolso/form-desembolso.component';
 import { ListPendientesComponent } from './list-pendientes/list-pendientes.component';
 import { ListFondoRendirEmpleadoComponent } from './list-fondo-rendir-empleado/list-fondo-rendir-empleado.component';
+import { ListMovimientoFondoRendirComponent } from './list-movimiento-fondo-rendir/list-movimiento-fondo-rendir.component';
 
 
 
@@ -24,7 +25,8 @@ import { ListFondoRendirEmpleadoComponent } from './list-fondo-rendir-empleado/l
     FormDesembolsoComponent,
     FormPagoComponent,
     ListPendientesComponent,
-    ListFondoRendirEmpleadoComponent
+    ListFondoRendirEmpleadoComponent,
+    ListMovimientoFondoRendirComponent
   ],
   imports: [
     CommonModule,
@@ -37,6 +39,7 @@ import { ListFondoRendirEmpleadoComponent } from './list-fondo-rendir-empleado/l
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
     ComponentesCompartidosModule
+
   ]
 })
 export class FondoRendirModule { }
