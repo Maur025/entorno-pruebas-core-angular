@@ -4,6 +4,7 @@ import {
   UntypedFormGroup,
   Validators,
 } from "@angular/forms";
+import { BsModalRef } from "ngx-bootstrap/modal";
 import { ProveedorService } from "src/app/core/services/compras/proveedor.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { ResponseHandlerService } from "src/app/core/services/response-handler.service";
@@ -34,6 +35,7 @@ export class FormAnticipoComponent {
   @Input() type: any;
   @Input() modalData: any;
   @Input() id: any;
+  @Input() data: any;
   public onSubmitFormStatus: boolean = false;
 
   constructor(
@@ -45,17 +47,14 @@ export class FormAnticipoComponent {
     protected utilityService: UtilityService,
     protected screenshotService: ScreenshotService,
     private responseHandlerService: ResponseHandlerService,
-    public anticipoProveedorService: AnticipoProveedorService
+    public anticipoProveedorService: AnticipoProveedorService,
+    public bsModalRef: BsModalRef
   ) {}
 
   ngOnInit() {
     this.getCentroCostos();
     this.getProveedoresHabilitados("");
     this.setForm();
-    console.log("Title: ", this.title);
-    console.log("Type: ", this.type);
-    console.log("Data: ", this.modalData);
-    console.log("Id: ", this.id);
   }
 
   setForm() {

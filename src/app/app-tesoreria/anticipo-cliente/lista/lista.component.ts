@@ -9,6 +9,7 @@ import { FuncionesComponent } from "../../funciones.component";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { AnticipoClienteService } from "src/app/core/services/tesoreria/anticipo-cliente.service";
 import { FormAnticipoComponent } from "../../componentes-compartidos/form-anticipo/form-anticipo.component";
+import { VentasService } from "src/app/core/services/ventas/ventas.service";
 
 @Component({
   selector: "app-lista",
@@ -17,7 +18,10 @@ import { FormAnticipoComponent } from "../../componentes-compartidos/form-antici
 })
 export class ListaComponent extends FuncionesComponent implements OnInit {
   /*Servicios Necesarios*/
+
   public _anticipoClienteService = inject(AnticipoClienteService);
+  private _ventaService = inject(VentasService);
+
   @ViewChild("nuevoAnticipo", { static: true }) nuevoAnticipo: TemplateRef<any>;
   breadCrumbItems: object[];
   formato: any;
@@ -28,6 +32,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     super();
   }
   ngOnInit(): void {
+    this.getVentas();
     this.breadCrumbItems = [
       { label: "Anticipo Cliente" },
       { label: "Gestión de anticipo cliente", active: true },
@@ -86,16 +91,15 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
       },
     };
   };
-  crearAnticipo() {
-    let title = "Cliente Anticipo";
-    let type = true;
-    let modalData = {
-      id: "Mensaje de prueba",
-      otherData: "Más datos",
-    };
-    this.modalRef = this.modalService.show(this.nuevoAnticipo, {
-      class: "modal-xl",
-      initialState: modalData,
+
+  getVentas = () => {
+    this._ventaService.getVentas(0, 100, "id", false).subscribe({
+      next: (data) => console.log(data),
+      error: (err) => console.log(err),
     });
+  };
+
+  crearAnticipo(template) {
+    this.modalRef = this.modalService.show(template, this.modalConfig);
   }
 }

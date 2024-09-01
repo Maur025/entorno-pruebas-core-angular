@@ -9,7 +9,7 @@
   getAll="getAll"
   [templateFila]="templateFila"
   [botonNuevo]="true"
-  (alCrear)="crearAnticipo()"
+  (alCrear)="crearAnticipo(nuevoAnticipo)"
 ></app-tabla-new>
 
 <ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">
@@ -55,6 +55,7 @@
 
 <ng-template #nuevoAnticipo>
   <app-form-anticipo
+    [title]="titleCustom"
     (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
     (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"
   ></app-form-anticipo>
