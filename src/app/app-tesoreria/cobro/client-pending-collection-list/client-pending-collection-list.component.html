@@ -1,0 +1,44 @@
+<app-page-title title="COBROS" [breadcrumbItems]="breadCrumbItems" />
+<app-tabla-new
+	#table
+	[botonNuevo]="true"
+	[smallTable]="false"
+	[conOpciones]="false"
+	[formato]="tableHeadersFormat"
+	[datosService]="cobroService"
+	getAll="getClientsByKeyword"
+	[templateFila]="rowTemplate"
+	labelNuevo="Nuevo Cobro"
+	(alCrear)="navigateToCollectForm()"
+/>
+
+<ng-template #rowTemplate let-rowData="fila" let-tableHeaders="cabeceras">
+	<ng-template ngFor let-field [ngForOf]="tableHeaders">
+		<ng-template
+			*ngIf="tableHeadersFormat?.cabeceras[field]?.visibleCheck; then tdTemp"
+		/>
+		<ng-template #tdTemp>
+			<td [ngSwitch]="field">
+				<div *ngSwitchCase="'totalCreditos'" class="text-end">
+					{{ rowData?.totalCreditos || 0 | decimalAmount }}
+				</div>
+				<div *ngSwitchCase="'totalPagado'" class="text-end">
+					{{ rowData?.totalCreditosPagados || 0 | decimalAmount }}
+				</div>
+				<div
+					*ngSwitchCase="'totalSaldo'"
+					class="text-end"
+					[ngClass]="{
+						'text-success': rowData?.totalSaldoCreditos >= 0,
+						'text-danger': rowData?.totalSaldoCreditos < 0
+					}"
+				>
+					{{ rowData?.totalSaldoCreditos || 0 | decimalAmount }}
+				</div>
+				<div *ngSwitchDefault="">
+					<td>{{ rowData[field] }}</td>
+				</div>
+			</td>
+		</ng-template>
+	</ng-template>
+</ng-template>
