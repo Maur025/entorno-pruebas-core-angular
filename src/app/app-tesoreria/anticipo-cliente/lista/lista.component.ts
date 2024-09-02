@@ -9,7 +9,7 @@ import { FuncionesComponent } from "../../funciones.component";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { AnticipoClienteService } from "src/app/core/services/tesoreria/anticipo-cliente.service";
 import { FormAnticipoComponent } from "../../componentes-compartidos/form-anticipo/form-anticipo.component";
-import { VentasService } from "src/app/core/services/ventas/ventas.service";
+import { ClienteService } from "src/app/core/services/ventas/clientes.service";
 
 @Component({
   selector: "app-lista",
@@ -18,16 +18,16 @@ import { VentasService } from "src/app/core/services/ventas/ventas.service";
 })
 export class ListaComponent extends FuncionesComponent implements OnInit {
   /*Servicios Necesarios*/
-
-  public _anticipoClienteService = inject(AnticipoClienteService);
-  private _ventaService = inject(VentasService);
-
   @ViewChild("nuevoAnticipo", { static: true }) nuevoAnticipo: TemplateRef<any>;
+
+  private _clienteService = inject(ClienteService);
+  public _anticipoClienteService = inject(AnticipoClienteService);
   breadCrumbItems: object[];
   formato: any;
   modalRef?: BsModalRef;
   titleCustom: any = "Registro de Anticipo de Clientes";
-
+  label: string = "Clientes";
+  data: any;
   constructor(private modalService: BsModalService) {
     super();
   }
@@ -93,8 +93,10 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   };
 
   getVentas = () => {
-    this._ventaService.getVentas(0, 100, "id", false).subscribe({
-      next: (data) => console.log(data),
+    this._clienteService.getAll(100, 1, "id", false, "").subscribe({
+      next: (data) => {
+        this.data = data;
+      },
       error: (err) => console.log(err),
     });
   };

@@ -55,6 +55,8 @@
 
 <ng-template #nuevoAnticipo>
   <app-form-anticipo
+    [label]="label"
+    [data]="data"
     [title]="titleCustom"
     (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
     (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"

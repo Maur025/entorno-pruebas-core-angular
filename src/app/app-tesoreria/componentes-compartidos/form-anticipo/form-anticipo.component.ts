@@ -32,11 +32,10 @@ export class FormAnticipoComponent {
   @Output() cerrarModal = new EventEmitter<void>();
   @Output() alActualizar = new EventEmitter<void>();
   @Input() title: string = "";
-  @Input() type: any;
-  @Input() modalData: any;
-  @Input() id: any;
-  @Input() data: any;
+  @Input() label: string = "";
+  @Input() data: any = [];
   public onSubmitFormStatus: boolean = false;
+  dataReceived: any = [];
 
   constructor(
     public BancoService: BancoService,
@@ -55,13 +54,14 @@ export class FormAnticipoComponent {
     this.getCentroCostos();
     this.getProveedoresHabilitados("");
     this.setForm();
+    this.dataReceived! = this.data;
   }
 
   setForm() {
     this.formAnticipo = this.formBuilder.group({
       id: "",
       fecha: ["", [Validators.required]],
-      proveedorId: ["", [Validators.required]],
+      clienteRefId: [""],
       centroCostoId: ["", [Validators.required]],
       descripcion: ["", [Validators.required]],
       nroReferencia: [""],
@@ -74,7 +74,6 @@ export class FormAnticipoComponent {
         ],
       ],
       transacciones: this.formBuilder.array([]),
-      proveedor: ["", [Validators.required]],
     });
   }
   get form() {
@@ -131,12 +130,20 @@ export class FormAnticipoComponent {
 
   selectProveedor(data) {
     if (typeof event !== "undefined") {
-      let proveedor = {};
-      proveedor["id"] = data["id"];
-      proveedor["nombreComercial"] = data["nombreComercial"];
-      proveedor["razonSocial"] = data["nombre"];
-      proveedor["nroDocumento"] = data["nitCi"];
-      this.formAnticipo.controls["proveedor"].setValue(proveedor);
+      console.log("data...", data);
+      let cliente = {};
+      this.formAnticipo.addControl(
+        "clienteNombreComercial",
+        this.formBuilder.control(data["nombre"], [Validators.required])
+      );
+      this.formAnticipo.addControl(
+        "clienteRazonSocial",
+        this.formBuilder.control(data["nombre"], [Validators.required])
+      );
+      this.formAnticipo.addControl(
+        "nroReferencia",
+        this.formBuilder.control(data["documentoNumero"], [Validators.required])
+      );
     }
   }
 
@@ -157,7 +164,7 @@ export class FormAnticipoComponent {
   };
   guardarForm() {
     console.log(this.formAnticipo.value);
-    if (this.formAnticipo.valid) {
+    /* if (this.formAnticipo.valid) {
       this.formAnticipo.value["movimientos"] =
         this.formAnticipo.value["transacciones"];
       //console.log(this.formAccionCaja.value)
@@ -170,7 +177,7 @@ export class FormAnticipoComponent {
           },
           (error) => this.notificacionService.alertError(error)
         );
-    }
+    } */
     this.submitted = true;
   }
 }
