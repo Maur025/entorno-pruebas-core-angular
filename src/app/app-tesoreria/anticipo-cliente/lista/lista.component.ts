@@ -66,6 +66,13 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
           true,
           true
         ),
+        descripcion: this.getOpcionesCabecera(
+          "descripcion",
+          12,
+          "text",
+          true,
+          true
+        ),
         nroReferencia: this.getOpcionesCabecera(
           "Nro Referencia",
           12,
