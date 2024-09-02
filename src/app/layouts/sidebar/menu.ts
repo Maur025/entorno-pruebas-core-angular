@@ -1,86 +1,102 @@
-import { MenuItem } from './menu.model'
+import { MenuItem } from "./menu.model";
 
 export const MENU: MenuItem[] = [
-
   {
     id: 1,
-    label: 'General',
-    isTitle: true
+    label: "General",
+    isTitle: true,
   },
   {
-    id:10,
-    label: 'Inicio',
-    icon: 'mdi mdi-view-dashboard',
-    link : ''
+    id: 10,
+    label: "Inicio",
+    icon: "mdi mdi-view-dashboard",
+    link: "",
   },
   {
-    id:10,
-    label: 'Apertura/Cierre',
-    icon: 'mdi mdi-calendar',
-    link : 'gestion/apertura-cierre'
+    id: 10,
+    label: "Apertura/Cierre",
+    icon: "mdi mdi-calendar",
+    link: "gestion/apertura-cierre",
   },
   {
-    id:10,
-    label: 'Empleados',
-    icon: 'mdi mdi-card-account-details',
-    link : 'gestion/empleado'
+    id: 10,
+    label: "Empleados",
+    icon: "mdi mdi-card-account-details",
+    link: "gestion/empleado",
   },
-	{
-		id: 1,
-		label: 'TESORERIA',
-		isTitle: true,
-	},
   {
-		id: 42,
-		label: 'Bancos',
-		icon: 'bx bxs-bank',
-		link: 'bancos',
-	},
+    id: 1,
+    label: "TESORERIA",
+    isTitle: true,
+  },
   {
-		id: 42,
-		label: 'Cajas',
-		icon: 'mdi mdi-archive',
-		link: 'cajas',
-	},
+    id: 42,
+    label: "Bancos",
+    icon: "bx bxs-bank",
+    link: "bancos",
+  },
   {
-		id: 42,
-		label: 'Fondos',
-		icon: 'mdi mdi-cube',
-    subItems: [
-			{
-				id: 321,
-				label: 'Fondos Operativos',
-				link: '/fondo-operativo',
-			},
-			{
-				id: 322,
-				label: 'Fondos a Rendir',
-				link: '/fondo-rendir',
-			},
-		],
-	},
+    id: 42,
+    label: "Cajas",
+    icon: "mdi mdi-archive",
+    link: "cajas",
+  },
   {
-		id: 9,
-		label: 'MOVIMIENTOS',
-		isTitle: true,
-	},
-  {
-		id: 42,
-		label: 'Proveedores',
-		icon: 'bx bxs-collection',
+    id: 42,
+    label: "Fondos",
+    icon: "mdi mdi-cube",
     subItems: [
       {
-				id: 322,
-				label: 'Anticipos',
-				link: '/anticipo-proveedor',
-			},
-			{
-				id: 321,
-				label: 'Pagos',
-				link: '/pagos',
-			},
-		],
-	},
+        id: 321,
+        label: "Fondos Operativos",
+        link: "/fondo-operativo",
+      },
+      {
+        id: 322,
+        label: "Fondos a Rendir",
+        link: "/fondo-rendir",
+      },
+    ],
+  },
+  {
+    id: 9,
+    label: "MOVIMIENTOS",
+    isTitle: true,
+  },
+  {
+    id: 42,
+    label: "Proveedores",
+    icon: "bx bxs-collection",
+    subItems: [
+      {
+        id: 322,
+        label: "Anticipos",
+        link: "/anticipo-proveedor",
+      },
+      {
+        id: 321,
+        label: "Pagos",
+        link: "/pagos",
+      },
+    ],
+  },
+  {
+    id: 42,
+    label: "Clientes",
+    icon: "bx bxs-collection",
+    subItems: [
+      {
+        id: 43,
+        label: "Anticipos",
+        link: "/anticipo-cliente",
+      },
+      {
+        id: 44,
+        label: "Cobros",
+        link: "/cobros",
+      },
+    ],
+  },
   /*  {
 		id: 1,
 		label: 'antiguo',
@@ -184,4 +200,4 @@ export const MENU: MenuItem[] = [
 		icon: 'mdi mdi-cash-plus',
 		link: '/operacion_financiera/efectuar_cobro',
 	}, */
-]
+];
