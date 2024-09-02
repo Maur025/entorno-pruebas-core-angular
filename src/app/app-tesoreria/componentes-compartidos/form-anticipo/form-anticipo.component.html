@@ -19,23 +19,23 @@
             <ng-select
               class="uppercase"
               formControlName="clienteRefId"
-              placeholder="Seleccione Proveedor"
-              [items]="dataReceived"
+              placeholder="Seleccione Cliente"
+              [items]="data"
               bindLabel="nombre"
               bindValue="id"
-              (change)="selectProveedor($event)"
-              (search)="searchProveedores($event)"
+              (change)="selectData($event)"
+              (search)="searchData($event)"
               [ngClass]="{
                 'ngselect-invalid':
-                  submitted && form['proveedorId'].errors != null
+                  submitted && form['clienteRefId'].errors != null
               }"
             />
-            <div *ngIf="submitted && form['proveedorId'].errors">
+            <div *ngIf="submitted && form['clienteRefId'].errors">
               <div
                 class="text-danger mt-1 font-size-10"
-                *ngIf="form['proveedorId'].errors['required']"
+                *ngIf="form['clienteRefId'].errors['required']"
               >
-                Proveedor es obligatorio
+                Cliente es obligatorio
               </div>
             </div>
           </div>
@@ -102,7 +102,7 @@
             formControlName="descripcion"
             class="form-control uppercase"
             rows="2"
-            placeholder="Descripción anticipo a proveedor"
+            placeholder="Descripción anticipo a cliente"
             [ngClass]="{
               'is-invalid': submitted && form['descripcion'].errors
             }"
@@ -150,11 +150,16 @@
           >
             Cerrar
           </button>
-          <button type="submit" class="btn btn-success">
-            <app-simple-loader [isLoading]="onSubmitFormStatus" />
-            {{
-              onSubmitFormStatus ? " Espere un momento..." : "Crear anticipo"
-            }}
+          <button
+            [disabled]="isStatusSubmit"
+            type="submit"
+            class="btn btn-success d-flex gap-1 align-items-center"
+          >
+            <app-simple-loader
+              [isLoading]="onSubmitFormStatus"
+              *ngIf="this.isStatusSubmit"
+            />
+            {{ isStatusSubmit ? " Espere un momento..." : "Crear anticipo" }}
           </button>
         </div>
       </div>

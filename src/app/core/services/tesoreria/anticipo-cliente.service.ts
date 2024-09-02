@@ -6,7 +6,7 @@ import { ConsumoApiService } from "../consumoApi.service";
 })
 export class AnticipoClienteService {
   constructor(private apiService: ConsumoApiService) {}
-  apiName: string = "anticipo-cliente";
+  apiName: string = "anticipos-cliente";
   apiUrl: string = "";
   prefix: string = "";
 

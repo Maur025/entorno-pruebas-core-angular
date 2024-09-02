@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, inject, Input, Output } from "@angular/core";
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -9,9 +9,11 @@ import { ProveedorService } from "src/app/core/services/compras/proveedor.servic
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { ResponseHandlerService } from "src/app/core/services/response-handler.service";
 import { ScreenshotService } from "src/app/core/services/screenshot.service";
+import { AnticipoClienteService } from "src/app/core/services/tesoreria/anticipo-cliente.service";
 import { AnticipoProveedorService } from "src/app/core/services/tesoreria/anticipo-proveedor.service";
 import { BancoService } from "src/app/core/services/tesoreria/banco.service";
 import { CentroCostosService } from "src/app/core/services/tesoreria/centro-costos.service";
+import { ClienteService } from "src/app/core/services/ventas/clientes.service";
 import {
   ApiResponseStandard,
   ErrorResponseStandard,
@@ -24,6 +26,7 @@ import { UtilityService } from "src/app/shared/services/utilityService.service";
   styleUrls: ["./form-anticipo.component.scss"],
 })
 export class FormAnticipoComponent {
+  private _clienteService = inject(ClienteService);
   formAnticipo: UntypedFormGroup;
   submitted: boolean = false;
   totalAnticipo: number = 0;
@@ -34,6 +37,8 @@ export class FormAnticipoComponent {
   @Input() title: string = "";
   @Input() label: string = "";
   @Input() data: any = [];
+  @Input() type: boolean;
+  isStatusSubmit: boolean = false;
   public onSubmitFormStatus: boolean = false;
   dataReceived: any = [];
 
@@ -47,14 +52,18 @@ export class FormAnticipoComponent {
     protected screenshotService: ScreenshotService,
     private responseHandlerService: ResponseHandlerService,
     public anticipoProveedorService: AnticipoProveedorService,
+    public anticipoClienteService: AnticipoClienteService,
     public bsModalRef: BsModalRef
   ) {}
 
   ngOnInit() {
     this.getCentroCostos();
-    this.getProveedoresHabilitados("");
     this.setForm();
-    this.dataReceived! = this.data;
+    if (this.type) {
+      this.getClients();
+    } else {
+      this.getProveedoresHabilitados("");
+    }
   }
 
   setForm() {
@@ -111,7 +120,16 @@ export class FormAnticipoComponent {
       });
   };
 
-  searchProveedores(event) {
+  getClients = () => {
+    this._clienteService.getAll(100, 1, "id", false, "").subscribe({
+      next: (data) => {
+        this.data = data;
+      },
+      error: (err) => console.log(err),
+    });
+  };
+
+  searchData(event) {
     if (typeof event !== "undefined") {
       if (event?.term?.length > 2) {
         this.comprasProveedorService
@@ -128,10 +146,8 @@ export class FormAnticipoComponent {
     }
   }
 
-  selectProveedor(data) {
+  selectData(data) {
     if (typeof event !== "undefined") {
-      console.log("data...", data);
-      let cliente = {};
       this.formAnticipo.addControl(
         "clienteNombreComercial",
         this.formBuilder.control(data["nombre"], [Validators.required])
@@ -141,7 +157,7 @@ export class FormAnticipoComponent {
         this.formBuilder.control(data["nombre"], [Validators.required])
       );
       this.formAnticipo.addControl(
-        "nroReferencia",
+        "clienteNroDocumento",
         this.formBuilder.control(data["documentoNumero"], [Validators.required])
       );
     }
@@ -149,35 +165,49 @@ export class FormAnticipoComponent {
 
   confirmAndContinueSaving = async (): Promise<void> => {
     this.submitted = true;
-    console.log(this.formAnticipo.valid);
-    console.log(this.formAnticipo.value);
+    this.isStatusSubmit = true;
+    const formData = this.prepareFormData(this.formAnticipo.value);
+
     if (!this.formAnticipo.valid) {
       console.log("aqui");
+      this.isStatusSubmit = false;
       return;
     }
     const dataImg = await this.screenshotService?.takeScreenshot(
       "accountFormModalBodyDiv"
     );
     this.notificacionService?.confirmAndContinueAlert(dataImg, (response) => {
-      if (response) this.guardarForm();
+      if (response) this.guardarForm(formData);
+      else this.isStatusSubmit = false;
     });
   };
-  guardarForm() {
-    console.log(this.formAnticipo.value);
-    /* if (this.formAnticipo.valid) {
-      this.formAnticipo.value["movimientos"] =
-        this.formAnticipo.value["transacciones"];
-      //console.log(this.formAccionCaja.value)
-      this.anticipoProveedorService
-        .crearAnticipo(this.formAnticipo.value)
-        .subscribe(
-          (data) => {
-            this.alActualizar.emit(data);
-            this.notificacionService.successStandar();
-          },
-          (error) => this.notificacionService.alertError(error)
-        );
-    } */
+  guardarForm(dataForm) {
+    if (this.formAnticipo.valid) {
+      dataForm["movimientos"] = this.formAnticipo.value["transacciones"];
+      this.anticipoClienteService.crearAnticipo(dataForm).subscribe({
+        next: (data) => {
+          this.isStatusSubmit = false;
+          this.alActualizar.emit(data);
+          this.notificacionService.successStandar();
+        },
+        error: (error) => this.notificacionService.alertError(error),
+      });
+    }
     this.submitted = true;
+  }
+
+  private prepareFormData(data: any): any {
+    const newData = { ...data };
+    // Renombrar el campo 'oldName' a 'newName'
+    if (newData.fecha && newData.descripcion && newData.monto) {
+      newData.montoTotal = newData.monto;
+      newData.fechaAnticipo = newData.fecha;
+      newData.descripcionAnticipo = newData.descripcion;
+      delete newData.fecha;
+      delete newData.descripcion;
+      delete newData.monto;
+    }
+    // Agregar aquí cualquier otro ajuste necesario en los datos
+    return newData;
   }
 }

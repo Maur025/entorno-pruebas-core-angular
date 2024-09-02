@@ -25,6 +25,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   breadCrumbItems: object[];
   formato: any;
   modalRef?: BsModalRef;
+  type: boolean = true;
   titleCustom: any = "Registro de Anticipo de Clientes";
   label: string = "Clientes";
   data: any;
