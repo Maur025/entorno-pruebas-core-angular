@@ -78,6 +78,11 @@ export const MENU: MenuItem[] = [
         label: "Pagos",
         link: "/pagos",
       },
+      {
+        id: 321,
+        label: "Devengados",
+        link: "/devengado-proveedor",
+      },
     ],
   },
   {
