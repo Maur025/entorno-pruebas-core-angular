@@ -18,15 +18,12 @@ export class ListaComponent extends FuncionesComponent{
   breadCrumbItems: object[];
   formato: any;
   modalRef?: BsModalRef;
+  dataProveedor: any;
 
   protected onSubmitFormStatus: boolean = false;
 
   constructor(
     private modalService: BsModalService,
-    private notificacionService: NotificacionService,
-    private responseHandlerService: ResponseHandlerService,
-    private router: Router,
-    private route: ActivatedRoute,
     public anticipoProveedorService : AnticipoProveedorService
     ){super()}
 
@@ -47,6 +44,7 @@ export class ListaComponent extends FuncionesComponent{
 		keyboard: false,
 		class: 'modal-xl modal-scrollable',
 	}
+
 	getCabeceras = () => {
 		return {
 			cabeceras: {
@@ -64,10 +62,8 @@ export class ListaComponent extends FuncionesComponent{
     this.modalRef = this.modalService.show(template, this.modalConfig)
   }
 
-  dataProveedor: any;
   realizarDevolucion(template, proveedor){
     this.dataProveedor = proveedor;
-    console.log(proveedor);
     this.modalRef = this.modalService.show(template, this.modalConfig);
   }
 
