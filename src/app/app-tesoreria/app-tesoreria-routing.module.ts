@@ -57,6 +57,10 @@ const routes: Routes = [
 		path: 'cobros',
 		loadChildren: () => import('./cobro/cobro.module').then(m => m.CobroModule),
 	},
+  {
+		path: 'devengado-proveedor',
+		loadChildren: () => import('./devengado-proveedor/devengado-proveedor.module').then(m => m.DevengadoProveedorModule),
+	},
 ]
 
 @NgModule({

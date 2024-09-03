@@ -1,0 +1,66 @@
+<div id="accountFormModalBodyDiv">
+  <div class="col-xl-12 border-bottom p-4 pb-2">
+      <div class="float-end ms-2">
+        <h6 class="fs-14 mb-0 ms-1 text-secondary fw-bold">DETALLE DEL DEVENGADO</h6>
+      </div>
+      <div class="d-flex">
+        <div class="flex-grow-1 align-self-center">
+            <div class="text-muted">
+                <h5 class="mb-1">{{dataDevengado['descripcion']}}</h5>
+                <p class="mb-0">Proveedor: {{dataDevengado['proveedor']['razonSocial']}}</p>
+                <p class="mb-0">Centro Costos: {{dataDevengado['centroCosto']['nombre']}}</p>
+                <p class="mb-0">Tipo Devengado: {{dataDevengado['tipoDevengado']}}</p>
+                <p class="mb-0">Fecha devengado: {{dataDevengado['fechaDevengado']|fechaFormat}}</p>
+                <p class="mb-0 fw-medium">Monto devengado:{{dataDevengado['monto']}}</p>
+            </div>
+        </div>
+    </div>
+  </div>
+  <div class="row p-3">
+    <div class="table-responsive">
+      <table class="table table-sm m-0">
+        <thead>
+          <tr>
+            <th  class="text-muted fs-14 mb-2">Estado</th>
+            <th  class="text-muted fs-14 mb-2">Fecha</th>
+            <th  class="text-muted fs-14 mb-2">Monto</th>
+            <th  class="text-muted fs-14 mb-2">Nº Referencia</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let credDev of creditoDevengadoList">
+            <td>
+              <span class="badge bg-info font-size-10">
+                {{credDev['estadoDevengado']}}
+              </span>
+            </td>
+            <td>
+              <div>
+                <p class="mb-0 text-muted">
+                  {{ credDev['fechaPagar']|fechaFormat}}
+                </p>
+              </div>
+            </td>
+            <td>{{credDev['monto']}}</td>
+            <td>{{credDev['nroReferencia']}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <div class="row mt-3 mb-3 me-3">
+    <div class="hstack gap-2 justify-content-end">
+        <button
+            type="button"
+            class="btn btn-light"
+            data-bs-dismiss="modal"
+            (click)="this.cerrarModal.emit()"
+           >
+            Cerrar
+        </button>
+    </div>
+  </div>
+
+</div>

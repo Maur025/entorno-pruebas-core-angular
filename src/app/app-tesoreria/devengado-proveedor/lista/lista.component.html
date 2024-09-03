@@ -1,0 +1,65 @@
+<app-page-title title="Devengado Proveedor" [breadcrumbItems]="breadCrumbItems" />
+<app-tabla-new
+#tabla
+[botonNuevo]="true"
+[smallTable]="false"
+[conOpciones]="false"
+[formato]="formato"
+[datosService]="devengadoService"
+getAll="getAll"
+[templateFila]="templateFila"
+[botonNuevo]="false"
+></app-tabla-new>
+<ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">
+  <ng-template ngFor let-campo [ngForOf]="cabeceras">
+    <ng-template
+      *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"
+    ></ng-template>
+    <ng-template #tempTD>
+      <td [ngSwitch]="campo">
+        <div *ngSwitchCase="'acciones'">
+          <button
+          class="btn btn-sm btn-info me-1"
+          tooltip="Ver detalle devengado"
+          (click)="verDetalleDevengado(fila, detalleDevengadoModal)">
+          <i class="mdi mdi-eye"></i>
+        </button>
+        </div>
+        <div *ngSwitchCase="'centroCosto'">
+          {{fila['centroCosto']['nombre']}}
+        </div>
+        <div *ngSwitchCase="'fechaDevengado'">
+          {{fila['fechaDevengado']|fechaFormat}}
+        </div>
+        <div *ngSwitchCase="'proveedor'">
+          {{fila['proveedor']['razonSocial']}}
+        </div>
+        <div *ngSwitchCase="'monto'">
+          {{fila['monto']|decimalAmount}}
+        </div>
+        <div *ngSwitchCase="'tipoDevengado'" class="text-center">
+          <span
+             class="badge font-size-10"
+             [ngClass]="fila['tipoDevengado'] == 'RECIBO'? 'bg-primary' : 'bg-info'" >
+						 {{fila['tipoDevengado']}}
+					</span>
+        </div>
+        <div *ngSwitchCase="'descripcion'">
+          {{fila['descripcion']}}
+        </div>
+        <div *ngSwitchCase="'nroReferencia'" class="text-end">
+          {{fila['nroReferencia']}}
+        </div>
+        <div *ngSwitchCase="'estado'">
+        </div>
+      </td>
+    </ng-template>
+  </ng-template>
+</ng-template>
+
+<ng-template #detalleDevengadoModal>
+  <detalle-devengado
+  [dataDevengado]="dataDevengado"
+  (cerrarModal)="modalRef.hide()"
+  ></detalle-devengado>
+</ng-template>
