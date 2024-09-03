@@ -15,6 +15,7 @@ import { FormAnticipoComponent } from './form-anticipo/form-anticipo.component';
 import { AnticipoProveedorRoutingModule } from './anticipo-proveedor-routing.module';
 import { FormDevolucionComponent } from './form-devolucion/form-devolucion.component';
 import { ListAnticiposComponent } from './form-devolucion/list-anticipos/list-anticipos.component';
+import { DetalleAnticipoComponent } from './detalle-anticipo/detalle-anticipo.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { ListAnticiposComponent } from './form-devolucion/list-anticipos/list-an
     ListaComponent,
     FormAnticipoComponent,
     FormDevolucionComponent,
-    ListAnticiposComponent
+    ListAnticiposComponent,
+    DetalleAnticipoComponent
   ],
   imports: [
     CommonModule,

@@ -24,7 +24,14 @@
       <td [ngSwitch]="campo">
         <div *ngSwitchCase="'acciones'">
           <button
-            class="btn btn-sm btn-warning me-2"
+            class="btn btn-sm btn-info me-1"
+            tooltip="Ver detalles"
+            (click)="verDetalles(fila, modalDetalle)"
+          >
+            <i class="mdi mdi-eye"></i>
+          </button>
+          <button
+            class="btn btn-sm btn-warning me-1"
             tooltip="Devolucion"
             (click)="realizarDevolucion(devolucionAnticipo, fila)"
           >
@@ -73,4 +80,11 @@
     (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
     (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"
   ></form-devolucion>
+</ng-template>
+
+<ng-template #modalDetalle>
+  <detalle-anticipo
+  [dataAnticipoProveedor]="dataProveedor"
+  (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
+  ></detalle-anticipo>
 </ng-template>

@@ -70,4 +70,10 @@ export class ListaComponent extends FuncionesComponent{
     console.log(proveedor);
     this.modalRef = this.modalService.show(template, this.modalConfig);
   }
+
+  verDetalles(fila, template){
+    console.log(fila);
+    this.dataProveedor=fila;
+    this.modalRef = this.modalService.show(template, this.modalConfig);
+  }
 }
