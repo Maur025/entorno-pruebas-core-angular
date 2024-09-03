@@ -155,10 +155,7 @@
             type="submit"
             class="btn btn-success d-flex gap-1 align-items-center"
           >
-            <app-simple-loader
-              [isLoading]="onSubmitFormStatus"
-              *ngIf="this.isStatusSubmit"
-            />
+            <app-loader-button *ngIf="this.isStatusSubmit" />
             {{ isStatusSubmit ? " Espere un momento..." : "Crear anticipo" }}
           </button>
         </div>
