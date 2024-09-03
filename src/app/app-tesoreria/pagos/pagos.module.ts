@@ -12,13 +12,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PagoFormComponent } from './pago-form/pago-form.component';
 import { ListComprasProveedorComponent } from './list-compras-proveedor/list-compras-proveedor.component';
+import { DetallePagoProveedorComponent } from './detalle-pago-proveedor/detalle-pago-proveedor.component';
 
 
 @NgModule({
   declarations: [
     ListaComponent,
     PagoFormComponent,
-    ListComprasProveedorComponent
+    ListComprasProveedorComponent,
+    DetallePagoProveedorComponent
   ],
   imports: [
     CommonModule,

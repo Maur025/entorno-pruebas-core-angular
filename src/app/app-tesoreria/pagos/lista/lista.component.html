@@ -20,6 +20,15 @@ labelNuevo="Pago Nuevo"
 		></ng-template>
 		<ng-template #tempTD>
 			<td [ngSwitch]="campo">
+        <div *ngSwitchCase="'acciones'">
+          <button
+            class="btn btn-sm btn-info me-1"
+            tooltip="Ver detalles"
+            (click)="verDetalles(fila, modalDetalle)"
+          >
+            <i class="mdi mdi-eye"></i>
+          </button>
+        </div>
         <div *ngSwitchDefault>
 					<td>{{ fila[campo] }}</td>
 				</div>
@@ -45,4 +54,11 @@ labelNuevo="Pago Nuevo"
   (alActualizar)="modalRef.hide(); tabla.obtenerDatos();"
   (cerrarModal)="modalRef.hide()"
   ></pago-form>
+</ng-template>
+
+<ng-template #modalDetalle>
+  <detalle-pago-proveedor
+  [dataProveedor]="dataProveedor"
+  (cerrarModal)="modalRef.hide()"
+  ></detalle-pago-proveedor>
 </ng-template>
