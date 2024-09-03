@@ -16,8 +16,6 @@
             <th [width]="50"></th>
             <th class="text-muted fs-14 mb-2">Fecha desembolso</th>
             <th class="text-muted fs-14 mb-2">Detalle</th>
-<!--             <th>Nº referencia</th>
-            <th>Descripción</th> -->
             <th class="text-muted fs-14 mb-2">{{labelMontoTh}}</th>
             <th class="text-muted fs-14 mb-2">Saldo</th>
           </tr>
@@ -43,8 +41,6 @@
                 </small>
               </div>
             </td>
-<!--             <td>{{pendiente['nroReferencia']}}</td>
-            <td>{{pendiente['descripcion']}}</td> -->
             <td class="text-center">{{pendiente['pagar_saldo']|decimalAmount}}</td>
             <td class="text-end">
               <input

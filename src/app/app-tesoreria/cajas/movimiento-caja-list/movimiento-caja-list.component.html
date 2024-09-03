@@ -49,7 +49,7 @@
           </div>
         </div>
         <div *ngSwitchCase="'fecha'">
-          {{ fila["fecha"] }}
+          {{ fila["fecha"]|fechaFormat}}
         </div>
         <div *ngSwitchCase="'monto'" class="text-end">
           {{ fila["monto"] |decimalAmount}}
