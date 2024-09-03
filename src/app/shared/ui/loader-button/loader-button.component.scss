@@ -1,15 +1,22 @@
 .loader {
-    display: inline-flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     border-radius: 10px;
     overflow: hidden;
+    margin: 0;
+    padding: 0;
   }
   
   .loader div {
+    align-self: center;
+    margin: 0;
+    padding: 0;
     width: 8%;
-    height: 23%;
+    height: 28%;
     background: rgb(255, 255, 255);
     position: absolute;
     left: 50%;

@@ -1,22 +1,27 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { EstadosFondoRendir } from 'src/app/core/models/estados-tesoreria.model';
-import { NotificacionService } from 'src/app/core/services/notificacion.service';
-import { ScreenshotService } from 'src/app/core/services/screenshot.service';
-import { FondoRendirService } from 'src/app/core/services/tesoreria/fondo-rendir.service';
-import { UtilityService } from 'src/app/shared/services/utilityService.service';
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from "@angular/forms";
+import { EstadosFondoRendir } from "src/app/core/models/estados-tesoreria.model";
+import { NotificacionService } from "src/app/core/services/notificacion.service";
+import { ScreenshotService } from "src/app/core/services/screenshot.service";
+import { FondoRendirService } from "src/app/core/services/tesoreria/fondo-rendir.service";
+import { UtilityService } from "src/app/shared/services/utilityService.service";
 
 @Component({
-  selector: 'form-pago',
-  templateUrl: './form-pago.component.html',
-  styleUrls: ['./form-pago.component.scss']
+  selector: "form-pago",
+  templateUrl: "./form-pago.component.html",
+  styleUrls: ["./form-pago.component.scss"],
 })
 export class FormPagoComponent {
   formPago: UntypedFormGroup;
-  submitted:boolean=false;
-  montoPagarSelect: number=0;
-  listaResponsables:any[]=[];
-  listaCentroCostos: any[]=[];
+  submitted: boolean = false;
+  montoPagarSelect: number = 0;
+  listaResponsables: any[] = [];
+  listaCentroCostos: any[] = [];
+  isStatusSubmit: boolean = false;
   @Input() fondoRendirData: any;
   @Input() operacion: any;
   @Output() cerrarModal = new EventEmitter<void>();
@@ -27,14 +32,14 @@ export class FormPagoComponent {
   labelMonto = "";
 
   constructor(
-		private notificacionService: NotificacionService,
+    private notificacionService: NotificacionService,
     private formBuilder: UntypedFormBuilder,
-		protected utilityService: UtilityService,
-		protected screenshotService: ScreenshotService,
-    public fondoRendirService: FondoRendirService,
-	) {}
+    protected utilityService: UtilityService,
+    protected screenshotService: ScreenshotService,
+    public fondoRendirService: FondoRendirService
+  ) {}
 
-  ngOnInit(){
+  ngOnInit() {
     this.setForm();
     this.fieldByOperation();
   }
@@ -43,11 +48,11 @@ export class FormPagoComponent {
     return this.formPago.controls;
   }
 
-  setForm(){
-    this.formPago = this.formBuilder. group({
-			id:[],
-      fecha:['', [Validators.required]],
-      fondoRendirId:['', [Validators.required]],
+  setForm() {
+    this.formPago = this.formBuilder.group({
+      id: [],
+      fecha: ["", [Validators.required]],
+      fondoRendirId: ["", [Validators.required]],
       descripcion: [
         "",
         [
@@ -56,105 +61,122 @@ export class FormPagoComponent {
           Validators.maxLength(255),
         ],
       ],
-      montoPagar:[0, [
-        Validators.required,
-        Validators.minLength(8),
-        Validators.maxLength(255)
-      ]],
+      montoPagar: [
+        0,
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(255),
+        ],
+      ],
       transacciones: this.formBuilder.array([]),
     });
   }
 
-  alAperturar(){
-    this.cerrarModal.emit()
+  alAperturar() {
+    this.cerrarModal.emit();
   }
 
-  fieldByOperation(){
-
-    if(this.operacion == EstadosFondoRendir.PAGO_REEMBOLSO){
-      this.labelTitle="Pago por reembolso al empleado";
-      this.labelFecha="(*)Fecha pago reembolso";
+  fieldByOperation() {
+    if (this.operacion == EstadosFondoRendir.PAGO_REEMBOLSO) {
+      this.labelTitle = "Pago por reembolso al empleado";
+      this.labelFecha = "(*)Fecha pago reembolso";
       this.labelMonto = "Monto total por reembolso";
     }
-    if(this.operacion == EstadosFondoRendir.DEVOLUCION){
-      this.labelTitle="Pago por devolución del empleado";
-      this.labelFecha="(*)Fecha pago devolucion";
+    if (this.operacion == EstadosFondoRendir.DEVOLUCION) {
+      this.labelTitle = "Pago por devolución del empleado";
+      this.labelFecha = "(*)Fecha pago devolucion";
       this.labelMonto = "Monto total por devolución";
     }
   }
 
-  recibirMontoPago(monto){
-    this.formPago.controls['montoPagar'].setValue(monto);
+  recibirMontoPago(monto) {
+    this.formPago.controls["montoPagar"].setValue(monto);
   }
 
-  recibirMontoReembolsaDevolucion(reembolsoDevolucion){
-    this.formPago.controls['fondoRendirId'].setValue(reembolsoDevolucion['fondoRendirId']);
-    this.montoPagarSelect=reembolsoDevolucion['montoPagar'];
+  recibirMontoReembolsaDevolucion(reembolsoDevolucion) {
+    this.formPago.controls["fondoRendirId"].setValue(
+      reembolsoDevolucion["fondoRendirId"]
+    );
+    this.montoPagarSelect = reembolsoDevolucion["montoPagar"];
   }
 
   confirmAndContinueSaving = async (): Promise<void> => {
-		this.submitted = true;
+    this.submitted = true;
+    this.isStatusSubmit = true;
     let verificar = this.verificarMontos();
-		if (!this.formPago.valid || verificar == false) {
-			return
-		}
-		const dataImg = await this.screenshotService?.takeScreenshot('accountFormModalBodyDiv');
-		this.notificacionService?.confirmAndContinueAlert(dataImg, response =>{
-			if(response)
-        this.guardar();
+    if (!this.formPago.valid || verificar == false) {
+      this.isStatusSubmit = false;
+      return;
     }
-		)
-	}
+    const dataImg = await this.screenshotService?.takeScreenshot(
+      "accountFormModalBodyDiv"
+    );
+    this.notificacionService?.confirmAndContinueAlert(dataImg, (response) => {
+      if (response) this.guardar();
+      this.isStatusSubmit = false;
+    });
+  };
 
   verificarMontos() {
     const totalsCero =
-     Number( this.montoPagarSelect) === 0 &&
+      Number(this.montoPagarSelect) === 0 &&
       this.formPago.controls["montoPagar"].value == 0;
     if (totalsCero) {
       this.notificacionService.warningMessage(
-        "No ha seleccionado ningun reeembolso pendiente y el monto total de reembolso es 0.");
+        "No ha seleccionado ningun reeembolso pendiente y el monto total de reembolso es 0."
+      );
       return false;
     }
 
-    if( this.formPago.controls["montoPagar"].value!==Number(this.montoPagarSelect)){
+    if (
+      this.formPago.controls["montoPagar"].value !==
+      Number(this.montoPagarSelect)
+    ) {
       this.notificacionService.warningMessage(
-        `El monto total de ${this.operacion} en monto ingresado para el fondo a rendir a ${this.operacion} deben coincidir`);
+        `El monto total de ${this.operacion} en monto ingresado para el fondo a rendir a ${this.operacion} deben coincidir`
+      );
       return false;
     }
     return true;
   }
 
-  guardar(){
-
-    if(this.operacion == EstadosFondoRendir.PAGO_REEMBOLSO){
+  guardar() {
+    if (this.operacion == EstadosFondoRendir.PAGO_REEMBOLSO) {
       this.guardarPagoReembolso();
     }
-    if(this.operacion == EstadosFondoRendir.DEVOLUCION){
+    if (this.operacion == EstadosFondoRendir.DEVOLUCION) {
       this.guardarDevolucion();
     }
   }
 
-  guardarDevolucion(){
-    this.formPago.value['fechaPagoDevolucion']= this.formPago.value['fecha'];
-    this.formPago.value['montoADevolver']= this.formPago.value['montoPagar'];
-    this.formPago.value['movimientos']= this.formPago.value['transacciones'];
+  guardarDevolucion() {
+    this.formPago.value["fechaPagoDevolucion"] = this.formPago.value["fecha"];
+    this.formPago.value["montoADevolver"] = this.formPago.value["montoPagar"];
+    this.formPago.value["movimientos"] = this.formPago.value["transacciones"];
 
-    this.fondoRendirService.pagoDevolucion(this.formPago.value).subscribe(data=>{
-     this.alActualizar.emit(data);
+    this.fondoRendirService.pagoDevolucion(this.formPago.value).subscribe(
+      (data) => {
+        this.alActualizar.emit(data);
+        this.isStatusSubmit = false;
         this.notificacionService.successStandar();
-      }, error=>this.notificacionService.alertError(error));
+      },
+      (error) => this.notificacionService.alertError(error)
+    );
   }
 
-  guardarPagoReembolso(){
-    this.formPago.value['fechaPagoReembolso']= this.formPago.value['fecha'];
-    this.formPago.value['montoReembolso']= this.formPago.value['montoPagar'];
-    this.formPago.value['movimientos']= this.formPago.value['transacciones'];
+  guardarPagoReembolso() {
+    this.formPago.value["fechaPagoReembolso"] = this.formPago.value["fecha"];
+    this.formPago.value["montoReembolso"] = this.formPago.value["montoPagar"];
+    this.formPago.value["movimientos"] = this.formPago.value["transacciones"];
 
-    this.fondoRendirService.pagoReembolso(this.formPago.value).subscribe(data=>{
-     this.alActualizar.emit(data);
+    this.fondoRendirService.pagoReembolso(this.formPago.value).subscribe(
+      (data) => {
+        this.alActualizar.emit(data);
+        this.isStatusSubmit = false;
         this.notificacionService.successStandar();
-      }, error=>this.notificacionService.alertError(error));
+      },
+      (error) => this.notificacionService.alertError(error)
+    );
   }
-
-
 }

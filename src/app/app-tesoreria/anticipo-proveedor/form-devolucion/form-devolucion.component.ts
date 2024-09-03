@@ -21,6 +21,7 @@ export class FormDevolucionComponent {
   submitted: boolean = false;
   formDevolucionAnticipo: UntypedFormGroup;
   saldoAnticipo: number = 0;
+  isStatusSubmit: boolean = false;
   protected onSubmitFormStatus: boolean = false;
 
   constructor(
@@ -28,7 +29,7 @@ export class FormDevolucionComponent {
     private notificacionService: NotificacionService,
     private screenshotService: ScreenshotService,
     private anticipoProveedorService: AnticipoProveedorService,
-    protected utilityService: UtilityService,
+    protected utilityService: UtilityService
   ) {}
 
   ngOnInit() {
@@ -56,7 +57,7 @@ export class FormDevolucionComponent {
           Validators.maxLength(255),
         ],
       ],
-      compraId:[''],
+      compraId: [""],
       transacciones: this.formBuilder.array([]),
     });
   }
@@ -92,7 +93,7 @@ export class FormDevolucionComponent {
     }
 
     if (
-        this.formDevolucionAnticipo.controls["monto"].value > this.saldoAnticipo
+      this.formDevolucionAnticipo.controls["monto"].value > this.saldoAnticipo
     ) {
       this.notificacionService.warningMessage(
         "El monto de devolucion no debe sobre pasar al monto del saldo del anticipo"
@@ -105,8 +106,9 @@ export class FormDevolucionComponent {
   confirmAndContinueSaving = async (): Promise<void> => {
     let verificacion = this.verificarMontos();
     this.submitted = true;
-
-    if (!this.formDevolucionAnticipo.valid || verificacion==false) {
+    this.isStatusSubmit = true;
+    if (!this.formDevolucionAnticipo.valid || verificacion == false) {
+      this.isStatusSubmit = false;
       return;
     }
     const dataImg = await this.screenshotService?.takeScreenshot(
@@ -114,16 +116,24 @@ export class FormDevolucionComponent {
     );
     this.notificacionService?.confirmAndContinueAlert(dataImg, (response) => {
       if (response) this.guardarForm();
+      this.isStatusSubmit = false;
     });
   };
 
   guardarForm() {
-    if(this.formDevolucionAnticipo.valid){
-      this.formDevolucionAnticipo.value['movimientos']= this.formDevolucionAnticipo.value['transacciones'];
-      this.anticipoProveedorService.crearDevolucionAnticipo(this.formDevolucionAnticipo.value).subscribe(data=>{
-        this.alActualizar.emit(data);
-        this.notificacionService.successStandar();
-      }, error=>this.notificacionService.alertError(error));
+    if (this.formDevolucionAnticipo.valid) {
+      this.formDevolucionAnticipo.value["movimientos"] =
+        this.formDevolucionAnticipo.value["transacciones"];
+      this.anticipoProveedorService
+        .crearDevolucionAnticipo(this.formDevolucionAnticipo.value)
+        .subscribe(
+          (data) => {
+            this.alActualizar.emit(data);
+            this.isStatusSubmit = false;
+            this.notificacionService.successStandar();
+          },
+          (error) => this.notificacionService.alertError(error)
+        );
     }
   }
 }

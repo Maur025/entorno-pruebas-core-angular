@@ -14,7 +14,10 @@ import { UtilityService } from "src/app/shared/services/utilityService.service";
 import { TablaNewComponent } from "src/app/shared/ui/tabla-new/tabla-new.component";
 import { FuncionesComponent } from "../../funciones.component";
 import { CentroCostosService } from "src/app/core/services/tesoreria/centro-costos.service";
-import { ApiResponseStandard, ErrorResponseStandard } from "src/app/shared/interface/common-api-response";
+import {
+  ApiResponseStandard,
+  ErrorResponseStandard,
+} from "src/app/shared/interface/common-api-response";
 import { EmpleadoService } from "src/app/core/services/tesoreria/empleado.service";
 
 @Component({
@@ -34,6 +37,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   listaResponsables: any[] = [];
   listaCentroCostos: any[] = [];
   datosCaja: any;
+  isStatusSubmit: boolean = false;
 
   protected onSubmitFormStatus: boolean = false;
 
@@ -97,8 +101,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
           Validators.maxLength(255),
         ],
       ],
-			empleadoId: [null, [Validators.required]],
-			centroCostoId: [null, [Validators.required]],
+      empleadoId: [null, [Validators.required]],
+      centroCostoId: [null, [Validators.required]],
     });
   }
   get form() {
@@ -120,8 +124,9 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     this.formCajaCreate.controls["id"].setValue(fila["id"]);
     this.formCajaCreate.controls["nombre"].setValue(fila["nombre"]);
     this.formCajaCreate.controls["empleadoId"].setValue(fila["empleado"]["id"]);
-    this.formCajaCreate.controls["centroCostoId"].setValue(fila["centroCosto"]["id"]);
-
+    this.formCajaCreate.controls["centroCostoId"].setValue(
+      fila["centroCosto"]["id"]
+    );
   }
 
   aperturarCaja(fila, template) {
@@ -137,38 +142,43 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   }
 
   getCentroCostos() {
-		this.centroCostosService.habilitados().subscribe({
-			next: (response: ApiResponseStandard) => {
-				this.listaCentroCostos =
-					this.responseHandlerService?.handleResponseAsArray(response)
-			},
-			error: (error: ErrorResponseStandard) =>
-				this.notificacionService.alertError(error),
-		})
-	}
+    this.centroCostosService.habilitados().subscribe({
+      next: (response: ApiResponseStandard) => {
+        this.listaCentroCostos =
+          this.responseHandlerService?.handleResponseAsArray(response);
+      },
+      error: (error: ErrorResponseStandard) =>
+        this.notificacionService.alertError(error),
+    });
+  }
 
   getEmployeesList = (): void => {
-		this.empleadoService?.listarHabilitados().subscribe({
-			next: (response: ApiResponseStandard) => {
-				this.listaResponsables =
-					this.responseHandlerService?.handleResponseAsArray(response)
-			},
-			error: (error: ErrorResponseStandard) => {
-				this.notificacionService?.alertError(error)
-			},
-		})
-	}
+    this.empleadoService?.listarHabilitados().subscribe({
+      next: (response: ApiResponseStandard) => {
+        this.listaResponsables =
+          this.responseHandlerService?.handleResponseAsArray(response);
+      },
+      error: (error: ErrorResponseStandard) => {
+        this.notificacionService?.alertError(error);
+      },
+    });
+  };
 
   confirmAndContinueSaving = async (): Promise<void> => {
     this.submitted = true;
-    if (!this.formCajaCreate.valid) {return;}
+    this.isStatusSubmit = true;
+    if (!this.formCajaCreate.valid) {
+      this.isStatusSubmit = false;
+      return;
+    }
 
     const dataImg = await this.screenshotService?.takeScreenshot(
       "form-create-caja"
     );
-    this.notificacionService?.confirmAndContinueAlert(dataImg, (response) =>
-      this.registrar()
-    );
+    this.notificacionService?.confirmAndContinueAlert(dataImg, (response) => {
+      if (response) this.registrar();
+      this.isStatusSubmit = false;
+    });
   };
 
   registrar() {
@@ -176,6 +186,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
       this.cajaService.update(this.formCajaCreate.value).subscribe(
         (data) => {
           this.cerrarModal();
+          this.isStatusSubmit = false;
           this.notificacionService.successStandar();
           this.tabla.obtenerDatos();
         },
@@ -185,6 +196,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
       this.cajaService.register(this.formCajaCreate.value).subscribe(
         (data) => {
           this.cerrarModal();
+          this.isStatusSubmit = false;
           this.notificacionService.successStandar();
           this.tabla.obtenerDatos();
         },
