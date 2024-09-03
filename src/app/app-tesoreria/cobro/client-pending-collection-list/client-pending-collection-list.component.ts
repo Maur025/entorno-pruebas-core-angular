@@ -42,6 +42,6 @@ export class ClientPendingCollectionListComponent
 	}
 
 	navigateToCollectForm = (): void => {
-		this.router.navigateByUrl('pago-form')
+		this.router.navigateByUrl('/cobros/cobro-form')
 	}
 }
