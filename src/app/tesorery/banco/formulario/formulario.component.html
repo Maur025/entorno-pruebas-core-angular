@@ -1,86 +1,86 @@
 <form [formGroup]="formGroup">
-	<label class="mb-3 col-12">
-		Los campos marcados con asterisco (*) son obligatorios.
-	</label>
-	<div class="nav col-12">
-		<div class="col-6">
-			<div class="mb-3 px-1">
-				<label class="mb-2">(*) Nombre </label>
-				<input
-					type="text"
-					class="form-control uppercase"
-					id="nombre"
-					formControlName="nombre"
-					placeholder="NOMBRE DEL BANCO"
-					[ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }"
-				/>
-				<div
-					*ngIf="submitted && form['nombre'].errors"
-					class="invalid-feedback"
-				>
-					<div *ngIf="form['nombre'].errors['required']">
-						El nombre del banco es obligatorio
-					</div>
-					<div *ngIf="form['nombre'].errors['minlength']">
-						Debe tener al menos
-						{{ form['nombre'].errors['minlength']['requiredLength'] }}
-						caracteres
-					</div>
-					<div *ngIf="form['nombre'].errors['maxlength']">
-						Debe tener menos de
-						{{ form['nombre'].errors['maxlength']['requiredLength'] }}
-						caracteres
-					</div>
-					<div *ngIf="form['nombre'].errors['min']">
-						Debe tener mayor o igual que
-						{{ form['nombre'].errors['min']['min'] }}
-					</div>
-					<div *ngIf="form['nombre'].errors['max']">
-						Debe tener menor o igual que
-						{{ form['nombre'].errors['max']['max'] }}
-					</div>
-				</div>
-			</div>
-		</div>
+  <label class="mb-3 col-12">
+    Los campos marcados con asterisco (*) son obligatorios.
+  </label>
+  <div class="nav col-12">
+    <div class="col-6">
+      <div class="mb-3 px-1">
+        <label class="mb-2">(*) Nombre </label>
+        <input
+          type="text"
+          class="form-control uppercase"
+          id="nombre"
+          formControlName="nombre"
+          placeholder="NOMBRE DEL BANCO"
+          [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }"
+        />
+        <div
+          *ngIf="submitted && form['nombre'].errors"
+          class="invalid-feedback"
+        >
+          <div *ngIf="form['nombre'].errors['required']">
+            El nombre del banco es obligatorio
+          </div>
+          <div *ngIf="form['nombre'].errors['minlength']">
+            Debe tener al menos
+            {{ form["nombre"].errors["minlength"]["requiredLength"] }}
+            caracteres
+          </div>
+          <div *ngIf="form['nombre'].errors['maxlength']">
+            Debe tener menos de
+            {{ form["nombre"].errors["maxlength"]["requiredLength"] }}
+            caracteres
+          </div>
+          <div *ngIf="form['nombre'].errors['min']">
+            Debe tener mayor o igual que
+            {{ form["nombre"].errors["min"]["min"] }}
+          </div>
+          <div *ngIf="form['nombre'].errors['max']">
+            Debe tener menor o igual que
+            {{ form["nombre"].errors["max"]["max"] }}
+          </div>
+        </div>
+      </div>
+    </div>
 
-		<div class="col-6">
-			<div class="mb-3 px-1">
-				<label class="mb-2">Descripción </label>
-				<textarea
-					class="form-control uppercase"
-					rows="1"
-					id="descripcion"
-					formControlName="descripcion"
-					placeholder="DESCRIPCIÓN"
-					[ngClass]="{ 'is-invalid': submitted && form['descripcion'].errors }"
-				></textarea>
-				<div
-					*ngIf="submitted && form['descripcion'].errors"
-					class="invalid-feedback"
-				>
-					<div *ngIf="form['descripcion'].errors['required']">
-						la descripción es obligatoria
-					</div>
-					<div *ngIf="form['descripcion'].errors['minlength']">
-						Debe tener al menos
-						{{ form['descripcion'].errors['minlength']['requiredLength'] }}
-						caracteres
-					</div>
-					<div *ngIf="form['descripcion'].errors['maxlength']">
-						Debe tener menos de
-						{{ form['descripcion'].errors['maxlength']['requiredLength'] }}
-						caracteres
-					</div>
-					<div *ngIf="form['descripcion'].errors['min']">
-						Debe tener mayor o igual que
-						{{ form['descripcion'].errors['min']['min'] }}
-					</div>
-					<div *ngIf="form['descripcion'].errors['max']">
-						Debe tener menor o igual que
-						{{ form['descripcion'].errors['max']['max'] }}
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="col-6">
+      <div class="mb-3 px-1">
+        <label class="mb-2">Descripción </label>
+        <textarea
+          class="form-control uppercase"
+          rows="1"
+          id="descripcion"
+          formControlName="descripcion"
+          placeholder="DESCRIPCIÓN"
+          [ngClass]="{ 'is-invalid': submitted && form['descripcion'].errors }"
+        ></textarea>
+        <div
+          *ngIf="submitted && form['descripcion'].errors"
+          class="invalid-feedback"
+        >
+          <div *ngIf="form['descripcion'].errors['required']">
+            la descripción es obligatoria
+          </div>
+          <div *ngIf="form['descripcion'].errors['minlength']">
+            Debe tener al menos
+            {{ form["descripcion"].errors["minlength"]["requiredLength"] }}
+            caracteres
+          </div>
+          <div *ngIf="form['descripcion'].errors['maxlength']">
+            Debe tener menos de
+            {{ form["descripcion"].errors["maxlength"]["requiredLength"] }}
+            caracteres
+          </div>
+          <div *ngIf="form['descripcion'].errors['min']">
+            Debe tener mayor o igual que
+            {{ form["descripcion"].errors["min"]["min"] }}
+          </div>
+          <div *ngIf="form['descripcion'].errors['max']">
+            Debe tener menor o igual que
+            {{ form["descripcion"].errors["max"]["max"] }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </form>
