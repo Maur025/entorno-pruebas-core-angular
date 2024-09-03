@@ -180,7 +180,7 @@ export class AperturaFormComponent {
   }
 
   variablesOperacion() {
-    this.fondoOperativoService
+ /*    this.fondoOperativoService
       .getMontoPorRendir(this.datosFondo["id"])
       .subscribe((data) => {
         let monto = data["data"]["montoPorRendir"];
@@ -190,6 +190,8 @@ export class AperturaFormComponent {
           this.montoPendienteReponer = this.datosFondo["importe"];
         else this.montoPendienteReponer = monto;
       });
+ */
+
 
     switch (this.operacion) {
       case "APER":
@@ -199,6 +201,7 @@ export class AperturaFormComponent {
         this.labelMonto = "Monto total de apertura";
         this.labelPlaceholder = "Descripción para la apertura de fondo";
         this.labelAlert = "Importe de fondo operativo";
+        this.montoPendienteReponer = this.datosFondo['importe'];
         break;
       case "REPO":
         this.labelOperacion = "Reposición de Fondo Operativo";
@@ -207,6 +210,7 @@ export class AperturaFormComponent {
         this.labelMonto = "Monto total de reposición";
         this.labelPlaceholder = "Descripción para la reposición de fondo";
         this.labelAlert = "Pendiente a reposicion";
+        this.montoPendienteReponer = this.datosFondo['saldo'];
         break;
       case "CIE":
         this.labelOperacion = "Cierre de Fondo Operativo";
@@ -215,6 +219,7 @@ export class AperturaFormComponent {
         this.labelMonto = "Monto total para el cierre";
         this.labelPlaceholder = "Descripción para la cierre de fondo";
         this.labelAlert = "Pendiente a reposicion";
+        this.montoPendienteReponer = this.datosFondo['saldo'];
         break;
       default:
         console.error("No se encontro la operacion");

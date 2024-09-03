@@ -95,7 +95,7 @@ export class CuentaBancoFormComponent {
       monedaId: [null, [Validators.required]],
       inicializacion: [true],
       montoCuenta: ["", [Validators.required]],
-      fechaCuenta: [this.fechaActual2, [Validators.required]],
+      fecha: [null, [Validators.required]],
       descripcion: [
         "",
         [
@@ -156,13 +156,12 @@ export class CuentaBancoFormComponent {
   };
 
   guardarForm() {
-    console.log(this.formCuentaBanco.value);
     if (this.formCuentaBanco.valid) {
       this.formCuentaBanco.value["movimientosCuentaBanco"] = this
         .formCuentaBanco.value["transacciones"]
         ? this.formCuentaBanco.value["transacciones"]
         : null;
-      //console.log(this.formAccionCaja.value)
+      this.formCuentaBanco.value['fechaCuenta'] = this.formCuentaBanco.value['fecha'];
       this.cuentaBancoService.register(this.formCuentaBanco.value).subscribe(
         (data) => {
           this.alActualizar.emit(data);
@@ -174,4 +173,9 @@ export class CuentaBancoFormComponent {
     }
     this.submitted = true;
   }
+
+  alAperturar() {
+    this.cerrarModal.emit();
+  }
+
 }

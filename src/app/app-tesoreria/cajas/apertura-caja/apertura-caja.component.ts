@@ -48,8 +48,8 @@ export class AperturaCajaComponent {
   }
 
   setForm() {
-    let fechaActual = new Date();
-    this.fechaActual =
+    /*let fechaActual = new Date();
+     this.fechaActual =
       fechaActual.getFullYear() +
       "-" +
       (fechaActual.getMonth() + 1).toString().padStart(2, "0") +
@@ -66,12 +66,12 @@ export class AperturaCajaComponent {
       ":" +
       fechaActual.getMinutes().toString().padStart(2, "0") +
       ":" +
-      fechaActual.getSeconds().toString().padStart(2, "0");
+      fechaActual.getSeconds().toString().padStart(2, "0"); */
     this.formAccionCaja = this.formBuilder.group({
       id: "",
       cajaId: [this.datosCaja["id"], [Validators.required]],
       montoApertura: ["", [Validators.required]],
-      fechaApertura: [this.fechaActual2, Validators.required],
+      fecha: [this.fechaActual2, Validators.required],
       descripcionApertura: [
         "",
         [
@@ -94,8 +94,8 @@ export class AperturaCajaComponent {
 
   guardarForm() {
     if (this.formAccionCaja.valid) {
-      this.formAccionCaja.value["movimientoCajas"] =
-        this.formAccionCaja.value["transacciones"];
+      this.formAccionCaja.value["movimientoCajas"] = this.formAccionCaja.value["transacciones"];
+      this.formAccionCaja.value["fechaApertura"] = this.formAccionCaja.value["fecha"];
       this.movimientoCajaService
         .movimientoApertura(this.formAccionCaja.value)
         .subscribe(
@@ -125,4 +125,9 @@ export class AperturaCajaComponent {
       this.isStatusSubmit = false;
     });
   };
+
+  alAperturar() {
+    this.cerrarModal.emit();
+  }
+
 }
