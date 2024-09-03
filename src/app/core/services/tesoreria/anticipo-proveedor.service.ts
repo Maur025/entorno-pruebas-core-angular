@@ -27,4 +27,8 @@ export class AnticipoProveedorService {
   findAnticipoProveedor(idProveedor){
     return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/${idProveedor}`);
   }
+
+  detalleAnticipoProveedor(anticipoProveedorId){
+    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/detalle/${anticipoProveedorId}`);
+  }
 }
