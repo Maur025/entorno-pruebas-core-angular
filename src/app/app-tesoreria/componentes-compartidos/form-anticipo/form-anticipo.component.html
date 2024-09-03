@@ -153,6 +153,7 @@
           <button
             [disabled]="isStatusSubmit"
             type="submit"
+            [ngStyle]="{ padding: isStatusSubmit ? '6px' : '7.52px' }"
             class="btn btn-success d-flex gap-1 align-items-center"
           >
             <app-loader-button *ngIf="this.isStatusSubmit" />

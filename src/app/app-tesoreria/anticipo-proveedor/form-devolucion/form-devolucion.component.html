@@ -1,95 +1,122 @@
 <div id="accountFormModalBodyDiv">
-    <div class="col-xl-12 border-bottom p-4 pb-2">
-        <div class="float-end ms-2">
-            <small>
-                Los campos marcados con asterisco (*) son requeridos.
-              </small>
-          </div>
-          <div class="d-flex">
-            <div>
-              <h6 class="fs-14 mb-0 ms-1 text-primary">{{datosProveedor['proveedor']['razonSocial']}}</h6>
-              <small class="text-muted ms-1 mb-0">Devolucion de anticipo</small>
-            </div>
-          </div>
+  <div class="col-xl-12 border-bottom p-4 pb-2">
+    <div class="float-end ms-2">
+      <small> Los campos marcados con asterisco (*) son requeridos. </small>
     </div>
+    <div class="d-flex">
+      <div>
+        <h6 class="fs-14 mb-0 ms-1 text-primary">
+          {{ datosProveedor["proveedor"]["razonSocial"] }}
+        </h6>
+        <small class="text-muted ms-1 mb-0">Devolucion de anticipo</small>
+      </div>
+    </div>
+  </div>
 
-    <form [formGroup]="formDevolucionAnticipo" (ngSubmit)="confirmAndContinueSaving()">
-        <div class="ms-4 me-4 m-2">
-            <div class="row mb-2">
-                <div class="col-md-4">
-                    <input-fecha
-                    [formPadre]="formDevolucionAnticipo"
-                    [submitted]="submitted"
-                    labelFecha="(*)Fecha devolucion"
-                    (alRedirigir)="alAperturar()"
-                    ></input-fecha>
-                  </div>
-            </div>
-            <div class="row">
-                <list-anticipos
-                [proveedorId]="datosProveedor['proveedorId']"
-                (alSelectAnticipo)="recibirAnticipo($event)"
-                ></list-anticipos>
-            </div>
-            <div class="row">
-                <transaccion-array
-                [formPadre]="formDevolucionAnticipo"
-                labelTransferencia="la devolucion"
-                [submitted]="submitted"
-                (alIngresarMonto)="recibirMontoTotal($event)"
-                ></transaccion-array>
-              </div>
-        
-              <div class="row mt-2">
-                <div class="col-md-8">
-                  <p class="text-muted mb-1">(*) Descripción</p>
-                  <textarea
-                    formControlName="descripcion"
-                    class="form-control"
-                    rows="2"
-                    placeholder="Descripción para la devolucion"
-                    [ngClass]="{'is-invalid': submitted && form['descripcion'].errors}"
-                    (input)="utilityService?.convertUppercase('descripcion', $event, formDevolucionAnticipo)"
-                  ></textarea>
-                  <div *ngIf="submitted && form['descripcion'].errors"class="invalid-feedback">
-                    <div *ngIf="formDevolucionAnticipo.get('descripcion').errors?.required">
-                      La descripción para devolucion es obligatoria
-                    </div>
-                    <div *ngIf="form['descripcion'].errors['maxlength']">
-                      Debe tener menos de {{ form['descripcion'].errors['maxlength']['requiredLength']}}carácteres
-                    </div>
-                    <div *ngIf="form['descripcion'].errors['minlength']">
-                      Debe tener mas de {{ form['descripcion'].errors['minlength']['requiredLength']}}carácteres
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4 border p-3">
-                  <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary"><b> (*) Monto devolucion </b></h6>
-                  <div class="hstack gap-2 justify-content-end me-4">
-                    <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary"> <b>{{formDevolucionAnticipo.get('monto').value}}</b></h5>
-                  </div>
-                </div>
-              </div>
+  <form
+    [formGroup]="formDevolucionAnticipo"
+    (ngSubmit)="confirmAndContinueSaving()"
+  >
+    <div class="ms-4 me-4 m-2">
+      <div class="row mb-2">
+        <div class="col-md-4">
+          <input-fecha
+            [formPadre]="formDevolucionAnticipo"
+            [submitted]="submitted"
+            labelFecha="(*)Fecha devolucion"
+            (alRedirigir)="alAperturar()"
+          ></input-fecha>
         </div>
-        <div class="row mt-3 mb-3 me-3">
-            <div class="hstack gap-2 justify-content-end">
-                <button
-                    type="button"
-                    class="btn btn-light"
-                    data-bs-dismiss="modal"
-                    (click)="this.cerrarModal.emit()">
-                    Cerrar
-                </button>
-                <button
-                    type="submit"
-                    class="btn btn-success">
-                  <app-simple-loader [isLoading]="onSubmitFormStatus" />
-                  {{ onSubmitFormStatus ? ' Espere un momento...' : 'Realizar devolucion' }}
-                </button>
+      </div>
+      <div class="row">
+        <list-anticipos
+          [proveedorId]="datosProveedor['proveedorId']"
+          (alSelectAnticipo)="recibirAnticipo($event)"
+        ></list-anticipos>
+      </div>
+      <div class="row">
+        <transaccion-array
+          [formPadre]="formDevolucionAnticipo"
+          labelTransferencia="la devolucion"
+          [submitted]="submitted"
+          (alIngresarMonto)="recibirMontoTotal($event)"
+        ></transaccion-array>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-md-8">
+          <p class="text-muted mb-1">(*) Descripción</p>
+          <textarea
+            formControlName="descripcion"
+            class="form-control"
+            rows="2"
+            placeholder="Descripción para la devolucion"
+            [ngClass]="{
+              'is-invalid': submitted && form['descripcion'].errors
+            }"
+            (input)="
+              utilityService?.convertUppercase(
+                'descripcion',
+                $event,
+                formDevolucionAnticipo
+              )
+            "
+          ></textarea>
+          <div
+            *ngIf="submitted && form['descripcion'].errors"
+            class="invalid-feedback"
+          >
+            <div
+              *ngIf="formDevolucionAnticipo.get('descripcion').errors?.required"
+            >
+              La descripción para devolucion es obligatoria
+            </div>
+            <div *ngIf="form['descripcion'].errors['maxlength']">
+              Debe tener menos de
+              {{
+                form["descripcion"].errors["maxlength"]["requiredLength"]
+              }}carácteres
+            </div>
+            <div *ngIf="form['descripcion'].errors['minlength']">
+              Debe tener mas de
+              {{
+                form["descripcion"].errors["minlength"]["requiredLength"]
+              }}carácteres
             </div>
           </div>
-    </form>        
-
-
-
+        </div>
+        <div class="col-md-4 border p-3">
+          <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary">
+            <b> (*) Monto devolucion </b>
+          </h6>
+          <div class="hstack gap-2 justify-content-end me-4">
+            <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary">
+              <b>{{ formDevolucionAnticipo.get("monto").value }}</b>
+            </h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3 mb-3 me-3">
+      <div class="hstack gap-2 justify-content-end">
+        <button
+          type="button"
+          class="btn btn-light"
+          data-bs-dismiss="modal"
+          (click)="this.cerrarModal.emit()"
+        >
+          Cerrar
+        </button>
+        <button
+          [disabled]="isStatusSubmit"
+          type="submit"
+          class="btn btn-success d-flex gap-1 align-items-center"
+          [ngStyle]="{ padding: isStatusSubmit ? '6px' : '7.52px' }"
+        >
+          <app-loader-button *ngIf="isStatusSubmit" />
+          {{ isStatusSubmit ? " Espere un momento..." : "Realizar devolucion" }}
+        </button>
+      </div>
+    </div>
+  </form>
 </div>

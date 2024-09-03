@@ -1,21 +1,19 @@
 <div id="accountFormModalBodyDiv">
   <div class="col-xl-12 border-bottom p-4 pb-2">
-      <div class="float-end ms-2">
-        <small>
-          Los campos marcados con asterisco (*) son requeridos.
-        </small>
+    <div class="float-end ms-2">
+      <small> Los campos marcados con asterisco (*) son requeridos. </small>
+    </div>
+    <div class="d-flex">
+      <div>
+        <h6 class="fs-14 mb-0 ms-1 text-primary">{{ datosFondo["nombre"] }}</h6>
+        <small class="text-muted ms-1 mb-0">{{ labelOperacion }}</small>
       </div>
-      <div class="d-flex">
-        <div>
-          <h6 class="fs-14 mb-0 ms-1 text-primary">{{datosFondo['nombre']}}</h6>
-          <small class="text-muted ms-1 mb-0">{{labelOperacion}}</small>
-        </div>
-      </div>
+    </div>
   </div>
   <div class="mt-1 ms-4 me-4">
-    <alert type="info" [dismissible]="true"  role="alert">
+    <alert type="info" [dismissible]="true" role="alert">
       <i class="mdi mdi-alert-circle-outline me-2"></i>
-     {{labelAlert}}: {{montoPendienteReponer}}
+      {{ labelAlert }}: {{ montoPendienteReponer }}
     </alert>
   </div>
 
@@ -24,10 +22,10 @@
       <div class="row mb-2">
         <div class="col-md-4">
           <input-fecha
-          [formPadre]="formAperturaFondo"
-          [submitted]="submitted"
-          [labelFecha]="labelFecha"
-          (alRedirigir)="this.cerrarModal.emit()"
+            [formPadre]="formAperturaFondo"
+            [submitted]="submitted"
+            [labelFecha]="labelFecha"
+            (alRedirigir)="this.cerrarModal.emit()"
           ></input-fecha>
         </div>
         <div class="col-md-4">
@@ -48,7 +46,8 @@
             <div *ngIf="submitted && form['centroCostoId'].errors">
               <div
                 class="text-danger mt-1 font-size-10"
-                *ngIf="form['centroCostoId'].errors['required']">
+                *ngIf="form['centroCostoId'].errors['required']"
+              >
                 El centro de costos es obligatorio
               </div>
             </div>
@@ -56,74 +55,103 @@
         </div>
         <div class="col-md-4">
           <div class="">
-            <p class="text-muted mb-1">Nº referencia </p>
+            <p class="text-muted mb-1">Nº referencia</p>
             <input
               type="text"
               class="form-control text-end"
               formControlName="nroReferencia"
-              />
+            />
           </div>
         </div>
       </div>
       <div class="row">
         <transaccion-array
-        [formPadre]="formAperturaFondo"
-        [labelTransferencia]="labelTransferencias"
-        [submitted]="submitted"
-        (alIngresarMonto)="recibirMontoTotal($event)"
+          [formPadre]="formAperturaFondo"
+          [labelTransferencia]="labelTransferencias"
+          [submitted]="submitted"
+          (alIngresarMonto)="recibirMontoTotal($event)"
         ></transaccion-array>
       </div>
       <div class="row mt-2">
         <div class="col-md-8">
-          <p class="text-muted mb-1">(*) Descripción </p>
+          <p class="text-muted mb-1">(*) Descripción</p>
           <textarea
             formControlName="descripcion"
             class="form-control"
             rows="2"
             [placeholder]="labelPlaceholder"
-            [ngClass]="{'is-invalid': submitted && form['descripcion'].errors}"
-            (input)="utilityService?.convertUppercase('descripcion', $event, formAperturaFondo)"
+            [ngClass]="{
+              'is-invalid': submitted && form['descripcion'].errors
+            }"
+            (input)="
+              utilityService?.convertUppercase(
+                'descripcion',
+                $event,
+                formAperturaFondo
+              )
+            "
           ></textarea>
-          <div *ngIf="submitted && form['descripcion'].errors"class="invalid-feedback">
+          <div
+            *ngIf="submitted && form['descripcion'].errors"
+            class="invalid-feedback"
+          >
             <div *ngIf="formAperturaFondo.get('descripcion').errors?.required">
               La descripción para la apertura de caja es obligatoria
             </div>
             <div *ngIf="form['descripcion'].errors['maxlength']">
-              Debe tener menos de {{ form['descripcion'].errors['maxlength']['requiredLength']}}carácteres
+              Debe tener menos de
+              {{
+                form["descripcion"].errors["maxlength"]["requiredLength"]
+              }}carácteres
             </div>
             <div *ngIf="form['descripcion'].errors['minlength']">
-              Debe tener mas de {{ form['descripcion'].errors['minlength']['requiredLength']}}carácteres
+              Debe tener mas de
+              {{
+                form["descripcion"].errors["minlength"]["requiredLength"]
+              }}carácteres
             </div>
           </div>
         </div>
         <div class="col-md-4 border p-3">
-          <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary"><b>{{labelMonto}} </b></h6>
+          <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary">
+            <b>{{ labelMonto }} </b>
+          </h6>
           <div class="hstack gap-2 justify-content-end me-4">
-            <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary"> <b>{{montoTotalTransferencia}}</b></h5>
+            <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary">
+              <b>{{ montoTotalTransferencia }}</b>
+            </h5>
           </div>
         </div>
       </div>
       <div class="row mt-3 mb-3 me-3 pt-4 border-top">
         <div class="hstack gap-2 justify-content-end">
-            <button
-                type="button"
-                class="btn btn-light"
-                data-bs-dismiss="modal"
-                (click)="this.cerrarModal.emit()">
-                Cerrar
-            </button>
-            <button
-                type="submit"
-                class="btn btn-success">
-              <app-simple-loader [isLoading]="onSubmitFormStatus" />
-              {{ onSubmitFormStatus ? ' Espere un momento...' :
-                operacion=="APER" ? 'Apertura de Fondo' : operacion=="REPO" ? 'Realizar reposición': 'Cierre de fondo'
-              }}
-            </button>
+          <button
+            type="button"
+            class="btn btn-light"
+            data-bs-dismiss="modal"
+            (click)="this.cerrarModal.emit()"
+          >
+            Cerrar
+          </button>
+          <button
+            type="submit"
+            class="btn btn-success d-flex gap-1 align-items-center"
+            [ngStyle]="{ padding: isStatusSubmit ? '6px' : '7.52px' }"
+            [disabled]="isStatusSubmit"
+          >
+            <app-loader-button *ngIf="isStatusSubmit" />
+            {{
+              isStatusSubmit
+                ? " Espere un momento..."
+                : operacion == "APER"
+                ? "Apertura de Fondo"
+                : operacion == "REPO"
+                ? "Realizar reposición"
+                : "Cierre de fondo"
+            }}
+          </button>
         </div>
       </div>
-
     </div>
   </form>
-
 </div>
