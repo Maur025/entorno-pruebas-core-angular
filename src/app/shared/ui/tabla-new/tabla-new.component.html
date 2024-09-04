@@ -78,7 +78,9 @@
                     tooltip="Herramientas"
                     (click)="verOpcionesPagina()"
                   >
-                    <i class="bx bxs-widget bx-spin font-size-18 align-middle"></i>
+                    <i
+                      class="bx bxs-widget bx-spin font-size-18 align-middle"
+                    ></i>
                   </button>
                 </ng-template>
                 <ng-template #columnas>
@@ -124,7 +126,8 @@
                     data-bs-toggle="tooltip"
                     data-bs-placement="top"
                     tooltip="Busqueda Avanzada"
-                    (click)="verSeccionBusqueda()">
+                    (click)="verSeccionBusqueda()"
+                  >
                     <i class="mdi mdi-filter-plus font-size-16"></i>
                   </button>
                 </div>
@@ -134,7 +137,12 @@
 
           <div class="row mb-2">
             <div class="col-xl-12">
-              <ng-template *ngIf=" templateFiltrar !== undefined && verBusquedaAvanzada; then isTemplateFiltrar"/>
+              <ng-template
+                *ngIf="
+                  templateFiltrar !== undefined && verBusquedaAvanzada;
+                  then isTemplateFiltrar
+                "
+              />
               <ng-template #isTemplateFiltrar>
                 <ng-container [ngTemplateOutlet]="templateFiltrar">
                   <p class="text-secondary mb-0"><b>Busqueda Avanzada</b></p>
@@ -151,8 +159,13 @@
               </ng-template>
             </div>
 
-            <div  *ngIf="datos" class="table-responsive mt-2"
-              [class]="{'container-scroll': paginate == false && datos.length > 10}">
+            <div
+              *ngIf="datos"
+              class="table-responsive mt-2"
+              [class]="{
+                'container-scroll': paginate == false && datos.length > 10
+              }"
+            >
               <table
                 class="table mb-0 table-hover align-middle nowrap data-table table-condensed"
                 [ngClass]="{ 'table-sm': smallTable }"
@@ -167,7 +180,8 @@
                         "
                       ></ng-template>
                       <ng-template #tempTH>
-                        <th>{{cabeceras[campo]|json}}
+                        <th>
+                          {{ cabeceras[campo] | json }}
                           <button
                             *ngIf="
                               formato.cabeceras[campo].sortable === undefined
@@ -221,9 +235,13 @@
                     ></ng-container>
                   </ng-template>
                   <ng-template #noTemplatetbody>
-                    <tr *ngFor="let data of datos; let i ='index'" let content = "datos">
+                    <tr
+                      *ngFor="let data of datos; let i = index"
+                      let
+                      content="datos"
+                    >
                       <ng-template
-                      {{templateFila}}
+                        {{templateFila}}
                         [ngIf]="templateFila !== undefined"
                         [ngIfElse]="sintemplate"
                       >
@@ -239,7 +257,6 @@
                       </ng-template>
                       <ng-template #sintemplate>
                         <ng-template ngFor let-campo [ngForOf]="this.cabeceras">
-
                           <ng-template
                             *ngIf="
                               formato.cabeceras[campo].visibleCheck;
@@ -345,10 +362,15 @@
           </div>
 
           <div *ngIf="paginate">
-            <div class="row justify-content-between align-items-center"
-              *ngIf="datos">
+            <div
+              class="row justify-content-between align-items-center"
+              *ngIf="datos"
+            >
               <div class="col-auto me-auto">
-                <small class="text-secondary">Mostrando {{ datos.length }} de {{ datos.length }} registros</small>
+                <small class="text-secondary"
+                  >Mostrando {{ datos.length }} de
+                  {{ pagination.limit }} registros</small
+                >
               </div>
 
               <div class="col-auto me-auto">
@@ -358,7 +380,8 @@
                   [(ngModel)]="pagination.size"
                   (change)="obtenerDatos()"
                 >
-                  <option value="10">Mostrar 10</option>4n
+                  <option value="10">Mostrar 10</option>
+                  4n
                   <option value="20">Mostrar 20</option>
                   <option value="1000">Mostrar Todo</option>
                 </select>
@@ -373,7 +396,7 @@
                           [boundaryLinks]="true"
                           [directionLinks]="true"
                           [(ngModel)]="pagination.page"
-                          [totalItems]="pagination.rowsNumber"
+                          [totalItems]="pagination.limit"
                           [maxSize]="10"
                           [itemsPerPage]="pagination.size"
                           (pageChanged)="pageChanged($event)"

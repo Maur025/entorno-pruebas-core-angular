@@ -13,7 +13,9 @@ import { TransaccionArrayComponent } from "./transaccion-array/transaccion-array
 import { FechaFormatPipe } from "src/app/core/pipes/fechaFormat.pipe";
 import { DecimalAmountPipe } from "src/app/core/pipes/decimal-amount.pipe";
 import { FormAnticipoComponent } from "./form-anticipo/form-anticipo.component";
-
+import { esLocale } from "ngx-bootstrap/locale";
+import { defineLocale } from "ngx-bootstrap/chronos";
+defineLocale("es", esLocale);
 @NgModule({
   declarations: [
     FechaFormatPipe,

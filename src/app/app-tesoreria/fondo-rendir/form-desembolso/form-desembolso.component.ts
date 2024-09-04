@@ -115,7 +115,6 @@ export class FormDesembolsoComponent {
     );
     this.notificacionService?.confirmAndContinueAlert(dataImg, (response) => {
       if (response) this.guardarForm();
-      this.isStatusSubmit = false;
     });
   };
   guardarForm() {
@@ -127,10 +126,13 @@ export class FormDesembolsoComponent {
       this.fondoRendirService.desembolso(this.formDesembolso.value).subscribe(
         (data) => {
           this.alActualizar.emit(data);
-          this.isStatusSubmit = false;
           this.notificacionService.successStandar();
+          this.isStatusSubmit = false;
         },
-        (error) => this.notificacionService.alertError(error)
+        (error) => {
+          this.notificacionService.alertError(error);
+          this.isStatusSubmit = false;
+        }
       );
     }
     this.submitted = true;

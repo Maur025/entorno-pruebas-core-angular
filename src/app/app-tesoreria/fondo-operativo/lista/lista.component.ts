@@ -195,8 +195,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
       this.fondoOperativoService.update(this.formFondoCreate.value).subscribe(
         (data) => {
           this.cerrarModal();
-          this.isStatusSubmit = false;
           this.notificacionService.successStandar();
+          this.isStatusSubmit = false;
           this.tabla.obtenerDatos();
         },
         (error) => this.notificacionService.alertError(error)
@@ -208,6 +208,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
           this.isStatusSubmit = false;
           this.notificacionService.successStandar();
           this.tabla.obtenerDatos();
+          this.submitted = false;
         },
         (error) => this.notificacionService.alertError(error)
       );
