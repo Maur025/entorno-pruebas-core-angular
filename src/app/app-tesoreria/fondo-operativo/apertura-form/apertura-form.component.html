@@ -13,10 +13,9 @@
   <div class="mt-1 ms-4 me-4">
     <alert type="info" [dismissible]="true" role="alert">
       <i class="mdi mdi-alert-circle-outline me-2"></i>
-      {{ labelAlert }}: {{ montoPendienteReponer }}
+      {{ labelAlert }}: <b>{{ montoPendienteReponer }}</b>
     </alert>
   </div>
-
   <form [formGroup]="formAperturaFondo" (ngSubmit)="confirmAndContinueSaving()">
     <div class="ms-4 me-4 m-2">
       <div class="row mb-2">

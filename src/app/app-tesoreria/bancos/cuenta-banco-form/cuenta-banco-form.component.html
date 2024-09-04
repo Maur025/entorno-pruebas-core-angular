@@ -18,8 +18,16 @@
       >
         <div class="row">
           <div class="col-md-4">
+            <input-fecha
+              [formPadre]="formCuentaBanco"
+              [submitted]="submitted"
+              labelFecha="(*) Fecha"
+              (alRedirigir)="alAperturar()"
+            ></input-fecha>
+          </div>
+          <div class="col-md-4">
             <div class="mb-3 px-1">
-              <label class="mb-2">(*) Moneda </label>
+              <p class="text-muted mb-1">(*) Moneda</p>
               <ng-select
                 class="uppercase"
                 formControlName="monedaId"
@@ -43,9 +51,9 @@
               </div>
             </div>
           </div>
-          <div class="col-md-8">
+          <div class="col-md-4">
             <div class="mb-3 px-1">
-              <label class="mb-2">(*) N° de Cuenta </label>
+              <p class="text-muted mb-1">(*) N° de Cuenta </p>
               <input
                 type="text"
                 class="form-control uppercase"
@@ -85,7 +93,7 @@
         </div>
         <div class="row">
           <div class="d-flex">
-            <label class="col-4">(*) Apertura de cuenta con: </label>
+            <p class="text-muted mb-1">(*) Apertura de cuenta con: </p>
             <ui-switch
               formControlName="inicializacion"
               color="#556ee6"
@@ -160,7 +168,7 @@
           </ng-template>
         </div>
         <div class="col-md-8">
-          <label class="mb-2 mt-2">(*) Descripción </label>
+          <p class="text-muted mb-1">(*) Descripción </p>
           <textarea
             formControlName="descripcion"
             class="form-control"
