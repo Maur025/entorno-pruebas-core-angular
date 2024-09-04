@@ -22,7 +22,7 @@
               notFoundText="Sin registros"
               placeholder="Seleccione empleado"
               appendTo="#accountFormModalBodyDiv">
-              <ng-option *ngFor="let item of listaResponsables" [value]="item">
+              <ng-option *ngFor="let item of listaResponsables" [value]="item['id']">
                 {{item.nombre}} ({{item['nitCi']}})
               </ng-option>
             </ng-select>
