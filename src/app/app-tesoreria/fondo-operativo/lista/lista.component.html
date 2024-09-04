@@ -21,7 +21,7 @@
       <td [ngSwitch]="campo">
         <div *ngSwitchCase="'acciones'">
           <button
-            *ngIf="fila['estadoFondo'] !== 'CIE'"
+            *ngIf="fila['estadoFondo'] !== 'APER'"
             class="btn btn-sm btn-soft-info me-1"
             tooltip="Editar"
             [disabled]="fila.deleted"
@@ -59,7 +59,6 @@
             <i class="bx bx-lock-open-alt"></i>
           </button>
           <button
-            *ngIf="fila['estadoFondo'] == 'APER'"
             class="btn btn-sm btn-secondary me-1"
             tooltip="Ver movimientos"
             (click)="verMovimientos(fila, modalMovimientos)"
