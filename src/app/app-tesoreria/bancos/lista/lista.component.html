@@ -43,6 +43,15 @@
           >
             <i class="mdi mdi-format-list-bulleted"></i>
           </button>
+          <button
+            class="btn btn-sm btn-primary me-1"
+            tooltip="Traspaso"
+            [disabled]="fila.deleted"
+            (click)="realizarTraspaso(fila, templateTraspaso)"
+          >
+            <i class="mdi mdi-arrow-collapse-horizontal"></i>
+          </button>
+
         </div>
         <div *ngSwitchCase="'nombre'">
           {{ fila["nombre"] }}
@@ -181,4 +190,11 @@
     (cerrarModal)="modalRef.hide()"
   >
   </cuenta-banco-form>
+</ng-template>
+
+<ng-template #templateTraspaso>
+  <form-traspaso-cuenta
+   [datosBanco]="bancoData"
+   (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
+   ></form-traspaso-cuenta>
 </ng-template>

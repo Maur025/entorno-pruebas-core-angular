@@ -1,0 +1,247 @@
+<div id="accountFormModalBodyDiv">
+  <div class="col-xl-12 border-bottom p-4 pb-2">
+    <div class="float-end ms-2">
+      <small> Los campos marcados con asterisco (*) son requeridos. </small>
+    </div>
+    <div class="d-flex">
+      <div>
+        <h6 class="fs-14 mb-0 ms-1 text-primary">{{ datosBanco["nombre"] }}</h6>
+        <small class="text-muted mb-0 ms-1">Traspaso entre cuentas - Traspaso entre bancos</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-2 ms-3 me-3">
+
+    <div class="row">
+      <div class="hstack gap-2 justify-content-center ">
+        <div class="d-flex col-md-6 p-3 border">
+          <div class="form-check form-radio-primary ms-4">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="traspasoEntreCuentas"
+              style="transform: scale(1.5)"
+              (change)="verOpcion($event['target']['value'])"
+              [value]="true"
+              [checked]="traspasoEntreCuentas == true ? 'checked': ''"
+              >
+            <p class="text-muted mb-1">Traspaso entre cuentas</p>
+          </div>
+          <div class="form-check form-radio-primary ms-4">
+              <input
+              class="form-check-input"
+              type="radio"
+              name="traspasoEntreCuentas"
+              style="transform: scale(1.5)"
+              (change)="verOpcion($event['target']['value'])"
+              [value]="false"
+              [checked]="traspasoEntreCuentas == false ? 'checked': ''"
+              >
+              <p class="text-muted mb-1">Traspaso a otros bancos</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="formTraspaso" (ngSubmit)="confirmAndContinueSaving()">
+
+      <div class="row mt-3 mb-3">
+        <div class="col-md-4">
+          <input-fecha
+            [formPadre]="formTraspaso"
+            [submitted]="submitted"
+            labelFecha="(*) Fecha"
+            (alRedirigir)="this.cerrarModal.emit()"
+          ></input-fecha>
+        </div>
+        <div class="col-md-8">
+          <div class="col-md-12">
+            <p class="text-muted mb-1">(*) Descripción </p>
+            <textarea
+              formControlName="descripcion"
+              class="form-control"
+              rows="2"
+              placeholder="Descripción para el traspaso"
+              [ngClass]="{
+                'is-invalid': submitted && form['descripcion'].errors
+              }"
+              (input)="
+                utilityService?.convertUppercase(
+                  'descripcion',
+                  $event,
+                  formTraspaso
+                )
+              "
+            ></textarea>
+            </div>
+        </div>
+      </div>
+
+      <div class="row hstack gap-2 justify-content-center">
+        <div class="col-md-5">
+          <h6 class="fs-14 mb-0 ms-1 text-secondary fw-bold"> ORIGEN</h6>
+          <div class="border mt-2 ps-3">
+            <div class="col-md-10 mb-2 mt-2">
+              <h6 class="fs-14 mb-0 ms-1 text-primary fw-bold mb-1"> {{ datosBanco["nombre"] }}</h6>
+              <p class="text-muted mb-1">(*) Cuenta </p>
+              <ng-select
+              placeholder="Seleccione cuenta bancaria"
+              [items]="cuentaBancoListOrigen"
+              bindLabel="nroCuenta"
+              bindValue="id"
+              formControlName="cuentaBancoIdOrigen"
+              appendTo="#accountFormModalBodyDiv"
+              (change)="selectCuenta($event,traspasoEntreCuentas )"
+            >
+            </ng-select>
+            </div>
+
+            <div class="col-md-10 mb-2">
+              <p class="text-muted mb-1">(*) Medio de transferencia</p>
+              <ng-select
+                formControlName="medioTranferenciaIdOrigen"
+                [items]="medioTransferenciaOrigen"
+                bindLabel="medio"
+                bindValue="id"
+                appendTo="#accountFormModalBodyDiv"
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-10 mb-2">
+              <p class="text-muted mb-1">Nº Referencia</p>
+              <input
+              type="text"
+              class="form-control text-end"
+              formControlName="nroReferenciaOrigen"
+              [ngClass]="{'is-invalid': submitted && formTraspaso.controls['nroReferencia'].errors != null}"
+            />
+            </div>
+
+            <div class="col-md-10 mb-2">
+              <h6 class="fs-14 mt-2 mb-2 ms-1 text-secondary">
+                <b> (*)Monto a traspasar  </b> <small>(Salida)</small>
+              </h6>
+              <div class="hstack gap-2 justify-content-end">
+                <input
+                  type="text"
+                  formControlName="montoEgreso"
+                  class="form-control text-end"
+                  placeholder="Monto a traspasar Bs."
+                  (change)="montoTraspasar()"
+                  [ngClass]="{
+                    'is-invalid': submitted && form['montoEgreso'].errors
+                  }"
+                  (input)="
+                    utilityService.onlyNumbers(
+                      'montoEgreso',
+                      $event,
+                      formTraspaso
+                    )
+                  "
+                />
+                <div
+                  *ngIf="submitted && form['montoCuenta'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="form['montoCuenta'].errors['required']">
+                    Ingrese el saldo inicial
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-5">
+          <h6 class="fs-14 mb-0 ms-1 text-secondary fw-bold"> DESTINO</h6>
+          <div class="border  mt-2 ps-3">
+            <div class="col-md-10 mb-2 mt-2" *ngIf="!traspasoEntreCuentas">
+              <p class="text-muted mb-1">(*) Banco</p>
+              <ng-select
+                placeholder="Seleccione un banco"
+                [items]="bancoList"
+                bindLabel="nombre"
+                bindValue="id"
+                appendTo="#accountFormModalBodyDiv"
+                (change)="selectCajaBancoList($event)"
+              >
+              </ng-select>
+            </div>
+
+            <div class="col-md-10 mb-2 ">
+              <h6 class="fs-14 mb-0 ms-1 text-primary fw-bold mb-1 mt-2" *ngIf="traspasoEntreCuentas">
+                {{ datosBanco["nombre"] }}
+              </h6>
+
+              <p class="text-muted mb-1">(*) Cuenta  </p>
+              <ng-select
+              placeholder="Seleccione cuenta bancaria destino"
+              [items]="cuentaBancoListDestino"
+              bindLabel="nroCuenta"
+              bindValue="id"
+              formControlName="cuentaBancoIdDestino"
+              appendTo="#accountFormModalBodyDiv"
+              >
+            </ng-select>
+            </div>
+            <div class="col-md-10 mb-2">
+              <p class="text-muted mb-1">(*) Medio de transferencia</p>
+              <ng-select
+                formControlName="medioTranferenciaIdDestino"
+                [items]="medioTransferenciaDestino"
+                bindLabel="medio"
+                bindValue="id"
+                appendTo="#accountFormModalBodyDiv"
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-10 mb-2">
+              <p class="text-muted mb-1">Nº Referencia</p>
+              <input
+              type="text"
+              class="form-control text-end"
+              formControlName="nroReferenciaDestino"
+              [ngClass]="{'is-invalid': submitted && formTraspaso.controls['nroReferencia'].errors != null}"
+            />
+            </div>
+            <div class="col-md-10 mb-2">
+              <h6 class="fs-14 mt-2 mb-2 ms-1 text-secondary">
+                <b> (*)Monto transferido </b><small>(Ingreso)</small>
+              </h6>
+              <div class="hstack gap-2 justify-content-end">
+                <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary">
+                  <b>{{ formTraspaso.controls['montoIngreso'].value }}</b>
+                </h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3 mb-3 me-3">
+        <div class="hstack gap-2 justify-content-end">
+          <button
+            type="button"
+            class="btn btn-light"
+            data-bs-dismiss="modal"
+            (click)="this.cerrarModal.emit()"
+          >
+            Cerrar
+          </button>
+          <button
+            [disabled]="isStatusSubmit"
+            type="submit"
+            class="btn btn-success d-flex gap-1 align-items-center"
+            [ngStyle]="{ padding: isStatusSubmit ? '6px' : '7.52px' }"
+          >
+            <app-loader-button *ngIf="isStatusSubmit" />
+            {{
+              isStatusSubmit ? " Espere un momento..." : "Realizar Transferencia"
+            }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</div>

@@ -29,6 +29,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   titleCustom: any = "Registro de Anticipo de Clientes";
   label: string = "Clientes";
   data: any;
+  dataCliente: any;
   constructor(private modalService: BsModalService) {
     super();
   }
@@ -110,6 +111,11 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   };
 
   crearAnticipo(template) {
+    this.modalRef = this.modalService.show(template, this.modalConfig);
+  }
+
+  realizarDevolucion(template, cliente) {
+    this.dataCliente = cliente;
     this.modalRef = this.modalService.show(template, this.modalConfig);
   }
 }

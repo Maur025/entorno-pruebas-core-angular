@@ -62,10 +62,12 @@ export class FondoOperativoService {
       datos
     );
   }
-  /*
-  getMontoPorRendir(fondoOperativoId){
-    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/${fondoOperativoId}/monto/porRendir`);
-  } */
+
+  getMontoPorRendir(fondoOperativoId) {
+    return this.apiService.tesoreria.get(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/${fondoOperativoId}/monto/porRendir`
+    );
+  }
 
   movimientoFondoRendir(fondoOperativoId, filtros) {
     return this.apiService.tesoreria.post(
