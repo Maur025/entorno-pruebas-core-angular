@@ -62,7 +62,7 @@ export class CuentaBancoFormComponent {
   }
 
   setForm() {
-    let fechaActual = new Date();
+/*     let fechaActual = new Date();
     this.fechaActual =
       fechaActual.getFullYear() +
       "-" +
@@ -80,7 +80,7 @@ export class CuentaBancoFormComponent {
       ":" +
       fechaActual.getMinutes().toString().padStart(2, "0") +
       ":" +
-      fechaActual.getSeconds().toString().padStart(2, "0");
+      fechaActual.getSeconds().toString().padStart(2, "0"); */
     this.formCuentaBanco = this.formBuilder.group({
       id: "",
       nroCuenta: [

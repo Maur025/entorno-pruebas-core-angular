@@ -36,10 +36,10 @@ export class FondoOperativoService {
   cierreFondo(datos: any) {
     return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/cierres`, datos);
   }
-/*
+
   getMontoPorRendir(fondoOperativoId){
     return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}/${fondoOperativoId}/monto/porRendir`);
-  } */
+  }
 
   movimientoFondoRendir(fondoOperativoId,filtros){
     return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/detail/${fondoOperativoId}`, filtros);

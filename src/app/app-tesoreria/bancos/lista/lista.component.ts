@@ -136,6 +136,12 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     });
   }
 
+  realizarTraspaso(banco, template){
+    this.bancoData = banco;
+    this.modalConfig.class = `modal-xl modal-scrollable`;
+    this.modalRef = this.modalService.show(template, this.modalConfig);
+  }
+
   confirmAndContinueSaving = async (): Promise<void> => {
     this.submitted = true;
     this.isStatusSubmit = true;
