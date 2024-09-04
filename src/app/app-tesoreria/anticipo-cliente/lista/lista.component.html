@@ -24,6 +24,7 @@
             class="btn btn-sm btn-warning me-2"
             tooltip="Devolucion"
             [disabled]="fila['saldo'] == 0"
+            (click)="realizarDevolucion(devolucionAnticipo, fila)"
           >
             <i class="mdi mdi-keyboard-backspace"></i>
           </button>
@@ -69,4 +70,12 @@
     (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
     (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"
   ></app-form-anticipo>
+</ng-template>
+
+<ng-template #devolucionAnticipo>
+  <app-form-devolucion
+    [datosCliente]="dataCliente"
+    (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
+    (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"
+  ></app-form-devolucion>
 </ng-template>
