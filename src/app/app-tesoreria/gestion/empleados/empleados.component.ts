@@ -140,7 +140,6 @@ export class EmpleadosComponent extends FuncionesComponent implements OnInit {
 
     this.notificacionService?.confirmAndContinueAlert(dataImg, (response) => {
       if (response) this.guardar();
-      this.isStatusSubmit = false;
     });
   };
 
@@ -155,8 +154,8 @@ export class EmpleadosComponent extends FuncionesComponent implements OnInit {
       this.empleadoService.update(this.formEmpleado?.value).subscribe({
         next: () => {
           this.notificacionService.successStandar();
-          this.isStatusSubmit = false;
           this.cerrarModal();
+          this.isStatusSubmit = false;
         },
         error: (error: ErrorResponseStandard) => {
           this.notificacionService?.alertError(error);

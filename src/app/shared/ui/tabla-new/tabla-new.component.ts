@@ -11,10 +11,16 @@ import { PageChangedEvent } from "ngx-bootstrap/pagination";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { ArchivosService } from "src/app/core/services/archivos.service";
 import { ResponseHandlerService } from "src/app/core/services/response-handler.service";
-import { ResponseDataStandard } from './../../interface/common-list-interface';
-import { ErrorResponseStandard, ApiResponseStandard } from './../../interface/common-api-response';
-import { ItemOptionInterface, FileTypeEnum, ActionTypeEnum } from './../../../core/models/details.model';
-
+import { ResponseDataStandard } from "./../../interface/common-list-interface";
+import {
+  ErrorResponseStandard,
+  ApiResponseStandard,
+} from "./../../interface/common-api-response";
+import {
+  ItemOptionInterface,
+  FileTypeEnum,
+  ActionTypeEnum,
+} from "./../../../core/models/details.model";
 
 @Component({
   selector: "app-tabla-new",
@@ -45,7 +51,6 @@ export class TablaNewComponent implements OnChanges {
   @Input() labelNuevo: string = "Nuevo";
   @Input() opcionesPage: any = [];
 
-
   @Output() alCrear: EventEmitter<any> = new EventEmitter();
   @Output() alEditar: EventEmitter<any> = new EventEmitter();
   @Output() alDeshabilitar: EventEmitter<any> = new EventEmitter();
@@ -59,14 +64,13 @@ export class TablaNewComponent implements OnChanges {
   @Output() onFilterChange: EventEmitter<any> = new EventEmitter<any>();
   @Output() onHeadersChange: EventEmitter<any> = new EventEmitter<any>();
 
-
   inputBuscar: string = "";
   cabeceras: any;
   datos: any;
   estaCargando = true;
   flagEncontrado;
   verBusquedaAvanzada = false;
-  viewTools: boolean=false;
+  viewTools: boolean = false;
   objectKeys = Object.keys;
 
   public pagination = {
@@ -76,7 +80,7 @@ export class TablaNewComponent implements OnChanges {
     descending: false,
     rowsNumber: 0,
     pages: 0,
-    limit:0
+    limit: 0,
   };
   constructor(
     private responseHandlerService: ResponseHandlerService,
@@ -151,11 +155,9 @@ export class TablaNewComponent implements OnChanges {
       descending: false,
       rowsNumber: 0,
       pages: 0,
-      limit:0
+      limit: 0,
     };
   }
-
-
 
   pageChanged(event: PageChangedEvent) {
     this.pagination.page = event.page;
@@ -184,7 +186,7 @@ export class TablaNewComponent implements OnChanges {
     }
   }
  */
-  verSeccionBusqueda(){
+  verSeccionBusqueda() {
     this.verBusquedaAvanzada = !this.verBusquedaAvanzada;
   }
 
@@ -241,19 +243,19 @@ export class TablaNewComponent implements OnChanges {
             this.idRuta
           ).subscribe(
             (result: any) => {
-							const contenido = result.data ? result.data : result.content
-							this.datos = contenido;
-							this.pagination.limit = result.pagination.limit;
-							this.pagination.pages = result.pagination.pages;
-							this.estaCargando = false
-							this.alCargar.emit(this.datos)
+              console.log("result", result);
+              const contenido = result.data ? result.data : result.content;
+              this.datos = contenido;
+              this.pagination.limit = result.pagination.count;
+              this.pagination.pages = result.pagination.pages;
+              this.estaCargando = false;
+              this.alCargar.emit(result);
             },
             (error) => {
               this.notificacionService.alertError(error);
             }
           );
         } else {
-
           this.datosService[this.getAll](
             this.pagination.size,
             this.pagination.page,
@@ -262,14 +264,18 @@ export class TablaNewComponent implements OnChanges {
             this.inputBuscar
           ).subscribe(
             (result: any) => {
-
               const contenido = result.data ? result.data : result.content;
-
-							this.datos = contenido;
-							this.pagination.limit = result.pagination ? result.pagination.limit : contenido.length;
-              this.pagination.pages = result.pagination ? result.pagination.pages : 0;
-							this.estaCargando = false;
-							this.alCargar.emit(this.datos)
+              this.datos = contenido;
+              this.pagination.limit = result?.pagination?.count;
+              this.pagination.pages = result?.pagination?.pages;
+              this.estaCargando = false;
+              this.alCargar.emit(result);
+              /* this.pagination.limit = result.pagination
+                ? result.pagination.limit
+                : contenido.length; */
+              /* this.pagination.pages = result.pagination
+                ? result.pagination.pages
+                : 0; */
             },
             (error) => {
               this.notificacionService.alertError(error);
@@ -291,22 +297,38 @@ export class TablaNewComponent implements OnChanges {
           (result: any) => {
             const contenido = result.data ? result.data : result.content;
             this.datos = contenido;
-            this.pagination.limit = result.pagination? result.pagination.limit : contenido.length;
-            this.pagination.pages = result.pagination ? result.pagination.pages : 0;
+            this.pagination.limit = result?.pagination?.count;
+            this.pagination.pages = result?.pagination?.pages;
+            /* this.pagination.limit = result.pagination
+              ? result.pagination.limit
+              : contenido.length;
+            this.pagination.pages = result.pagination
+              ? result.pagination.pages
+              : 0; */
             this.estaCargando = false;
-            this.alCargar.emit(this.datos)
-          },error => this.notificacionService.alertError(error));
+            this.alCargar.emit(result);
+          },
+          (error) => this.notificacionService.alertError(error)
+        );
       }
     } else {
       this.datosService[this.getAll](this.inputBuscar, this.filtros).subscribe(
         (result: any) => {
           const contenido = result.data ? result.data : result.content;
           this.datos = contenido;
-          this.pagination.limit = result.pagination ? result.pagination.limit : contenido.length;
-          this.pagination.pages = result.pagination ? result.pagination.pages: 0;
+          /* this.pagination.limit = result.pagination
+            ? result.pagination.limit
+            : contenido.length;
+          this.pagination.pages = result.pagination
+            ? result.pagination.pages
+            : 0; */
+          this.pagination.limit = result?.pagination?.count;
+          this.pagination.pages = result?.pagination?.pages;
           this.estaCargando = false;
-          this.alCargar.emit(this.datos)
-        },error => this.notificacionService.alertError(error));
+          this.alCargar.emit(this.datos);
+        },
+        (error) => this.notificacionService.alertError(error)
+      );
     }
   }
 

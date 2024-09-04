@@ -1,10 +1,10 @@
 {
   "production": false,
-  "configApi": "https://sandbox-kbi-config-api.kernotec.com/api/config",
-  "contabilidadApi": "https://sandbox-kbi-contabilidad-api.kernotec.com/api/contabilidad",
-  "tesoreriaApi": "https://sandbox-kbi-tesoreria-api.kernotec.com/api/tesoreria",
-  "inventariosApi": "https://sandbox-kbi-inventarios-api.kernotec.com/api/inventarios",
-  "comprasApi": "https://sandbox-kbi-compras-api.kernotec.com/api/compras",
+"configApi": "https://sandbox-config-api.kernotec.com/api/config",
+  "contabilidadApi": "https://sandbox-contabilidad-api.kernotec.com/api/contabilidad",
+  "tesoreriaApi": "https://sandbox-tesoreria-api.kernotec.com/api/tesoreria",
+  "inventariosApi": "https://sandbox-inventarios-api.kernotec.com/api/inventarios",
+  "comprasApi": "https://sandbox-compras-api.kernotec.com/api/compras",
   "ventasAdminApi": "https://sandbox-kbi-ventas-admin-api.kernotec.com/api/ventas/admin",
-  "ventasEmisorApi": "https://sandbox-kbi-ventas-emisor-api.kernotec.com/api/ventas/emisor"
+  "ventasEmisorApi": "https://sandbox-ventas-api.kernotec.com/api/ventas"
 }

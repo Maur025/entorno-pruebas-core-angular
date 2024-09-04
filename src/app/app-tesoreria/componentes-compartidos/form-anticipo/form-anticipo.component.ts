@@ -124,6 +124,7 @@ export class FormAnticipoComponent {
     this._clienteService.getAll(100, 1, "id", false, "").subscribe({
       next: (data) => {
         this.data = data;
+        console.log("DATA: ", this.data)
       },
       error: (err) => console.log(err),
     });

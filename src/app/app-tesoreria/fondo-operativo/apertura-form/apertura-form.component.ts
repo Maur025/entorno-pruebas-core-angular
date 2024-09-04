@@ -180,7 +180,7 @@ export class AperturaFormComponent {
   }
 
   variablesOperacion() {
- /*    this.fondoOperativoService
+    /*    this.fondoOperativoService
       .getMontoPorRendir(this.datosFondo["id"])
       .subscribe((data) => {
         let monto = data["data"]["montoPorRendir"];
@@ -192,7 +192,6 @@ export class AperturaFormComponent {
       });
  */
 
-
     switch (this.operacion) {
       case "APER":
         this.labelOperacion = "Apertura de Fondo Operativo";
@@ -201,7 +200,7 @@ export class AperturaFormComponent {
         this.labelMonto = "Monto total de apertura";
         this.labelPlaceholder = "Descripción para la apertura de fondo";
         this.labelAlert = "Importe de fondo operativo";
-        this.montoPendienteReponer = this.datosFondo['importe'];
+        this.montoPendienteReponer = this.datosFondo["importe"];
         break;
       case "REPO":
         this.labelOperacion = "Reposición de Fondo Operativo";
@@ -210,12 +209,12 @@ export class AperturaFormComponent {
         this.labelMonto = "Monto total de reposición";
         this.labelPlaceholder = "Descripción para la reposición de fondo";
         this.labelAlert = "Pendiente a reposicion";
-
-        this.fondoOperativoService.getMontoPorRendir(this.datosFondo["id"])
-        .subscribe((data) => {
-          let monto = data["data"]["montoPorRendir"];
-          this.montoPendienteReponer = monto;
-        });
+        this.fondoOperativoService
+          .getMontoPorRendir(this.datosFondo["id"])
+          .subscribe((data) => {
+            let monto = data["data"]["montoPorRendir"];
+            this.montoPendienteReponer = monto;
+          });
         break;
       case "CIE":
         this.labelOperacion = "Cierre de Fondo Operativo";
@@ -224,7 +223,7 @@ export class AperturaFormComponent {
         this.labelMonto = "Monto total para el cierre";
         this.labelPlaceholder = "Descripción para la cierre de fondo";
         this.labelAlert = "Pendiente a reposicion";
-        this.montoPendienteReponer = this.datosFondo['saldo'];
+        this.montoPendienteReponer = this.datosFondo["saldo"];
         break;
       default:
         console.error("No se encontro la operacion");
@@ -303,8 +302,8 @@ export class AperturaFormComponent {
     this.fondoOperativoService.cierreFondo(request).subscribe(
       (data) => {
         this.alActualizar.emit(data);
-        this.isStatusSubmit = false;
         this.notificacionService.successStandar();
+        this.isStatusSubmit = false;
       },
       (error) => this.notificacionService.alertError(error)
     );

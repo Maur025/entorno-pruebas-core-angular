@@ -13,6 +13,10 @@ import { TransaccionArrayComponent } from "./transaccion-array/transaccion-array
 import { FechaFormatPipe } from "src/app/core/pipes/fechaFormat.pipe";
 import { DecimalAmountPipe } from "src/app/core/pipes/decimal-amount.pipe";
 import { FormAnticipoComponent } from "./form-anticipo/form-anticipo.component";
+
+import { esLocale } from "ngx-bootstrap/locale";
+import { defineLocale } from "ngx-bootstrap/chronos";
+defineLocale("es", esLocale);
 import { FormDevolucionComponent } from "./form-devolucion/form-devolucion.component";
 import { ListAnticipoComponent } from "./form-devolucion/list-anticipo/list-anticipo.component";
 
