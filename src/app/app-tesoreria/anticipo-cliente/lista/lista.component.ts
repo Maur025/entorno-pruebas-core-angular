@@ -101,7 +101,7 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   };
 
   getVentas = () => {
-    this._clienteService.getAll(100, 1, "id", false, "").subscribe({
+    this._clienteService.getAll(100, 0, "id", false, "").subscribe({
       next: (data) => {
         this.data = data;
       },

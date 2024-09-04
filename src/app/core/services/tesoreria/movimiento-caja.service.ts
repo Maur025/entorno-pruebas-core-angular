@@ -13,18 +13,22 @@ export class MovimientoCajaService {
   apiUrl: string = "";
   prefix: string = "";
 
-  movimientosPorCaja=(
-		size: number = 100,
-		page: number = 0,
-		sortBy: string = 'id',
-		descending: boolean = false,
-		keyword: string = '',
-		id: string | number
-	): Observable<ApiResponseStandard> => {
-		return this.apiService.tesoreria.get(
-			`${this.apiUrl}${this.prefix}/${this.apiName}/${id}?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
-		)
-	}
+  movimientosPorCaja = (
+    size: number = 100,
+    page: number = 0,
+    sortBy: string = "id",
+    descending: boolean = false,
+    keyword: string = "",
+    id: string | number
+  ): Observable<ApiResponseStandard> => {
+    size = size <= 0 ? 100 : size;
+    page = page <= 0 ? 1 : page;
+    return this.apiService.tesoreria.get(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/${id}?size=${size}&page=${
+        page - 1
+      }&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
+    );
+  };
 
   movimientoApertura(datos: any) {
     return this.apiService.tesoreria.post(

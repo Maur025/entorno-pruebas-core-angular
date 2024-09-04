@@ -48,8 +48,14 @@ export class FondoRendirService {
     keyword: any = "",
     empleadoId
   ) {
+    size = size <= 0 ? 100 : size;
+    page = page <= 0 ? 1 : page;
     return this.apiService.tesoreria.get(
-      `${this.apiUrl}${this.prefix}/${this.apiName}/desembolsos/empleado/${empleadoId}?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
+      `${this.apiUrl}${this.prefix}/${
+        this.apiName
+      }/desembolsos/empleado/${empleadoId}?size=${size}&page=${
+        page - 1
+      }&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
     );
   }
 

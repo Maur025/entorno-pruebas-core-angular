@@ -46,6 +46,7 @@ export class InputFechaComponent implements OnInit {
   getGestionId() {
     this.gestionService.getRecordsEnabled().subscribe({
       next: (data) => {
+        console.log("DATA: ", data);
         this.gestionId?.next(data?.data[0]?.id);
       },
     });
@@ -56,7 +57,6 @@ export class InputFechaComponent implements OnInit {
       this.aperturasCierresService
         .getAperturaCierreHabilitados(this.gestionId.getValue())
         .subscribe((data) => {
-          console.log("DATA: ", data);
           this.checkDateStatus(data);
           data["data"].forEach((mes) => {
             let dia = new Date(mes.fechaIni);
@@ -83,6 +83,6 @@ export class InputFechaComponent implements OnInit {
 
   enabledDate() {
     this.alRedirigir.emit();
-    this.router.navigate(["/gestion/aperturaCierre"]);
+    this.router.navigate(["/gestion/apertura-cierre"]);
   }
 }

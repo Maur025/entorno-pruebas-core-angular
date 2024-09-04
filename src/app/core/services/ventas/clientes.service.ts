@@ -24,6 +24,7 @@ export class ClienteService {
     keyword: any = ""
   ) {
     size = size <= 0 ? 100 : size;
+    page = page <= 0 ? 1 : page;
     return this.apiService.ventas
       .get(
         `${this.apiUrl}${this.prefix}/${this.apiName}?size=${size}&page=${

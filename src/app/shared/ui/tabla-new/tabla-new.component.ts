@@ -243,6 +243,7 @@ export class TablaNewComponent implements OnChanges {
             this.idRuta
           ).subscribe(
             (result: any) => {
+              console.log("result", result);
               const contenido = result.data ? result.data : result.content;
               this.datos = contenido;
               this.pagination.limit = result.pagination.count;
