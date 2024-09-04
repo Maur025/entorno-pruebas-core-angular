@@ -210,7 +210,12 @@ export class AperturaFormComponent {
         this.labelMonto = "Monto total de reposición";
         this.labelPlaceholder = "Descripción para la reposición de fondo";
         this.labelAlert = "Pendiente a reposicion";
-        this.montoPendienteReponer = this.datosFondo['saldo'];
+
+        this.fondoOperativoService.getMontoPorRendir(this.datosFondo["id"])
+        .subscribe((data) => {
+          let monto = data["data"]["montoPorRendir"];
+          this.montoPendienteReponer = monto;
+        });
         break;
       case "CIE":
         this.labelOperacion = "Cierre de Fondo Operativo";

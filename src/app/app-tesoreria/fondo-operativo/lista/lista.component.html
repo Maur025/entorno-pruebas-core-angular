@@ -168,18 +168,19 @@
           <div class="mb-3 px-1">
             <label class="mb-2" for="cashEmployeeId">(*) Responsable </label>
             <ng-select
-              id="cashEmployeeId"
-              class="uppercase"
               formControlName="empleadoId"
-              placeholder="SELECCIONE RESPONSABLE"
-              [items]="listaResponsables"
-              bindLabel="nombre"
+              notFoundText="Sin registros"
+              placeholder="Seleccione empleado"
+              appendTo="#form-create-edit-cash"
               bindValue="id"
               [ngClass]="{
                 'ngselect-invalid':
                   submitted && form['empleadoId'].errors != null
-              }"
-            />
+              }">
+              <ng-option *ngFor="let item of listaResponsables" [value]="item['id']">
+                {{item.nombre}} ({{item['nitCi']}})
+              </ng-option>
+            </ng-select>
             <div
               *ngIf="submitted && form['empleadoId'].errors"
               class="col-sm-12"

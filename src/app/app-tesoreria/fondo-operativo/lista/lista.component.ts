@@ -123,14 +123,15 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     this.titleModal = "Editar fondo operativo";
     this.modalConfig.class = `modal-md modal-scrollable`;
     this.modalRef = this.modalService.show(template, this.modalConfig);
-
     this.idFondoEdit = fila["id"];
     this.formFondoCreate.controls["id"].setValue(fila["id"]);
     this.formFondoCreate.controls["nombre"].setValue(fila["nombre"]);
-    this.formFondoCreate.controls["empleadoId"].setValue(fila["empleadoId"]);
     this.formFondoCreate.controls["importe"].setValue(fila["importe"]);
-  }
+    setTimeout(()=>{
+      this.formFondoCreate.get('empleadoId')?.setValue(fila["empleado"]["id"]);
+    }, 500);
 
+  }
   aperturarFondo(fila, template) {
     this.operacionFondo = "APER";
 

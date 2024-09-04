@@ -123,10 +123,12 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     this.idCajaEdit = fila["id"];
     this.formCajaCreate.controls["id"].setValue(fila["id"]);
     this.formCajaCreate.controls["nombre"].setValue(fila["nombre"]);
-    this.formCajaCreate.controls["empleadoId"].setValue(fila["empleado"]["id"]);
     this.formCajaCreate.controls["centroCostoId"].setValue(
       fila["centroCosto"]["id"]
     );
+    setTimeout(()=>{
+      this.formCajaCreate.get('empleadoId')?.setValue(fila["empleado"]["id"]);
+    }, 500);
   }
 
   aperturarCaja(fila, template) {
