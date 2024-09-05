@@ -45,7 +45,7 @@
           </button>
           <button
             class="btn btn-sm btn-primary me-1"
-            tooltip="Traspaso"
+            tooltip="Realizar transferencias"
             [disabled]="fila.deleted"
             (click)="realizarTraspaso(fila, templateTraspaso)"
           >
@@ -196,5 +196,6 @@
   <form-traspaso-cuenta
    [datosBanco]="bancoData"
    (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
+   (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"
    ></form-traspaso-cuenta>
 </ng-template>

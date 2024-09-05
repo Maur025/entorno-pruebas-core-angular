@@ -83,7 +83,7 @@ export class EmpleadosComponent extends FuncionesComponent implements OnInit {
         null,
         [
           Validators.required,
-          Validators.minLength(2),
+          Validators.minLength(5),
           Validators.maxLength(255),
         ],
       ],
