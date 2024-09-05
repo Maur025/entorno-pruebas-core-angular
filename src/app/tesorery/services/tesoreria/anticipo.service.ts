@@ -1,27 +1,43 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ConsumoApiService } from 'src/app/core/services/consumoApi.service';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { ConsumoApiService } from "src/app/core/services/consumoApi.service";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class AnticipoService {
+  apiName: string = "anticipo_proveedor";
+  apiUrl: string = "";
+  prefix: string = "";
+  constructor(
+    private http: HttpClient,
+    private apiService: ConsumoApiService
+  ) {}
 
-  apiName:string = 'anticipo_proveedor';
-  apiUrl:string = '' ;
-  prefix:string = '';
-  constructor(private http: HttpClient, private apiService : ConsumoApiService) { }
-
-  getAll(size: number = 100, page: number = 1, sortBy:string = 'id', descending:false, keyword:any = '') {
-    size = size <= 0? 100 : size;
-    return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}?size=${size}&page=${page}&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`);
+  getAll(
+    size: number = 100,
+    page: number = 1,
+    sortBy: string = "id",
+    descending: false,
+    keyword: any = ""
+  ) {
+    size = size <= 0 ? 100 : size;
+    page = page <= 0 ? 1 : page;
+    return this.apiService.tesoreria.get(
+      `${this.apiUrl}${this.prefix}/${this.apiName}?size=${size}&page=${
+        page - 1
+      }&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
+    );
   }
 
   crearAnticipo(datos: any) {
-    return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}`, datos);
+    return this.apiService.tesoreria.post(
+      `${this.apiUrl}${this.prefix}/${this.apiName}`,
+      datos
+    );
   }
-/*
+  /*
     apiName:string = 'anticipo';
     entitys:string = 'Anticipos';
 

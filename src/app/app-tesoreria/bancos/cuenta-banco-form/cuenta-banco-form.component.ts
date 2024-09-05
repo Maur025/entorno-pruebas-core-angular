@@ -62,7 +62,7 @@ export class CuentaBancoFormComponent {
   }
 
   setForm() {
-/*     let fechaActual = new Date();
+    /*     let fechaActual = new Date();
     this.fechaActual =
       fechaActual.getFullYear() +
       "-" +
@@ -150,8 +150,11 @@ export class CuentaBancoFormComponent {
       "accountFormModalBodyDiv"
     );
     this.notificacionService?.confirmAndContinueAlert(dataImg, (response) => {
-      if (response) this.guardarForm();
-      this.isStatusSubmit = false;
+      if (response) {
+        this.guardarForm();
+      } else {
+        this.isStatusSubmit = false;
+      }
     });
   };
 
@@ -161,14 +164,18 @@ export class CuentaBancoFormComponent {
         .formCuentaBanco.value["transacciones"]
         ? this.formCuentaBanco.value["transacciones"]
         : null;
-      this.formCuentaBanco.value['fechaCuenta'] = this.formCuentaBanco.value['fecha'];
+      this.formCuentaBanco.value["fechaCuenta"] =
+        this.formCuentaBanco.value["fecha"];
       this.cuentaBancoService.register(this.formCuentaBanco.value).subscribe(
         (data) => {
           this.alActualizar.emit(data);
           this.notificacionService.successStandar();
           this.isStatusSubmit = false;
         },
-        (error) => this.notificacionService.alertError(error)
+        (error) => {
+          this.notificacionService.alertError(error);
+          this.isStatusSubmit = false;
+        }
       );
     }
     this.submitted = true;
@@ -177,5 +184,4 @@ export class CuentaBancoFormComponent {
   alAperturar() {
     this.cerrarModal.emit();
   }
-
 }
