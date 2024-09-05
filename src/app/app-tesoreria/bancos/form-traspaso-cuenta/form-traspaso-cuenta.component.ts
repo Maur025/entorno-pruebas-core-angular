@@ -46,7 +46,6 @@ export class FormTraspasoCuentaComponent implements OnInit {
   ngOnInit() {
     this.setFieldForm();
     this.getCuentaBancoListOrigen(this.datosBanco['id']);
-    //this.getBancosList();
     this.getTransferMediumData();
   }
 
@@ -57,7 +56,7 @@ export class FormTraspasoCuentaComponent implements OnInit {
   setFieldForm(){
     this.formTraspaso = this.formBuilder.group({
       fecha: [null, [Validators.required]],
-      descripcion: [null, [Validators.required]],
+      descripcionTranferencia: [null, [Validators.required]],
       cuentaBancoIdOrigen: [null, [Validators.required]],
       cuentaBancoIdDestino: [null, [Validators.required]],
       medioTranferenciaIdDestino: [null, [Validators.required]],
@@ -101,7 +100,6 @@ export class FormTraspasoCuentaComponent implements OnInit {
       },error => this.notificacionService?.alertError(error));
 	}
 
-
 	getBancosList() {
 		this.bancoService.habilitados().subscribe(
 			(response: ApiResponseStandard) => {
@@ -127,8 +125,17 @@ export class FormTraspasoCuentaComponent implements OnInit {
   getTransferMediumData = (): void => {
 		this.medioTransferenciaService?.habilitados()?.subscribe(
 			(response: ApiResponseStandard) => {
-				this.medioTransferenciaDestino =	this.responseHandlerService?.handleResponseAsArray(response);
-        this.medioTransferenciaOrigen = this.responseHandlerService?.handleResponseAsArray(response);
+
+        let dataTransfer = this.responseHandlerService?.handleResponseAsArray(response);
+
+        dataTransfer = dataTransfer.filter(element=>{
+          return element['destino'] !== "CAJA"
+        });
+
+/* 				this.medioTransferenciaDestino =	this.responseHandlerService?.handleResponseAsArray(response);
+        this.medioTransferenciaOrigen = this.responseHandlerService?.handleResponseAsArray(response); */
+        this.medioTransferenciaDestino =	dataTransfer;
+        this.medioTransferenciaOrigen = dataTransfer;
 			},
 			(error: ErrorResponseStandard) => {
 				this.notificacionService?.alertError(error)
@@ -139,6 +146,7 @@ export class FormTraspasoCuentaComponent implements OnInit {
   selectCuenta(event,traspasoEntreCuentas ){
     if(traspasoEntreCuentas){
       this.getCuentaBancoListDestino(this.datosBanco['id']);
+      this.formTraspaso.controls['cuentaBancoIdDestino'].reset();
     }
   }
   confirmAndContinueSaving = async (): Promise<void> => {
@@ -158,6 +166,38 @@ export class FormTraspasoCuentaComponent implements OnInit {
   };
 
   guardarTraspaso(){
+    let body = {
+      fechaTransferencia: this.formTraspaso.value["fecha"],
+      descripcionTranferencia: this.formTraspaso.value["descripcionTranferencia"],
+      montoTotal: this.formTraspaso.value["montoEgreso"],
+      movimientoIngreso: {
+        monto: this.formTraspaso.value["montoIngreso"],
+        nroReferencia: this.formTraspaso.value["nroReferenciaDestino"],
+        medioTransferenciaId: this.formTraspaso.value["medioTranferenciaIdDestino"],
+        cajaCuentaBancoId: this.formTraspaso.value["cuentaBancoIdDestino"],
+        destino: "BANCO"
+      },
+      movimientoEgreso: {
+        monto: this.formTraspaso.value["montoEgreso"],
+        nroReferencia: this.formTraspaso.value["nroReferenciaOrigen"],
+        medioTransferenciaId: this.formTraspaso.value["medioTranferenciaIdOrigen"],
+        cajaCuentaBancoId: this.formTraspaso.value["cuentaBancoIdOrigen"],
+        destino: "BANCO"
+      }
+    }
 
+    this.cuentaBancoService.registerTransferencia(
+      this.formTraspaso.value["cuentaBancoIdOrigen"],
+      this.formTraspaso.value["cuentaBancoIdDestino"],
+      body).subscribe(
+      (data) => {
+        this.alActualizar.emit(data);
+        this.notificacionService.successStandar();
+        this.isStatusSubmit = false;
+      },
+      (error) => this.notificacionService.alertError(error)
+    );
+
+    this.submitted = true;
   }
 }

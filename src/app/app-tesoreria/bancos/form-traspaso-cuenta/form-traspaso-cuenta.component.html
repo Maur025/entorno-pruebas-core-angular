@@ -6,7 +6,7 @@
     <div class="d-flex">
       <div>
         <h6 class="fs-14 mb-0 ms-1 text-primary">{{ datosBanco["nombre"] }}</h6>
-        <small class="text-muted mb-0 ms-1">Traspaso entre cuentas - Traspaso entre bancos</small>
+        <small class="text-muted mb-0 ms-1">Transferencia entre cuentas - Transferencia entre bancos</small>
       </div>
     </div>
   </div>
@@ -26,7 +26,7 @@
               [value]="true"
               [checked]="traspasoEntreCuentas == true ? 'checked': ''"
               >
-            <p class="text-muted mb-1">Traspaso entre cuentas</p>
+            <p class="text-muted mb-1">Transferencia entre cuentas</p>
           </div>
           <div class="form-check form-radio-primary ms-4">
               <input
@@ -38,7 +38,7 @@
               [value]="false"
               [checked]="traspasoEntreCuentas == false ? 'checked': ''"
               >
-              <p class="text-muted mb-1">Traspaso a otros bancos</p>
+              <p class="text-muted mb-1">Transferencia a otros bancos</p>
           </div>
         </div>
       </div>
@@ -47,7 +47,7 @@
     <form [formGroup]="formTraspaso" (ngSubmit)="confirmAndContinueSaving()">
 
       <div class="row mt-3 mb-3">
-        <div class="col-md-4">
+        <div class="col-md-6">
           <input-fecha
             [formPadre]="formTraspaso"
             [submitted]="submitted"
@@ -55,20 +55,20 @@
             (alRedirigir)="this.cerrarModal.emit()"
           ></input-fecha>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-6">
           <div class="col-md-12">
             <p class="text-muted mb-1">(*) Descripción </p>
             <textarea
-              formControlName="descripcion"
+              formControlName="descripcionTranferencia"
               class="form-control"
               rows="2"
               placeholder="Descripción para el traspaso"
               [ngClass]="{
-                'is-invalid': submitted && form['descripcion'].errors
+                'is-invalid': submitted && form['descripcionTranferencia'].errors
               }"
               (input)="
                 utilityService?.convertUppercase(
-                  'descripcion',
+                  'descripcionTranferencia',
                   $event,
                   formTraspaso
                 )
@@ -114,20 +114,20 @@
               type="text"
               class="form-control text-end"
               formControlName="nroReferenciaOrigen"
-              [ngClass]="{'is-invalid': submitted && formTraspaso.controls['nroReferencia'].errors != null}"
+              [ngClass]="{'is-invalid': submitted && formTraspaso.controls['nroReferenciaOrigen'].errors != null}"
             />
             </div>
 
             <div class="col-md-10 mb-2">
               <h6 class="fs-14 mt-2 mb-2 ms-1 text-secondary">
-                <b> (*)Monto a traspasar  </b> <small>(Salida)</small>
+                <b> (*)Monto a transferir  </b> <small>(Salida)</small>
               </h6>
               <div class="hstack gap-2 justify-content-end">
                 <input
                   type="text"
                   formControlName="montoEgreso"
                   class="form-control text-end"
-                  placeholder="Monto a traspasar Bs."
+                  placeholder="Monto a transferir Bs."
                   (change)="montoTraspasar()"
                   [ngClass]="{
                     'is-invalid': submitted && form['montoEgreso'].errors
@@ -141,10 +141,10 @@
                   "
                 />
                 <div
-                  *ngIf="submitted && form['montoCuenta'].errors"
+                  *ngIf="submitted && form['montoEgreso'].errors"
                   class="invalid-feedback"
                 >
-                  <div *ngIf="form['montoCuenta'].errors['required']">
+                  <div *ngIf="form['montoEgreso'].errors['required']">
                     Ingrese el saldo inicial
                   </div>
                 </div>
@@ -202,7 +202,7 @@
               type="text"
               class="form-control text-end"
               formControlName="nroReferenciaDestino"
-              [ngClass]="{'is-invalid': submitted && formTraspaso.controls['nroReferencia'].errors != null}"
+              [ngClass]="{'is-invalid': submitted && formTraspaso.controls['nroReferenciaOrigen'].errors != null}"
             />
             </div>
             <div class="col-md-10 mb-2">

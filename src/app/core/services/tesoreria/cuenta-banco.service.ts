@@ -36,4 +36,11 @@ export class CuentaBancoService {
       }&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
     );
   };
+
+  registerTransferencia(cuentaBancoOrigenId, cuentaBancoDestinoId, datos: any) {
+    return this.apiService.tesoreria.post(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/${cuentaBancoOrigenId}/transferencias/cuentas-banco/${cuentaBancoDestinoId}`,
+      datos
+    );
+  }
 }

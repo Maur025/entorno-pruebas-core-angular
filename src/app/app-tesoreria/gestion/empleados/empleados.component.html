@@ -38,8 +38,11 @@
             <i class="mdi mdi-power"></i>
           </button>
         </div>
-        <div *ngSwitchDefault>
-          <td>{{ fila[campo] }}</td>
+        <div *ngSwitchCase="'nombre'">
+          {{ fila["nombre"] }}
+        </div>
+        <div *ngSwitchCase="'nitCi'">
+          {{ fila["nitCi"] }}
         </div>
         <div *ngSwitchCase="'estado'">
           <span *ngIf="!fila.deleted" class="badge bg-success font-size-10">
