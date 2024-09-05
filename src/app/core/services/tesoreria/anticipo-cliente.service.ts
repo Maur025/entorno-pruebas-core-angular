@@ -33,10 +33,13 @@ export class AnticipoClienteService {
     );
   }
 
-  /* crearDevolucionAnticipo(datos: any) {
-    return this.apiService.tesoreria.post(`${this.apiUrl}${this.prefix}/${this.apiName}/devolucion`, datos);
+  crearDevolucionAnticipo(datos: any) {
+    return this.apiService.tesoreria.post(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/devoluciones`,
+      datos
+    );
   }
-  */
+
   findAnticipoCliente(idClient) {
     return this.apiService.tesoreria.get(
       `${this.apiUrl}${this.prefix}/${this.apiName}/${idClient}`

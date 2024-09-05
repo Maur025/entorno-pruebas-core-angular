@@ -124,17 +124,17 @@ export class FormDevolucionComponent {
     if (this.formDevolucionAnticipo.valid) {
       this.formDevolucionAnticipo.value["movimientos"] =
         this.formDevolucionAnticipo.value["transacciones"];
-      console.log("Datos: ", this.formDevolucionAnticipo.value);
-      /* this.anticipoClienteService
-        .crearDevolucionAnticipo(this.formDevolucionAnticipo.value)
-        .subscribe(
-          (data) => {
-            this.alActualizar.emit(data);
-            this.isStatusSubmit = false;
-            this.notificacionService.successStandar();
-          },
-          (error) => this.notificacionService.alertError(error)
-        ); */
+      const newData = { ...this.formDevolucionAnticipo.value };
+      newData.fechaDevolucion = newData.fecha;
+      delete newData.fecha;
+      this.anticipoClienteService.crearDevolucionAnticipo(newData).subscribe(
+        (data) => {
+          this.alActualizar.emit(data);
+          this.isStatusSubmit = false;
+          this.notificacionService.successStandar();
+        },
+        (error) => this.notificacionService.alertError(error)
+      );
     }
   }
 }
