@@ -124,7 +124,7 @@ export class FormAnticipoComponent {
     this._clienteService.getAll(100, 1, "id", false, "").subscribe({
       next: (data) => {
         this.data = data;
-        console.log("DATA: ", this.data)
+        console.log("DATA: ", this.data);
       },
       error: (err) => console.log(err),
     });
@@ -199,7 +199,6 @@ export class FormAnticipoComponent {
 
   private prepareFormData(data: any): any {
     const newData = { ...data };
-    // Renombrar el campo 'oldName' a 'newName'
     if (newData.fecha && newData.descripcion && newData.monto) {
       newData.montoTotal = newData.monto;
       newData.fechaAnticipo = newData.fecha;
@@ -208,7 +207,6 @@ export class FormAnticipoComponent {
       delete newData.descripcion;
       delete newData.monto;
     }
-    // Agregar aquí cualquier otro ajuste necesario en los datos
     return newData;
   }
 }
