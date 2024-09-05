@@ -14,7 +14,7 @@ export class ConsumoApiService {
   private key_compras: string = "comprasApi";
   private key_tesoreria: string = "tesoreriaApi";
   private key_contabilidad: string = "contabilidadApi";
-  private key_ventas: string = "ventasEmisorApi";
+  private key_ventas: string = "ventasApi";
 
   /*Objetos para peticion*/
   public config: ConsumerApi;
