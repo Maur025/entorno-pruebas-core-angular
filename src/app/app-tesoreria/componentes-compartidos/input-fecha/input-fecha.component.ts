@@ -68,6 +68,7 @@ export class InputFechaComponent implements OnInit {
               dia = new Date(dia.setDate(dia.getDate() + 1));
             }
           });
+          console.log("Fechas validas: ", this.arrayDiasHabilitados);
         });
     } else {
       console.error("No se encontro la gestion");
