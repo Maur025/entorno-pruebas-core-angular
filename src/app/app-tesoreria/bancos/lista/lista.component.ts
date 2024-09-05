@@ -59,7 +59,6 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     ];
     this.formato = this.getCabeceras();
     this.setForm();
-    //this.getEmployeesList();
   }
 
   private modalConfig: {
