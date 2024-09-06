@@ -7,6 +7,7 @@
         placeholder="dd-mm-AA"
         class="form-control"
         formControlName="fecha"
+        (change)="validateDate($event)"
         [maxDate]="this.dateNow"
         [datesEnabled]="arrayDiasHabilitados"
         bsDatepicker
@@ -19,6 +20,9 @@
       <span class="input-group-text">
         <i class="mdi mdi-calendar-outline"></i>
       </span>
+      <div *ngIf="isValidDate" class="col-sm-12 d-flex justify-content-between">
+        <div class="text-danger mt-1 font-size-10">Fecha no valida</div>
+      </div>
       <div *ngIf="stateDate" class="col-sm-12 d-flex justify-content-between">
         <div class="text-danger mt-1 font-size-10">
           No existen meses aperturados

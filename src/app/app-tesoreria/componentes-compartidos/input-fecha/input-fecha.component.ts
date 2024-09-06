@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, debounceTime } from "rxjs";
 import { UntypedFormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { AperturaCierreService } from "src/app/core/services/tesoreria/apertura-cierre.service";
@@ -22,6 +22,7 @@ export class InputFechaComponent implements OnInit {
   gestionId = new BehaviorSubject("");
   dateNow = new Date(new Date().setHours(23, 59, 59, 999));
   stateDate: boolean = false;
+  isValidDate: boolean = false;
 
   constructor(
     private aperturasCierresService: AperturaCierreService,
@@ -42,11 +43,25 @@ export class InputFechaComponent implements OnInit {
   get form() {
     return this.formPadre?.controls;
   }
+  validateDate(event) {
+    let dateStart = this.arrayDiasHabilitados[0];
+    let dateEnd =
+      this.arrayDiasHabilitados[this.arrayDiasHabilitados.length - 1];
+    //console.log(dateStart, dateEnd);
+    this.isValidDate = event >= dateStart && event <= dateEnd ? false : true;
+    if (this.isValidDate) {
+      setTimeout(() => {
+        this.formPadre.patchValue({
+          fecha: "",
+        });
+        this.isValidDate = false;
+      }, 2000);
+    }
+  }
 
   getGestionId() {
     this.gestionService.getRecordsEnabled().subscribe({
       next: (data) => {
-        console.log("DATA: ", data);
         this.gestionId?.next(data?.data[0]?.id);
       },
     });
