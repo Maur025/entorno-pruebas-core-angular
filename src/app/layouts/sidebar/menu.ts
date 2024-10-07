@@ -102,6 +102,12 @@ export const MENU: MenuItem[] = [
       },
     ],
   },
+  {
+    id: 43,
+    label: "Pagos Varios",
+    link: "/pagos-varios",
+    icon: "mdi mdi-cash-multiple",
+  },
   /*  {
 		id: 1,
 		label: 'antiguo',
