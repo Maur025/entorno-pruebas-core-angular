@@ -21,14 +21,14 @@
               formControlName="cuentaContableId"
               placeholder="Seleccione Cliente"
               (change)="selectData($event)"
+              bindLabel="displayName"
+              bindValue="id"
+              [items]="data"
               [ngClass]="{
                 'ngselect-invalid':
                   submitted && form['cuentaContableId'].errors != null
               }"
             >
-              <ng-option *ngFor="let account of data" [value]="account">
-                <b>{{ account.codigo }}</b> - {{ account.nombre }}
-              </ng-option>
             </ng-select>
             <div *ngIf="submitted && form['cuentaContableId'].errors">
               <div

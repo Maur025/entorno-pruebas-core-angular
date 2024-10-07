@@ -94,7 +94,10 @@ export class PagosVariosFormComponent implements OnInit {
   getAccountingAccounts = () => {
     this._contaCuentasService.getAll(false).subscribe({
       next: (data) => {
-        this.data = data;
+        this.data = data.map(account => ({
+          ...account,
+          displayName: `${account.codigo} - ${account.nombre}`
+        }));
       },
       error: (err) => this.notificacionService.alertErrorOnlyMessage(err),
     });
