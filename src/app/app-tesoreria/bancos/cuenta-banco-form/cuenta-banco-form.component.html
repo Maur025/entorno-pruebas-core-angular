@@ -92,17 +92,45 @@
           </div>
         </div>
         <div class="row">
-          <div class="d-flex">
-            <p class="text-muted mb-1">(*) Apertura de cuenta con:</p>
-            <ui-switch
-              formControlName="inicializacion"
-              color="#556ee6"
-              size="small"
-              class="ms-3 me-2 include-in-screenshot"
-              uncheckedLabel="Transferencia"
-              checkedLabel="Saldo Inicial"
-              (change)="onChangeSwitchTransferType($event)"
-            />
+          <div class="col-md-4">
+            <div class="mb-3 px-1">
+              <p class="text-muted mb-1">(*) Centro Costos</p>
+              <ng-select
+                class="uppercase"
+                formControlName="centroCostoId"
+                placeholder="Seleccione el centro de costos"
+                [items]="listaCentroCostos"
+                bindLabel="nombre"
+                bindValue="id"
+                [ngClass]="{
+                  'ngselect-invalid':
+                    submitted && form['centroCostoId'].errors != null
+                }"
+              >
+              </ng-select>
+              <div *ngIf="submitted && form['centroCostoId'].errors">
+                <div
+                  class="text-danger mt-1 font-size-10"
+                  *ngIf="form['centroCostoId'].errors['required']"
+                >
+                  Seleccione un centro de costos
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="d-flex mt-4">
+              <p class="text-muted mb-1">(*) Apertura de cuenta con:</p>
+              <ui-switch
+                formControlName="inicializacion"
+                color="#556ee6"
+                size="small"
+                class="ms-3 me-2 include-in-screenshot"
+                uncheckedLabel="Transferencia"
+                checkedLabel="Saldo Inicial"
+                (change)="onChangeSwitchTransferType($event)"
+              />
+            </div>
           </div>
         </div>
       </div>

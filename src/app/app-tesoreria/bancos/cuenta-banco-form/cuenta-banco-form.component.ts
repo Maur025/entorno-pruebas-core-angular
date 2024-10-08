@@ -8,6 +8,7 @@ import { NotificacionService } from "src/app/core/services/notificacion.service"
 import { ResponseHandlerService } from "src/app/core/services/response-handler.service";
 import { ScreenshotService } from "src/app/core/services/screenshot.service";
 import { BancoService } from "src/app/core/services/tesoreria/banco.service";
+import { CentroCostosService } from "src/app/core/services/tesoreria/centro-costos.service";
 import { CuentaBancoService } from "src/app/core/services/tesoreria/cuenta-banco.service";
 import { MonedaService } from "src/app/core/services/tesoreria/moneda.service";
 import {
@@ -38,6 +39,7 @@ export class CuentaBancoFormComponent {
   totalTransferencia = 0;
   fechaActual2;
   fechaActual;
+  listaCentroCostos: any[] = [];
 
   public transferMediumList: ResponseDataStandard[] = [];
 
@@ -49,12 +51,14 @@ export class CuentaBancoFormComponent {
     private cuentaBancoService: CuentaBancoService,
     protected utilityService: UtilityService,
     protected screenshotService: ScreenshotService,
-    private responseHandlerService: ResponseHandlerService
+    private responseHandlerService: ResponseHandlerService,
+    private centroCostosService: CentroCostosService
   ) {}
 
   ngOnInit() {
     this.getMonedas();
     this.setForm();
+    this.getCentroCostos();
   }
 
   get form() {
@@ -62,25 +66,6 @@ export class CuentaBancoFormComponent {
   }
 
   setForm() {
-    /*     let fechaActual = new Date();
-    this.fechaActual =
-      fechaActual.getFullYear() +
-      "-" +
-      (fechaActual.getMonth() + 1).toString().padStart(2, "0") +
-      "-" +
-      fechaActual.getDate().toString().padStart(2, "0");
-    this.fechaActual2 =
-      fechaActual.getFullYear() +
-      "-" +
-      (fechaActual.getMonth() + 1).toString().padStart(2, "0") +
-      "-" +
-      fechaActual.getDate().toString().padStart(2, "0") +
-      "T" +
-      fechaActual.getHours().toString().padStart(2, "0") +
-      ":" +
-      fechaActual.getMinutes().toString().padStart(2, "0") +
-      ":" +
-      fechaActual.getSeconds().toString().padStart(2, "0"); */
     this.formCuentaBanco = this.formBuilder.group({
       id: "",
       nroCuenta: [
@@ -104,7 +89,18 @@ export class CuentaBancoFormComponent {
           Validators.maxLength(255),
         ],
       ],
-      //transacciones: this.formBuilder.array([]),
+      centroCostoId: ["", [Validators.required]],
+    });
+  }
+
+  getCentroCostos() {
+    this.centroCostosService.habilitados().subscribe({
+      next: (response: ApiResponseStandard) => {
+        this.listaCentroCostos =
+          this.responseHandlerService?.handleResponseAsArray(response);
+      },
+      error: (error: ErrorResponseStandard) =>
+        this.notificacionService.alertError(error),
     });
   }
 
