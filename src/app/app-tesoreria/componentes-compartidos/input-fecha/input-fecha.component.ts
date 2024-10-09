@@ -1,10 +1,18 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { BehaviorSubject, debounceTime } from "rxjs";
 import { UntypedFormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { AperturaCierreService } from "src/app/core/services/tesoreria/apertura-cierre.service";
 import { GestionService } from "src/app/core/services/tesoreria/gestion.service";
 import { BsLocaleService } from "ngx-bootstrap/datepicker";
+import { AperturaEnabledDatesService } from "src/app/core/services/apertura-enabled-dates.service";
 
 @Component({
   selector: "input-fecha",
@@ -16,7 +24,7 @@ export class InputFechaComponent implements OnInit {
   @Input() formPadre: UntypedFormGroup;
   @Input() submitted: boolean;
   @Output() alRedirigir = new EventEmitter<void>();
-
+  private _aperturaEnabledDatesService = inject(AperturaEnabledDatesService);
   public arrayDiasHabilitados: any = [];
   public arrayMesesHabilitados: any = [];
   gestionId = new BehaviorSubject("");
@@ -25,7 +33,6 @@ export class InputFechaComponent implements OnInit {
   isValidDate: boolean = false;
 
   constructor(
-    private aperturasCierresService: AperturaCierreService,
     private gestionService: GestionService,
     private _localeService: BsLocaleService,
     private router: Router
@@ -34,20 +41,17 @@ export class InputFechaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getGestionId();
-    setTimeout(() => {
-      this.enabledDays();
-    }, 700);
+    this.enabledDays();
   }
 
   get form() {
     return this.formPadre?.controls;
   }
+
   validateDate(event) {
     let dateStart = this.arrayDiasHabilitados[0];
     let dateEnd =
       this.arrayDiasHabilitados[this.arrayDiasHabilitados.length - 1];
-    //console.log(dateStart, dateEnd);
     this.isValidDate = event >= dateStart && event <= dateEnd ? false : true;
     if (this.isValidDate) {
       setTimeout(() => {
@@ -67,7 +71,7 @@ export class InputFechaComponent implements OnInit {
     });
   }
 
-  public enabledDays() {
+  /*   public enabledDays() {
     if (this.gestionId.getValue()) {
       this.aperturasCierresService
         .getAperturaCierreHabilitados(this.gestionId.getValue())
@@ -87,10 +91,20 @@ export class InputFechaComponent implements OnInit {
     } else {
       console.error("No se encontro la gestion");
     }
+  } */
+
+  public enabledDays() {
+    this._aperturaEnabledDatesService?.getEnabledDateList()?.subscribe({
+      next: (response: Date[]) => {
+        this.checkDateStatus(response);
+        this.arrayDiasHabilitados = response;
+      },
+      error: (error) => console.error("Dates not found", error),
+    });
   }
 
   checkDateStatus(data) {
-    if (data["data"].length == 0) {
+    if (data.length == 0) {
       this.form.fecha.disable();
       this.stateDate = true;
     }

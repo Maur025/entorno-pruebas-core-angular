@@ -35,6 +35,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: "compensacion",
+    loadChildren: () =>
+      import("./compensaciones/compensaciones.module").then(
+        (m) => m.CompensacionesModule
+      ),
+  },
+  {
     path: "fondo-operativo",
     loadChildren: () =>
       import("./fondo-operativo/fondo-operativo.module").then(

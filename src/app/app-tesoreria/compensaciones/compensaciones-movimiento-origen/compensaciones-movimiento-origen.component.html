@@ -1,0 +1,58 @@
+<div class="seccion-compensaciones" *ngIf="isStatusRadio">
+  <div class="col-xl-12 mb-2">
+    <div class="d-flex">
+      <div>
+        <h6 class="fs-14 mb-2 ms-1 text-primary">Anticipos del proveedor</h6>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <form [formGroup]="myForm">
+      <table class="table table-sm m-0">
+        <thead>
+          <tr>
+            <th [width]="100" class="">Regularizar</th>
+            <th [width]="120" class="text-muted fs-14 mb-2">N° Documento</th>
+            <th [width]="120" class="text-muted fs-14 mb-2">Fecha</th>
+            <th [width]="120" class="text-muted fs-14 mb-2">Monto Anticipo</th>
+            <th [width]="120" class="text-muted fs-14 mb-2">Importe</th>
+            <th [width]="120" class="text-muted fs-14 mb-2">Saldo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let move of listMoves; let i = index" class="py-2">
+            <td class="text-start">
+              <div class="form-check form-radio-primary">
+                <input
+                  class="form-check-input mt-2 ms-1"
+                  type="radio"
+                  [formControl]="getRadioControl(i)"
+                  (change)="onRadioChange(i)"
+                  style="transform: scale(1.5)"
+                />
+                <!--   <input type="radio"
+                [formControl]="rows.at(i).get('selected')"
+                 (change)="onRadioChange(i)" /> -->
+              </div>
+            </td>
+            <td class="text-start">{{ move["nroFacturaRecibo"] }}</td>
+            <td class="text-start">{{ move["fechaVenta"] | fechaFormat }}</td>
+            <td class="text-end me-5">{{ move["total"] | decimalAmount }}</td>
+            <td class="text-end">
+              <input
+                class="form-control"
+                type="number"
+                [formControl]="getNumberInputControl(i)"
+                (change)="onNumberChange(i)"
+              />
+            </td>
+            <td class="text-end me-2">
+              {{ move["saldoPendiente"] | decimalAmount }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+</div>
