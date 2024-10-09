@@ -2,12 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FuncionesComponent } from '../../funciones.component';
 import { TablaNewComponent } from 'src/app/shared/ui/tabla-new/tabla-new.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { NotificacionService } from 'src/app/core/services/notificacion.service';
-import { ResponseHandlerService } from 'src/app/core/services/response-handler.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { AnticipoProveedorService } from 'src/app/core/services/tesoreria/anticipo-proveedor.service';
-
-
 @Component({
   selector: 'app-lista',
   templateUrl: './lista.component.html',
@@ -50,9 +45,9 @@ export class ListaComponent extends FuncionesComponent{
 			cabeceras: {
 				acciones: this.getOpcionesCabecera('Acciones', 12, 'text', true, false),
 				proveedor: this.getOpcionesCabecera('Proveedor',12,'text',true,true),
-				centroCosto: this.getOpcionesCabecera('Centro Costo',12,'text',true,true),
-				nroReferencia: this.getOpcionesCabecera('Nro Referencia',12,'text',true,true),
-        monto: this.getOpcionesCabecera('Monto Anticipo',12,'text',true,true, 'text-end'),
+				nroDocumento: this.getOpcionesCabecera('Nro Documento',12,'text',true,true),
+        montoAnticipo: this.getOpcionesCabecera('Monto Anticipo',12,'text',true,true, 'text-end'),
+        montoAplicacion: this.getOpcionesCabecera('Anticipo Aplicado',12,'text',true,true, 'text-end'),
         saldo: this.getOpcionesCabecera('Saldo',12,'text',true,true, 'text-end'),
 			},
 		}
