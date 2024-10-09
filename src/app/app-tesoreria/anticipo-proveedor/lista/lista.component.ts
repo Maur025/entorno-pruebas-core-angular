@@ -3,6 +3,7 @@ import { FuncionesComponent } from '../../funciones.component';
 import { TablaNewComponent } from 'src/app/shared/ui/tabla-new/tabla-new.component';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AnticipoProveedorService } from 'src/app/core/services/tesoreria/anticipo-proveedor.service';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-lista',
   templateUrl: './lista.component.html',
@@ -19,7 +20,9 @@ export class ListaComponent extends FuncionesComponent{
 
   constructor(
     private modalService: BsModalService,
-    public anticipoProveedorService : AnticipoProveedorService
+    public anticipoProveedorService : AnticipoProveedorService,
+    private router: Router,
+    private route: ActivatedRoute
     ){super()}
 
   ngOnInit(): void {
@@ -63,8 +66,13 @@ export class ListaComponent extends FuncionesComponent{
   }
 
   verDetalles(fila, template){
-    console.log(fila);
-    this.dataProveedor=fila;
-    this.modalRef = this.modalService.show(template, this.modalConfig);
+     console.log(fila);
+  /*  this.dataProveedor=fila;
+    this.modalRef = this.modalService.show(template, this.modalConfig); */
+
+    this.router.navigate(["./" + fila.id + "/anticipos-list/", {}], {
+      relativeTo: this.route,
+    });
+
   }
 }
