@@ -23,13 +23,13 @@
     <ng-template #tempTD>
       <td [ngSwitch]="campo">
         <div *ngSwitchCase="'acciones'">
-          <button
+        <!--   <button
             class="btn btn-sm btn-info me-1"
-            tooltip="Ver detalles"
+            tooltip="Ver anticipos de proveedor"
             (click)="verDetalles(fila, modalDetalle)"
           >
-            <i class="mdi mdi-eye"></i>
-          </button>
+            <i class="mdi mdi-format-list-bulleted"></i>
+          </button> -->
           <button
             class="btn btn-sm btn-warning me-1"
             tooltip="Devolucion"
@@ -39,25 +39,32 @@
           </button>
         </div>
         <div *ngSwitchCase="'proveedor'">
-          {{ fila["proveedor"]["razonSocial"] }}
+          {{ fila["razonSocial"] }}
         </div>
 
-        <div *ngSwitchCase="'centroCosto'">
-          {{ fila.centroCosto.nombre }}
+        <div *ngSwitchCase="'nroDocumento'">
+          {{ fila['nroDocumento'] }}
         </div>
         <div
           class="text-end"
-          *ngSwitchCase="'monto'"
-          [ngClass]="fila['monto'] >= 0 ? 'text-success' : 'text-danger'"
+          *ngSwitchCase="'montoAnticipo'"
+          [ngClass]="fila['totalAnticipo'] >= 0 ? 'text-success' : 'text-danger'"
         >
-          {{ fila["monto"] | decimalAmount }}
+          {{ fila["totalAnticipo"] | decimalAmount }}
+        </div>
+        <div
+          class="text-end"
+          *ngSwitchCase="'montoAplicacion'"
+          [ngClass]="fila['totalAplicacionAnticipo'] >= 0 ? 'text-success' : 'text-danger'"
+        >
+          {{ fila["totalAplicacionAnticipo"] | decimalAmount }}
         </div>
         <div
           class="text-end"
           *ngSwitchCase="'saldo'"
-          [ngClass]="fila['saldo'] >= 0 ? 'text-success' : 'text-danger'"
+          [ngClass]="fila['totalSaldo'] >= 0 ? 'text-success' : 'text-danger'"
         >
-          {{ fila["saldo"] | decimalAmount }}
+          {{ fila["totalSaldo"] | decimalAmount }}
         </div>
         <div *ngSwitchDefault>
           <td>{{ fila[campo] }}</td>

@@ -6,7 +6,7 @@
     <div class="d-flex">
       <div>
         <h6 class="fs-14 mb-0 ms-1 text-primary">
-          {{ datosProveedor["proveedor"]["razonSocial"] }}
+          {{ datosProveedor["razonSocial"] }}
         </h6>
         <small class="text-muted ms-1 mb-0">Devolucion de anticipo</small>
       </div>
@@ -30,7 +30,7 @@
       </div>
       <div class="row">
         <list-anticipos
-          [proveedorId]="datosProveedor['proveedorId']"
+          [proveedorId]="datosProveedor['id']"
           (alSelectAnticipo)="recibirAnticipo($event)"
         ></list-anticipos>
       </div>
