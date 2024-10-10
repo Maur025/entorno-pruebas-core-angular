@@ -25,8 +25,8 @@
             <div class="form-check form-radio-primary">
               <input
                 class="form-check-input mt-2 ms-1"
-                type="radio"
-                (change)="onRadioChange(move['id'])"
+                type="checkbox"
+                (change)="onCheckboxChange(move['id'])"
                 style="transform: scale(1.5)"
                 [checked]="move['selected']"
               />

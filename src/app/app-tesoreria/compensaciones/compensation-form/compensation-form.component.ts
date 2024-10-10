@@ -18,6 +18,10 @@ import { ResponseDataStandard } from "src/app/shared/interface/common-list-inter
 import { UtilityService } from "src/app/shared/services/utilityService.service";
 import { EmpleadoService } from "src/app/core/services/tesoreria/empleado.service";
 import { CobroService } from "src/app/core/services/tesoreria/cobro.service";
+import { AnticipoClienteService } from "src/app/core/services/tesoreria/anticipo-cliente.service";
+import { AnticipoProveedorService } from "src/app/core/services/tesoreria/anticipo-proveedor.service";
+import { PagosService } from "src/app/core/services/tesoreria/pagos.service";
+import { FondoRendirService } from "src/app/core/services/tesoreria/fondo-rendir.service";
 
 @Component({
   selector: "compensation-form",
@@ -35,10 +39,17 @@ export class CompensationFormComponent implements OnInit {
   private notificacionService = inject(NotificacionService);
   protected _utilityService = inject(UtilityService);
   private cobroService = inject(CobroService);
+  private _anticipoProveedorService = inject(AnticipoProveedorService);
+  private _anticipoClienteService = inject(AnticipoClienteService);
+  private _supplierAdvanceService = inject(PagosService);
+  private fondoRendirService = inject(FondoRendirService);
   protected salesPendingCollection: ResponseDataStandard[] = [];
   //private collectionTotalAmount: number = 0;
   collectionTotalAmount: number = 0;
   isSelected: boolean = true;
+  isStatusSubmit: boolean = false;
+  isStatusData: boolean = false;
+  isStatusDataNoOrigin: boolean = false;
   breadCrumbItems: object[];
   compensationForm: UntypedFormGroup;
   submitted: boolean = false;
@@ -55,16 +66,20 @@ export class CompensationFormComponent implements OnInit {
   employeeList: ResponseDataStandard[] = [];
   selectedClientType: string;
   selectedOperatorType: string;
+  typeOperator: string = "";
+  typeOperatorNoOrigin: string = "";
   itemsClientGeneralOrigin: any = [];
   itemsOperatiorGeneralOrigin: any = [];
   itemsClientGeneralNoOrigin: any = [];
   itemsOperatorGeneralNoOrigin: any = [];
   itemsOperatiorGeneralNoOrigin: any = [];
   personalOriginId: string = "";
+  operationOriginId: string = "";
+  operationNoOriginId: string = "";
   personalNoOriginId: string = "";
   clientData: any;
   listMovesOrigin: ResponseDataStandard[] = [];
-
+  listMovesNoOrigin: ResponseDataStandard[] = [];
   constructor() {}
 
   itemMapperClient = {
@@ -144,21 +159,86 @@ export class CompensationFormComponent implements OnInit {
     return this.compensationForm.controls;
   }
 
-  getSalesPendingByClientId = (clientId: string): void => {
+  getSClientCredit = (clientId: string, origin: boolean = true): void => {
     this.cobroService
       ?.getSalesPendingByClientId(clientId, 0, 20, "razonSocial", false, true)
       ?.subscribe({
         next: (response: ApiResponseStandard) => {
-          console.log(
-            this._responseHandlerService?.handleResponseAsArray(response)
-          );
-          this.listMovesOrigin =
-            this._responseHandlerService?.handleResponseAsArray(response);
+          if (origin) {
+            this.listMovesOrigin =
+              this._responseHandlerService?.handleResponseAsArray(response);
+          } else {
+            this.listMovesNoOrigin =
+              this._responseHandlerService?.handleResponseAsArray(response);
+          }
         },
         error: (error: ErrorResponseStandard) => {
           this.notificacionService?.alertError(error);
         },
       });
+  };
+
+  getClientAdvanced = (clientId: string, origin: boolean = true) => {
+    this._anticipoClienteService.findAnticipoCliente(clientId).subscribe({
+      next: (data: ApiResponseStandard) => {
+        if (origin) {
+          this.listMovesOrigin =
+            this._responseHandlerService?.handleResponseAsArray(data);
+        } else {
+          this.listMovesNoOrigin =
+            this._responseHandlerService?.handleResponseAsArray(data);
+        }
+      },
+      error: (err) => this.notificacionService.alertError(err),
+    });
+  };
+
+  getSupplierAdvance = (proveedorId: string, origin: boolean = true) => {
+    this._anticipoProveedorService.findAnticipoProveedor(proveedorId).subscribe(
+      (data) => {
+        if (origin) {
+          this.listMovesOrigin =
+            this._responseHandlerService?.handleResponseAsArray(data);
+        } else {
+          this.listMovesNoOrigin =
+            this._responseHandlerService?.handleResponseAsArray(data);
+        }
+      },
+      (error) => this.notificacionService.alertError(error)
+    );
+  };
+
+  getSupplierCredit = (idProveedor: string, origin: boolean = true) => {
+    this._supplierAdvanceService.comprasPorProveedor(idProveedor).subscribe(
+      (data) => {
+        if (origin) {
+          this.listMovesOrigin =
+            this._responseHandlerService?.handleResponseAsArray(data);
+        } else {
+          this.listMovesNoOrigin =
+            this._responseHandlerService?.handleResponseAsArray(data);
+        }
+      },
+      (error) => this.notificacionService.alertError(error)
+    );
+  };
+
+  getEmployeeFundRenderOrRefund = (
+    employeeId: string,
+    origin: boolean = true
+  ) => {
+    this.fondoRendirService.fondosRendirEmpleado(employeeId).subscribe(
+      (data) => {
+        if (origin) {
+          this.listMovesOrigin =
+            this._responseHandlerService?.handleResponseAsArray(data);
+        } else {
+          this.listMovesNoOrigin =
+            this._responseHandlerService?.handleResponseAsArray(data);
+        }
+      },
+      (error) => this.notificacionService.alertError(error)
+    );
   };
 
   onChangeOrigin = (event) => {
@@ -168,6 +248,8 @@ export class CompensationFormComponent implements OnInit {
       this.updateClientListOrigin();
       this.updateOperatorListOrigin(this.selectedOperatorType);
       this.updateOperatorListNoOrigin(event.tipoPersonasContrapartes);
+      this.typeOperator = event?.codigo;
+      console.log("Operator: ", event);
     }
   };
 
@@ -177,14 +259,85 @@ export class CompensationFormComponent implements OnInit {
       //this.updateOperatorListOrigin(this.selectedOperatorType);
       this.updateClientListNoOrigin(event?.codigo);
       console.log("event contraparte: ", event);
+      this.typeOperatorNoOrigin = event?.codigo;
     }
   };
   onChangeClientOrigin = (event) => {
-    this.salesPendingCollection = [];
-    this.personalOriginId = event.id;
-    this.clientData = event;
-    this.getSalesPendingByClientId(event.id);
-    console.log("client: ", event);
+    if (event != undefined) {
+      this.personalOriginId = event.id;
+      this.clientData = event;
+      console.log("client: ", event);
+    }
+  };
+
+  onChangeOperationOrigin = (event) => {
+    console.log("event Operation:", event);
+    if (event != undefined) {
+      this.isStatusData = true;
+      setTimeout(() => {
+        this.operationOriginId = event.id;
+        this.isStatusData = false;
+        if (event.codigo == "CREDITO" && this.typeOperator == "CLIENTE") {
+          this.getSClientCredit(this.personalOriginId);
+        }
+        if (event.codigo == "ANTICIPO" && this.typeOperator == "CLIENTE") {
+          this.getClientAdvanced(this.personalOriginId);
+        }
+        if (event.codigo == "CREDITO" && this.typeOperator == "PROVEEDOR") {
+          this.getSupplierCredit(this.personalOriginId);
+        }
+        if (event.codigo == "ANTICIPO" && this.typeOperator == "PROVEEDOR") {
+          this.getSupplierAdvance(this.personalOriginId);
+        }
+        if (
+          (event.codigo == "FONDO_RENDIR" || event.codigo == "REEMBOLSO") &&
+          this.typeOperator == "EMPLEADO"
+        ) {
+          this.getEmployeeFundRenderOrRefund(this.personalOriginId);
+        }
+      }, 750);
+    }
+  };
+
+  onChangeOperationNoOrigin = (event) => {
+    console.log("****", event);
+    if (event != undefined) {
+      this.isStatusDataNoOrigin = true;
+      setTimeout(() => {
+        this.operationNoOriginId = event.id;
+        this.isStatusDataNoOrigin = false;
+        if (
+          event.codigo == "CREDITO" &&
+          this.typeOperatorNoOrigin == "CLIENTE"
+        ) {
+          this.getSClientCredit(this.personalOriginId, false);
+        }
+        if (
+          event.codigo == "ANTICIPO" &&
+          this.typeOperatorNoOrigin == "CLIENTE"
+        ) {
+          this.getClientAdvanced(this.personalOriginId, false);
+        }
+        if (
+          event.codigo == "CREDITO" &&
+          this.typeOperatorNoOrigin == "PROVEEDOR"
+        ) {
+          this.getSupplierCredit(this.personalOriginId, false);
+        }
+        if (
+          event.codigo == "ANTICIPO" &&
+          this.typeOperatorNoOrigin == "PROVEEDOR"
+        ) {
+          this.getSupplierAdvance(this.personalOriginId, false);
+        }
+        if (
+          (event.codigo == "FONDO_RENDIR" || event.codigo == "REEMBOLSO") &&
+          this.typeOperatorNoOrigin == "EMPLEADO"
+        ) {
+          this.getEmployeeFundRenderOrRefund(this.personalOriginId, false);
+        }
+      }, 750);
+    }
   };
 
   onChangeClientNoOrigin = (event) => {
