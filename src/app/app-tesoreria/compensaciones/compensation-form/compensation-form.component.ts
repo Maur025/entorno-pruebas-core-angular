@@ -491,8 +491,10 @@ export class CompensationFormComponent implements OnInit {
 
   saveForm = (data: any) => {
     this._compensacionService.register(data).subscribe({
-      next: (data) => console.log(data),
-      error: (err) => console.log(err),
+      next: (data) => {
+        this.notificacionService.successStandar("Registro Exitoso!");
+      },
+      error: (err) => this.notificacionService.alertError(err),
     });
   };
 }
