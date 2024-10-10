@@ -4,15 +4,16 @@ import { ConsumoApiService } from "../consumoApi.service";
 @Injectable({
   providedIn: "root",
 })
-export class AnticipoProveedorService {
+export class CobrosVariosService {
   constructor(private apiService: ConsumoApiService) {}
-  apiName: string = "anticipo_proveedor";
+
+  apiName: string = "otros-cobros";
   apiUrl: string = "";
   prefix: string = "";
 
   getAll(
     size: number = 100,
-    page: number = 1,
+    page: number = 0,
     sortBy: string = "id",
     descending: false,
     keyword: any = ""
@@ -20,35 +21,22 @@ export class AnticipoProveedorService {
     size = size <= 0 ? 100 : size;
     page = page <= 0 ? 1 : page;
     return this.apiService.tesoreria.get(
-      `${this.apiUrl}${this.prefix}/${this.apiName}/listar?size=${size}&page=${
+      `${this.apiUrl}${this.prefix}/${this.apiName}?size=${size}&page=${
         page - 1
       }&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
     );
   }
 
-  crearAnticipo(datos: any) {
+  register(data: any) {
     return this.apiService.tesoreria.post(
       `${this.apiUrl}${this.prefix}/${this.apiName}`,
-      datos
+      data
     );
   }
 
-  crearDevolucionAnticipo(datos: any) {
-    return this.apiService.tesoreria.post(
-      `${this.apiUrl}${this.prefix}/${this.apiName}/devolucion`,
-      datos
-    );
-  }
-
-  findAnticipoProveedor(idProveedor) {
+  comprasPorProveedor(idProveedor) {
     return this.apiService.tesoreria.get(
       `${this.apiUrl}${this.prefix}/${this.apiName}/${idProveedor}`
-    );
-  }
-
-  detalleAnticipoProveedor(anticipoProveedorId) {
-    return this.apiService.tesoreria.get(
-      `${this.apiUrl}${this.prefix}/${this.apiName}/detalle/${anticipoProveedorId}`
     );
   }
 }

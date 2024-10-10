@@ -81,6 +81,13 @@ const routes: Routes = [
         (m) => m.DevengadoProveedorModule
       ),
   },
+  {
+    path: "cobros-varios",
+    loadChildren: () =>
+      import("./cobros-varios/cobros-varios.module").then(
+        (m) => m.CobrosVariosModule
+      ),
+  },
 ];
 
 @NgModule({
