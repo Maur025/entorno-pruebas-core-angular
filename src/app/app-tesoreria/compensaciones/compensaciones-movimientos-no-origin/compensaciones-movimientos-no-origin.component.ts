@@ -7,7 +7,13 @@ import {
   Output,
   SimpleChanges,
 } from "@angular/core";
-import { FormBuilder, FormGroup, FormArray, FormControl } from "@angular/forms";
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  FormControl,
+  UntypedFormGroup,
+} from "@angular/forms";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 @Component({
   selector: "compensaciones-movimientos-no-origin",
@@ -17,9 +23,11 @@ import { NotificacionService } from "src/app/core/services/notificacion.service"
 export class CompensacionesMovimientosNoOriginComponent implements OnInit {
   @Input() listMoves;
   @Output() alSelectAnticipo: EventEmitter<any> = new EventEmitter();
+  @Input() formMain: UntypedFormGroup;
+  @Input() labelOperation: string;
+
   private fb = inject(FormBuilder);
-  //listMoves: any[];
-  myForm: FormGroup;
+  listMovesNoOrigin: any;
   importe: number = 0;
   isStatusRadio: boolean = false;
   changeImporte: number = 0;
@@ -30,15 +38,10 @@ export class CompensacionesMovimientosNoOriginComponent implements OnInit {
   };
   objectSelected: any;
   totalOrigin: number = 0;
-  constructor(private notificacionService: NotificacionService) {
-    this.myForm = this.fb.group({
-      rows: this.fb.array([]),
-    });
-  }
+  constructor(private notificacionService: NotificacionService) {}
 
   ngOnInit(): void {
     console.log("Data llega: ", this.listMoves);
-    this.initializeForm();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -54,10 +57,8 @@ export class CompensacionesMovimientosNoOriginComponent implements OnInit {
     console.log("LIST NEW", this.listData);
   }
 
-  initializeForm() {}
-
-  get rows(): FormArray {
-    return this.myForm.get("rows") as FormArray;
+  get form() {
+    return this.formMain?.controls;
   }
 
   onCheckboxChange = (index: string) => {
@@ -65,40 +66,45 @@ export class CompensacionesMovimientosNoOriginComponent implements OnInit {
     this.objectSelected = this.listData.find((element) => element.id == index);
     console.log("selected: ", this.objectSelected);
     if (this.objectSelected != undefined) {
-      this.objectSelected.selected = true;
+      this.objectSelected.selected = !this.objectSelected.selected;
       //this.clearRadioAll(index);
       this.objectSelected.importe =
         this.objectSelected.total ||
         this.objectSelected.monto ||
         this.objectSelected.saldoDesembolso;
       this.totalOrigin = this.objectSelected.importe;
+      this.objectSelected.movimientoReferenciaId = this.objectSelected.id;
+      this.objectSelected.montoMovimiento = this.objectSelected.importe;
+      if (!this.objectSelected.selected) {
+        this.objectSelected.importe = 0;
+      }
+      this.calculateTotal();
     }
     console.log("LIST DATA CHANGED", this.listData);
   };
 
-  clearRadioAll = (id: string) => {
-    this.listData.forEach((element) => {
-      if (element.id != id) {
-        element.selected = false;
-        element.importe = 0;
-      }
+  calculateTotal = () => {
+    const objectsSelected = this.listData.filter((element) => element.selected);
+    this.listMovesNoOrigin = objectsSelected;
+    console.log("list no ORIGIN: ", this.listMovesNoOrigin);
+    this.totalOrigin = this.listMovesNoOrigin?.reduce(
+      (total, item) => total + Number(item?.montoMovimiento),
+      0
+    );
+    this.formMain.patchValue({
+      montoNoOrigin: this.totalOrigin,
+      movimientosContraparte: this.listMovesNoOrigin,
     });
-    console.log("CLEAR: ", this.listData);
+
+    console.log("lista de objetos: ", this.listMovesNoOrigin);
   };
 
-  onNumberChange = (event) => {
-    console.log(event);
+  onNumberChange = (id: string, event) => {
+    const objectSelected = this.listData.find((element) => element.id == id);
+    objectSelected.importe = event.target.value;
+    objectSelected.montoMovimiento = objectSelected.importe;
     if (event != "") {
-      this.objectSelected.importe = event.target.value;
-      this.totalOrigin = event.target.value;
+      this.calculateTotal();
     }
   };
-
-  getNumberInputControl(index: number): FormControl {
-    return this.rows.at(index).get("numberInput") as FormControl;
-  }
-
-  getRadioControl(index: number): FormControl {
-    return this.rows.at(index).get("selected") as FormControl;
-  }
 }

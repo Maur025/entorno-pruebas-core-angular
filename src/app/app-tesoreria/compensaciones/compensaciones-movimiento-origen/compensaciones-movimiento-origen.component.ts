@@ -7,7 +7,14 @@ import {
   Output,
   SimpleChanges,
 } from "@angular/core";
-import { FormBuilder, FormGroup, FormArray, FormControl } from "@angular/forms";
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  FormControl,
+  UntypedFormGroup,
+} from "@angular/forms";
+import { BehaviorSubject } from "rxjs";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 
 @Component({
@@ -17,75 +24,63 @@ import { NotificacionService } from "src/app/core/services/notificacion.service"
 })
 export class CompensacionesMovimientoOrigenComponent implements OnInit {
   @Input() listMoves;
+  @Input() formMain: UntypedFormGroup;
+  @Input() labelOperation: string;
   @Output() alSelectAnticipo: EventEmitter<any> = new EventEmitter();
   private fb = inject(FormBuilder);
   //listMoves: any[];
-  myForm: FormGroup;
+  listCuotas = new BehaviorSubject(undefined);
   importe: number = 0;
   isStatusRadio: boolean = false;
   changeImporte: number = 0;
   listData: any;
+  listCobrosPagos: any;
+  cuotaSelected: any;
   move = {
     movimientoReferenciaId: "",
     montoMovimiento: 0,
   };
   objectSelected: any;
   totalOrigin: number = 0;
-  constructor(private notificacionService: NotificacionService) {
-    this.myForm = this.fb.group({
-      rows: this.fb.array([]),
-    });
-  }
+  constructor(private notificacionService: NotificacionService) {}
 
   ngOnInit(): void {
     console.log("Data llega: ", this.listMoves);
-    this.initializeForm();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.listMoves) {
-      console.log("list MOVES: ", this.listMoves);
       this.listData = this.listMoves.map((objeto) => ({
         ...objeto,
-        selected: false, // o el valor que necesites
-        importe: 0, // o la fecha que necesites
+        selected: false,
+        importe: 0,
+        showOdds: false,
       }));
       this.totalOrigin = 0;
     }
     console.log("LIST NEW", this.listData);
   }
-
-  initializeForm() {
-    /* this.listMoves.forEach(() => {
-      this.rows.push(this.fb.group({
-        selected: [false], // Control para el input de tipo radio
-        numberInput: [{ value: '', disabled: true }] // Control para el input de tipo number
-      }));
-    }); */
-    /*     this.listMoves.forEach(() => {
-      this.rows.push(
-        this.fb.group({
-          selected: [false], // Control para el input de tipo radio
-          numberInput: [{ value: "", disabled: true }], // Control para el input de tipo number
-        })
-      );
-    }); */
+  get form() {
+    return this.formMain?.controls;
   }
 
-  /*   onRadioChange(index: number) {
-    this.rows.controls.forEach((row, i) => {
-      const numberInputControl = row.get("numberInput");
-      if (i === index) {
-        numberInputControl?.enable(); // Habilitar el input de número de la fila seleccionada
-      } else {
-        numberInputControl?.disable(); // Deshabilitar los demás inputs de número
-        numberInputControl?.setValue(""); // Limpiar el valor de los inputs deshabilitados
-      }
-    });
-  } */
-  get rows(): FormArray {
-    return this.myForm.get("rows") as FormArray;
-  }
+  onClickShowOdds = (id: string) => {
+    const objectSelected = this.listData.find((element) => element.id == id);
+    objectSelected.showOdds = !objectSelected.showOdds;
+    if (objectSelected?.planCobros != undefined) {
+      objectSelected.planCobros.forEach((element) => {
+        element["show"] = false;
+        element["importe"] = 0;
+      });
+    }
+    if (objectSelected?.planPagos != undefined) {
+      objectSelected.planPagos.forEach((element) => {
+        element["show"] = false;
+        element["importe"] = 0;
+      });
+    }
+    console.log("***Selected: ", objectSelected);
+  };
 
   onRadioChange(index: string) {
     console.log("index: ", index);
@@ -99,28 +94,18 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
         this.objectSelected.monto ||
         this.objectSelected.saldoDesembolso;
       this.totalOrigin = this.objectSelected.importe;
+      this.formMain.get("movimientoOrigen").patchValue({
+        movimientoReferenciaId: this.objectSelected.id,
+        montoMovimiento:
+          this.objectSelected.monto ||
+          this.objectSelected.total ||
+          this.objectSelected.saldoDesembolso,
+        montoOrigin:
+          this.objectSelected.monto ||
+          this.objectSelected.total ||
+          this.objectSelected.saldoDesembolso,
+      });
     }
-    /*  this.rows.controls.forEach((row, i) => {
-      const selectedControl = row.get("selected") as FormControl;
-      const numberInputControl = row.get("numberInput") as FormControl;
-      if (i === index) {
-        selectedControl.setValue(true);
-        numberInputControl.enable();
-        const selectedVenta = this.listMoves[i];
-        const isSelected = selectedControl.value;
-        const numberValue = numberInputControl.value;
-
-        console.log({
-          isSelected,
-          numberValue,
-          selectedVenta,
-        });
-      } else {
-        selectedControl.setValue(false);
-        numberInputControl.disable();
-        numberInputControl.setValue("");
-      }
-    }); */
     console.log("LIST DATA CHANGED", this.listData);
   }
 
@@ -139,33 +124,64 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
     if (event != "") {
       this.objectSelected.importe = event.target.value;
       this.totalOrigin = event.target.value;
+      this.formMain.patchValue({
+        montoOrigin: this.totalOrigin,
+      });
+      /*       this.formMain.setValue({
+        movimientoOrigen: this.objectSelected,
+      }); */
+      this.formMain.get("movimientoOrigen").patchValue({
+        montoMovimiento: event.target.value,
+      });
     }
-    /*     this.rows.controls.forEach((row, i) => {
-      const selectedControl = row.get("selected") as FormControl;
-      const numberInputControl = row.get("numberInput") as FormControl;
-      if (i === index) {
-        selectedControl.setValue(true);
-        numberInputControl.enable();
-        const selectedVenta = this.listMoves[i];
-        const isSelected = selectedControl.value;
-        const numberValue = numberInputControl.value;
-
-        console.log({
-          numberValue,
-        });
-      } else {
-        selectedControl.setValue(false);
-        numberInputControl.disable();
-        numberInputControl.setValue("");
-      }
-    }); */
   };
 
-  getNumberInputControl(index: number): FormControl {
-    return this.rows.at(index).get("numberInput") as FormControl;
-  }
+  onSelectCheckbox = (data: any, id: string) => {
+    const objectSelected = this.listData.find((element) => element.id == id);
+    objectSelected.importe = data.monto;
+    const dataCheck = [];
+    console.log("Checkbox: ", data);
+    data.show = !data.show;
+    data.importe = data.monto;
+    data.planReferenciaId = data.id;
+    data.monto = data.monto;
+    this.totalOrigin = data.importe;
+    if (data.show) {
+      dataCheck.push(data);
+      this.listCuotas.next(dataCheck);
+    }
+    this.calculateTotal();
+  };
 
-  getRadioControl(index: number): FormControl {
-    return this.rows.at(index).get("selected") as FormControl;
-  }
+  onNumberChangeCuota = (data: any, id: string, event) => {
+    const objectSelected = this.listData.find((element) => element.id == id);
+    if (event != "") {
+      data.monto = event.target.value;
+      data.importe = event.target.value;
+      objectSelected.importe = event.target.value;
+      this.calculateTotal();
+    }
+  };
+
+  calculateTotal = () => {
+    console.log("listCuotas", this.listCuotas.getValue());
+    const objectsSelected = this.listCuotas
+      .getValue()
+      .filter((element) => element.show);
+
+    console.log("list ORIGIN: ", objectsSelected);
+
+    this.totalOrigin = objectsSelected?.reduce(
+      (total, item) => total + Number(item?.importe),
+      0
+    );
+    this.formMain.patchValue({
+      montoOrigin: this.totalOrigin,
+    });
+    this.formMain.get("movimientoOrigen").patchValue({
+      montoMovimiento: this.totalOrigin,
+      planCuotas: objectsSelected,
+    });
+    console.log("TOTAL: ", this.totalOrigin);
+  };
 }

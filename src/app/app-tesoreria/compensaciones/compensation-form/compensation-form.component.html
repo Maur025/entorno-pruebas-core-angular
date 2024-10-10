@@ -204,7 +204,9 @@
               </div>
               <compensaciones-movimiento-origen
                 *ngIf="operationOriginId"
+                [labelOperation]="labelOperationOrigin"
                 [listMoves]="listMovesOrigin"
+                [formMain]="compensationForm"
               />
             </div>
           </div>
@@ -255,6 +257,7 @@
                   formControlName="personaReferenciaId"
                   notFoundText="Sin registros"
                   placeholder="Seleccione empleado"
+                  (change)="onChangeClientNoOrigin($event)"
                 >
                   <ng-option
                     *ngFor="let item of clientListNoOrigin"
@@ -316,12 +319,17 @@
               </div>
               <compensaciones-movimientos-no-origin
                 *ngIf="operationNoOriginId"
+                [labelOperation]="labelOperationNoOrigin"
                 [listMoves]="listMovesNoOrigin"
+                [formMain]="compensationForm"
               />
             </div>
           </div>
         </div>
       </div>
+      <!--       <div *ngIf="compensationForm.get('montoOrigin').value!= compensationForm.get('montoNoOrigin').value" class="alert alert-danger" role="alert">
+        EL total del debe
+      </div> -->
       <div class="card-footer">
         <div class="row mt-3 mb-3 me-3">
           <div class="hstack gap-2 justify-content-end">

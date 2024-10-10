@@ -14,7 +14,9 @@
           <th [width]="100" class="">Regularizar</th>
           <th [width]="120" class="text-muted fs-14 mb-2">N° Documento</th>
           <th [width]="120" class="text-muted fs-14 mb-2">Fecha</th>
-          <th [width]="120" class="text-muted fs-14 mb-2">Monto Anticipo</th>
+          <th [width]="120" class="text-muted fs-14 mb-2">
+            Monto {{ labelOperation }}
+          </th>
           <th [width]="120" class="text-muted fs-14 mb-2">Importe</th>
           <th [width]="120" class="text-muted fs-14 mb-2">Saldo</th>
         </tr>
@@ -58,7 +60,7 @@
               type="number"
               [disabled]="!move['selected']"
               [value]="move['importe']"
-              (change)="onNumberChange($event)"
+              (change)="onNumberChange(move['id'], $event)"
             />
           </td>
           <td class="text-end me-2">
