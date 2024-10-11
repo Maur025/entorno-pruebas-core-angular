@@ -6,12 +6,14 @@ steps:
   - name: compile
     image: node:20.11.0
     commands:
-      - npm config set registry https://registry.kernotec.com/repository/npm-central/
-      - npm config set //registry.kernotec.com/repository/npm-central/:_auth=Z2l0aHViOnRST0NBVkxQcmVzcDVmaVBoZXBy
+      - npm install -g npm@latest
+      - npm cache clean --force
+      - npm config set registry https://registry.kernotec.com/repository/npm-public/
+      - npm config set //registry.kernotec.com/repository/npm-public/:_auth=Z2l0aHViOnRST0NBVkxQcmVzcDVmaVBoZXBy
+      - npm config list
       - npm install -g @angular/cli
-      - npm install npm@latest
       - cp src/environments/environment.prod.ts src/environments/environment.ts
-      - npm install
+      - npm install --legacy-peer-deps
       - ng build --configuration=production
     when:
       repo:

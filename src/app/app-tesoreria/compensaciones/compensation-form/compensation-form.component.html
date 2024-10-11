@@ -36,6 +36,7 @@
               formControlName="centroCostoId"
               placeholder="Seleccione Centro de Costo"
               [items]="costCenterList"
+              appendTo="#accountFormModalBodyDiv"
               bindLabel="nombre"
               bindValue="id"
               [ngClass]="{
@@ -77,7 +78,7 @@
               class="invalid-feedback"
             >
               <div *ngIf="compensationForm.get('descripcion').errors?.required">
-                La descripción para el desmbolso es obligatorio
+                La descripción para la compensación es obligatorio
               </div>
               <div *ngIf="form['descripcion'].errors['maxlength']">
                 Debe tener menos de
@@ -111,20 +112,16 @@
                   placeholder="Seleccione empleado"
                   (change)="onChangeOrigin($event)"
                   [disabled]="isSelected"
-                >
-                  <ng-option
-                    *ngFor="let item of operatorListOrigin"
-                    [value]="item"
-                  >
-                    {{ item.nombre }}
-                  </ng-option>
-                </ng-select>
+                  [items]="operatorListOrigin"
+                  bindLabel="nombre"
+                  bindValue="id"
+                />
                 <div
-                  *ngIf="submitted && form['tipoPersonaId'].errors"
+                  *ngIf="submitted && datosOrigen.get('tipoPersonaId').errors"
                   class="col-sm-12"
                 >
                   <div
-                    *ngIf="form['tipoPersonaId'].errors['required']"
+                    *ngIf="datosOrigen.get('tipoPersonaId').errors['required']"
                     class="text-danger mt-1 font-size-10"
                   >
                     Seleccione responsable.
@@ -154,14 +151,18 @@
                   </ng-option>
                 </ng-select>
                 <div
-                  *ngIf="submitted && form['personaReferenciaId'].errors"
+                  *ngIf="
+                    submitted && datosOrigen.get('personaReferenciaId').errors
+                  "
                   class="col-sm-12"
                 >
                   <div
-                    *ngIf="form['personaReferenciaId'].errors['required']"
+                    *ngIf="
+                      datosOrigen.get('personaReferenciaId').errors['required']
+                    "
                     class="text-danger mt-1 font-size-10"
                   >
-                    Seleccione responsable.
+                    Seleccione cliente.
                   </div>
                 </div>
               </div>
@@ -184,14 +185,14 @@
                   </ng-option>
                 </ng-select>
                 <div
-                  *ngIf="submitted && form['operacionId'].errors"
+                  *ngIf="submitted && datosOrigen.get('operacionId').errors"
                   class="col-sm-12"
                 >
                   <div
-                    *ngIf="form['operacionId'].errors['required']"
+                    *ngIf="datosOrigen.get('operacionId').errors['required']"
                     class="text-danger mt-1 font-size-10"
                   >
-                    Seleccione responsable.
+                    Seleccione Operación.
                   </div>
                 </div>
               </div>
@@ -235,14 +236,18 @@
                   </ng-option>
                 </ng-select>
                 <div
-                  *ngIf="submitted && form['tipoPersonaId'].errors"
+                  *ngIf="
+                    submitted && datosContraparte.get('tipoPersonaId').errors
+                  "
                   class="col-sm-12"
                 >
                   <div
-                    *ngIf="form['tipoPersonaId'].errors['required']"
+                    *ngIf="
+                      datosContraparte.get('tipoPersonaId').errors['required']
+                    "
                     class="text-danger mt-1 font-size-10"
                   >
-                    Seleccione responsable.
+                    Seleccione Operador.
                   </div>
                 </div>
               </div>
@@ -269,14 +274,21 @@
                   </ng-option>
                 </ng-select>
                 <div
-                  *ngIf="submitted && form['personaReferenciaId'].errors"
+                  *ngIf="
+                    submitted &&
+                    datosContraparte.get('personaReferenciaId').errors
+                  "
                   class="col-sm-12"
                 >
                   <div
-                    *ngIf="form['personaReferenciaId'].errors['required']"
+                    *ngIf="
+                      datosContraparte.get('personaReferenciaId').errors[
+                        'required'
+                      ]
+                    "
                     class="text-danger mt-1 font-size-10"
                   >
-                    Seleccione responsable.
+                    Seleccione Cliente.
                   </div>
                 </div>
               </div>
@@ -299,11 +311,15 @@
                   </ng-option>
                 </ng-select>
                 <div
-                  *ngIf="submitted && form['operacionId'].errors"
+                  *ngIf="
+                    submitted && datosContraparte.get('operacionId').errors
+                  "
                   class="col-sm-12"
                 >
                   <div
-                    *ngIf="form['operacionId'].errors['required']"
+                    *ngIf="
+                      datosContraparte.get('operacionId').errors['required']
+                    "
                     class="text-danger mt-1 font-size-10"
                   >
                     Seleccione responsable.
@@ -338,13 +354,13 @@
               class="btn btn-light"
               data-bs-dismiss="modal"
               [routerLink]="'/compensacion'"
+              [disabled]="isStatusSubmit"
             >
               Cerrar
             </button>
             <button
               type="submit"
               class="btn btn-success d-flex gap-1 align-items-center"
-              [ngStyle]="{ padding: isStatusSubmit ? '6px' : '7.52px' }"
             >
               <app-loader-button *ngIf="isStatusSubmit" />
               {{

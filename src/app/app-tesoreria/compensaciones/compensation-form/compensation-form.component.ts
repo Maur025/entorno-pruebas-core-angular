@@ -1,5 +1,7 @@
 import { Component, inject, OnInit } from "@angular/core";
 import {
+  FormArray,
+  FormGroup,
   UntypedFormBuilder,
   UntypedFormGroup,
   Validators,
@@ -24,6 +26,7 @@ import { PagosService } from "src/app/core/services/tesoreria/pagos.service";
 import { FondoRendirService } from "src/app/core/services/tesoreria/fondo-rendir.service";
 import { ScreenshotService } from "src/app/core/services/screenshot.service";
 import { CompensacionService } from "src/app/core/services/tesoreria/compensaciones.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "compensation-form",
@@ -47,6 +50,7 @@ export class CompensationFormComponent implements OnInit {
   private _anticipoClienteService = inject(AnticipoClienteService);
   private _supplierAdvanceService = inject(PagosService);
   private fondoRendirService = inject(FondoRendirService);
+  private router = inject(Router);
   protected salesPendingCollection: ResponseDataStandard[] = [];
   //private collectionTotalAmount: number = 0;
   collectionTotalAmount: number = 0;
@@ -86,6 +90,8 @@ export class CompensationFormComponent implements OnInit {
   listMovesNoOrigin: ResponseDataStandard[] = [];
   labelOperationOrigin: string = "";
   labelOperationNoOrigin: string = "";
+  codeDesabled: string;
+  operationDesabled: string;
   dataOrigin = {
     tipoPersonaId: "",
     personaReferenciaId: "",
@@ -140,12 +146,12 @@ export class CompensationFormComponent implements OnInit {
   setForm() {
     this.compensationForm = this.formBuilder.group({
       id: "",
-      fechaCompensacion: ["", Validators.required],
-      fecha: [""],
+      fechaCompensacion: [""],
+      fecha: ["", [Validators.required]],
       centroCostoId: ["", [Validators.required]],
-      montoOrigin: ["", [Validators.required]],
-      montoNoOrigin: ["", [Validators.required]],
-      montoTotal: [0, [Validators.required]],
+      montoOrigin: [0],
+      montoNoOrigin: [0],
+      montoTotal: [0],
       descripcion: [
         "",
         [
@@ -174,6 +180,22 @@ export class CompensationFormComponent implements OnInit {
   }
   get form() {
     return this.compensationForm.controls;
+  }
+
+  get datosOrigen() {
+    return this.compensationForm.get("datosOrigen") as FormGroup;
+  }
+
+  get datosContraparte() {
+    return this.compensationForm.get("datosContraparte") as FormGroup;
+  }
+
+  get movimientoOrigen() {
+    return this.compensationForm.get("movimientoOrigen") as FormGroup;
+  }
+
+  get movimientosContraparte() {
+    return this.compensationForm.get("movimientosContraparte") as FormArray;
   }
 
   getSClientCredit = (clientId: string, origin: boolean = true): void => {
@@ -267,6 +289,12 @@ export class CompensationFormComponent implements OnInit {
       this.updateOperatorListOrigin(this.selectedOperatorType);
       this.updateOperatorListNoOrigin(event.tipoPersonasContrapartes);
       this.typeOperator = event?.codigo;
+    }
+  };
+
+  evaluateCode = (code: string) => {
+    if (code == "CLIENTE") {
+      this.codeDesabled = "Proveedor";
     }
   };
 
@@ -464,7 +492,7 @@ export class CompensationFormComponent implements OnInit {
       );
       return;
     }
-    /*   if (!this.compensationForm.valid) {
+    /* if (!this.compensationForm.valid) {
       this.isStatusSubmit = false;
       return;
     } */
@@ -491,10 +519,15 @@ export class CompensationFormComponent implements OnInit {
 
   saveForm = (data: any) => {
     this._compensacionService.register(data).subscribe({
-      next: (data) => {
-        this.notificacionService.successStandar("Registro Exitoso!");
+      next: () => {
+        this.notificacionService?.successStandar("Registro exitoso.");
+        this.isStatusSubmit = false;
+        this.router.navigateByUrl("/compensacion");
       },
-      error: (err) => this.notificacionService.alertError(err),
+      error: (err) => {
+        this.notificacionService.alertError(err);
+        this.isStatusSubmit = false;
+      },
     });
   };
 }
