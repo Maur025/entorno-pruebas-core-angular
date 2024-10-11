@@ -1,0 +1,170 @@
+<div class="seccion-compensaciones">
+  <div class="col-xl-12 mb-2">
+    <div class="d-flex">
+      <div>
+        <h6 class="fs-14 mb-2 ms-1 text-primary">Anticipos del proveedor</h6>
+      </div>
+    </div>
+  </div>
+
+  <div
+    [formGroup]="formMain"
+    class="table-responsive"
+    style="max-height: 450px; overflow-y: scroll"
+  >
+    <table class="table table-sm m-0">
+      <thead>
+        <tr>
+          <th [width]="100" class="">Regularizar</th>
+          <th [width]="120" class="text-muted fs-14 mb-2">N° Documento</th>
+          <th [width]="120" class="text-muted fs-14 mb-2">Fecha</th>
+          <th [width]="120" class="text-muted fs-14 mb-2">
+            Monto {{ labelOperation }}
+          </th>
+          <th [width]="120" class="text-muted fs-14 mb-2">Importe</th>
+          <th [width]="120" class="text-muted fs-14 mb-2">Saldo</th>
+          <th [width]="120" class="text-muted fs-14 mb-2">Cuotas</th>
+        </tr>
+      </thead>
+      <tbody
+        formGroupName="movimientoOrigen"
+        *ngFor="let move of listData; let i = index"
+        class="py-2"
+      >
+        <tr>
+          <input
+            type="hidden"
+            [value]="move['id']"
+            formControlName="movimientoReferenciaId"
+          />
+          <td class="text-start">
+            <div class="form-check form-radio-primary">
+              <input
+                class="form-check-input mt-2 ms-1"
+                type="radio"
+                (change)="onRadioChange(move['id'])"
+                style="transform: scale(1.5)"
+                [checked]="move['selected']"
+              />
+            </div>
+          </td>
+          <td class="text-start">
+            {{ move["nroFacturaRecibo"] || move["nroReferencia"] }}
+          </td>
+          <td class="text-start">
+            {{
+              move["fechaVenta"] ||
+                move["fecha"] ||
+                move["fechaCompra"] ||
+                move["fechaDesembolso"] | fechaFormat
+            }}
+          </td>
+          <td class="text-end me-5">
+            {{
+              move["total"] || move["monto"] || move["saldoDesembolso"]
+                | decimalAmount
+            }}
+          </td>
+          <td class="text-end">
+            <input
+              class="form-control"
+              type="number"
+              [disabled]="
+                !move['selected'] || move['planCobros'] || move['planPagos']
+              "
+              [value]="move['importe']"
+              (change)="onNumberChange($event)"
+            />
+          </td>
+          <td class="text-end me-2">
+            {{
+              move["saldoPendiente"] || move["saldo"] || move["saldoNeto"]
+                | decimalAmount
+            }}
+          </td>
+          <td class="text-center" title="Ver Cuotas">
+            <button
+              [disabled]="!move['planCobros'] && !move['planPagos']"
+              type="button"
+              class="btn btn-warning btn-sm ms-2 py-0 px-1"
+              (click)="onClickShowOdds(move['id'])"
+            >
+              <i
+                class="mdi m-0 p-0 mdi-clipboard-plus"
+                style="font-size: 15px"
+              ></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="move['showOdds']" style="opacity: 0.8" class="bg-light">
+          <td></td>
+          <td colspan="6">
+            <div class="table-responsive">
+              <table class="table m-0 table-striped">
+                <thead class="bg-primary text-white p-0 m-0">
+                  <tr>
+                    <th></th>
+                    <th>Nro Ref.</th>
+                    <th>Fecha limite</th>
+                    <th>Monto</th>
+                    <th>Saldo</th>
+                    <th>Cuota</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let dataCredito of move['planCobros'] ||
+                        move['planPagos'];
+                      let i = index
+                    "
+                  >
+                    <td>
+                      <small class="me-2" [id]="'nameCouta' + i">
+                        Couta &nbsp; {{ i + 1 }}</small
+                      >
+                      <input
+                        type="checkbox"
+                        name="selectCouta"
+                        class="form-check-input ms-1"
+                        style="width: 1.8em; height: 1.8em"
+                        [checked]="dataCredito['show']"
+                        (change)="onSelectCheckbox(dataCredito, move['id'])"
+                      />
+                    </td>
+                    <td>{{ dataCredito["nroReferencia"] }}</td>
+                    <td>{{ dataCredito["fechaLimiteCobro"] | fechaFormat }}</td>
+                    <td class="text-end">
+                      {{ dataCredito["monto"] | decimalAmount }}
+                    </td>
+                    <td class="text-end">
+                      {{ dataCredito["saldoPendiente"] | decimalAmount }}
+                    </td>
+                    <td class="text-end">
+                      <input
+                        class="form-control"
+                        type="number"
+                        [value]="dataCredito['importe']"
+                        [disabled]="!dataCredito['show']"
+                        (change)="
+                          onNumberChangeCuota(dataCredito, move['id'], $event)
+                        "
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="bg-light">
+          <td colspan="5"></td>
+          <th>TOTAL</th>
+          <th class="text-end fs-3">{{ totalOrigin }}</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

@@ -23,7 +23,10 @@
       <div *ngIf="isValidDate" class="col-sm-12 d-flex justify-content-between">
         <div class="text-danger mt-1 font-size-10">Fecha no valida</div>
       </div>
-      <div *ngIf="stateDate" class="col-sm-12 d-flex justify-content-between">
+      <div
+        *ngIf="stateDate"
+        class="col-sm-12 d-flex justify-content-between mt-1"
+      >
         <div class="text-danger mt-1 font-size-10">
           No existen meses aperturados
         </div>

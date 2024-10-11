@@ -1,0 +1,83 @@
+<div class="seccion-compensaciones">
+  <div class="col-xl-12 mb-2">
+    <div class="d-flex">
+      <div>
+        <h6 class="fs-14 mb-2 ms-1 text-primary">Anticipos del proveedor</h6>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive" style="max-height: 450px; overflow-y: scroll">
+    <table class="table table-sm m-0">
+      <thead>
+        <tr>
+          <th [width]="100" class="">Regularizar</th>
+          <th [width]="120" class="text-muted fs-14 mb-2">N° Documento</th>
+          <th [width]="120" class="text-muted fs-14 mb-2">Fecha</th>
+          <th [width]="120" class="text-muted fs-14 mb-2">
+            Monto {{ labelOperation }}
+          </th>
+          <th [width]="120" class="text-muted fs-14 mb-2">Importe</th>
+          <th [width]="120" class="text-muted fs-14 mb-2">Saldo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let move of listData; let i = index" class="py-2">
+          <td class="text-start">
+            <div class="form-check form-radio-primary">
+              <input
+                class="form-check-input mt-2 ms-1"
+                type="checkbox"
+                (change)="onCheckboxChange(move['id'])"
+                style="transform: scale(1.5)"
+                [checked]="move['selected']"
+              />
+              <!--   <input type="radio"
+                [formControl]="rows.at(i).get('selected')"
+                 (change)="onRadioChange(i)" /> -->
+            </div>
+          </td>
+          <td class="text-start">
+            {{ move["nroFacturaRecibo"] || move["nroReferencia"] }}
+          </td>
+          <td class="text-start">
+            {{
+              move["fechaVenta"] ||
+                move["fecha"] ||
+                move["fechaCompra"] ||
+                move["fechaDesembolso"] | fechaFormat
+            }}
+          </td>
+          <td class="text-end me-5">
+            {{
+              move["total"] || move["monto"] || move["saldoDesembolso"]
+                | decimalAmount
+            }}
+          </td>
+          <td class="text-end">
+            <input
+              class="form-control"
+              type="number"
+              [disabled]="!move['selected']"
+              [value]="move['importe']"
+              (change)="onNumberChange(move['id'], $event)"
+            />
+          </td>
+          <td class="text-end me-2">
+            {{
+              move["saldoPendiente"] || move["saldo"] || move["saldoNeto"]
+                | decimalAmount
+            }}
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="bg-light">
+          <td colspan="4"></td>
+          <th>TOTAL</th>
+          <th class="text-end fs-3">{{ totalOrigin }}</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
