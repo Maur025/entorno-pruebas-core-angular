@@ -44,9 +44,7 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
   totalOrigin: number = 0;
   constructor(private notificacionService: NotificacionService) {}
 
-  ngOnInit(): void {
-    console.log("Data llega: ", this.listMoves);
-  }
+  ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.listMoves) {
@@ -58,7 +56,6 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
       }));
       this.totalOrigin = 0;
     }
-    console.log("LIST NEW", this.listData);
   }
   get form() {
     return this.formMain?.controls;
@@ -79,13 +76,10 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
         element["importe"] = 0;
       });
     }
-    console.log("***Selected: ", objectSelected);
   };
 
   onRadioChange(index: string) {
-    console.log("index: ", index);
     this.objectSelected = this.listData.find((element) => element.id == index);
-    console.log("selected: ", this.objectSelected);
     if (this.objectSelected != undefined) {
       this.objectSelected.selected = true;
       this.clearRadioAll(index);
@@ -106,7 +100,6 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
           this.objectSelected.saldoDesembolso,
       });
     }
-    console.log("LIST DATA CHANGED", this.listData);
   }
 
   clearRadioAll = (id: string) => {
@@ -116,11 +109,9 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
         element.importe = 0;
       }
     });
-    console.log("CLEAR: ", this.listData);
   };
 
   onNumberChange = (event) => {
-    console.log(event);
     if (event != "") {
       this.objectSelected.importe = event.target.value;
       this.totalOrigin = event.target.value;
@@ -140,7 +131,6 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
     const objectSelected = this.listData.find((element) => element.id == id);
     objectSelected.importe = data.monto;
     const dataCheck = [];
-    console.log("Checkbox: ", data);
     data.show = !data.show;
     data.importe = data.monto;
     data.planReferenciaId = data.id;
@@ -164,12 +154,9 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
   };
 
   calculateTotal = () => {
-    console.log("listCuotas", this.listCuotas.getValue());
     const objectsSelected = this.listCuotas
       .getValue()
       .filter((element) => element.show);
-
-    console.log("list ORIGIN: ", objectsSelected);
 
     this.totalOrigin = objectsSelected?.reduce(
       (total, item) => total + Number(item?.importe),
@@ -182,6 +169,5 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
       montoMovimiento: this.totalOrigin,
       planCuotas: objectsSelected,
     });
-    console.log("TOTAL: ", this.totalOrigin);
   };
 }

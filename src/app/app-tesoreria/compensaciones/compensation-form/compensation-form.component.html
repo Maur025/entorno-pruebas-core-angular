@@ -361,6 +361,7 @@
             <button
               type="submit"
               class="btn btn-success d-flex gap-1 align-items-center"
+              [disabled]="isStatusSubmit"
             >
               <app-loader-button *ngIf="isStatusSubmit" />
               {{

@@ -51,14 +51,14 @@ export class CompensationListComponent
           true,
           "text-start"
         ),
-        personaOrigen: this.getOpcionesCabecera(
+        /*         personaOrigen: this.getOpcionesCabecera(
           "Persona Origen",
           12,
           "text",
           true,
           true,
           "text-start"
-        ),
+        ), */
         operacionOrigen: this.getOpcionesCabecera(
           "Operación Origen",
           12,
@@ -68,14 +68,14 @@ export class CompensationListComponent
           "text-start"
         ),
 
-        personaContraparte: this.getOpcionesCabecera(
+        /*   personaContraparte: this.getOpcionesCabecera(
           "Persona Contraparte",
           12,
           "text",
           true,
           true,
           "text-start"
-        ),
+        ), */
         operacionContraparte: this.getOpcionesCabecera(
           "Operación Contraparte",
           12,

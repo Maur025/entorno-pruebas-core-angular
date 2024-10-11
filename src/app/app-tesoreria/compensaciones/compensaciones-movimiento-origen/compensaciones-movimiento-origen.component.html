@@ -84,7 +84,7 @@
           </td>
           <td class="text-center" title="Ver Cuotas">
             <button
-              [disabled]="!move['planCobros'] && !move['planPagos']"
+              [disabled]="!move['selected']"
               type="button"
               class="btn btn-warning btn-sm ms-2 py-0 px-1"
               (click)="onClickShowOdds(move['id'])"
@@ -96,7 +96,11 @@
             </button>
           </td>
         </tr>
-        <tr *ngIf="move['showOdds']" style="opacity: 0.8" class="bg-light">
+        <tr
+          *ngIf="move['showOdds'] && (move['planCobros'] || move['planPagos'])"
+          style="opacity: 0.8"
+          class="bg-light"
+        >
           <td></td>
           <td colspan="6">
             <div class="table-responsive">
@@ -133,12 +137,20 @@
                       />
                     </td>
                     <td>{{ dataCredito["nroReferencia"] }}</td>
-                    <td>{{ dataCredito["fechaLimiteCobro"] | fechaFormat }}</td>
+                    <td>
+                      {{
+                        dataCredito["fechaLimiteCobro"] ||
+                          dataCredito["fechaLimitePago"] | fechaFormat
+                      }}
+                    </td>
                     <td class="text-end">
                       {{ dataCredito["monto"] | decimalAmount }}
                     </td>
                     <td class="text-end">
-                      {{ dataCredito["saldoPendiente"] | decimalAmount }}
+                      {{
+                        dataCredito["saldoPendiente"] ||
+                          dataCredito["saldoPagar"] | decimalAmount
+                      }}
                     </td>
                     <td class="text-end">
                       <input

@@ -511,6 +511,16 @@ export class CompensationFormComponent implements OnInit {
         this.compensationForm
           .get("datosContraparte")
           .patchValue(this.dataNoOrigin);
+        const movimientoContraparte = this.compensationForm.get(
+          "movimientosContraparte"
+        ).value;
+        console.log("movimientoContraparte: ", movimientoContraparte);
+        this.compensationForm.patchValue({
+          movimientosContraparte: movimientoContraparte.filter(
+            (element) => element.checked
+          ),
+        });
+
         this.saveForm(this.compensationForm.value);
       }
       this.isStatusSubmit = false;
@@ -518,6 +528,7 @@ export class CompensationFormComponent implements OnInit {
   };
 
   saveForm = (data: any) => {
+    console.log("DATA SEND: ", data);
     this._compensacionService.register(data).subscribe({
       next: () => {
         this.notificacionService?.successStandar("Registro exitoso.");
