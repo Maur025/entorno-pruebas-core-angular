@@ -492,10 +492,10 @@ export class CompensationFormComponent implements OnInit {
       );
       return;
     }
-    /* if (!this.compensationForm.valid) {
+    if (!this.compensationForm.valid) {
       this.isStatusSubmit = false;
       return;
-    } */
+    }
     const dataImg = await this.screenshotService?.takeScreenshot(
       "accountFormModalBodyDiv"
     );
