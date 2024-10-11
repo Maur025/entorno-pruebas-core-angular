@@ -12,7 +12,7 @@ import { NgSelectModule } from "@ng-select/ng-select";
 import { CompensationFormComponent } from "./compensation-form/compensation-form.component";
 import { CompensationListComponent } from "./compensation-list/compensation-list.component";
 import { CompensacionesMovimientoOrigenComponent } from "./compensaciones-movimiento-origen/compensaciones-movimiento-origen.component";
-import { CompensacionesMovimientosNoOriginComponent } from './compensaciones-movimientos-no-origin/compensaciones-movimientos-no-origin.component';
+import { CompensacionesMovimientosNoOriginComponent } from "./compensaciones-movimientos-no-origin/compensaciones-movimientos-no-origin.component";
 
 @NgModule({
   declarations: [

@@ -109,16 +109,16 @@ export const MENU: MenuItem[] = [
     icon: "mdi mdi-cash-multiple",
   },
   {
-    id: 43,
-    label: "Compensaciones",
-    link: "/compensacion",
-    icon: "mdi mdi-scale-balance",
-  },
-  {
     id: 44,
     label: "Cobros Varios",
     link: "/cobros-varios",
     icon: "fas fa-hand-holding-usd",
+  },
+  {
+    id: 45,
+    label: "Compensaciones",
+    link: "/compensacion",
+    icon: "mdi mdi-scale-balance",
   },
   /*  {
 		id: 1,
