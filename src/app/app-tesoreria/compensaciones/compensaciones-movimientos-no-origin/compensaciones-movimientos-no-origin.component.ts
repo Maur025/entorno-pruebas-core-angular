@@ -104,7 +104,7 @@ export class CompensacionesMovimientosNoOriginComponent
       console.log("Filtrado true: ", dataCurrent);
       const move = {
         movimientoReferenciaId: data.id,
-        montoMovimiento: data.importe,
+        montoMovimiento: Number(data.importe),
         planCuotas: [],
         checked: data.selected,
       };
@@ -123,20 +123,16 @@ export class CompensacionesMovimientosNoOriginComponent
       }
     }
   };
-  /*   updateListChecked = (data: any) => {
-    const objectCurrent = this.listNoOrigin.getValue();
-    const newObject = objectCurrent.map((element) =>
-      element.id === data.id ? data : element
-    );
-    console.log("newObject: ", newObject);
-    this.listNoOrigin.next(newObject);
-  };
- */
+
   onNumberChange = (id: string, event) => {
     const objectSelected = this.listData.find((element) => element.id == id);
+    if (event != "") {
     objectSelected.importe = event.target.value;
     objectSelected.montoMovimiento = objectSelected.importe;
-    if (event != "") {
+    const dataSelected = this.listNoOrigin
+        .getValue()
+        .find((element) => element.movimientoReferenciaId == id);
+        dataSelected.montoMovimiento = Number(event.target.value);
       this.calculateTotal();
     }
   };
@@ -185,9 +181,9 @@ export class CompensacionesMovimientosNoOriginComponent
   onNumberChangeCuota = (data: any, id: string, event) => {
     const objectSelected = this.listData.find((element) => element.id == id);
     if (event != "") {
-      data.monto = event.target.value;
-      data.importe = event.target.value;
-      objectSelected.importe = event.target.value;
+      data.monto = Number(event.target.value);
+      data.importe = Number(event.target.value);
+      objectSelected.importe = Number(event.target.value);
 
       const dataMoveSelected = this.listNoOrigin
         .getValue()
@@ -196,7 +192,7 @@ export class CompensacionesMovimientosNoOriginComponent
         (element) => element.planReferenciaId == data.id
       );
       console.log("installmentPlan", installmentPlan);
-      installmentPlan.monto = event.target.value;
+      installmentPlan.monto = Number(event.target.value);
       this.calculateTotalinstallmentPlan(
         objectSelected,
         dataMoveSelected["planCuotas"]

@@ -40,12 +40,18 @@
         <!--         <div *ngSwitchCase="'personaOrigen'">
           {{ fila.personaOrigen }}
         </div> -->
+        <div *ngSwitchCase="'tipoPersonaOrigen'">
+          {{ fila.tipoPersonaOrigen.nombre }}
+        </div>
         <div *ngSwitchCase="'operacionOrigen'">
           {{ fila.operacionOrigen?.nombre }}
         </div>
         <!--         <div *ngSwitchCase="'personaContraparte'">
           {{ fila.personaContraparte }}
         </div> -->
+        <div *ngSwitchCase="'tipoPersonaContraparte'">
+          {{ fila.tipoPersonaContraparte.nombre }}
+        </div>
         <div *ngSwitchCase="'operacionContraparte'">
           {{ fila.operacionContraparte?.nombre }}
         </div>

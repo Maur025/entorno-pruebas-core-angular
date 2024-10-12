@@ -173,7 +173,7 @@ export class CompensationFormComponent implements OnInit {
       movimientoOrigen: this.formBuilder.group({
         movimientoReferenciaId: [""],
         montoMovimiento: [""],
-        planCuotas: [""],
+        planCuotas: [[]],
       }),
       movimientosContraparte: [this.formBuilder.array([])],
     });
@@ -281,7 +281,7 @@ export class CompensationFormComponent implements OnInit {
   };
 
   onChangeOrigin = (event) => {
-    if (event != null) {
+    if (event != undefined) {
       this.dataOrigin.tipoPersonaId = event.id;
       this.selectedClientType = event?.codigo;
       this.selectedOperatorType = event?.operaciones;
@@ -289,6 +289,11 @@ export class CompensationFormComponent implements OnInit {
       this.updateOperatorListOrigin(this.selectedOperatorType);
       this.updateOperatorListNoOrigin(event.tipoPersonasContrapartes);
       this.typeOperator = event?.codigo;
+      this.datosOrigen.patchValue({
+        personaReferenciaId:'',
+        operacionId:''
+      })
+      this.listMovesOrigin=[]
     }
   };
 
@@ -299,12 +304,17 @@ export class CompensationFormComponent implements OnInit {
   };
 
   onChangeNoOrigin = (event) => {
-    if (event != null) {
+    if (event != undefined) {
       //this.updateClientListNoOrigin();
       //this.updateOperatorListOrigin(this.selectedOperatorType);
       this.dataNoOrigin.tipoPersonaId = event.id;
       this.updateClientListNoOrigin(event?.codigo);
       this.typeOperatorNoOrigin = event?.codigo;
+      this.datosContraparte.patchValue({
+        personaReferenciaId:'',
+        operacionId:''
+      })
+      this.listMovesNoOrigin=[]
     }
   };
   onChangeClientOrigin = (event) => {
@@ -312,17 +322,25 @@ export class CompensationFormComponent implements OnInit {
       this.dataOrigin.personaReferenciaId = event.id;
       this.personalOriginId = event.id;
       this.clientData = event;
+      this.datosOrigen.patchValue({
+        operacionId:''
+      })
     }
   };
 
   onChangeClientNoOrigin = (event) => {
-    this.personalNoOriginId = event.id;
-    this.dataNoOrigin.personaReferenciaId = event.id;
+    if(event!=undefined){
+      this.personalNoOriginId = event.id;
+      this.dataNoOrigin.personaReferenciaId = event.id;
+      this.datosContraparte.patchValue({
+        operacionId:''
+      })
+    }
   };
 
   onChangeOperationOrigin = (event) => {
-    this.labelOperationOrigin = event?.nombre;
     if (event != undefined) {
+      this.labelOperationOrigin = event?.nombre;
       this.dataOrigin.operacionId = event.id;
       this.isStatusData = true;
       setTimeout(() => {
@@ -351,9 +369,9 @@ export class CompensationFormComponent implements OnInit {
   };
 
   onChangeOperationNoOrigin = (event) => {
+    if (event != undefined) {
     this.labelOperationNoOrigin = event?.nombre;
     this.dataNoOrigin.operacionId = event.id;
-    if (event != undefined) {
       this.isStatusDataNoOrigin = true;
       setTimeout(() => {
         this.operationNoOriginId = event.id;
@@ -505,7 +523,7 @@ export class CompensationFormComponent implements OnInit {
           fechaCompensacion: this.form["fecha"].value,
         });
         this.compensationForm.patchValue({
-          montoTotal: this.form["montoOrigin"].value,
+          montoTotal: Number(this.form["montoOrigin"].value),
         });
         this.compensationForm.get("datosOrigen").patchValue(this.dataOrigin);
         this.compensationForm

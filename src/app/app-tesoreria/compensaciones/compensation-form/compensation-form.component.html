@@ -204,7 +204,7 @@
                 <div class="loader-paymentMethod"></div>
               </div>
               <compensaciones-movimiento-origen
-                *ngIf="operationOriginId"
+                *ngIf="operationOriginId && this.listMovesOrigin!=[]"
                 [labelOperation]="labelOperationOrigin"
                 [listMoves]="listMovesOrigin"
                 [formMain]="compensationForm"
@@ -334,7 +334,7 @@
                 <div class="loader-paymentMethod"></div>
               </div>
               <compensaciones-movimientos-no-origin
-                *ngIf="operationNoOriginId"
+                *ngIf="operationNoOriginId && this.listMovesNoOrigin!=[]"
                 [labelOperation]="labelOperationNoOrigin"
                 [listMoves]="listMovesNoOrigin"
                 [formMain]="compensationForm"

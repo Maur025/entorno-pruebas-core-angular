@@ -80,6 +80,7 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
 
   onRadioChange(index: string) {
     this.objectSelected = this.listData.find((element) => element.id == index);
+    console.log("objectSelected radio", this.objectSelected);
     if (this.objectSelected != undefined) {
       this.objectSelected.selected = true;
       this.clearRadioAll(index);
@@ -146,9 +147,9 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
   onNumberChangeCuota = (data: any, id: string, event) => {
     const objectSelected = this.listData.find((element) => element.id == id);
     if (event != "") {
-      data.monto = event.target.value;
-      data.importe = event.target.value;
-      objectSelected.importe = event.target.value;
+      data.monto = Number(event.target.value);
+      data.importe = Number(event.target.value);
+      objectSelected.importe = Number(event.target.value);
       this.calculateTotal();
     }
   };
