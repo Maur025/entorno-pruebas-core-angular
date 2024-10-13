@@ -126,21 +126,17 @@ export class CompensationFormComponent implements OnInit {
   updateClientListOrigin() {
     this.itemsClientGeneralOrigin =
       this.itemMapperClient[this.selectedClientType] || [];
-    //console.log("General ", this.itemsClientGeneralOrigin);
   }
   updateClientListNoOrigin(data: any) {
     this.clientListNoOrigin = this.itemMapperClient[data] || [];
-    //console.log("General ", this.itemsClientGeneralOrigin);
   }
 
   updateOperatorListOrigin(data: any) {
     this.itemsOperatiorGeneralOrigin = data;
     this.itemsOperatiorGeneralNoOrigin = data;
-    //console.log("General Operator", this.itemsClientGeneralOrigin);
   }
   updateOperatorListNoOrigin(data: any) {
     this.itemsOperatorGeneralNoOrigin = data;
-    //console.log("General Operator", this.itemsClientGeneralOrigin);
   }
 
   setForm() {
@@ -177,6 +173,10 @@ export class CompensationFormComponent implements OnInit {
       }),
       movimientosContraparte: [this.formBuilder.array([])],
     });
+    this.datosOrigen.get("personaReferenciaId").disable();
+    this.datosOrigen.get("operacionId").disable();
+    this.datosContraparte.get("personaReferenciaId").disable();
+    this.datosContraparte.get("operacionId").disable();
   }
   get form() {
     return this.compensationForm.controls;
@@ -293,7 +293,16 @@ export class CompensationFormComponent implements OnInit {
         personaReferenciaId:'',
         operacionId:''
       })
+      this.datosOrigen.get("personaReferenciaId").enable();
+      this.datosOrigen.get("operacionId").disable();
       this.listMovesOrigin=[]
+    }else{
+      this.datosOrigen.patchValue({
+        personaReferenciaId:'',
+        operacionId:''
+      })
+      this.datosOrigen.get("personaReferenciaId").disable();
+      this.datosOrigen.get("operacionId").disable();
     }
   };
 
@@ -314,7 +323,17 @@ export class CompensationFormComponent implements OnInit {
         personaReferenciaId:'',
         operacionId:''
       })
+      this.datosContraparte.get("personaReferenciaId").enable();
+      this.datosContraparte.get("operacionId").disable();
       this.listMovesNoOrigin=[]
+    }else{
+      this.datosContraparte.patchValue({
+        personaReferenciaId:'',
+        operacionId:''
+      })
+      this.datosContraparte.get("personaReferenciaId").disable();
+      this.datosContraparte.get("operacionId").disable();
+
     }
   };
   onChangeClientOrigin = (event) => {
@@ -325,6 +344,13 @@ export class CompensationFormComponent implements OnInit {
       this.datosOrigen.patchValue({
         operacionId:''
       })
+      this.datosOrigen.get("operacionId").enable();
+    }else{
+      this.datosOrigen.patchValue({
+        operacionId:''
+      })
+      this.datosOrigen.get("operacionId").disable();
+
     }
   };
 
@@ -335,6 +361,12 @@ export class CompensationFormComponent implements OnInit {
       this.datosContraparte.patchValue({
         operacionId:''
       })
+      this.datosContraparte.get("operacionId").enable();
+    }else{
+      this.datosContraparte.patchValue({
+        operacionId:''
+      })
+      this.datosContraparte.get("operacionId").disable();
     }
   };
 
@@ -437,9 +469,12 @@ export class CompensationFormComponent implements OnInit {
     this._customersService.getAllByKeyword("", false).subscribe({
       next: (data) => {
         this.clientListOrigin =
-          this._responseHandlerService?.handleResponseAsArray(data);
+          this._responseHandlerService?.handleResponseAsArray(data).map(element => ({
+            ...element,
+            nameGeneral: this.getNameGeneralClient(element)
+          }));
         this.itemMapperClient.CLIENTE = this.clientListOrigin;
-      },
+        },
       error: (error: ErrorResponseStandard) => {
         this.notificacionService?.alertError(error);
       },
@@ -450,8 +485,12 @@ export class CompensationFormComponent implements OnInit {
     this._supplierService.getProveedores().subscribe({
       next: (data: ApiResponseStandard) => {
         this.supplierList =
-          this._responseHandlerService?.handleResponseAsArray(data);
-        this.itemMapperClient.PROVEEDOR = this.supplierList;
+          this._responseHandlerService?.handleResponseAsArray(data).map(element => ({
+            ...element,
+            nameGeneral: this.getNameGeneralSupplier(element)
+          }));
+
+          this.itemMapperClient.PROVEEDOR = this.supplierList;
       },
       error: (error: ErrorResponseStandard) =>
         this.notificacionService.alertError(error),
@@ -462,8 +501,11 @@ export class CompensationFormComponent implements OnInit {
     this._employeesService.listarHabilitados().subscribe({
       next: (data: ApiResponseStandard) => {
         this.employeeList =
-          this._responseHandlerService?.handleResponseAsArray(data);
-        this.itemMapperClient.EMPLEADO = this.employeeList;
+          this._responseHandlerService?.handleResponseAsArray(data).map(element => ({
+            ...element,
+            nameGeneral: this.getNameGeneralEmployee(element)
+          }));
+          this.itemMapperClient.EMPLEADO = this.employeeList;
       },
       error: (error: ErrorResponseStandard) =>
         this.notificacionService.alertError(error),
@@ -501,15 +543,9 @@ export class CompensationFormComponent implements OnInit {
   confirmAndContinueSaving = async (): Promise<void> => {
     this.submitted = true;
     this.isStatusSubmit = true;
-    if (
-      this.compensationForm.get("montoOrigin").value !=
-      this.compensationForm.get("montoNoOrigin").value
-    ) {
-      this.notificacionService.alertErrorOnlyMessage(
-        "El total del origen es distinto al total de la contraparte"
-      );
-      return;
-    }
+    this.validateDifferentAmounts();
+    this.validateAmountsEqualToZero();
+
     if (!this.compensationForm.valid) {
       this.isStatusSubmit = false;
       return;
@@ -532,21 +568,19 @@ export class CompensationFormComponent implements OnInit {
         const movimientoContraparte = this.compensationForm.get(
           "movimientosContraparte"
         ).value;
-        console.log("movimientoContraparte: ", movimientoContraparte);
         this.compensationForm.patchValue({
           movimientosContraparte: movimientoContraparte.filter(
             (element) => element.checked
           ),
         });
 
-        this.saveForm(this.compensationForm.value);
+        this.saveForm(this.compensationForm.getRawValue());
       }
       this.isStatusSubmit = false;
     });
   };
 
   saveForm = (data: any) => {
-    console.log("DATA SEND: ", data);
     this._compensacionService.register(data).subscribe({
       next: () => {
         this.notificacionService?.successStandar("Registro exitoso.");
@@ -559,4 +593,45 @@ export class CompensationFormComponent implements OnInit {
       },
     });
   };
+
+  validateDifferentAmounts = ()=>{
+    if (
+      this.compensationForm.get("montoOrigin").value !=
+      this.compensationForm.get("montoNoOrigin").value
+    ) {
+      this.notificacionService.alertErrorOnlyMessage(
+        "El total del origen es distinto al total de la contraparte"
+      );
+      this.isStatusSubmit = false;
+      return;
+    }
+  }
+  validateAmountsEqualToZero = ()=>{
+    if (
+      this.compensationForm.get("montoOrigin").value ==0 ||
+      this.compensationForm.get("montoNoOrigin").value == 0
+    ) {
+      this.notificacionService.alertErrorOnlyMessage(
+        "El total del origen y de la contraparte deben ser mayor a cero"
+      );
+      this.isStatusSubmit = false;
+      return;
+    }
+  }
+
+  getClassDifferentAmounts = ()=>{
+    return this.compensationForm.get('montoOrigin').value != this.compensationForm.get('montoNoOrigin').value
+  }
+  getClassEqualAmounts = ()=>{
+    return this.compensationForm.get('montoOrigin').value == this.compensationForm.get('montoNoOrigin').value && this.compensationForm.get('montoOrigin').value != 0 && this.compensationForm.get('montoNoOrigin').value !=0
+  }
+  getClassEqualToZero = ()=>{
+    return this.compensationForm.get('montoOrigin').value == 0 || this.compensationForm.get('montoNoOrigin').value == 0
+  }
+
+  getNameGeneralClient = (data:any)=>data.nombreComercial;
+
+  getNameGeneralSupplier = (data:any)=> data.razonSocial;
+
+  getNameGeneralEmployee = (data:any)=> data.nombre
 }

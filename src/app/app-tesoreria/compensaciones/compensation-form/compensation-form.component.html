@@ -101,8 +101,11 @@
           class="mb-3 border border-danger rounded p-3"
           formGroupName="datosOrigen"
         >
-          <h5 class="fw-light mb-3">Datos de origen</h5>
-          <div class="row mb-2">
+        <div class="d-flex justify-content-between">
+          <h5 class="fw-300 fs-5 mb-3 text-primary">Datos de origen</h5>
+          <h5 class="fw-300 fs-5 mb-3" [ngClass]="{'text-danger':getClassDifferentAmounts(), 'text-success':getClassEqualAmounts(), 'text-primary':getClassEqualToZero()}"><span class="fw-bold">TOTAL ORIGEN: </span> <span class="fw-bolder fs-4">{{compensationForm.get("montoOrigin").value}}</span></h5>
+          </div>
+          <div class="row mb-3">
             <div class="col-md-4">
               <div class="px-1">
                 <label class="mb-2" for="tipoPersonaId">(*) Operador </label>
@@ -140,16 +143,10 @@
                   notFoundText="Sin registros"
                   placeholder="Seleccione empleado"
                   (change)="onChangeClientOrigin($event)"
-                >
-                  <ng-option
-                    *ngFor="let item of itemsClientGeneralOrigin"
-                    [value]="item"
-                  >
-                    {{
-                      item.nombre || item.nombreComercial || item.razonSocial
-                    }}
-                  </ng-option>
-                </ng-select>
+                  [items]="itemsClientGeneralOrigin"
+                  bindLabel="nameGeneral"
+                  bindValue="id"
+                  />
                 <div
                   *ngIf="
                     submitted && datosOrigen.get('personaReferenciaId').errors
@@ -176,14 +173,10 @@
                   notFoundText="Sin registros"
                   placeholder="Seleccione empleado"
                   (change)="onChangeOperationOrigin($event)"
-                >
-                  <ng-option
-                    *ngFor="let item of itemsOperatiorGeneralOrigin"
-                    [value]="item"
-                  >
-                    {{ item.nombre }}
-                  </ng-option>
-                </ng-select>
+                  [items]="itemsOperatiorGeneralOrigin"
+                  bindLabel="nombre"
+                  bindValue="id"
+                />
                 <div
                   *ngIf="submitted && datosOrigen.get('operacionId').errors"
                   class="col-sm-12"
@@ -204,11 +197,19 @@
                 <div class="loader-paymentMethod"></div>
               </div>
               <compensaciones-movimiento-origen
-                *ngIf="operationOriginId && this.listMovesOrigin!=[]"
+                *ngIf="operationOriginId && this.listMovesOrigin.length!=0;else elseOrigin"
                 [labelOperation]="labelOperationOrigin"
                 [listMoves]="listMovesOrigin"
                 [formMain]="compensationForm"
               />
+              <ng-template #elseOrigin>
+                <div *ngIf="operationOriginId && this.listMovesOrigin.length==0" class="alert alert-warning d-flex align-items-center" role="alert">
+                  <i class="mdi mdi-information me-2 text-dark fs-4"></i>
+                  <div>
+                    No se encontraron movimientos registrados
+                  </div>
+                </div>
+              </ng-template>
             </div>
           </div>
         </div>
@@ -217,8 +218,12 @@
           class="mb-3 border border-primary rounded p-3"
           formGroupName="datosContraparte"
         >
-          <h5 class="fw-light mb-3">Datos Contraparte</h5>
-          <div class="row mb-2">
+        <div class="d-flex justify-content-between">
+          <h5 class="fw-300 fs-5 mb-3 text-primary">Datos Contraparte</h5>
+          <h5 class="fw-300 fs-5 mb-3" [ngClass]="{'text-danger':getClassDifferentAmounts(), 'text-success':getClassEqualAmounts(), 'text-primary':getClassEqualToZero()}"><span class="fw-bold">TOTAL CONTRAPARTE: </span> <span class="fw-bolder fs-4">{{compensationForm.get("montoNoOrigin").value}}</span></h5>
+
+        </div>
+          <div class="row mb-3">
             <div class="col-md-4">
               <div class="px-1">
                 <label class="mb-2" for="tipoPersonaId">(*) Operador </label>
@@ -227,14 +232,10 @@
                   notFoundText="Sin registros"
                   placeholder="Seleccione empleado"
                   (change)="onChangeNoOrigin($event)"
-                >
-                  <ng-option
-                    *ngFor="let item of itemsOperatorGeneralNoOrigin"
-                    [value]="item"
-                  >
-                    {{ item.nombre }}
-                  </ng-option>
-                </ng-select>
+                  [items]="itemsOperatorGeneralNoOrigin"
+                  bindLabel="nombre"
+                  bindValue="id"
+                />
                 <div
                   *ngIf="
                     submitted && datosContraparte.get('tipoPersonaId').errors
@@ -263,16 +264,10 @@
                   notFoundText="Sin registros"
                   placeholder="Seleccione empleado"
                   (change)="onChangeClientNoOrigin($event)"
-                >
-                  <ng-option
-                    *ngFor="let item of clientListNoOrigin"
-                    [value]="item"
-                  >
-                    {{
-                      item.nombre || item.nombreComercial || item.razonSocial
-                    }}
-                  </ng-option>
-                </ng-select>
+                  [items]="clientListNoOrigin"
+                  bindLabel="nameGeneral"
+                  bindValue="id"
+                />
                 <div
                   *ngIf="
                     submitted &&
@@ -302,14 +297,10 @@
                   notFoundText="Sin registros"
                   placeholder="Seleccione empleado"
                   (change)="onChangeOperationNoOrigin($event)"
-                >
-                  <ng-option
-                    *ngFor="let item of itemsOperatiorGeneralNoOrigin"
-                    [value]="item"
-                  >
-                    {{ item.nombre }}
-                  </ng-option>
-                </ng-select>
+                  [items]="itemsOperatiorGeneralNoOrigin"
+                  bindLabel="nombre"
+                  bindValue="id"
+                />
                 <div
                   *ngIf="
                     submitted && datosContraparte.get('operacionId').errors
@@ -334,18 +325,23 @@
                 <div class="loader-paymentMethod"></div>
               </div>
               <compensaciones-movimientos-no-origin
-                *ngIf="operationNoOriginId && this.listMovesNoOrigin!=[]"
+                *ngIf="operationNoOriginId && this.listMovesNoOrigin.length!=0;else elseNoOrigin"
                 [labelOperation]="labelOperationNoOrigin"
                 [listMoves]="listMovesNoOrigin"
                 [formMain]="compensationForm"
               />
+              <ng-template #elseNoOrigin>
+                <div *ngIf="operationNoOriginId && this.listMovesNoOrigin.length==0" class="alert alert-warning d-flex align-items-center" role="alert">
+                  <i class="mdi mdi-information me-2 text-dark fs-4"></i>
+                  <div>
+                    No se encontraron movimientos registrados
+                  </div>
+                </div>
+              </ng-template>
             </div>
           </div>
         </div>
       </div>
-      <!--       <div *ngIf="compensationForm.get('montoOrigin').value!= compensationForm.get('montoNoOrigin').value" class="alert alert-danger" role="alert">
-        EL total del debe
-      </div> -->
       <div class="card-footer">
         <div class="row mt-3 mb-3 me-3">
           <div class="hstack gap-2 justify-content-end">

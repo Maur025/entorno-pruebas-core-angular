@@ -1,5 +1,5 @@
 <div class="seccion-compensaciones">
-  <div class="col-xl-12 mb-2">
+  <div class="col-xl-12 mb-1">
     <div class="d-flex">
       <div>
         <h6 class="fs-14 mb-2 ms-1 text-primary">Compensación del {{labelOperation}}</h6>
@@ -17,8 +17,8 @@
           <th [width]="120" class="text-muted fs-14 mb-2">
             Monto {{ labelOperation }}
           </th>
-          <th [width]="120" class="text-muted fs-14 mb-2">Importe</th>
           <th [width]="120" class="text-muted fs-14 mb-2">Saldo</th>
+          <th [width]="120" class="text-muted fs-14 mb-2">Importe</th>
           <th [width]="120" class="text-muted fs-14 mb-2">Cuotas</th>
         </tr>
       </thead>
@@ -55,6 +55,13 @@
                 | decimalAmount
             }}
           </td>
+
+          <td class="text-end me-2">
+            {{
+              move["saldoPendiente"] || move["saldo"] || move["saldoNeto"]
+                | decimalAmount
+            }}
+          </td>
           <td class="text-end">
             <input
               class="form-control"
@@ -64,13 +71,9 @@
               [disabled]="
                 !move['selected'] || move['planCobros'] || move['planPagos']
               "
+              placeholder="0"
             />
-          </td>
-          <td class="text-end me-2">
-            {{
-              move["saldoPendiente"] || move["saldo"] || move["saldoNeto"]
-                | decimalAmount
-            }}
+            <span class="text-danger" *ngIf="isOlder && move['selected'] && labelOperation =='Anticipo'">El importe no debe ser mayor al saldo</span>
           </td>
           <td class="text-center" title="Ver Cuotas">
             <button
@@ -92,7 +95,8 @@
           class="bg-light"
         >
           <td></td>
-          <td colspan="6">
+          <td></td>
+          <td colspan="5">
             <div class="table-responsive">
               <table class="table m-0 table-striped">
                 <thead class="bg-primary text-white p-0 m-0">
@@ -140,7 +144,9 @@
                         (change)="
                           onNumberChangeCuota(dataCredito, move['id'], $event)
                         "
+                        placeholder="0"
                       />
+                      <span class="text-danger" *ngIf="isOlder && dataCredito['show']">El importe no debe ser mayor al saldo</span>
                     </td>
                   </tr>
                 </tbody>
