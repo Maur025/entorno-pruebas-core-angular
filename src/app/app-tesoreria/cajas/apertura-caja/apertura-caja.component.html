@@ -25,12 +25,38 @@
           </div>
         </div>
         <div class="col-md-4">
-          <div class="">
+
+          <div class="mb-3 px-1">
+            <p class="text-muted mb-1">(*) Centro Costos</p>
+            <ng-select
+              class="uppercase"
+              formControlName="centroCostoId"
+              placeholder="Seleccione el centro de costos"
+              [items]="listaCentroCostos"
+              bindLabel="nombre"
+              bindValue="id"
+              [ngClass]="{
+                'ngselect-invalid':
+                  submitted && form['centroCostoId'].errors != null
+              }"
+            >
+            </ng-select>
+            <div *ngIf="submitted && form['centroCostoId'].errors">
+              <div
+                class="text-danger mt-1 font-size-10"
+                *ngIf="form['centroCostoId'].errors['required']"
+              >
+                Seleccione un centro de costos
+              </div>
+            </div>
+          </div>
+
+       <!--    <div class="">
             <label class="mb-0 text-secondary">Centro de Costos:</label>
             <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary">
               <b> {{ datosCaja["centroCosto"]["nombre"] }} </b>
             </h6>
-          </div>
+          </div> -->
         </div>
         <div class="col-md-4">
           <div class="">
