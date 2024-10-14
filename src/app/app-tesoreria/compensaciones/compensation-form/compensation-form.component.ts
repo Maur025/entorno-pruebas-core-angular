@@ -126,21 +126,17 @@ export class CompensationFormComponent implements OnInit {
   updateClientListOrigin() {
     this.itemsClientGeneralOrigin =
       this.itemMapperClient[this.selectedClientType] || [];
-    //console.log("General ", this.itemsClientGeneralOrigin);
   }
   updateClientListNoOrigin(data: any) {
     this.clientListNoOrigin = this.itemMapperClient[data] || [];
-    //console.log("General ", this.itemsClientGeneralOrigin);
   }
 
   updateOperatorListOrigin(data: any) {
     this.itemsOperatiorGeneralOrigin = data;
     this.itemsOperatiorGeneralNoOrigin = data;
-    //console.log("General Operator", this.itemsClientGeneralOrigin);
   }
   updateOperatorListNoOrigin(data: any) {
     this.itemsOperatorGeneralNoOrigin = data;
-    //console.log("General Operator", this.itemsClientGeneralOrigin);
   }
 
   setForm() {
@@ -173,10 +169,14 @@ export class CompensationFormComponent implements OnInit {
       movimientoOrigen: this.formBuilder.group({
         movimientoReferenciaId: [""],
         montoMovimiento: [""],
-        planCuotas: [""],
+        planCuotas: [[]],
       }),
       movimientosContraparte: [this.formBuilder.array([])],
     });
+    this.datosOrigen.get("personaReferenciaId").disable();
+    this.datosOrigen.get("operacionId").disable();
+    this.datosContraparte.get("personaReferenciaId").disable();
+    this.datosContraparte.get("operacionId").disable();
   }
   get form() {
     return this.compensationForm.controls;
@@ -281,7 +281,7 @@ export class CompensationFormComponent implements OnInit {
   };
 
   onChangeOrigin = (event) => {
-    if (event != null) {
+    if (event != undefined) {
       this.dataOrigin.tipoPersonaId = event.id;
       this.selectedClientType = event?.codigo;
       this.selectedOperatorType = event?.operaciones;
@@ -289,6 +289,20 @@ export class CompensationFormComponent implements OnInit {
       this.updateOperatorListOrigin(this.selectedOperatorType);
       this.updateOperatorListNoOrigin(event.tipoPersonasContrapartes);
       this.typeOperator = event?.codigo;
+      this.datosOrigen.patchValue({
+        personaReferenciaId:'',
+        operacionId:''
+      })
+      this.datosOrigen.get("personaReferenciaId").enable();
+      this.datosOrigen.get("operacionId").disable();
+      this.listMovesOrigin=[]
+    }else{
+      this.datosOrigen.patchValue({
+        personaReferenciaId:'',
+        operacionId:''
+      })
+      this.datosOrigen.get("personaReferenciaId").disable();
+      this.datosOrigen.get("operacionId").disable();
     }
   };
 
@@ -299,12 +313,27 @@ export class CompensationFormComponent implements OnInit {
   };
 
   onChangeNoOrigin = (event) => {
-    if (event != null) {
+    if (event != undefined) {
       //this.updateClientListNoOrigin();
       //this.updateOperatorListOrigin(this.selectedOperatorType);
       this.dataNoOrigin.tipoPersonaId = event.id;
       this.updateClientListNoOrigin(event?.codigo);
       this.typeOperatorNoOrigin = event?.codigo;
+      this.datosContraparte.patchValue({
+        personaReferenciaId:'',
+        operacionId:''
+      })
+      this.datosContraparte.get("personaReferenciaId").enable();
+      this.datosContraparte.get("operacionId").disable();
+      this.listMovesNoOrigin=[]
+    }else{
+      this.datosContraparte.patchValue({
+        personaReferenciaId:'',
+        operacionId:''
+      })
+      this.datosContraparte.get("personaReferenciaId").disable();
+      this.datosContraparte.get("operacionId").disable();
+
     }
   };
   onChangeClientOrigin = (event) => {
@@ -312,17 +341,38 @@ export class CompensationFormComponent implements OnInit {
       this.dataOrigin.personaReferenciaId = event.id;
       this.personalOriginId = event.id;
       this.clientData = event;
+      this.datosOrigen.patchValue({
+        operacionId:''
+      })
+      this.datosOrigen.get("operacionId").enable();
+    }else{
+      this.datosOrigen.patchValue({
+        operacionId:''
+      })
+      this.datosOrigen.get("operacionId").disable();
+
     }
   };
 
   onChangeClientNoOrigin = (event) => {
-    this.personalNoOriginId = event.id;
-    this.dataNoOrigin.personaReferenciaId = event.id;
+    if(event!=undefined){
+      this.personalNoOriginId = event.id;
+      this.dataNoOrigin.personaReferenciaId = event.id;
+      this.datosContraparte.patchValue({
+        operacionId:''
+      })
+      this.datosContraparte.get("operacionId").enable();
+    }else{
+      this.datosContraparte.patchValue({
+        operacionId:''
+      })
+      this.datosContraparte.get("operacionId").disable();
+    }
   };
 
   onChangeOperationOrigin = (event) => {
-    this.labelOperationOrigin = event?.nombre;
     if (event != undefined) {
+      this.labelOperationOrigin = event?.nombre;
       this.dataOrigin.operacionId = event.id;
       this.isStatusData = true;
       setTimeout(() => {
@@ -351,9 +401,9 @@ export class CompensationFormComponent implements OnInit {
   };
 
   onChangeOperationNoOrigin = (event) => {
+    if (event != undefined) {
     this.labelOperationNoOrigin = event?.nombre;
     this.dataNoOrigin.operacionId = event.id;
-    if (event != undefined) {
       this.isStatusDataNoOrigin = true;
       setTimeout(() => {
         this.operationNoOriginId = event.id;
@@ -419,9 +469,12 @@ export class CompensationFormComponent implements OnInit {
     this._customersService.getAllByKeyword("", false).subscribe({
       next: (data) => {
         this.clientListOrigin =
-          this._responseHandlerService?.handleResponseAsArray(data);
+          this._responseHandlerService?.handleResponseAsArray(data).map(element => ({
+            ...element,
+            nameGeneral: this.getNameGeneralClient(element)
+          }));
         this.itemMapperClient.CLIENTE = this.clientListOrigin;
-      },
+        },
       error: (error: ErrorResponseStandard) => {
         this.notificacionService?.alertError(error);
       },
@@ -432,8 +485,12 @@ export class CompensationFormComponent implements OnInit {
     this._supplierService.getProveedores().subscribe({
       next: (data: ApiResponseStandard) => {
         this.supplierList =
-          this._responseHandlerService?.handleResponseAsArray(data);
-        this.itemMapperClient.PROVEEDOR = this.supplierList;
+          this._responseHandlerService?.handleResponseAsArray(data).map(element => ({
+            ...element,
+            nameGeneral: this.getNameGeneralSupplier(element)
+          }));
+
+          this.itemMapperClient.PROVEEDOR = this.supplierList;
       },
       error: (error: ErrorResponseStandard) =>
         this.notificacionService.alertError(error),
@@ -444,8 +501,11 @@ export class CompensationFormComponent implements OnInit {
     this._employeesService.listarHabilitados().subscribe({
       next: (data: ApiResponseStandard) => {
         this.employeeList =
-          this._responseHandlerService?.handleResponseAsArray(data);
-        this.itemMapperClient.EMPLEADO = this.employeeList;
+          this._responseHandlerService?.handleResponseAsArray(data).map(element => ({
+            ...element,
+            nameGeneral: this.getNameGeneralEmployee(element)
+          }));
+          this.itemMapperClient.EMPLEADO = this.employeeList;
       },
       error: (error: ErrorResponseStandard) =>
         this.notificacionService.alertError(error),
@@ -483,15 +543,9 @@ export class CompensationFormComponent implements OnInit {
   confirmAndContinueSaving = async (): Promise<void> => {
     this.submitted = true;
     this.isStatusSubmit = true;
-    if (
-      this.compensationForm.get("montoOrigin").value !=
-      this.compensationForm.get("montoNoOrigin").value
-    ) {
-      this.notificacionService.alertErrorOnlyMessage(
-        "El total del origen es distinto al total de la contraparte"
-      );
-      return;
-    }
+    this.validateDifferentAmounts();
+    this.validateAmountsEqualToZero();
+
     if (!this.compensationForm.valid) {
       this.isStatusSubmit = false;
       return;
@@ -505,13 +559,22 @@ export class CompensationFormComponent implements OnInit {
           fechaCompensacion: this.form["fecha"].value,
         });
         this.compensationForm.patchValue({
-          montoTotal: this.form["montoOrigin"].value,
+          montoTotal: Number(this.form["montoOrigin"].value),
         });
         this.compensationForm.get("datosOrigen").patchValue(this.dataOrigin);
         this.compensationForm
           .get("datosContraparte")
           .patchValue(this.dataNoOrigin);
-        this.saveForm(this.compensationForm.value);
+        const movimientoContraparte = this.compensationForm.get(
+          "movimientosContraparte"
+        ).value;
+        this.compensationForm.patchValue({
+          movimientosContraparte: movimientoContraparte.filter(
+            (element) => element.checked
+          ),
+        });
+
+        this.saveForm(this.compensationForm.getRawValue());
       }
       this.isStatusSubmit = false;
     });
@@ -530,4 +593,45 @@ export class CompensationFormComponent implements OnInit {
       },
     });
   };
+
+  validateDifferentAmounts = ()=>{
+    if (
+      this.compensationForm.get("montoOrigin").value !=
+      this.compensationForm.get("montoNoOrigin").value
+    ) {
+      this.notificacionService.alertErrorOnlyMessage(
+        "El total del origen es distinto al total de la contraparte"
+      );
+      this.isStatusSubmit = false;
+      return;
+    }
+  }
+  validateAmountsEqualToZero = ()=>{
+    if (
+      this.compensationForm.get("montoOrigin").value ==0 ||
+      this.compensationForm.get("montoNoOrigin").value == 0
+    ) {
+      this.notificacionService.alertErrorOnlyMessage(
+        "El total del origen y de la contraparte deben ser mayor a cero"
+      );
+      this.isStatusSubmit = false;
+      return;
+    }
+  }
+
+  getClassDifferentAmounts = ()=>{
+    return this.compensationForm.get('montoOrigin').value != this.compensationForm.get('montoNoOrigin').value
+  }
+  getClassEqualAmounts = ()=>{
+    return this.compensationForm.get('montoOrigin').value == this.compensationForm.get('montoNoOrigin').value && this.compensationForm.get('montoOrigin').value != 0 && this.compensationForm.get('montoNoOrigin').value !=0
+  }
+  getClassEqualToZero = ()=>{
+    return this.compensationForm.get('montoOrigin').value == 0 || this.compensationForm.get('montoNoOrigin').value == 0
+  }
+
+  getNameGeneralClient = (data:any)=>data.nombreComercial;
+
+  getNameGeneralSupplier = (data:any)=> data.razonSocial;
+
+  getNameGeneralEmployee = (data:any)=> data.nombre
 }

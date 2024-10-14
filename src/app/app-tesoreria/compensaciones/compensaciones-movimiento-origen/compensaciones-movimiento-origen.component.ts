@@ -43,10 +43,8 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
   objectSelected: any;
   totalOrigin: number = 0;
   constructor(private notificacionService: NotificacionService) {}
-
-  ngOnInit(): void {
-    console.log("Data llega: ", this.listMoves);
-  }
+  isOlder:boolean = false;
+  ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.listMoves) {
@@ -58,7 +56,6 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
       }));
       this.totalOrigin = 0;
     }
-    console.log("LIST NEW", this.listData);
   }
   get form() {
     return this.formMain?.controls;
@@ -79,34 +76,21 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
         element["importe"] = 0;
       });
     }
-    console.log("***Selected: ", objectSelected);
   };
 
   onRadioChange(index: string) {
-    console.log("index: ", index);
     this.objectSelected = this.listData.find((element) => element.id == index);
-    console.log("selected: ", this.objectSelected);
     if (this.objectSelected != undefined) {
       this.objectSelected.selected = true;
       this.clearRadioAll(index);
-      this.objectSelected.importe =
-        this.objectSelected.total ||
-        this.objectSelected.monto ||
-        this.objectSelected.saldoDesembolso;
+      this.objectSelected.importe = this.getBalance(this.objectSelected);
       this.totalOrigin = this.objectSelected.importe;
       this.formMain.get("movimientoOrigen").patchValue({
         movimientoReferenciaId: this.objectSelected.id,
-        montoMovimiento:
-          this.objectSelected.monto ||
-          this.objectSelected.total ||
-          this.objectSelected.saldoDesembolso,
-        montoOrigin:
-          this.objectSelected.monto ||
-          this.objectSelected.total ||
-          this.objectSelected.saldoDesembolso,
+        montoMovimiento: this.getBalance(this.objectSelected),
+        montoOrigin: this.getBalance(this.objectSelected)
       });
     }
-    console.log("LIST DATA CHANGED", this.listData);
   }
 
   clearRadioAll = (id: string) => {
@@ -114,16 +98,17 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
       if (element.id != id) {
         element.selected = false;
         element.importe = 0;
+        element.showOdds = false;
       }
     });
-    console.log("CLEAR: ", this.listData);
   };
 
   onNumberChange = (event) => {
-    console.log(event);
     if (event != "") {
-      this.objectSelected.importe = event.target.value;
+      this.isOlder = false;
+      this.objectSelected.importe = Number(event.target.value);
       this.totalOrigin = event.target.value;
+
       this.formMain.patchValue({
         montoOrigin: this.totalOrigin,
       });
@@ -131,18 +116,18 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
         movimientoOrigen: this.objectSelected,
       }); */
       this.formMain.get("movimientoOrigen").patchValue({
-        montoMovimiento: event.target.value,
+        montoMovimiento: Number(event.target.value),
       });
+      this.validateHigherAmount(this.objectSelected, event.target.value);
     }
   };
 
   onSelectCheckbox = (data: any, id: string) => {
     const objectSelected = this.listData.find((element) => element.id == id);
-    objectSelected.importe = data.monto;
+    objectSelected.importe = this.getInstallmentBalance(data);
     const dataCheck = [];
-    console.log("Checkbox: ", data);
     data.show = !data.show;
-    data.importe = data.monto;
+    data.importe = this.getInstallmentBalance(data);
     data.planReferenciaId = data.id;
     data.monto = data.monto;
     this.totalOrigin = data.importe;
@@ -154,22 +139,30 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
   };
 
   onNumberChangeCuota = (data: any, id: string, event) => {
+    this.isOlder = false;
     const objectSelected = this.listData.find((element) => element.id == id);
     if (event != "") {
-      data.monto = event.target.value;
-      data.importe = event.target.value;
-      objectSelected.importe = event.target.value;
+      data.monto = Number(event.target.value);
+      data.importe = Number(event.target.value);
+      objectSelected.importe = Number(event.target.value);
+      this.validateHigherAmount(data,event.target.value);
       this.calculateTotal();
     }
   };
 
+
+  validateHigherAmount = (data:any, amount)=>{
+    if(amount > (data.saldoPagar || data.saldoPendiente || data.saldo || data.saldoPendiente || data.saldoNeto)){
+      data.importe = '';
+      this.isOlder = true;
+      this.totalOrigin = 0;
+    }
+  }
+
   calculateTotal = () => {
-    console.log("listCuotas", this.listCuotas.getValue());
     const objectsSelected = this.listCuotas
       .getValue()
       .filter((element) => element.show);
-
-    console.log("list ORIGIN: ", objectsSelected);
 
     this.totalOrigin = objectsSelected?.reduce(
       (total, item) => total + Number(item?.importe),
@@ -182,6 +175,13 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
       montoMovimiento: this.totalOrigin,
       planCuotas: objectsSelected,
     });
-    console.log("TOTAL: ", this.totalOrigin);
   };
+
+
+  getBalance = (data:any)=> data.saldo ||
+    data.saldoPendiente ||
+    data.saldoNeto ||
+    data.saldoDesembolso;
+
+  getInstallmentBalance = (data:any)=>data.saldoPendiente || data.saldoPagar;
 }

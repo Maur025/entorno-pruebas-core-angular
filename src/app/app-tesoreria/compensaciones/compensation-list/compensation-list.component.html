@@ -7,7 +7,7 @@
   [conOpciones]="false"
   [formato]="formato"
   [datosService]="compensacionService"
-  getAll="null"
+  getAll="getAll"
   [templateFila]="templateFila"
   [botonNuevo]="true"
   (alCrear)="crearCompensacion()"
@@ -37,26 +37,34 @@
         <div *ngSwitchCase="'descripcion'">
           {{ fila.descripcion }}
         </div>
-        <div *ngSwitchCase="'personaOrigen'">
+        <!--         <div *ngSwitchCase="'personaOrigen'">
           {{ fila.personaOrigen }}
+        </div> -->
+        <div *ngSwitchCase="'tipoPersonaOrigen'">
+          {{ fila.tipoPersonaOrigen.nombre }}
         </div>
         <div *ngSwitchCase="'operacionOrigen'">
-          {{ fila.operacionOrigen }}
+          {{ fila.operacionOrigen?.nombre }}
         </div>
-        <div *ngSwitchCase="'personaContraparte'">
+        <!--         <div *ngSwitchCase="'personaContraparte'">
           {{ fila.personaContraparte }}
+        </div> -->
+        <div *ngSwitchCase="'tipoPersonaContraparte'">
+          {{ fila.tipoPersonaContraparte.nombre }}
         </div>
         <div *ngSwitchCase="'operacionContraparte'">
-          {{ fila.operacionContraparte }}
+          {{ fila.operacionContraparte?.nombre }}
         </div>
-        <div *ngSwitchCase="'montoCompensacion'">
-          {{ fila.montoCompensacion?.nombre }}
+        <div *ngSwitchCase="'montoCompensacion'" class="text-end">
+          {{ fila.montoCompensacion }}
         </div>
         <div *ngSwitchCase="'fechaCompensacion'">
           {{ fila.fechaCompensacion | fechaFormat }}
         </div>
         <div class="text-end" *ngSwitchCase="'estadoContabilidad'">
-          {{ fila["estadoContabilidad"] }}
+          <span class="badge bg-primary font-size-10">
+            {{ fila["estadoContabilidad"]?.nombre }}
+          </span>
         </div>
         <div *ngSwitchDefault>
           <td>{{ fila[campo] }}</td>
