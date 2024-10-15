@@ -4,6 +4,7 @@ import { NotificacionService } from 'src/app/core/services/notificacion.service'
 import { ResponseHandlerService } from 'src/app/core/services/response-handler.service';
 import { ScreenshotService } from 'src/app/core/services/screenshot.service';
 import { BancoService } from 'src/app/core/services/tesoreria/banco.service';
+import { CentroCostosService } from 'src/app/core/services/tesoreria/centro-costos.service';
 import { CuentaBancoService } from 'src/app/core/services/tesoreria/cuenta-banco.service';
 import { MedioTransferenciaService } from 'src/app/core/services/tesoreria/medio-transferencia.service';
 import { MonedaService } from 'src/app/core/services/tesoreria/moneda.service';
@@ -30,6 +31,7 @@ export class FormTraspasoCuentaComponent implements OnInit {
   cuentaBancoListOrigen: any;
   medioTransferenciaOrigen:any;
   medioTransferenciaDestino:any;
+  listaCentroCostos: any[] = [];
 
   constructor(
     public bancoService: BancoService,
@@ -40,13 +42,15 @@ export class FormTraspasoCuentaComponent implements OnInit {
     protected utilityService: UtilityService,
     protected screenshotService: ScreenshotService,
     private responseHandlerService: ResponseHandlerService,
-    private medioTransferenciaService: MedioTransferenciaService
+    private medioTransferenciaService: MedioTransferenciaService,
+    private centroCostosService:CentroCostosService
   ) {}
 
   ngOnInit() {
     this.setFieldForm();
     this.getCuentaBancoListOrigen(this.datosBanco['id']);
     this.getTransferMediumData();
+    this.getCentroCostos();
   }
 
   get form() {
@@ -65,6 +69,7 @@ export class FormTraspasoCuentaComponent implements OnInit {
       nroReferenciaDestino: [null, [Validators.required]],
       montoEgreso:[null, [Validators.required]],
       montoIngreso:[0, [Validators.required]],
+      centroCostoId: [null, [Validators.required]]
     });
   }
 
@@ -75,7 +80,16 @@ export class FormTraspasoCuentaComponent implements OnInit {
       this.formTraspaso.controls['cuentaBancoIdDestino'].reset();
     }
   }
-
+  getCentroCostos() {
+    this.centroCostosService.habilitados().subscribe({
+      next: (response: ApiResponseStandard) => {
+        this.listaCentroCostos =
+          this.responseHandlerService?.handleResponseAsArray(response);
+      },
+      error: (error: ErrorResponseStandard) =>
+        this.notificacionService.alertError(error),
+    });
+  }
   getCuentaBancoListOrigen(idBanco) {
 		this.cuentaBancoService.getCuentasBanco(1000, 0, 'nroCuenta', false, '', idBanco)
 			.subscribe(data=>{
@@ -170,6 +184,7 @@ export class FormTraspasoCuentaComponent implements OnInit {
       fechaTransferencia: this.formTraspaso.value["fecha"],
       descripcionTranferencia: this.formTraspaso.value["descripcionTranferencia"],
       montoTotal: this.formTraspaso.value["montoEgreso"],
+      centroCostoId: this.formTraspaso.value["centroCostoId"],
       movimientoIngreso: {
         monto: this.formTraspaso.value["montoIngreso"],
         nroReferencia: this.formTraspaso.value["nroReferenciaDestino"],
