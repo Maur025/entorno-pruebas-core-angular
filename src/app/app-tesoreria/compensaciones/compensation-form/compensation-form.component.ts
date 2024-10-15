@@ -560,8 +560,12 @@ export class CompensationFormComponent implements OnInit {
   confirmAndContinueSaving = async (): Promise<void> => {
     this.submitted = true;
     this.isStatusSubmit = true;
-    this.validateDifferentAmounts();
-    this.validateAmountsEqualToZero();
+    if (!this.validateDifferentAmounts()) {
+      return;
+    }
+    if (this.validateAmountsEqualToZero()) {
+      return;
+    }
 
     if (!this.compensationForm.valid) {
       this.isStatusSubmit = false;
@@ -620,7 +624,7 @@ export class CompensationFormComponent implements OnInit {
         "El total del origen es distinto al total de la contraparte"
       );
       this.isStatusSubmit = false;
-      return;
+      return false;
     }
   };
   validateAmountsEqualToZero = () => {
@@ -632,7 +636,7 @@ export class CompensationFormComponent implements OnInit {
         "El total del origen y de la contraparte deben ser mayor a cero"
       );
       this.isStatusSubmit = false;
-      return;
+      return false;
     }
   };
 
