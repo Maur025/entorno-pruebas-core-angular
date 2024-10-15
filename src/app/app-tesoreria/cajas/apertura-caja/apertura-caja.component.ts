@@ -6,8 +6,11 @@ import {
 } from "@angular/forms";
 import { BsModalRef } from "ngx-bootstrap/modal";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
+import { ResponseHandlerService } from "src/app/core/services/response-handler.service";
 import { ScreenshotService } from "src/app/core/services/screenshot.service";
+import { CentroCostosService } from "src/app/core/services/tesoreria/centro-costos.service";
 import { MovimientoCajaService } from "src/app/core/services/tesoreria/movimiento-caja.service";
+import { ApiResponseStandard, ErrorResponseStandard } from "src/app/shared/interface/common-api-response";
 import { UtilityService } from "src/app/shared/services/utilityService.service";
 
 @Component({
@@ -28,13 +31,16 @@ export class AperturaCajaComponent {
   fechaActual;
   isStatusSubmit: boolean = false;
   protected onSubmitFormStatus: boolean = false;
+  listaCentroCostos: any[] = [];
 
   constructor(
     private movimientoCajaService: MovimientoCajaService,
     private formBuilder: UntypedFormBuilder,
     private notificacionService: NotificacionService,
     private screenshotService: ScreenshotService,
-    protected utilityService: UtilityService
+    protected utilityService: UtilityService,
+    private centroCostosService:CentroCostosService,
+    private responseHandlerService: ResponseHandlerService,
   ) {}
 
   ngOnInit() {
@@ -45,28 +51,10 @@ export class AperturaCajaComponent {
     }
 
     this.setForm();
+    this.getCentroCostos();
   }
 
   setForm() {
-    /*let fechaActual = new Date();
-     this.fechaActual =
-      fechaActual.getFullYear() +
-      "-" +
-      (fechaActual.getMonth() + 1).toString().padStart(2, "0") +
-      "-" +
-      fechaActual.getDate().toString().padStart(2, "0");
-    this.fechaActual2 =
-      fechaActual.getFullYear() +
-      "-" +
-      (fechaActual.getMonth() + 1).toString().padStart(2, "0") +
-      "-" +
-      fechaActual.getDate().toString().padStart(2, "0") +
-      "T" +
-      fechaActual.getHours().toString().padStart(2, "0") +
-      ":" +
-      fechaActual.getMinutes().toString().padStart(2, "0") +
-      ":" +
-      fechaActual.getSeconds().toString().padStart(2, "0"); */
     this.formAccionCaja = this.formBuilder.group({
       id: "",
       cajaId: [this.datosCaja["id"], [Validators.required]],
@@ -80,11 +68,23 @@ export class AperturaCajaComponent {
           Validators.maxLength(255),
         ],
       ],
+      centroCostoId: [null, [Validators.required]],
       transacciones: this.formBuilder.array([]),
     });
   }
   get form() {
     return this.formAccionCaja.controls;
+  }
+
+  getCentroCostos() {
+    this.centroCostosService.habilitados().subscribe({
+      next: (response: ApiResponseStandard) => {
+        this.listaCentroCostos =
+          this.responseHandlerService?.handleResponseAsArray(response);
+      },
+      error: (error: ErrorResponseStandard) =>
+        this.notificacionService.alertError(error),
+    });
   }
 
   recibirMontoTotal(monto) {
