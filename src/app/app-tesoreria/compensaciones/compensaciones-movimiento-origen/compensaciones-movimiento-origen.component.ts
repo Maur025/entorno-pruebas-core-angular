@@ -26,6 +26,7 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
   @Input() listMoves;
   @Input() formMain: UntypedFormGroup;
   @Input() labelOperation: string;
+  @Input() selectedClientType: string;
   @Output() alSelectAnticipo: EventEmitter<any> = new EventEmitter();
   private fb = inject(FormBuilder);
   //listMoves: any[];
@@ -33,6 +34,7 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
   importe: number = 0;
   isStatusRadio: boolean = false;
   changeImporte: number = 0;
+  labelPerson: string = "";
   listData: any;
   listCobrosPagos: any;
   cuotaSelected: any;
@@ -43,7 +45,7 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
   objectSelected: any;
   totalOrigin: number = 0;
   constructor(private notificacionService: NotificacionService) {}
-  isOlder:boolean = false;
+  isOlder: boolean = false;
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -79,8 +81,10 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
   };
 
   onRadioChange(index: string) {
+    this.isOlder = false;
     this.objectSelected = this.listData.find((element) => element.id == index);
     if (this.objectSelected != undefined) {
+      this.updateTotalAmount();
       this.objectSelected.selected = true;
       this.clearRadioAll(index);
       this.objectSelected.importe = this.getBalance(this.objectSelected);
@@ -88,8 +92,11 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
       this.formMain.get("movimientoOrigen").patchValue({
         movimientoReferenciaId: this.objectSelected.id,
         montoMovimiento: this.getBalance(this.objectSelected),
-        montoOrigin: this.getBalance(this.objectSelected)
+        montoOrigin: this.getBalance(this.objectSelected),
       });
+      if (this.labelOperation == "Anticipo") {
+        this.updateTotalAmount(this.totalOrigin);
+      }
     }
   }
 
@@ -107,18 +114,15 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
     if (event != "") {
       this.isOlder = false;
       this.objectSelected.importe = Number(event.target.value);
-      this.totalOrigin = event.target.value;
-
-      this.formMain.patchValue({
-        montoOrigin: this.totalOrigin,
-      });
-      /*       this.formMain.setValue({
-        movimientoOrigen: this.objectSelected,
-      }); */
+      this.totalOrigin = Number(event.target.value);
+      this.updateTotalAmount(this.totalOrigin);
       this.formMain.get("movimientoOrigen").patchValue({
         montoMovimiento: Number(event.target.value),
       });
-      this.validateHigherAmount(this.objectSelected, event.target.value);
+      this.validateHigherAmount(
+        this.objectSelected,
+        Number(event.target.value)
+      );
     }
   };
 
@@ -145,19 +149,18 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
       data.monto = Number(event.target.value);
       data.importe = Number(event.target.value);
       objectSelected.importe = Number(event.target.value);
-      this.validateHigherAmount(data,event.target.value);
+      this.validateHigherAmount(data, event.target.value);
       this.calculateTotal();
     }
   };
 
-
-  validateHigherAmount = (data:any, amount)=>{
-    if(amount > (data.saldoPagar || data.saldoPendiente || data.saldo || data.saldoPendiente || data.saldoNeto)){
-      data.importe = '';
+  validateHigherAmount = (data: any, amount) => {
+    if (amount > (this.getInstallmentBalance(data) || this.getBalance(data))) {
+      data.importe = "";
       this.isOlder = true;
       this.totalOrigin = 0;
     }
-  }
+  };
 
   calculateTotal = () => {
     const objectsSelected = this.listCuotas
@@ -168,20 +171,49 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
       (total, item) => total + Number(item?.importe),
       0
     );
-    this.formMain.patchValue({
-      montoOrigin: this.totalOrigin,
-    });
+    this.updateTotalAmount(this.totalOrigin);
+
     this.formMain.get("movimientoOrigen").patchValue({
       montoMovimiento: this.totalOrigin,
       planCuotas: objectsSelected,
     });
   };
 
+  getAmount = (data: any) => {
+    if (this.labelOperation == "Reembolso") {
+      return data.reembolso;
+    } else if (this.labelOperation == "Fondo Rendir") {
+      return data.desembolso;
+    } else {
+      return data.total || data.monto;
+    }
+  };
+  getBalance = (data: any) => {
+    if (this.labelOperation == "Reembolso") {
+      return data.saldoReembolso;
+    } else if (this.labelOperation == "Fondo Rendir") {
+      return data.saldoDesembolso;
+    } else {
+      return data.saldo || data.saldoPendiente;
+    }
+  };
 
-  getBalance = (data:any)=> data.saldo ||
-    data.saldoPendiente ||
-    data.saldoNeto ||
-    data.saldoDesembolso;
+  getInstallmentBalance = (data: any) => data.saldoPendiente || data.saldoPagar;
 
-  getInstallmentBalance = (data:any)=>data.saldoPendiente || data.saldoPagar;
+  getInstallmentDate = (data: any) =>
+    data.fechaLimiteCobro || data.fechaLimitePago;
+
+  getNroDocument = (data) => data["nroFacturaRecibo"] || data["nroReferencia"];
+
+  getMovementDate = (data: any) =>
+    data["fechaVenta"] ||
+    data["fecha"] ||
+    data["fechaCompra"] ||
+    data["fechaDesembolso"];
+
+  updateTotalAmount = (totalAmount: number = 0) => {
+    this.formMain.patchValue({
+      montoOrigin: totalAmount,
+    });
+  };
 }

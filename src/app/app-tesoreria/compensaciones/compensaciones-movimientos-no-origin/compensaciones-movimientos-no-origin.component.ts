@@ -8,10 +8,7 @@ import {
   SimpleChanges,
   OnDestroy,
 } from "@angular/core";
-import {
-  FormBuilder,
-  UntypedFormGroup,
-} from "@angular/forms";
+import { FormBuilder, UntypedFormGroup } from "@angular/forms";
 import { BehaviorSubject } from "rxjs";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 @Component({
@@ -26,6 +23,8 @@ export class CompensacionesMovimientosNoOriginComponent
   @Output() alSelectAnticipo: EventEmitter<any> = new EventEmitter();
   @Input() formMain: UntypedFormGroup;
   @Input() labelOperation: string;
+  @Input() selectedClientType: string;
+
   private listCuotas = new BehaviorSubject<any[]>([]);
   private listNoOrigin = new BehaviorSubject<any[]>([]);
   private fb = inject(FormBuilder);
@@ -44,7 +43,7 @@ export class CompensacionesMovimientosNoOriginComponent
   };
   objectSelected: any;
   totalOrigin: number = 0;
-  isOlder:boolean = false;
+  isOlder: boolean = false;
   constructor(private notificacionService: NotificacionService) {}
 
   ngOnInit(): void {}
@@ -69,10 +68,11 @@ export class CompensacionesMovimientosNoOriginComponent
   }
 
   onCheckboxChange = (index: string) => {
+    this.isOlder = false;
     const objectSelected = this.listData.find((element) => element.id == index);
     if (objectSelected != undefined) {
       objectSelected.selected = !objectSelected.selected;
-      objectSelected.importe = this.getBalance(objectSelected)
+      objectSelected.importe = this.getBalance(objectSelected);
       this.totalOrigin = objectSelected.importe;
       objectSelected.movimientoReferenciaId = objectSelected.id;
       objectSelected.montoMovimiento = objectSelected.importe;
@@ -81,8 +81,6 @@ export class CompensacionesMovimientosNoOriginComponent
         objectSelected.selected = false;
         objectSelected.showOdds = false;
       }
-      let dataCurrent = this.listNoOrigin.getValue();
-
       this.addListChecked(objectSelected);
       this.calculateTotal();
     }
@@ -99,9 +97,6 @@ export class CompensacionesMovimientosNoOriginComponent
         planCuotas: [],
         checked: data.selected,
       };
-      /* this.move.movimientoReferenciaId = data.id;
-      this.move.montoMovimiento = data.importe; */
-
       this.listNoOrigin.next([...dataCurrent, move]);
     } else {
       const dataSelected = this.listNoOrigin
@@ -117,21 +112,21 @@ export class CompensacionesMovimientosNoOriginComponent
     const objectSelected = this.listData.find((element) => element.id == id);
     if (event != "") {
       this.isOlder = false;
-    objectSelected.importe = Number(event.target.value);
-    objectSelected.montoMovimiento = objectSelected.importe;
-    this.validateHigherAmount(objectSelected, Number(event.target.value));
-    const dataSelected = this.listNoOrigin
+      objectSelected.importe = Number(event.target.value);
+      objectSelected.montoMovimiento = objectSelected.importe;
+      this.validateHigherAmount(objectSelected, Number(event.target.value));
+      const dataSelected = this.listNoOrigin
         .getValue()
         .find((element) => element.movimientoReferenciaId == id);
-        dataSelected.montoMovimiento = Number(event.target.value);
+      dataSelected.montoMovimiento = Number(event.target.value);
       this.calculateTotal();
     }
-
   };
 
   onSelectCheckboxOdds = (data: any, id: string) => {
+    this.isOlder = false;
     const objectSelected = this.listData.find((element) => element.id == id);
-    objectSelected.importe = data.saldoPendiente || data.saldoPagar;;
+    objectSelected.importe = data.saldoPendiente || data.saldoPagar;
     const dataCheck = [];
     data.show = !data.show;
     data.importe = this.getInstallmentBalance(data);
@@ -234,18 +229,50 @@ export class CompensacionesMovimientosNoOriginComponent
     objectsSelected.importe = totalMoveById;
   };
 
-  validateHigherAmount = (data:any, amount)=>{
-    if(amount > (data.saldoPagar || data.saldoPendiente || data.saldo || data.saldoPendiente || data.saldoNeto)){
-      data.importe = '';
+  validateHigherAmount = (data: any, amount) => {
+    if (amount > (this.getInstallmentBalance(data) || this.getBalance(data))) {
+      data.importe = "";
       this.isOlder = true;
+      this.totalOrigin = 0;
     }
-  }
+  };
 
-  getBalance = (data:any)=> data.saldo ||
-  data.saldoPendiente ||
-  data.saldoNeto ||
-  data.saldoDesembolso;
+  getAmount = (data: any) => {
+    if (this.labelOperation == "Reembolso") {
+      return data.reembolso;
+    } else if (this.labelOperation == "Fondo Rendir") {
+      return data.desembolso;
+    } else {
+      return data.total || data.monto;
+    }
+  };
 
-getInstallmentBalance = (data:any)=>data.saldoPendiente || data.saldoPagar;
+  getBalance = (data: any) => {
+    if (this.labelOperation == "Reembolso") {
+      return data.saldoReembolso;
+    } else if (this.labelOperation == "Fondo Rendir") {
+      return data.saldoDesembolso;
+    } else {
+      return data.saldo || data.saldoPendiente;
+    }
+  };
 
+  getInstallmentBalance = (data: any) => data.saldoPendiente || data.saldoPagar;
+
+  getInstallmentDate = (data: any) =>
+    data.fechaLimiteCobro || data.fechaLimitePago;
+
+  getMovementDate = (data: any) =>
+    data["fechaVenta"] ||
+    data["fecha"] ||
+    data["fechaCompra"] ||
+    data["fechaDesembolso"];
+
+  getNroDocument = (data) => data["nroFacturaRecibo"] || data["nroReferencia"];
+
+  updateTotalAmount = (totalAmount: number = 0) => {
+    this.formMain.patchValue({
+      montoNoOrigin: totalAmount,
+    });
+  };
 }
