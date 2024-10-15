@@ -94,7 +94,11 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
         montoMovimiento: this.getBalance(this.objectSelected),
         montoOrigin: this.getBalance(this.objectSelected),
       });
-      if (this.labelOperation == "Anticipo") {
+      if (
+        this.labelOperation == "Anticipo" ||
+        this.labelOperation == "Fondo Rendir" ||
+        this.labelOperation == "Reembolso"
+      ) {
         this.updateTotalAmount(this.totalOrigin);
       }
     }
