@@ -2,7 +2,9 @@
   <div class="col-xl-12 mb-1">
     <div class="d-flex">
       <div>
-        <h6 class="fs-14 mb-2 ms-1 text-primary">Compensación del {{labelOperation}}</h6>
+        <h6 class="fs-14 mb-2 ms-1 text-primary">
+          Compensación del {{ labelOperation }}
+        </h6>
       </div>
     </div>
   </div>
@@ -23,7 +25,7 @@
         </tr>
       </thead>
       <tbody *ngFor="let move of listData; let i = index">
-        <tr class="py-2">
+        <tr [ngClass]="{ rowDisabled: getBalance(move) == 0 }">
           <td class="text-start">
             <div class="form-check form-radio-primary">
               <input
@@ -32,35 +34,25 @@
                 (change)="onCheckboxChange(move['id'])"
                 style="transform: scale(1.5)"
                 [checked]="move['selected']"
+                [disabled]="getBalance(move) == 0"
               />
-              <!--   <input type="radio"
-                [formControl]="rows.at(i).get('selected')"
-                 (change)="onRadioChange(i)" /> -->
             </div>
           </td>
           <td class="text-start">
-            {{ move["nroFacturaRecibo"] || move["nroReferencia"] }}
+            {{ getNroDocument(move) }}
           </td>
           <td class="text-start">
-            {{
-              move["fechaVenta"] ||
-                move["fecha"] ||
-                move["fechaCompra"] ||
-                move["fechaDesembolso"] | fechaFormat
-            }}
+            {{ getMovementDate(move) | fechaFormat }}
           </td>
           <td class="text-end me-5">
-            {{
-              move["total"] || move["monto"] || move["saldoDesembolso"]
-                | decimalAmount
-            }}
+            {{ getAmount(move) | decimalAmount }}
           </td>
 
-          <td class="text-end me-2">
-            {{
-              move["saldoPendiente"] || move["saldo"] || move["saldoNeto"]
-                | decimalAmount
-            }}
+          <td
+            class="text-end me-2"
+            [ngClass]="{ cellZero: getBalance(move) == 0 }"
+          >
+            {{ getBalance(move) | decimalAmount }}
           </td>
           <td class="text-end">
             <input
@@ -73,7 +65,13 @@
               "
               placeholder="0"
             />
-            <span class="text-danger" *ngIf="isOlder && move['selected'] && labelOperation =='Anticipo'">El importe no debe ser mayor al saldo</span>
+            <span
+              class="text-danger"
+              *ngIf="
+                isOlder && move['selected'] && labelOperation == 'Anticipo'
+              "
+              >El importe no debe ser mayor al saldo</span
+            >
           </td>
           <td class="text-center" title="Ver Cuotas">
             <button
@@ -130,10 +128,10 @@
                       />
                     </td>
                     <td>{{ dataCredito["nroReferencia"] }}</td>
-                    <td>{{ dataCredito["fechaLimiteCobro"] | fechaFormat }}</td>
+                    <td>{{ getInstallmentDate(dataCredito) | fechaFormat }}</td>
 
                     <td class="text-end">
-                      {{ dataCredito["saldoPendiente"] | decimalAmount }}
+                      {{ getInstallmentBalance(dataCredito) | decimalAmount }}
                     </td>
                     <td class="text-end">
                       <input
@@ -146,7 +144,11 @@
                         "
                         placeholder="0"
                       />
-                      <span class="text-danger" *ngIf="isOlder && dataCredito['show']">El importe no debe ser mayor al saldo</span>
+                      <span
+                        class="text-danger"
+                        *ngIf="isOlder && dataCredito['show']"
+                        >El importe no debe ser mayor al saldo</span
+                      >
                     </td>
                   </tr>
                 </tbody>
