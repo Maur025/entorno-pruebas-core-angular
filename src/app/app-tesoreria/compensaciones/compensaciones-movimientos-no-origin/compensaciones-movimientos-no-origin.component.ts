@@ -133,7 +133,7 @@ export class CompensacionesMovimientosNoOriginComponent
     data.show = !data.show;
     data.importe = this.getInstallmentBalance(data);
     data.planReferenciaId = data.id;
-    data.monto = data.monto;
+    data.monto = data.importe;
     this.totalOrigin = data.importe;
     if (data.show) {
       //console.log("cuotas?: ", installmentPlanSelectedCurrent);
