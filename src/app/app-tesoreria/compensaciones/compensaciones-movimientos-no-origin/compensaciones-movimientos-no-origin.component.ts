@@ -126,6 +126,20 @@ export class CompensacionesMovimientosNoOriginComponent
     }
   };
 
+  validateDecimalInput = (event: KeyboardEvent) => {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    const regex = /^\d*([.]?\d{0,1})?$/;
+    const key = event.key;
+    if (!/[\d.]/.test(key) && key !== "Backspace" && key !== "Tab") {
+      event.preventDefault();
+      return;
+    }
+    if (!regex.test(value)) {
+      event.preventDefault();
+    }
+  };
+
   onSelectCheckboxOdds = (data: any, id: string) => {
     this.isOlder = false;
     const objectSelected = this.listData.find((element) => element.id == id);

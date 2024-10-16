@@ -73,7 +73,7 @@
           <td class="text-end">
             <input
               class="form-control"
-              type="number"
+              type="text"
               [disabled]="
                 !move['selected'] || move['planCobros'] || move['planPagos']
               "
@@ -81,6 +81,7 @@
               (change)="onNumberChange($event)"
               min="1"
               placeholder="0"
+              (keypress)="validateDecimalInput($event)"
             />
             <span
               class="text-danger"
@@ -154,7 +155,7 @@
                     <td class="text-end">
                       <input
                         class="form-control"
-                        type="number"
+                        type="text"
                         [value]="dataCredito['importe']"
                         [disabled]="!dataCredito['show']"
                         (change)="
@@ -162,6 +163,7 @@
                         "
                         min="1"
                         placeholder="0"
+                        (keypress)="validateDecimalInput($event)"
                       />
                       <span
                         class="text-danger"

@@ -68,6 +68,7 @@
                 !move['selected'] || move['planCobros'] || move['planPagos']
               "
               placeholder="0"
+              (keypress)="validateDecimalInput($event)"
             />
             <span
               class="text-danger"
@@ -146,6 +147,7 @@
                         (change)="
                           onNumberChangeCuota(dataCredito, move['id'], $event)
                         "
+                        (keypress)="validateDecimalInput($event)"
                         placeholder="0"
                       />
                       <span
