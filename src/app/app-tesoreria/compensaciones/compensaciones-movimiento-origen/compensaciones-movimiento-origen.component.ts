@@ -17,6 +17,7 @@ import {
 } from "@angular/forms";
 import { BehaviorSubject } from "rxjs";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
+import Decimal from "decimal.js";
 
 @Component({
   selector: "compensaciones-movimiento-origen",
@@ -179,10 +180,15 @@ export class CompensacionesMovimientoOrigenComponent
       .getValue()
       .filter((element) => element.show);
 
-    this.totalOrigin = objectsSelected?.reduce(
+    /*     this.totalOrigin = objectsSelected?.reduce(
       (total, item) => total + Number(item?.importe),
       0
-    );
+    ); */
+    const total = objectsSelected?.reduce((total, item) => {
+      return total.plus(new Decimal(item?.importe));
+    }, new Decimal(0));
+    this.totalOrigin = Number(total.toString());
+
     this.updateTotalAmount(this.totalOrigin);
 
     this.formMain.get("movimientoOrigen").patchValue({

@@ -610,7 +610,7 @@ export class CompensationFormComponent implements OnInit {
             (element) => element.checked
           ),
         });
-        console.log("DATA SEND: ", this.compensationForm.getRawValue());
+        //console.log("DATA SEND: ", this.compensationForm.getRawValue());
         this.saveForm(this.compensationForm.getRawValue());
       }
       this.isStatusSubmit = false;
