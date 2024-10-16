@@ -197,6 +197,20 @@ export class CompensacionesMovimientoOrigenComponent
     });
   };
 
+  validateDecimalInput = (event: KeyboardEvent) => {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    const regex = /^\d*([.]?\d{0,1})?$/;
+    const key = event.key;
+    if (!/[\d.]/.test(key) && key !== "Backspace" && key !== "Tab") {
+      event.preventDefault();
+      return;
+    }
+    if (!regex.test(value)) {
+      event.preventDefault();
+    }
+  };
+
   getAmount = (data: any) => {
     if (this.labelOperation == "Reembolso") {
       return data.reembolso;
