@@ -105,8 +105,6 @@ export class FormPagoComponent {
     this.submitted = true;
     this.isStatusSubmit = true;
     let verificar = this.verificarMontos();
-    console.log("verificar: ", verificar);
-    console.log("this.formPago.valid: ", this.formPago.valid);
     if (!this.formPago.valid || verificar == false) {
       this.isStatusSubmit = false;
       return;
@@ -121,11 +119,6 @@ export class FormPagoComponent {
   };
 
   verificarMontos() {
-    console.log("this.montoPagarSelect", this.montoPagarSelect);
-    console.log(
-      "this.formPago.controls['montoPagar'].value",
-      this.formPago.controls["montoPagar"].value
-    );
     const totalsCero =
       Number(this.montoPagarSelect) === 0 &&
       this.formPago.controls["montoPagar"].value == 0;
@@ -176,14 +169,13 @@ export class FormPagoComponent {
     this.formPago.value["fechaPagoReembolso"] = this.formPago.value["fecha"];
     this.formPago.value["montoReembolso"] = this.formPago.value["montoPagar"];
     this.formPago.value["movimientos"] = this.formPago.value["transacciones"];
-    console.log("this.formPago.value", this.formPago.value);
-    /* this.fondoRendirService.pagoReembolso(this.formPago.value).subscribe(
+    this.fondoRendirService.pagoReembolso(this.formPago.value).subscribe(
       (data) => {
         this.alActualizar.emit(data);
         this.isStatusSubmit = false;
         this.notificacionService.successStandar();
       },
       (error) => this.notificacionService.alertError(error)
-    ); */
+    );
   }
 }

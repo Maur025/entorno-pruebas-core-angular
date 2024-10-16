@@ -560,10 +560,6 @@ export class CompensationFormComponent implements OnInit {
   confirmAndContinueSaving = async (): Promise<void> => {
     this.submitted = true;
     this.isStatusSubmit = true;
-    console.log("this.form['fecha'] before", this.form.value);
-    /* if (!this.validateDifferentAmounts()) {
-      return;
-    } */
     if (
       this.compensationForm.get("montoOrigin").value !=
       this.compensationForm.get("montoNoOrigin").value
@@ -591,7 +587,6 @@ export class CompensationFormComponent implements OnInit {
       this.isStatusSubmit = false;
       return;
     }
-    console.log("this.form['fecha'] after", this.form.value);
     const dataImg = await this.screenshotService?.takeScreenshot(
       "accountFormModalBodyDiv"
     );

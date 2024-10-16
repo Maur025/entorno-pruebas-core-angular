@@ -60,6 +60,8 @@ export class CompensacionesMovimientosNoOriginComponent
         importe: 0, // o la fecha que necesites
       }));
       this.totalOrigin = 0;
+      this.listCuotas.next([]);
+      this.listNoOrigin.next([]);
     }
   }
 

@@ -25,7 +25,6 @@ export class ListPendientesComponent {
 
   ngOnInit() {
     //this.listPendientesReembolso();
-    console.log(this.operacionPadre);
     this.fieldByOperation();
   }
   labelMontoTh = "";
@@ -48,7 +47,6 @@ export class ListPendientesComponent {
           selected: false,
           importe: 0,
         }));
-        console.log("this.listaReembolsos", this.listaReembolsos);
         this.listaReembolsos = this.listaReembolsos.filter((r) => {
           r["pagar_saldo"] = r["saldoReembolso"];
           return r["saldoReembolso"] > 0;
@@ -61,8 +59,11 @@ export class ListPendientesComponent {
   listPendienteDevolucion() {
     this.fondoRendirService.fondosRendirEmpleado(this.empleadoId).subscribe(
       (data) => {
-        this.listaReembolsos = data["data"];
-        console.log("this.listaReembolsos", this.listaReembolsos);
+        this.listaReembolsos = data["data"].map((objeto) => ({
+          ...objeto,
+          selected: false,
+          importe: 0,
+        }));
         this.listaReembolsos = this.listaReembolsos.filter((r) => {
           r["pagar_saldo"] = r["saldoDesembolso"];
           return r["saldoDesembolso"] > 0;
@@ -85,10 +86,9 @@ export class ListPendientesComponent {
     const objectSelected = this.listaReembolsos.find(
       (element) => element.id == data.id
     );
-    console.log("objectSelected", objectSelected);
     objectSelected.selected = !data["selected"];
     objectSelected.importe = data.pagar_saldo;
-    this.changeInputPagar(data.pagar_saldo, 0, data.id);
+    this.changeInputPagar(data.pagar_saldo, 0, data);
   }
 
   changeInputPagar(monto, i, data) {

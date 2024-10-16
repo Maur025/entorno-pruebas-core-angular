@@ -3,6 +3,7 @@ import {
   EventEmitter,
   inject,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   SimpleChanges,
@@ -22,7 +23,9 @@ import { NotificacionService } from "src/app/core/services/notificacion.service"
   templateUrl: "./compensaciones-movimiento-origen.component.html",
   styleUrls: ["./compensaciones-movimiento-origen.component.scss"],
 })
-export class CompensacionesMovimientoOrigenComponent implements OnInit {
+export class CompensacionesMovimientoOrigenComponent
+  implements OnInit, OnDestroy
+{
   @Input() listMoves;
   @Input() formMain: UntypedFormGroup;
   @Input() labelOperation: string;
@@ -57,8 +60,13 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
         showOdds: false,
       }));
       this.totalOrigin = 0;
+      this.listCuotas.next([]);
     }
   }
+  ngOnDestroy(): void {
+    this.listCuotas.next([]);
+  }
+
   get form() {
     return this.formMain?.controls;
   }
