@@ -169,7 +169,6 @@ export class FormPagoComponent {
     this.formPago.value["fechaPagoReembolso"] = this.formPago.value["fecha"];
     this.formPago.value["montoReembolso"] = this.formPago.value["montoPagar"];
     this.formPago.value["movimientos"] = this.formPago.value["transacciones"];
-
     this.fondoRendirService.pagoReembolso(this.formPago.value).subscribe(
       (data) => {
         this.alActualizar.emit(data);

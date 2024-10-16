@@ -205,7 +205,7 @@ export class CompensationFormComponent implements OnInit {
   getSClientCredit = (clientId: string, origin: boolean = true): void => {
     this.isEmptyOrigin = false;
     this.cobroService
-      ?.getSalesPendingByClientId(clientId, 0, 20, "razonSocial", false, true)
+      ?.getSalesPendingByClientId(clientId, 0, 100, "razonSocial", false, true)
       ?.subscribe({
         next: (response: ApiResponseStandard) => {
           if (origin) {
@@ -560,13 +560,29 @@ export class CompensationFormComponent implements OnInit {
   confirmAndContinueSaving = async (): Promise<void> => {
     this.submitted = true;
     this.isStatusSubmit = true;
-    if (!this.validateDifferentAmounts()) {
+    if (
+      this.compensationForm.get("montoOrigin").value !=
+      this.compensationForm.get("montoNoOrigin").value
+    ) {
+      this.notificacionService.alertErrorOnlyMessage(
+        "El total del origen es distinto al total de la contraparte"
+      );
+      this.isStatusSubmit = false;
       return;
     }
-    if (this.validateAmountsEqualToZero()) {
+    /*     if (this.validateAmountsEqualToZero()) {
+      return;
+    } */
+    if (
+      this.compensationForm.get("montoOrigin").value == 0 ||
+      this.compensationForm.get("montoNoOrigin").value == 0
+    ) {
+      this.notificacionService.alertErrorOnlyMessage(
+        "El total del origen y de la contraparte deben ser mayor a cero"
+      );
+      this.isStatusSubmit = false;
       return;
     }
-
     if (!this.compensationForm.valid) {
       this.isStatusSubmit = false;
       return;
@@ -626,6 +642,7 @@ export class CompensationFormComponent implements OnInit {
       this.isStatusSubmit = false;
       return false;
     }
+    return true;
   };
   validateAmountsEqualToZero = () => {
     if (
@@ -638,6 +655,7 @@ export class CompensationFormComponent implements OnInit {
       this.isStatusSubmit = false;
       return false;
     }
+    return true;
   };
 
   getClassDifferentAmounts = () => {

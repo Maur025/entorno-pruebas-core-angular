@@ -1,63 +1,74 @@
 <div class="seccion-pendientes">
-    <div class="col-xl-12 mb-2">
-      <div class="d-flex">
-        <div>
-          <h6 class="fs-14 mb-2 ms-1 text-primary">
-            Reembolsos Pendientes
-          </h6>
-        </div>
+  <div class="col-xl-12 mb-2">
+    <div class="d-flex">
+      <div>
+        <h6 class="fs-14 mb-2 ms-1 text-primary">Reembolsos Pendientes</h6>
       </div>
     </div>
+  </div>
 
-    <div class="table-responsive">
-      <table class="table table-sm m-0">
-        <thead>
-          <tr>
-            <th [width]="50"></th>
-            <th class="text-muted fs-14 mb-2">Fecha desembolso</th>
-            <th class="text-muted fs-14 mb-2">Detalle</th>
-            <th class="text-muted fs-14 mb-2">{{labelMontoTh}}</th>
-            <th class="text-muted fs-14 mb-2">Saldo</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let pendiente of listaReembolsos; let i = index">
-            <td>
-              <div class="form-check form-radio-primary">
-                <input
-                    class="form-check-input ms-2 me-2"
-                    type="radio"
-                    name="radioPendiente"
-                    (change)="selectPendiente(pendiente, i)"
-                    style="transform: scale(1.5)">
-            </div>
-            </td>
-            <td>{{pendiente['fechaDesembolso']|fechaFormat}}</td>
-            <td>
-              <div>
-                <p class="mb-0 text-muted"><b>Nº ref:</b> {{pendiente['nroReferencia']}}</p>
-                <small class="text-muted text-end mb-0"><b>Descripción:</b>
-                  {{pendiente['descripcion']}}
-                </small>
-              </div>
-            </td>
-            <td class="text-center">{{pendiente['pagar_saldo']|decimalAmount}}</td>
-            <td class="text-end">
+  <div class="table-responsive">
+    <table class="table table-sm m-0">
+      <thead>
+        <tr>
+          <th [width]="50"></th>
+          <th class="text-muted fs-14 mb-2">Fecha desembolso</th>
+          <th class="text-muted fs-14 mb-2">Detalle</th>
+          <th class="text-muted fs-14 mb-2">Reembolso</th>
+          <th class="text-muted fs-14 mb-2">{{ labelMontoTh }}</th>
+          <th class="text-muted fs-14 mb-2">Saldo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pendiente of listaReembolsos; let i = index">
+          <td>
+            <div class="form-check form-radio-primary">
               <input
+                class="form-check-input ms-2 me-2"
+                type="radio"
+                name="radioPendiente"
+                (change)="selectPendiente(pendiente, i)"
+                style="transform: scale(1.5)"
+                [checked]="pendiente['selected']"
+                [disabled]="pendiente['pagar_saldo'] == 0"
+              />
+            </div>
+          </td>
+          <td>{{ pendiente["fechaDesembolso"] | fechaFormat }}</td>
+          <td>
+            <div>
+              <p class="mb-0 text-muted">
+                <b>Nº ref:</b> {{ pendiente["nroReferencia"] }}
+              </p>
+              <small class="text-muted text-end mb-0"
+                ><b>Descripción:</b>
+                {{ pendiente["descripcion"] }}
+              </small>
+            </div>
+          </td>
+          <td class="text-center">
+            {{ getAmount(pendiente) | decimalAmount }}
+          </td>
+          <td class="text-center">
+            {{ pendiente["pagar_saldo"] | decimalAmount }}
+          </td>
+          <td class="text-end">
+            <input
               disabled
-              [id] ="'input_pagar_' + i"
-              style="width: 100px;"
+              [id]="'input_pagar_' + i"
+              style="width: 100px"
               type="text"
               class="form-control form-control-sm text-end"
               placeholder="0"
+              [value]="pendiente['importe']"
               name="inputsPendiente"
-              (change)="changeInputPagar($event['target']['value'], i, pendiente)"
-              />
-            </td>
+              (change)="
+                changeInputPagar($event['target']['value'], i, pendiente)
+              "
+            />
+          </td>
         </tr>
-        </tbody>
-      </table>
-    </div>
+      </tbody>
+    </table>
+  </div>
 </div>
-
-
