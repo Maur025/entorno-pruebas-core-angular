@@ -37,22 +37,12 @@
         <div *ngSwitchCase="'descripcion'">
           {{ fila.descripcion }}
         </div>
-        <!--         <div *ngSwitchCase="'personaOrigen'">
-          {{ fila.personaOrigen }}
-        </div> -->
         <div *ngSwitchCase="'tipoPersonaOrigen'">
-          {{ fila.tipoPersonaOrigen.nombre }}
-        </div>
-        <div *ngSwitchCase="'operacionOrigen'">
+          {{ fila.tipoPersonaOrigen.nombre }} -
           {{ fila.operacionOrigen?.nombre }}
         </div>
-        <!--         <div *ngSwitchCase="'personaContraparte'">
-          {{ fila.personaContraparte }}
-        </div> -->
         <div *ngSwitchCase="'tipoPersonaContraparte'">
-          {{ fila.tipoPersonaContraparte.nombre }}
-        </div>
-        <div *ngSwitchCase="'operacionContraparte'">
+          {{ fila.tipoPersonaContraparte.nombre }} -
           {{ fila.operacionContraparte?.nombre }}
         </div>
         <div *ngSwitchCase="'montoCompensacion'" class="text-end">
@@ -66,9 +56,9 @@
             {{ fila["estadoContabilidad"]?.nombre }}
           </span>
         </div>
-        <div *ngSwitchDefault>
+        <!--         <div *ngSwitchDefault>
           <td>{{ fila[campo] }}</td>
-        </div>
+        </div> -->
       </td>
     </ng-template>
   </ng-template>

@@ -11,6 +11,7 @@ import {
 import { FormBuilder, UntypedFormGroup } from "@angular/forms";
 import { BehaviorSubject } from "rxjs";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
+import Decimal from "decimal.js";
 @Component({
   selector: "compensaciones-movimientos-no-origin",
   templateUrl: "./compensaciones-movimientos-no-origin.component.html",
@@ -42,7 +43,7 @@ export class CompensacionesMovimientosNoOriginComponent
     monto: 0,
   };
   objectSelected: any;
-  totalOrigin: number = 0;
+  totalOrigin: Decimal = new Decimal(0);
   isOlder: boolean = false;
   constructor(private notificacionService: NotificacionService) {}
 
@@ -59,7 +60,7 @@ export class CompensacionesMovimientosNoOriginComponent
         selected: false, // o el valor que necesites
         importe: 0, // o la fecha que necesites
       }));
-      this.totalOrigin = 0;
+      this.totalOrigin = new Decimal(0);
       this.listCuotas.next([]);
       this.listNoOrigin.next([]);
     }
@@ -129,7 +130,6 @@ export class CompensacionesMovimientosNoOriginComponent
     this.isOlder = false;
     const objectSelected = this.listData.find((element) => element.id == id);
     objectSelected.importe = data.saldoPendiente || data.saldoPagar;
-    const dataCheck = [];
     data.show = !data.show;
     data.importe = this.getInstallmentBalance(data);
     data.planReferenciaId = data.id;
@@ -203,13 +203,20 @@ export class CompensacionesMovimientosNoOriginComponent
 
   calculateTotal = () => {
     const objectsSelected = this.listData.filter((element) => element.selected);
-    this.listMovesNoOrigin = objectsSelected;
-    this.totalOrigin = this.listMovesNoOrigin?.reduce(
+
+    /*     this.listMovesNoOrigin = objectsSelected;
+        this.totalOrigin = this.listMovesNoOrigin?.reduce(
       (total, item) => total + Number(item?.importe),
       0
-    );
+      ); */
+    this.listMovesNoOrigin = objectsSelected;
+    const total = this.listMovesNoOrigin?.reduce((total, item) => {
+      return total.plus(new Decimal(item?.importe));
+    }, new Decimal(0));
+    this.totalOrigin = total.toString();
+
     this.formMain.patchValue({
-      montoNoOrigin: this.totalOrigin,
+      montoNoOrigin: total.toString(),
       //movimientosContraparte: this.listMovesNoOrigin,
       movimientosContraparte: this.listNoOrigin.getValue(),
     });
@@ -219,23 +226,27 @@ export class CompensacionesMovimientosNoOriginComponent
     const objectsSelected = this.listData.filter(
       (element) => element.id == data.id
     );
-    const totalMoveById = installmentPlan?.reduce(
+    const totalMoveById = installmentPlan?.reduce((total, item) => {
+      return total.plus(new Decimal(item?.monto));
+    }, new Decimal(0));
+
+    /* const totalMoveById = installmentPlan?.reduce(
       (total, item) => total + Number(item?.monto),
       0
-    );
+    ); */
     const listOrigin = this.listNoOrigin
       .getValue()
       .find((element) => element.movimientoReferenciaId == data.id);
-    listOrigin.montoMovimiento = totalMoveById;
+    listOrigin.montoMovimiento = Number(totalMoveById.toString());
 
-    objectsSelected.importe = totalMoveById;
+    objectsSelected.importe = Number(totalMoveById.toString());
   };
 
   validateHigherAmount = (data: any, amount) => {
     if (amount > (this.getInstallmentBalance(data) || this.getBalance(data))) {
       data.importe = "";
       this.isOlder = true;
-      this.totalOrigin = 0;
+      this.totalOrigin = new Decimal(0);
     }
   };
 
