@@ -220,11 +220,13 @@ export class CompensationFormComponent implements OnInit {
               this._responseHandlerService?.handleResponseAsArray(response);
             this.isEmptyOrigin = this.listMovesOrigin.length == 0;
             this.isStatusData = false;
+            this.isStatusDataNoOrigin = false;
           } else {
             this.listMovesNoOrigin =
               this._responseHandlerService?.handleResponseAsArray(response);
             this.isEmptyNoOrigin = this.listMovesNoOrigin.length == 0;
             this.isStatusData = false;
+            this.isStatusDataNoOrigin = false;
           }
         },
         error: (error: ErrorResponseStandard) => {
@@ -242,11 +244,13 @@ export class CompensationFormComponent implements OnInit {
             this._responseHandlerService?.handleResponseAsArray(data);
           this.isEmptyOrigin = this.listMovesOrigin.length == 0;
           this.isStatusData = false;
+          this.isStatusDataNoOrigin = false;
         } else {
           this.listMovesNoOrigin =
             this._responseHandlerService?.handleResponseAsArray(data);
           this.isEmptyNoOrigin = this.listMovesNoOrigin.length == 0;
           this.isStatusData = false;
+          this.isStatusDataNoOrigin = false;
         }
       },
       error: (err) => this.notificacionService.alertError(err),
@@ -262,11 +266,13 @@ export class CompensationFormComponent implements OnInit {
             this._responseHandlerService?.handleResponseAsArray(data);
           this.isEmptyOrigin = this.listMovesOrigin.length == 0;
           this.isStatusData = false;
+          this.isStatusDataNoOrigin = false;
         } else {
           this.listMovesNoOrigin =
             this._responseHandlerService?.handleResponseAsArray(data);
           this.isEmptyNoOrigin = this.listMovesNoOrigin.length == 0;
           this.isStatusData = false;
+          this.isStatusDataNoOrigin = false;
         }
       },
       (error) => this.notificacionService.alertError(error)
@@ -282,11 +288,13 @@ export class CompensationFormComponent implements OnInit {
             this._responseHandlerService?.handleResponseAsArray(data);
           this.isEmptyOrigin = this.listMovesOrigin.length == 0;
           this.isStatusData = false;
+          this.isStatusDataNoOrigin = false;
         } else {
           this.listMovesNoOrigin =
             this._responseHandlerService?.handleResponseAsArray(data);
           this.isEmptyNoOrigin = this.listMovesNoOrigin.length == 0;
           this.isStatusData = false;
+          this.isStatusDataNoOrigin = false;
         }
       },
       (error) => this.notificacionService.alertError(error)
@@ -305,11 +313,13 @@ export class CompensationFormComponent implements OnInit {
             this._responseHandlerService?.handleResponseAsArray(data);
           this.isEmptyOrigin = this.listMovesOrigin.length == 0;
           this.isStatusData = false;
+          this.isStatusDataNoOrigin = false;
         } else {
           this.listMovesNoOrigin =
             this._responseHandlerService?.handleResponseAsArray(data);
           this.isEmptyNoOrigin = this.listMovesNoOrigin.length == 0;
           this.isStatusData = false;
+          this.isStatusDataNoOrigin = false;
         }
       },
       (error) => this.notificacionService.alertError(error)
@@ -444,40 +454,34 @@ export class CompensationFormComponent implements OnInit {
       this.dataNoOrigin.operacionId = event.id;
       this.isStatusDataNoOrigin = true;
       this.updateTotalAmountNoOrigin();
-      setTimeout(() => {
-        this.operationNoOriginId = event.id;
-        this.isStatusDataNoOrigin = false;
-        if (
-          event.codigo == "CREDITO" &&
-          this.typeOperatorNoOrigin == "CLIENTE"
-        ) {
-          this.getSClientCredit(this.personalNoOriginId, false);
-        }
-        if (
-          event.codigo == "ANTICIPO" &&
-          this.typeOperatorNoOrigin == "CLIENTE"
-        ) {
-          this.getClientAdvanced(this.personalNoOriginId, false);
-        }
-        if (
-          event.codigo == "CREDITO" &&
-          this.typeOperatorNoOrigin == "PROVEEDOR"
-        ) {
-          this.getSupplierCredit(this.personalNoOriginId, false);
-        }
-        if (
-          event.codigo == "ANTICIPO" &&
-          this.typeOperatorNoOrigin == "PROVEEDOR"
-        ) {
-          this.getSupplierAdvance(this.personalNoOriginId, false);
-        }
-        if (
-          (event.codigo == "FONDO_RENDIR" || event.codigo == "REEMBOLSO") &&
-          this.typeOperatorNoOrigin == "EMPLEADO"
-        ) {
-          this.getEmployeeFundRenderOrRefund(this.personalNoOriginId, false);
-        }
-      }, 750);
+      this.operationNoOriginId = event.id;
+      if (event.codigo == "CREDITO" && this.typeOperatorNoOrigin == "CLIENTE") {
+        this.getSClientCredit(this.personalNoOriginId, false);
+      }
+      if (
+        event.codigo == "ANTICIPO" &&
+        this.typeOperatorNoOrigin == "CLIENTE"
+      ) {
+        this.getClientAdvanced(this.personalNoOriginId, false);
+      }
+      if (
+        event.codigo == "CREDITO" &&
+        this.typeOperatorNoOrigin == "PROVEEDOR"
+      ) {
+        this.getSupplierCredit(this.personalNoOriginId, false);
+      }
+      if (
+        event.codigo == "ANTICIPO" &&
+        this.typeOperatorNoOrigin == "PROVEEDOR"
+      ) {
+        this.getSupplierAdvance(this.personalNoOriginId, false);
+      }
+      if (
+        (event.codigo == "FONDO_RENDIR" || event.codigo == "REEMBOLSO") &&
+        this.typeOperatorNoOrigin == "EMPLEADO"
+      ) {
+        this.getEmployeeFundRenderOrRefund(this.personalNoOriginId, false);
+      }
     }
   };
 
