@@ -205,7 +205,14 @@ export class CompensationFormComponent implements OnInit {
   getSClientCredit = (clientId: string, origin: boolean = true): void => {
     this.isEmptyOrigin = false;
     this.cobroService
-      ?.getSalesPendingByClientId(clientId, 0, 100, "razonSocial", false, true)
+      ?.getSalesPendingByClientId(
+        clientId,
+        0,
+        1000,
+        "nroFacturaRecibo",
+        true,
+        true
+      )
       ?.subscribe({
         next: (response: ApiResponseStandard) => {
           if (origin) {
