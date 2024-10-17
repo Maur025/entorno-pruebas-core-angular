@@ -75,4 +75,10 @@ export class FondoOperativoService {
       filtros
     );
   }
+
+  exportComprobante(id: any) {
+		return this.apiService.tesoreria.get(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/${id}/pdf`
+		)
+	}
 }
