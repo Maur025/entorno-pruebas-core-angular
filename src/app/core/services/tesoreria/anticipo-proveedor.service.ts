@@ -51,4 +51,10 @@ export class AnticipoProveedorService {
       `${this.apiUrl}${this.prefix}/${this.apiName}/detalle/${anticipoProveedorId}`
     );
   }
+
+  generarComprobante(id: any) {
+		return this.apiService.tesoreria.get(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/${id}/pdf`
+		)
+	}
 }
