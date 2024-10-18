@@ -15,6 +15,9 @@ import {
   ErrorResponseStandard,
 } from "src/app/shared/interface/common-api-response";
 import { UtilityService } from "src/app/shared/services/utilityService.service";
+import { tap, catchError } from 'rxjs/operators';
+import { ArchivosService } from 'src/app/core/services/archivos.service'
+import { of } from 'rxjs';
 
 @Component({
   selector: "pago-form",
@@ -43,6 +46,7 @@ export class PagoFormComponent {
     private proveedorService: ProveedorService,
     public pagoService: PagosService,
     private responseHandlerService: ResponseHandlerService,
+		public archivosService: ArchivosService,
     protected utilityService: UtilityService,
     private router: Router
   ) {}
@@ -161,9 +165,22 @@ export class PagoFormComponent {
       (data) => {
         this.isStatusSubmit = false;
         this.notificacionService.successStandar();
+        this.descargarComprobante(data['data']['id']);
         this.router.navigate(["./pagos", {}]);
       },
       (error) => this.notificacionService.alertError(error)
     );
   }
+
+  descargarComprobante(id) {
+    this.pagoService.generarComprobante(id).pipe(
+      tap((data) => {
+        this.archivosService.generar64aPDF(data['data'].content, 'comprobante_anticipo_proveedor.pdf');
+      }),
+      catchError((error) => {
+        this.notificacionService.alertError(error);
+        return of(null);
+      })
+    ).subscribe();
+	}
 }
