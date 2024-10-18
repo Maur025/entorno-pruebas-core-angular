@@ -3,6 +3,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { EstadoFondoOperativoService } from 'src/app/core/services/tesoreria/estado-fondo-operativo.service';
 import { FondoOperativoService } from 'src/app/core/services/tesoreria/fondo-operativo.service';
+import { tap, catchError } from 'rxjs/operators';
+import { ArchivosService } from 'src/app/core/services/archivos.service'
+import { of } from 'rxjs';
 
 @Component({
   selector: 'list-movimiento-fondo-operativo',
@@ -27,6 +30,7 @@ export class ListMovimientoFondoOperativoComponent implements OnInit{
   constructor(private fondoOperativoService:FondoOperativoService,
     private notificacionService: NotificacionService,
     private centroCostoService: CentroCostosService,
+		public archivosService: ArchivosService,
     private estadoFondoOperativoService: EstadoFondoOperativoService
   ){}
 
@@ -80,5 +84,17 @@ export class ListMovimientoFondoOperativoComponent implements OnInit{
     this.bodyFilters = filtros;
     this.movimientoFondo();
   }
+
+	descargarComprobante(id) {
+    this.fondoOperativoService.exportComprobante(id).pipe(
+      tap((data) => {
+        this.archivosService.generar64aPDF(data['data'].content, 'comprobante_fondo_operativo.pdf');
+      }),
+      catchError((error) => {
+        this.notificacionService.alertError(error);
+        return of(null);
+      })
+    ).subscribe();
+	}
 
 }

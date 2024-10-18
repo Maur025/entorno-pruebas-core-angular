@@ -67,15 +67,6 @@ export class CompensationListComponent
           true,
           "text-start"
         ),
-        operacionOrigen: this.getOpcionesCabecera(
-          "Operación Origen",
-          12,
-          "text",
-          true,
-          true,
-          "text-start"
-        ),
-
         /*   personaContraparte: this.getOpcionesCabecera(
           "Persona Contraparte",
           12,
@@ -92,14 +83,6 @@ export class CompensationListComponent
           true,
           "text-start"
         ),
-        operacionContraparte: this.getOpcionesCabecera(
-          "Operación Contraparte",
-          12,
-          "text",
-          true,
-          true,
-          "text-start"
-        ),
         montoCompensacion: this.getOpcionesCabecera(
           "Monto",
           12,
@@ -107,6 +90,14 @@ export class CompensationListComponent
           true,
           true,
           "text-end"
+        ),
+        descripcion: this.getOpcionesCabecera(
+          "Descripción",
+          12,
+          "text",
+          true,
+          true,
+          "text-start"
         ),
         estadoContabilidad: this.getOpcionesCabecera(
           "Estado",

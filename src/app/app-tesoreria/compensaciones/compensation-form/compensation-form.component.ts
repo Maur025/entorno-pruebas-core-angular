@@ -205,7 +205,14 @@ export class CompensationFormComponent implements OnInit {
   getSClientCredit = (clientId: string, origin: boolean = true): void => {
     this.isEmptyOrigin = false;
     this.cobroService
-      ?.getSalesPendingByClientId(clientId, 0, 20, "razonSocial", false, true)
+      ?.getSalesPendingByClientId(
+        clientId,
+        0,
+        1000,
+        "nroFacturaRecibo",
+        true,
+        true
+      )
       ?.subscribe({
         next: (response: ApiResponseStandard) => {
           if (origin) {
@@ -213,11 +220,13 @@ export class CompensationFormComponent implements OnInit {
               this._responseHandlerService?.handleResponseAsArray(response);
             this.isEmptyOrigin = this.listMovesOrigin.length == 0;
             this.isStatusData = false;
+            this.isStatusDataNoOrigin = false;
           } else {
             this.listMovesNoOrigin =
               this._responseHandlerService?.handleResponseAsArray(response);
             this.isEmptyNoOrigin = this.listMovesNoOrigin.length == 0;
             this.isStatusData = false;
+            this.isStatusDataNoOrigin = false;
           }
         },
         error: (error: ErrorResponseStandard) => {
@@ -235,11 +244,13 @@ export class CompensationFormComponent implements OnInit {
             this._responseHandlerService?.handleResponseAsArray(data);
           this.isEmptyOrigin = this.listMovesOrigin.length == 0;
           this.isStatusData = false;
+          this.isStatusDataNoOrigin = false;
         } else {
           this.listMovesNoOrigin =
             this._responseHandlerService?.handleResponseAsArray(data);
           this.isEmptyNoOrigin = this.listMovesNoOrigin.length == 0;
           this.isStatusData = false;
+          this.isStatusDataNoOrigin = false;
         }
       },
       error: (err) => this.notificacionService.alertError(err),
@@ -255,11 +266,13 @@ export class CompensationFormComponent implements OnInit {
             this._responseHandlerService?.handleResponseAsArray(data);
           this.isEmptyOrigin = this.listMovesOrigin.length == 0;
           this.isStatusData = false;
+          this.isStatusDataNoOrigin = false;
         } else {
           this.listMovesNoOrigin =
             this._responseHandlerService?.handleResponseAsArray(data);
           this.isEmptyNoOrigin = this.listMovesNoOrigin.length == 0;
           this.isStatusData = false;
+          this.isStatusDataNoOrigin = false;
         }
       },
       (error) => this.notificacionService.alertError(error)
@@ -275,11 +288,13 @@ export class CompensationFormComponent implements OnInit {
             this._responseHandlerService?.handleResponseAsArray(data);
           this.isEmptyOrigin = this.listMovesOrigin.length == 0;
           this.isStatusData = false;
+          this.isStatusDataNoOrigin = false;
         } else {
           this.listMovesNoOrigin =
             this._responseHandlerService?.handleResponseAsArray(data);
           this.isEmptyNoOrigin = this.listMovesNoOrigin.length == 0;
           this.isStatusData = false;
+          this.isStatusDataNoOrigin = false;
         }
       },
       (error) => this.notificacionService.alertError(error)
@@ -298,11 +313,13 @@ export class CompensationFormComponent implements OnInit {
             this._responseHandlerService?.handleResponseAsArray(data);
           this.isEmptyOrigin = this.listMovesOrigin.length == 0;
           this.isStatusData = false;
+          this.isStatusDataNoOrigin = false;
         } else {
           this.listMovesNoOrigin =
             this._responseHandlerService?.handleResponseAsArray(data);
           this.isEmptyNoOrigin = this.listMovesNoOrigin.length == 0;
           this.isStatusData = false;
+          this.isStatusDataNoOrigin = false;
         }
       },
       (error) => this.notificacionService.alertError(error)
@@ -437,40 +454,34 @@ export class CompensationFormComponent implements OnInit {
       this.dataNoOrigin.operacionId = event.id;
       this.isStatusDataNoOrigin = true;
       this.updateTotalAmountNoOrigin();
-      setTimeout(() => {
-        this.operationNoOriginId = event.id;
-        this.isStatusDataNoOrigin = false;
-        if (
-          event.codigo == "CREDITO" &&
-          this.typeOperatorNoOrigin == "CLIENTE"
-        ) {
-          this.getSClientCredit(this.personalNoOriginId, false);
-        }
-        if (
-          event.codigo == "ANTICIPO" &&
-          this.typeOperatorNoOrigin == "CLIENTE"
-        ) {
-          this.getClientAdvanced(this.personalNoOriginId, false);
-        }
-        if (
-          event.codigo == "CREDITO" &&
-          this.typeOperatorNoOrigin == "PROVEEDOR"
-        ) {
-          this.getSupplierCredit(this.personalNoOriginId, false);
-        }
-        if (
-          event.codigo == "ANTICIPO" &&
-          this.typeOperatorNoOrigin == "PROVEEDOR"
-        ) {
-          this.getSupplierAdvance(this.personalNoOriginId, false);
-        }
-        if (
-          (event.codigo == "FONDO_RENDIR" || event.codigo == "REEMBOLSO") &&
-          this.typeOperatorNoOrigin == "EMPLEADO"
-        ) {
-          this.getEmployeeFundRenderOrRefund(this.personalNoOriginId, false);
-        }
-      }, 750);
+      this.operationNoOriginId = event.id;
+      if (event.codigo == "CREDITO" && this.typeOperatorNoOrigin == "CLIENTE") {
+        this.getSClientCredit(this.personalNoOriginId, false);
+      }
+      if (
+        event.codigo == "ANTICIPO" &&
+        this.typeOperatorNoOrigin == "CLIENTE"
+      ) {
+        this.getClientAdvanced(this.personalNoOriginId, false);
+      }
+      if (
+        event.codigo == "CREDITO" &&
+        this.typeOperatorNoOrigin == "PROVEEDOR"
+      ) {
+        this.getSupplierCredit(this.personalNoOriginId, false);
+      }
+      if (
+        event.codigo == "ANTICIPO" &&
+        this.typeOperatorNoOrigin == "PROVEEDOR"
+      ) {
+        this.getSupplierAdvance(this.personalNoOriginId, false);
+      }
+      if (
+        (event.codigo == "FONDO_RENDIR" || event.codigo == "REEMBOLSO") &&
+        this.typeOperatorNoOrigin == "EMPLEADO"
+      ) {
+        this.getEmployeeFundRenderOrRefund(this.personalNoOriginId, false);
+      }
     }
   };
 
@@ -560,9 +571,29 @@ export class CompensationFormComponent implements OnInit {
   confirmAndContinueSaving = async (): Promise<void> => {
     this.submitted = true;
     this.isStatusSubmit = true;
-    this.validateDifferentAmounts();
-    this.validateAmountsEqualToZero();
-
+    if (
+      this.compensationForm.get("montoOrigin").value !=
+      this.compensationForm.get("montoNoOrigin").value
+    ) {
+      this.notificacionService.alertErrorOnlyMessage(
+        "El total del origen es distinto al total de la contraparte"
+      );
+      this.isStatusSubmit = false;
+      return;
+    }
+    /*     if (this.validateAmountsEqualToZero()) {
+      return;
+    } */
+    if (
+      this.compensationForm.get("montoOrigin").value == 0 ||
+      this.compensationForm.get("montoNoOrigin").value == 0
+    ) {
+      this.notificacionService.alertErrorOnlyMessage(
+        "El total del origen y de la contraparte deben ser mayor a cero"
+      );
+      this.isStatusSubmit = false;
+      return;
+    }
     if (!this.compensationForm.valid) {
       this.isStatusSubmit = false;
       return;
@@ -590,7 +621,7 @@ export class CompensationFormComponent implements OnInit {
             (element) => element.checked
           ),
         });
-
+        //console.log("DATA SEND: ", this.compensationForm.getRawValue());
         this.saveForm(this.compensationForm.getRawValue());
       }
       this.isStatusSubmit = false;
@@ -620,8 +651,9 @@ export class CompensationFormComponent implements OnInit {
         "El total del origen es distinto al total de la contraparte"
       );
       this.isStatusSubmit = false;
-      return;
+      return false;
     }
+    return true;
   };
   validateAmountsEqualToZero = () => {
     if (
@@ -632,8 +664,9 @@ export class CompensationFormComponent implements OnInit {
         "El total del origen y de la contraparte deben ser mayor a cero"
       );
       this.isStatusSubmit = false;
-      return;
+      return false;
     }
+    return true;
   };
 
   getClassDifferentAmounts = () => {

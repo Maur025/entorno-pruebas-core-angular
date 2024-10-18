@@ -39,4 +39,10 @@ export class PagosService {
       `${this.apiUrl}${this.prefix}/${this.apiName}/${idProveedor}`
     );
   }
+
+  generarComprobante(id: any) {
+		return this.apiService.tesoreria.get(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/${id}/pdf`
+		)
+	}
 }

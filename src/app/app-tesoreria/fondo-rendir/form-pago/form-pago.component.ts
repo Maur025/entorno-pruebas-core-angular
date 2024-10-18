@@ -9,6 +9,9 @@ import { NotificacionService } from "src/app/core/services/notificacion.service"
 import { ScreenshotService } from "src/app/core/services/screenshot.service";
 import { FondoRendirService } from "src/app/core/services/tesoreria/fondo-rendir.service";
 import { UtilityService } from "src/app/shared/services/utilityService.service";
+import { tap, catchError } from 'rxjs/operators';
+import { ArchivosService } from 'src/app/core/services/archivos.service'
+import { of } from 'rxjs';
 
 @Component({
   selector: "form-pago",
@@ -36,6 +39,7 @@ export class FormPagoComponent {
     private formBuilder: UntypedFormBuilder,
     protected utilityService: UtilityService,
     protected screenshotService: ScreenshotService,
+		public archivosService: ArchivosService,
     public fondoRendirService: FondoRendirService
   ) {}
 
@@ -160,6 +164,7 @@ export class FormPagoComponent {
         this.alActualizar.emit(data);
         this.isStatusSubmit = false;
         this.notificacionService.successStandar();
+        this.descargarComprobante(data['data']['id']);
       },
       (error) => this.notificacionService.alertError(error)
     );
@@ -169,14 +174,26 @@ export class FormPagoComponent {
     this.formPago.value["fechaPagoReembolso"] = this.formPago.value["fecha"];
     this.formPago.value["montoReembolso"] = this.formPago.value["montoPagar"];
     this.formPago.value["movimientos"] = this.formPago.value["transacciones"];
-
     this.fondoRendirService.pagoReembolso(this.formPago.value).subscribe(
       (data) => {
         this.alActualizar.emit(data);
         this.isStatusSubmit = false;
         this.notificacionService.successStandar();
+        this.descargarComprobante(data['data']['id']);
       },
       (error) => this.notificacionService.alertError(error)
     );
   }
+
+  descargarComprobante(id) {
+    this.fondoRendirService.generarComprobante(id).pipe(
+      tap((data) => {
+        this.archivosService.generar64aPDF(data['data'].content, 'comprobante_fondo_rendir.pdf');
+      }),
+      catchError((error) => {
+        this.notificacionService.alertError(error);
+        return of(null);
+      })
+    ).subscribe();
+	}
 }

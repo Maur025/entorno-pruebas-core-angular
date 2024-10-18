@@ -3,6 +3,7 @@ import {
   EventEmitter,
   inject,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   SimpleChanges,
@@ -16,13 +17,16 @@ import {
 } from "@angular/forms";
 import { BehaviorSubject } from "rxjs";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
+import Decimal from "decimal.js";
 
 @Component({
   selector: "compensaciones-movimiento-origen",
   templateUrl: "./compensaciones-movimiento-origen.component.html",
   styleUrls: ["./compensaciones-movimiento-origen.component.scss"],
 })
-export class CompensacionesMovimientoOrigenComponent implements OnInit {
+export class CompensacionesMovimientoOrigenComponent
+  implements OnInit, OnDestroy
+{
   @Input() listMoves;
   @Input() formMain: UntypedFormGroup;
   @Input() labelOperation: string;
@@ -57,8 +61,13 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
         showOdds: false,
       }));
       this.totalOrigin = 0;
+      this.listCuotas.next([]);
     }
   }
+  ngOnDestroy(): void {
+    this.listCuotas.next([]);
+  }
+
   get form() {
     return this.formMain?.controls;
   }
@@ -94,7 +103,11 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
         montoMovimiento: this.getBalance(this.objectSelected),
         montoOrigin: this.getBalance(this.objectSelected),
       });
-      if (this.labelOperation == "Anticipo") {
+      if (
+        this.labelOperation == "Anticipo" ||
+        this.labelOperation == "Fondo Rendir" ||
+        this.labelOperation == "Reembolso"
+      ) {
         this.updateTotalAmount(this.totalOrigin);
       }
     }
@@ -167,16 +180,35 @@ export class CompensacionesMovimientoOrigenComponent implements OnInit {
       .getValue()
       .filter((element) => element.show);
 
-    this.totalOrigin = objectsSelected?.reduce(
+    /*     this.totalOrigin = objectsSelected?.reduce(
       (total, item) => total + Number(item?.importe),
       0
-    );
+    ); */
+    const total = objectsSelected?.reduce((total, item) => {
+      return total.plus(new Decimal(item?.importe));
+    }, new Decimal(0));
+    this.totalOrigin = Number(total.toString());
+
     this.updateTotalAmount(this.totalOrigin);
 
     this.formMain.get("movimientoOrigen").patchValue({
       montoMovimiento: this.totalOrigin,
       planCuotas: objectsSelected,
     });
+  };
+
+  validateDecimalInput = (event: KeyboardEvent) => {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    const regex = /^\d*([.]?\d{0,1})?$/;
+    const key = event.key;
+    if (!/[\d.]/.test(key) && key !== "Backspace" && key !== "Tab") {
+      event.preventDefault();
+      return;
+    }
+    if (!regex.test(value)) {
+      event.preventDefault();
+    }
   };
 
   getAmount = (data: any) => {

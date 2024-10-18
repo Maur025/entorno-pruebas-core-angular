@@ -13,15 +13,16 @@
     <table class="table table-sm m-0">
       <thead>
         <tr>
-          <th [width]="100" class="">Regularizar</th>
-          <th [width]="120" class="text-muted fs-14 mb-2">N° Documento</th>
-          <th [width]="120" class="text-muted fs-14 mb-2">Fecha</th>
-          <th [width]="120" class="text-muted fs-14 mb-2">
-            Monto {{ labelOperation }}
+          <th class="">Regularizar</th>
+          <th class="text-muted fs-14 mb-2">N° Documento</th>
+          <th style="width: 450px" class="text-muted fs-14 mb-2">
+            Descripción
           </th>
-          <th [width]="120" class="text-muted fs-14 mb-2">Saldo</th>
-          <th [width]="120" class="text-muted fs-14 mb-2">Importe</th>
-          <th [width]="120" class="text-muted fs-14 mb-2">Cuotas</th>
+          <th [width]="120" class="text-muted fs-14 mb-2">Fecha</th>
+          <th class="text-muted fs-14 mb-2">Monto {{ labelOperation }}</th>
+          <th class="text-muted fs-14 mb-2">Saldo</th>
+          <th class="text-muted fs-14 mb-2">Importe</th>
+          <th class="text-muted fs-14 mb-2">Cuotas</th>
         </tr>
       </thead>
       <tbody *ngFor="let move of listData; let i = index">
@@ -40,6 +41,9 @@
           </td>
           <td class="text-start">
             {{ getNroDocument(move) }}
+          </td>
+          <td class="text-start text-uppercase">
+            {{ move["descripcion"] || "" }}
           </td>
           <td class="text-start">
             {{ getMovementDate(move) | fechaFormat }}
@@ -64,6 +68,7 @@
                 !move['selected'] || move['planCobros'] || move['planPagos']
               "
               placeholder="0"
+              (keypress)="validateDecimalInput($event)"
             />
             <span
               class="text-danger"
@@ -94,7 +99,7 @@
         >
           <td></td>
           <td></td>
-          <td colspan="5">
+          <td colspan="6">
             <div class="table-responsive">
               <table class="table m-0 table-striped">
                 <thead class="bg-primary text-white p-0 m-0">
@@ -127,7 +132,7 @@
                         (change)="onSelectCheckboxOdds(dataCredito, move['id'])"
                       />
                     </td>
-                    <td>{{ dataCredito["nroReferencia"] }}</td>
+                    <th>{{ dataCredito["nroReferencia"] }}</th>
                     <td>{{ getInstallmentDate(dataCredito) | fechaFormat }}</td>
 
                     <td class="text-end">
@@ -142,6 +147,7 @@
                         (change)="
                           onNumberChangeCuota(dataCredito, move['id'], $event)
                         "
+                        (keypress)="validateDecimalInput($event)"
                         placeholder="0"
                       />
                       <span
@@ -159,9 +165,9 @@
       </tbody>
       <tfoot>
         <tr class="bg-light">
-          <td colspan="5"></td>
+          <td colspan="6"></td>
           <th>TOTAL</th>
-          <th class="text-end fs-3">{{ totalOrigin }}</th>
+          <th class="text-end fs-3">{{ totalOrigin.toString() }}</th>
         </tr>
       </tfoot>
     </table>
