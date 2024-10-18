@@ -1,0 +1,169 @@
+<!-- {{codeCliente}} -->
+<ng-template *ngIf="codeCliente == 'ANT_CLIENTE'; then anticipoPlantilla" />
+<ng-template #anticipoPlantilla>
+  <ng-template
+    *ngIf="importarDescargar; then downloadTemplate; else importData"
+  />
+  <ng-template #downloadTemplate>
+    <div class="row">
+      <div class="hstack gap-2 justify-content-center">
+        <div class="col-lg-8 border">
+          <div class="m-3">
+            <form
+              [formGroup]="formDownloadTemplateClient"
+              (ngSubmit)="descargarPlantilla()"
+            >
+              <h6 class="fw-bold text-secondary">
+                Seleccione un cliente antes de descargar la plantilla
+              </h6>
+              <div class="d-flex">
+                <ng-select
+                  class="me-3 col-9"
+                  formControlName="referenciaId"
+                  placeholder="Seleccione Cliente"
+                  [items]="dataClient"
+                  bindLabel="nombre"
+                  bindValue="id"
+                  (change)="selectData($event)"
+                />
+                <button type="submit" class="btn btn-info">descargar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #importData>
+    <div class="hstack gap-2 justify-content-center">
+      <div class="col-md-10">
+        <form (ngSubmit)="importarExcel()" [formGroup]="excelForm">
+          <div>
+            <div class="mb-3 position-relative">
+              <h6 class="fw-bold text-secondary">
+                Adjunte un documento Excel(*.xlsx) con los datos del
+                anticipo-cliente
+              </h6>
+              <input
+                class="form-control"
+                type="file"
+                formControlName="archivoXLSX"
+                (change)="recibirExcel($event)"
+                multiple="false"
+                [ngClass]="{
+                  'is-invalid': submitted && formE['archivoXLSX'].errors
+                }"
+              />
+              <div
+                *ngIf="submitted && formE['archivoXLSX'].errors"
+                class="invalid-tooltip end-0"
+              >
+                <div *ngIf="formE['archivoXLSX'].errors['required']">
+                  No ha ingresado ningun documento excel
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div *ngIf="clientData" class="mb-3 ms-4">
+              <div class="d-flex">
+                <h6 class="fw-bold text-secondary">Cliente :</h6>
+                <h6 class="text-secondary">{{ clientData[1][1] }}</h6>
+              </div>
+              <div class="d-flex">
+                <h6 class="fw-bold text-secondary">Nº documento :</h6>
+                <h6 class="text-secondary">{{ clientData[1][2] }}</h6>
+              </div>
+            </div>
+
+            <div class="table-responsive seccion-data-import" *ngIf="dataFila">
+              <table class="table table-hover mb-0 table-bordered table-sm m-0">
+                <tbody>
+                  <tr
+                    *ngFor="let data of dataFila; let i = index"
+                    [class]="{ 'table-danger': data['messageError']}">
+
+                    <td
+                      class="text-secondary"
+                      [class]="{ error: data['error'], 'bg-light': i == 0 }"
+                    >
+                      <b *ngIf="i != 0">{{ i }}</b>
+                    </td>
+                    <td>
+                      <span
+                        [ngClass]="{
+                          'text-secondary fw-semibold semi font-size-13': i == 0
+                        }"
+                      >
+                        {{ data["descripcion"] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        [ngClass]="{
+                          'text-secondary fw-semibold semi font-size-13': i == 0
+                        }"
+                      >
+                        {{ data["monto"] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        [ngClass]="{
+                          'text-secondary fw-semibold semi font-size-13': i == 0
+                        }"
+                      >
+                        {{ data["fecha"] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        [ngClass]="{
+                          'text-secondary fw-semibold semi font-size-13': i == 0
+                        }"
+                      >
+                        {{ data["centroCosto"] }}
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        [ngClass]="{
+                          'text-secondary fw-semibold semi font-size-13': i == 0
+                        }"
+                      >
+                        {{ data["nroReferencia"] }}
+                      </span>
+                    </td>
+                    <td
+                      *ngIf="data['messageError']"
+                      [ngStyle]="{ width: '22%' }"
+                    >
+                      <p class="error" [innerHTML]="data.messageError"></p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="hstack gap-2 justify-content-end">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                (click)="limpiarInputFile()"
+              >
+                Limpiar
+              </button>
+              <button type="submit" class="btn btn-success">
+                Realizar Importación
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-template>
+</ng-template>

@@ -88,6 +88,13 @@ const routes: Routes = [
         (m) => m.CobrosVariosModule
       ),
   },
+  {
+    path: "inicializacion",
+    loadChildren: () =>
+      import("./inicializacion/inicializacion.module").then(
+        (m) => m.InicializacionModule
+      ),
+  },
 ];
 
 @NgModule({

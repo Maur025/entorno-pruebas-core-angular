@@ -45,4 +45,14 @@ export class AnticipoClienteService {
       `${this.apiUrl}${this.prefix}/${this.apiName}/${idClient}`
     );
   }
+  exportarPlantillaInicializacion(dataClient) {
+    return this.apiService.tesoreria.post(this.prefix + `/${this.apiName}/exportar/plantilla`, dataClient);
+  }
+
+  importarSaldosIniciales(file) {
+    return this.apiService.tesoreria.post(
+      this.prefix + `/${this.apiName}/importar/saldos-iniciales`,
+      file
+    );
+  }
 }

@@ -120,6 +120,17 @@ export const MENU: MenuItem[] = [
     link: "/compensacion",
     icon: "mdi mdi-scale-balance",
   },
+  {
+    id: 9,
+    label: "SALDOS INICIALES",
+    isTitle: true,
+  },
+  {
+    id: 45,
+    label: "Inicialización",
+    link: "/inicializacion",
+    icon: "mdi mdi-clipboard-arrow-up",
+  },
   /*  {
 		id: 1,
 		label: 'antiguo',
