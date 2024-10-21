@@ -16,6 +16,9 @@ import {
 } from 'src/app/shared/interface/common-api-response'
 import { ResponseDataStandard } from 'src/app/shared/interface/common-list-interface'
 import { UtilityService } from 'src/app/shared/services/utilityService.service'
+import { tap, catchError } from 'rxjs/operators';
+import { ArchivosService } from 'src/app/core/services/archivos.service'
+import { of } from 'rxjs';
 
 @Component({
 	selector: 'app-collection-form',
@@ -40,6 +43,7 @@ export class CollectionFormComponent implements OnInit {
 		private notificacionService: NotificacionService,
 		private responseHandlerService: ResponseHandlerService,
 		private screenshotService: ScreenshotService,
+		public archivosService: ArchivosService,
 		private cobroService: CobroService,
 		private router: Router
 	) {}
@@ -178,10 +182,11 @@ export class CollectionFormComponent implements OnInit {
 			movimientos: this.collectionForm?.get('transacciones')?.value || [],
 		}
 		this.cobroService?.savePendingCollection(jsonDataSend)?.subscribe({
-			next: () => {
+			next: (data) => {
 				this.notificacionService?.successStandar('Registro exitoso.')
 				this.isSubmitStatus = false
-				this.router.navigateByUrl('/cobros')
+				this.router.navigateByUrl('/cobros');
+        this.descargarComprobante(data['data']['id']);
 			},
 			error: (error: ErrorResponseStandard) => {
 				this.notificacionService?.alertError(error)
@@ -189,4 +194,17 @@ export class CollectionFormComponent implements OnInit {
 			},
 		})
 	}
+
+  descargarComprobante(id) {
+    this.cobroService.generarComprobante(id).pipe(
+      tap((data) => {
+        this.archivosService.generar64aPDF(data['data'].content, 'comprobante_anticipo_cliente.pdf');
+      }),
+      catchError((error) => {
+        this.notificacionService.alertError(error);
+        return of(null);
+      })
+    ).subscribe();
+	}
+
 }

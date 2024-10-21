@@ -8,6 +8,9 @@ import { NotificacionService } from "src/app/core/services/notificacion.service"
 import { ScreenshotService } from "src/app/core/services/screenshot.service";
 import { AnticipoClienteService } from "src/app/core/services/tesoreria/anticipo-cliente.service";
 import { UtilityService } from "src/app/shared/services/utilityService.service";
+import { tap, catchError } from 'rxjs/operators';
+import { ArchivosService } from 'src/app/core/services/archivos.service'
+import { of } from 'rxjs';
 
 @Component({
   selector: "app-form-devolucion",
@@ -29,6 +32,7 @@ export class FormDevolucionComponent {
     private formBuilder: UntypedFormBuilder,
     private notificacionService: NotificacionService,
     private screenshotService: ScreenshotService,
+		public archivosService: ArchivosService,
     protected utilityService: UtilityService
   ) {}
 
@@ -132,9 +136,22 @@ export class FormDevolucionComponent {
           this.alActualizar.emit(data);
           this.isStatusSubmit = false;
           this.notificacionService.successStandar();
+          this.descargarComprobante(data['data']['id']);
         },
         (error) => this.notificacionService.alertError(error)
       );
     }
   }
+
+  descargarComprobante(id) {
+    this.anticipoClienteService.generarComprobanteDevolucion(id).pipe(
+      tap((data) => {
+        this.archivosService.generar64aPDF(data['data'].content, 'comprobante_anticipo_cliente.pdf');
+      }),
+      catchError((error) => {
+        this.notificacionService.alertError(error);
+        return of(null);
+      })
+    ).subscribe();
+	}
 }
