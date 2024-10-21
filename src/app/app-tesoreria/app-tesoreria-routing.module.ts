@@ -95,6 +95,13 @@ const routes: Routes = [
         (m) => m.InicializacionModule
       ),
   },
+  {
+    path: "ventas-devengadas",
+    loadChildren: () =>
+      import("./devengados-ventas/devengados-ventas.module").then(
+        (m) => m.DevengadosVentasModule
+      ),
+  },
 ];
 
 @NgModule({
