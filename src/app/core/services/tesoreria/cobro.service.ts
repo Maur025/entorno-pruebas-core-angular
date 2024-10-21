@@ -59,4 +59,10 @@ export class CobroService {
       data
     );
   };
+
+  generarComprobante(id: any) {
+		return this.apiService.tesoreria.get(
+      `${this.prefix}/${this.resource}/${id}/pdf`
+		)
+	}
 }
