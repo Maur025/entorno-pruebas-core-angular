@@ -61,4 +61,10 @@ export class AnticipoClienteService {
       `${this.apiUrl}${this.prefix}/${this.apiName}/${id}/pdf`
 		)
 	}
+
+  generarComprobanteDevolucion(id: any) {
+		return this.apiService.tesoreria.get(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/devoluciones/${id}/pdf`
+		)
+	}
 }
