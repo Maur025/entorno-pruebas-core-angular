@@ -43,4 +43,10 @@ export class CuentaBancoService {
       datos
     );
   }
+
+  generarComprobante(id: any) {
+		return this.apiService.tesoreria.get(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/transferencias/cuentas-banco/${id}/pdf`
+		)
+	}
 }
