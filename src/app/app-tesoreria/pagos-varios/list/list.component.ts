@@ -2,7 +2,10 @@ import { Component, inject, OnInit } from "@angular/core";
 import { FuncionesComponent } from "../../funciones.component";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { PagosVariosService } from "src/app/core/services/tesoreria/pagos-varios.service";
-
+import { tap, catchError } from 'rxjs/operators';
+import { ArchivosService } from 'src/app/core/services/archivos.service'
+import { of } from 'rxjs';
+import { NotificacionService } from "src/app/core/services/notificacion.service";
 @Component({
   selector: "app-list",
   templateUrl: "./list.component.html",
@@ -27,7 +30,9 @@ export class ListComponent extends FuncionesComponent implements OnInit {
     class: "modal-xl modal-scrollable",
   };
 
-  constructor(private modalService: BsModalService) {
+  constructor(private modalService: BsModalService,
+		public archivosService: ArchivosService,
+    public notificacionService: NotificacionService) {
     super();
   }
 
@@ -42,7 +47,7 @@ export class ListComponent extends FuncionesComponent implements OnInit {
   getCabeceras = () => {
     return {
       cabeceras: {
-        //acciones: this.getOpcionesCabecera("Acciones", 12, "text", true, false),
+        acciones: this.getOpcionesCabecera("Acciones", 12, "text", true, false),
         nombreCuenta: this.getOpcionesCabecera(
           "Cuenta Contable",
           12,
@@ -89,4 +94,16 @@ export class ListComponent extends FuncionesComponent implements OnInit {
   crearAnticipo(template: any) {
     this.modalRef = this.modalService.show(template, this.modalConfig);
   }
+
+  descargarComprobante(id) {
+    this._pagosVariosService.generarComprobante(id).pipe(
+      tap((data) => {
+        this.archivosService.generar64aPDF(data['data'].content, 'comprobante_pagos_varios.pdf');
+      }),
+      catchError((error) => {
+        this.notificacionService.alertError(error);
+        return of(null);
+      })
+    ).subscribe();
+	}
 }

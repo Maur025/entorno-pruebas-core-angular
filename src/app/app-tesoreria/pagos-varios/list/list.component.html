@@ -22,14 +22,17 @@
     <ng-template #tempTD>
       <td [ngSwitch]="campo">
         <div *ngSwitchCase="'acciones'">
-          <button
+          <!--<button
             class="btn btn-sm btn-warning me-2"
             tooltip="Devolucion"
             [disabled]="fila['saldo'] == 0"
-          >
-            <!-- (click)="realizarDevolucion(devolucionAnticipo, fila)" -->
+           (click)="realizarDevolucion(devolucionAnticipo, fila)" >
             <i class="mdi mdi-keyboard-backspace"></i>
+          </button>-->
+          <button class="btn btn-sm btn-warning" (click)="descargarComprobante(fila.id)" tooltip="Imprimir Comprobante">
+            <i class="mdi mdi-download"></i>
           </button>
+
         </div>
         <div *ngSwitchCase="'proveedor'">
           {{ fila["cliente"]["razonSocial"] }}
