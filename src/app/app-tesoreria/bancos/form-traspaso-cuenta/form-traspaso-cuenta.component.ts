@@ -10,6 +10,9 @@ import { MedioTransferenciaService } from 'src/app/core/services/tesoreria/medio
 import { MonedaService } from 'src/app/core/services/tesoreria/moneda.service';
 import { ApiResponseStandard, ErrorResponseStandard } from 'src/app/shared/interface/common-api-response';
 import { UtilityService } from 'src/app/shared/services/utilityService.service';
+import { tap, catchError } from 'rxjs/operators';
+import { ArchivosService } from 'src/app/core/services/archivos.service'
+import { of } from 'rxjs';
 
 @Component({
   selector: 'form-traspaso-cuenta',
@@ -43,7 +46,8 @@ export class FormTraspasoCuentaComponent implements OnInit {
     protected screenshotService: ScreenshotService,
     private responseHandlerService: ResponseHandlerService,
     private medioTransferenciaService: MedioTransferenciaService,
-    private centroCostosService:CentroCostosService
+    private centroCostosService:CentroCostosService,
+		public archivosService: ArchivosService
   ) {}
 
   ngOnInit() {
@@ -209,10 +213,24 @@ export class FormTraspasoCuentaComponent implements OnInit {
         this.alActualizar.emit(data);
         this.notificacionService.successStandar();
         this.isStatusSubmit = false;
+        console.log(data);
+        this.descargarComprobante(data['data']['id']);
       },
       (error) => this.notificacionService.alertError(error)
     );
 
     this.submitted = true;
   }
+
+  descargarComprobante(id) {
+    this.cuentaBancoService.generarComprobante(id).pipe(
+      tap((data) => {
+        this.archivosService.generar64aPDF(data['data'].content, 'comprobante_pagos_varios.pdf');
+      }),
+      catchError((error) => {
+        this.notificacionService.alertError(error);
+        return of(null);
+      })
+    ).subscribe();
+	}
 }
