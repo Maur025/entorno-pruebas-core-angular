@@ -24,7 +24,9 @@ import {
   ErrorResponseStandard,
 } from "src/app/shared/interface/common-api-response";
 import { UtilityService } from "src/app/shared/services/utilityService.service";
-
+import { tap, catchError } from 'rxjs/operators';
+import { ArchivosService } from 'src/app/core/services/archivos.service'
+import { of } from 'rxjs';
 @Component({
   selector: "app-pagos-varios-form",
   templateUrl: "./pagos-varios-form.component.html",
@@ -55,7 +57,8 @@ export class PagosVariosFormComponent implements OnInit {
   dataReceived: any = [];
 
   dataTipo: any;
-  constructor(public bsModalRef: BsModalRef) {}
+  constructor(public bsModalRef: BsModalRef,
+		public archivosService: ArchivosService) {}
 
   ngOnInit(): void {
     this.getCentroCostos();
@@ -153,10 +156,24 @@ export class PagosVariosFormComponent implements OnInit {
           this.isStatusSubmit = false;
           this.alActualizar.emit(data);
           this.notificacionService.successStandar();
+          this.descargarComprobante(data['data']['id']);
         },
         error: (error) => this.notificacionService.alertError(error),
       });
     }
     this.submitted = true;
   }
+
+  descargarComprobante(id) {
+    this._pagosVariosService.generarComprobante(id).pipe(
+      tap((data) => {
+        this.archivosService.generar64aPDF(data['data'].content, 'comprobante_pagos_varios.pdf');
+      }),
+      catchError((error) => {
+        this.notificacionService.alertError(error);
+        return of(null);
+      })
+    ).subscribe();
+	}
+
 }
