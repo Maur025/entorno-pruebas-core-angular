@@ -4,6 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { CajaService } from 'src/app/core/services/tesoreria/caja.service';
 import { MovimientoCajaService } from 'src/app/core/services/tesoreria/movimiento-caja.service';
 import { Location } from '@angular/common';
+import { tap, catchError } from 'rxjs/operators';
+import { ArchivosService } from 'src/app/core/services/archivos.service'
+import { of } from 'rxjs';
+import { NotificacionService } from "src/app/core/services/notificacion.service";
 
 @Component({
   selector: 'app-movimiento-caja-list',
@@ -20,7 +24,9 @@ export class MovimientoCajaListComponent extends FuncionesComponent implements O
     private route: ActivatedRoute,
     private cajaService: CajaService,
     public movimientoCajaService: MovimientoCajaService,
-    public location: Location
+    public location: Location,
+    private notificacionService: NotificacionService,
+		public archivosService: ArchivosService
 
   ){
     super();
@@ -39,6 +45,7 @@ export class MovimientoCajaListComponent extends FuncionesComponent implements O
   getCabeceras() {
     return {
       cabeceras: {
+        "acciones": this.getOpcionesCabecera('Acciones', 12),
         "movimiento": this.getOpcionesCabecera('Movimiento', 12),
         "fecha": this.getOpcionesCabecera('Fecha', 12),
         "monto": this.getOpcionesCabecera('Monto', 12),
@@ -73,7 +80,16 @@ export class MovimientoCajaListComponent extends FuncionesComponent implements O
     return saldo;
   }
 
-
-
+  descargarComprobante(id) {
+    this.movimientoCajaService.generarComprobante(id).pipe(
+      tap((data) => {
+        this.archivosService.generar64aPDF(data['data'].content, 'comprobante_transferencia.pdf');
+      }),
+      catchError((error) => {
+        this.notificacionService.alertError(error);
+        return of(null);
+      })
+    ).subscribe();
+	}
 
 }

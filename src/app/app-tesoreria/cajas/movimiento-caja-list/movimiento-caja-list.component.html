@@ -29,6 +29,11 @@
     ></ng-template>
     <ng-template #tempTD>
       <td [ngSwitch]="campo">
+        <div *ngSwitchCase="'acciones'">
+          <button class="btn btn-sm btn-warning" (click)="descargarComprobante(fila.id)" tooltip="Imprimir Comprobante">
+            <i class="mdi mdi-download"></i>
+          </button>
+        </div>
         <div *ngSwitchCase="'movimiento'">
           <div>
             <span
