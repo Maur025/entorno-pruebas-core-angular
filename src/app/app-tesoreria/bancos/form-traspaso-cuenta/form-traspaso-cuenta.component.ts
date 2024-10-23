@@ -213,7 +213,6 @@ export class FormTraspasoCuentaComponent implements OnInit {
         this.alActualizar.emit(data);
         this.notificacionService.successStandar();
         this.isStatusSubmit = false;
-        console.log(data);
         this.descargarComprobante(data['data']['id']);
       },
       (error) => this.notificacionService.alertError(error)
@@ -225,7 +224,7 @@ export class FormTraspasoCuentaComponent implements OnInit {
   descargarComprobante(id) {
     this.cuentaBancoService.generarComprobante(id).pipe(
       tap((data) => {
-        this.archivosService.generar64aPDF(data['data'].content, 'comprobante_pagos_varios.pdf');
+        this.archivosService.generar64aPDF(data['data'].content, 'comprobante_transferencia.pdf');
       }),
       catchError((error) => {
         this.notificacionService.alertError(error);
