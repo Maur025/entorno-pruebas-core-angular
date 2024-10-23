@@ -2,6 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NotificacionService } from 'src/app/core/services/notificacion.service';
 import { BancoService } from 'src/app/core/services/tesoreria/banco.service';
 import { MedioTransferenciaService } from 'src/app/core/services/tesoreria/medio-transferencia.service';
+import { tap, catchError } from 'rxjs/operators';
+import { ArchivosService } from 'src/app/core/services/archivos.service'
+import { of } from 'rxjs';
+import { CuentaBancoService } from "src/app/core/services/tesoreria/cuenta-banco.service";
 
 @Component({
   selector: 'list-movimiento-cuenta-banco',
@@ -29,6 +33,8 @@ export class ListMovimientoCuentaBancoComponent implements OnInit{
 		public bancoService: BancoService,
     private notificacionService: NotificacionService,
     private medioTransferenciaService: MedioTransferenciaService,
+    private cuentaBancoService: CuentaBancoService,
+		public archivosService: ArchivosService
   ){}
 
   ngOnInit(){
@@ -75,6 +81,18 @@ export class ListMovimientoCuentaBancoComponent implements OnInit{
 
     this.bodyFilters = filtros;
     this.movimientoCuenta();
-
   }
+
+  descargarComprobante(id) {
+    this.cuentaBancoService.generarComprobanteMovimiento(id).pipe(
+      tap((data) => {
+        this.archivosService.generar64aPDF(data['data'].content, data['data'].name);
+      }),
+      catchError((error) => {
+        this.notificacionService.alertError(error);
+        return of(null);
+      })
+    ).subscribe();
+	}
+
 }

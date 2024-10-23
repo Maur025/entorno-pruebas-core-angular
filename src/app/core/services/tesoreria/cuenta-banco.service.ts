@@ -49,4 +49,16 @@ export class CuentaBancoService {
       `${this.apiUrl}${this.prefix}/${this.apiName}/transferencias/cuentas-banco/${id}/pdf`
 		)
 	}
+
+  generarComprobanteCuenta(id: any) {
+		return this.apiService.tesoreria.get(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/${id}/pdf`
+		)
+	}
+
+  generarComprobanteMovimiento(id: any) {
+		return this.apiService.tesoreria.get(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/movimiento/${id}/pdf`
+		)
+	}
 }

@@ -17,6 +17,9 @@ import {
 } from "src/app/shared/interface/common-api-response";
 import { ResponseDataStandard } from "src/app/shared/interface/common-list-interface";
 import { UtilityService } from "src/app/shared/services/utilityService.service";
+import { tap, catchError } from 'rxjs/operators';
+import { ArchivosService } from 'src/app/core/services/archivos.service'
+import { of } from 'rxjs';
 
 @Component({
   selector: "cuenta-banco-form",
@@ -52,7 +55,8 @@ export class CuentaBancoFormComponent {
     protected utilityService: UtilityService,
     protected screenshotService: ScreenshotService,
     private responseHandlerService: ResponseHandlerService,
-    private centroCostosService: CentroCostosService
+    private centroCostosService: CentroCostosService,
+		public archivosService: ArchivosService
   ) {}
 
   ngOnInit() {
@@ -167,6 +171,7 @@ export class CuentaBancoFormComponent {
           this.alActualizar.emit(data);
           this.notificacionService.successStandar();
           this.isStatusSubmit = false;
+          this.descargarComprobante(data['data']['id']);
         },
         (error) => {
           this.notificacionService.alertError(error);
@@ -180,4 +185,17 @@ export class CuentaBancoFormComponent {
   alAperturar() {
     this.cerrarModal.emit();
   }
+
+
+  descargarComprobante(id) {
+    this.cuentaBancoService.generarComprobanteCuenta(id).pipe(
+      tap((data) => {
+        this.archivosService.generar64aPDF(data['data'].content, data['data'].name);
+      }),
+      catchError((error) => {
+        this.notificacionService.alertError(error);
+        return of(null);
+      })
+    ).subscribe();
+	}
 }
