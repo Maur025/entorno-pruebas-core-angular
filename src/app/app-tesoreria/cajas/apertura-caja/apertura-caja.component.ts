@@ -120,7 +120,6 @@ export class AperturaCajaComponent {
             this.isStatusSubmit = false;
             this.notificacionService.successStandar();
             if(data['data']['movimientoCajas'][0]){
-              console.log(data['data']['movimientoCajas'][0]);
               this.descargarComprobante(data['data']['movimientoCajas'][0]['id']);
             }
           },
