@@ -309,6 +309,7 @@ export class AperturaFormComponent {
         this.alActualizar.emit(data);
         this.notificacionService.successStandar();
         this.isStatusSubmit = false;
+        this.descargarComprobante(data['data']['id']);
       },
       (error) => this.notificacionService.alertError(error)
     );
