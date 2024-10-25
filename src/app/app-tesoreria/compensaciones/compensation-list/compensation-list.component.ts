@@ -3,6 +3,10 @@ import { FuncionesComponent } from "../../funciones.component";
 import { CompensacionService } from "src/app/core/services/tesoreria/compensaciones.service";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { Router } from "@angular/router";
+import { tap, catchError } from 'rxjs/operators';
+import { ArchivosService } from 'src/app/core/services/archivos.service'
+import { of } from 'rxjs';
+import { NotificacionService } from "src/app/core/services/notificacion.service";
 
 @Component({
   selector: "app-compensation-list",
@@ -20,7 +24,11 @@ export class CompensationListComponent
   titleCustom: string = "";
   modalRef?: BsModalRef;
 
-  constructor(private modalService: BsModalService) {
+  constructor(
+    private modalService: BsModalService,
+    private archivosService: ArchivosService,
+    private notificacionService: NotificacionService
+  ) {
     super();
   }
 
@@ -35,7 +43,7 @@ export class CompensationListComponent
   getCabeceras = () => {
     return {
       cabeceras: {
-        //acciones: this.getOpcionesCabecera("Acciones", 12, "text", true, false),
+        acciones: this.getOpcionesCabecera("Acciones", 12, "text", true, false),
         centroCosto: this.getOpcionesCabecera(
           "Centro Costo",
           12,
@@ -114,4 +122,16 @@ export class CompensationListComponent
   crearCompensacion = () => {
     this.router.navigateByUrl("/compensacion/registro");
   };
+
+  descargarComprobante(id) {
+    this.compensacionService.generarComprobante(id).pipe(
+      tap((data) => {
+        this.archivosService.generar64aPDF(data['data'].content, data['data'].name);
+      }),
+      catchError((error) => {
+        this.notificacionService.alertError(error);
+        return of(null);
+      })
+    ).subscribe();
+	}
 }

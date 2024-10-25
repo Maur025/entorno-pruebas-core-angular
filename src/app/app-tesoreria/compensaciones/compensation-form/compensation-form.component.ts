@@ -27,6 +27,9 @@ import { FondoRendirService } from "src/app/core/services/tesoreria/fondo-rendir
 import { ScreenshotService } from "src/app/core/services/screenshot.service";
 import { CompensacionService } from "src/app/core/services/tesoreria/compensaciones.service";
 import { Router } from "@angular/router";
+import { tap, catchError } from 'rxjs/operators';
+import { ArchivosService } from 'src/app/core/services/archivos.service'
+import { of } from 'rxjs';
 
 @Component({
   selector: "compensation-form",
@@ -106,7 +109,9 @@ export class CompensationFormComponent implements OnInit {
     personaReferenciaId: "",
     operacionId: "",
   };
-  constructor() {}
+  constructor(
+		public archivosService: ArchivosService
+  ) {}
 
   itemMapperClient = {
     EMPLEADO: this.clientListOrigin,
@@ -630,9 +635,10 @@ export class CompensationFormComponent implements OnInit {
 
   saveForm = (data: any) => {
     this._compensacionService.register(data).subscribe({
-      next: () => {
+      next: (response) => {
         this.notificacionService?.successStandar("Registro exitoso.");
         this.isStatusSubmit = false;
+        this.descargarComprobante(response['data']['id']);
         this.router.navigateByUrl("/compensacion");
       },
       error: (err) => {
@@ -641,6 +647,18 @@ export class CompensationFormComponent implements OnInit {
       },
     });
   };
+
+  descargarComprobante(id) {
+    this._compensacionService.generarComprobante(id).pipe(
+      tap((data) => {
+        this.archivosService.generar64aPDF(data['data'].content, data['data'].name);
+      }),
+      catchError((error) => {
+        this.notificacionService.alertError(error);
+        return of(null);
+      })
+    ).subscribe();
+	}
 
   validateDifferentAmounts = () => {
     if (
