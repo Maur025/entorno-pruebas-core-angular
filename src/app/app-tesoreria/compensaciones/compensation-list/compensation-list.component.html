@@ -21,15 +21,11 @@
     ></ng-template>
     <ng-template #tempTD>
       <td [ngSwitch]="campo">
-        <!-- <div *ngSwitchCase="'acciones'">
-          <button
-            class="btn btn-sm btn-warning me-2"
-            tooltip="Devolucion"
-            [disabled]="fila['saldo'] == 0"
-          >
-            <i class="mdi mdi-keyboard-backspace"></i>
+        <div *ngSwitchCase="'acciones'">
+          <button class="btn btn-sm btn-warning" (click)="descargarComprobante(fila.id)"tooltip="Imprimir comprobante" >
+            <i class="mdi mdi-download"></i>
           </button>
-        </div> -->
+        </div>
 
         <div *ngSwitchCase="'centroCosto'">
           {{ fila.centroCosto.nombre }}
