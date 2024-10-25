@@ -17,6 +17,7 @@ import { FormDevolucionComponent } from './form-devolucion/form-devolucion.compo
 import { ListAnticiposComponent } from './form-devolucion/list-anticipos/list-anticipos.component';
 import { DetalleAnticipoComponent } from './detalle-anticipo/detalle-anticipo.component';
 import { ListaAnticiposProveedorComponent } from './lista-anticipos-proveedor/lista-anticipos-proveedor.component';
+import { AlertModule } from 'ngx-bootstrap/alert';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { ListaAnticiposProveedorComponent } from './lista-anticipos-proveedor/li
     BsDropdownModule.forRoot(),
     UiSwitchModule,
     TooltipModule.forRoot(),
-    ComponentesCompartidosModule
+    ComponentesCompartidosModule,
+    AlertModule.forRoot(),
   ]
 })
 export class AnticipoProveedorModule { }

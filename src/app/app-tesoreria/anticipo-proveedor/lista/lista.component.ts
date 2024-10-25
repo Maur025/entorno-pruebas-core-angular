@@ -65,14 +65,11 @@ export class ListaComponent extends FuncionesComponent{
     this.modalRef = this.modalService.show(template, this.modalConfig);
   }
 
-  verDetalles(fila, template){
-     console.log(fila);
-  /*  this.dataProveedor=fila;
-    this.modalRef = this.modalService.show(template, this.modalConfig); */
 
-    this.router.navigate(["./" + fila.id + "/anticipos-list/", {}], {
+  listAnticipos(idProveedor){
+    this.router.navigate(["./" + idProveedor + "/anticipos-list/", {}], {
       relativeTo: this.route,
     });
-
   }
+
 }
