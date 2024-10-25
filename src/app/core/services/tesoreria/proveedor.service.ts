@@ -18,4 +18,9 @@ export class ProveedorService {
 		return this.apiService.tesoreria.get(`${this.apiUrl}${this.prefix}/${this.apiName}`);
 	}
 
+  find(id: string) {
+    return this.apiService.tesoreria.get(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/${id}`
+    );
+  }
 }
