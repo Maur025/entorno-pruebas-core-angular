@@ -1,17 +1,56 @@
-<!-- {{codeCliente}} -->
+<ng-template
+*ngIf="importarDescargar; then downloadTemplateClient; else importDataProcess"
+/>
+
+<ng-template #downloadTemplateClient>
+  <div class="row">
+    <div class="hstack gap-2 justify-content-center">
+      <div class="col-lg-8 border">
+        <div class="m-3">
+          <form
+            [formGroup]="formDownloadTemplateClient"
+            (ngSubmit)="descargarPlantilla(codeCliente)"
+          >
+            <h6 class="fw-bold text-secondary">
+              Seleccione un cliente antes de descargar la plantilla
+            </h6>
+            <div class="d-flex">
+              <ng-select
+                class="me-3 col-9"
+                formControlName="referenciaId"
+                placeholder="Seleccione Cliente"
+                [items]="dataClient"
+                bindLabel="nombre"
+                bindValue="id"
+                (change)="selectData($event)"
+              />
+              <button type="submit" class="btn btn-info">Descargar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #importDataProcess></ng-template>
+
+
+
+
 <ng-template *ngIf="codeCliente == 'ANT_CLIENTE'; then anticipoPlantilla" />
 <ng-template #anticipoPlantilla>
   <ng-template
     *ngIf="importarDescargar; then downloadTemplate; else importData"
   />
+<!-- Vista de exportacion de la plantilla -->
   <ng-template #downloadTemplate>
-    <div class="row">
+<!--     <div class="row">
       <div class="hstack gap-2 justify-content-center">
         <div class="col-lg-8 border">
           <div class="m-3">
             <form
               [formGroup]="formDownloadTemplateClient"
-              (ngSubmit)="descargarPlantilla()"
+              (ngSubmit)="descargarPlantilla(codeCliente)"
             >
               <h6 class="fw-bold text-secondary">
                 Seleccione un cliente antes de descargar la plantilla
@@ -26,14 +65,17 @@
                   bindValue="id"
                   (change)="selectData($event)"
                 />
-                <button type="submit" class="btn btn-info">descargar</button>
+                <button type="submit" class="btn btn-info">Descargar</button>
               </div>
             </form>
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </ng-template>
+
+  <!-- Vista de importacion de datos -->
+
   <ng-template #importData>
     <div class="hstack gap-2 justify-content-center">
       <div class="col-md-10">

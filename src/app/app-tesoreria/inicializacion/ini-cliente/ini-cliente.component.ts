@@ -8,6 +8,7 @@ import {
 import { ArchivosService } from "src/app/core/services/archivos.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { AnticipoClienteService } from "src/app/core/services/tesoreria/anticipo-cliente.service";
+import { InicializacionesService } from "src/app/core/services/tesoreria/inicializaciones.service";
 import { ClienteService } from "src/app/core/services/ventas/clientes.service";
 import {
   ErrorDetailDataResponseStandard,
@@ -38,6 +39,7 @@ export class IniClienteComponent {
   @Input() codeCliente: any;
   @Input() importarDescargar: any;
   submitted: boolean = false;
+  submittedDownload: boolean = false;
   dataClient;
   formDownloadTemplateClient: UntypedFormGroup;
   excelForm: UntypedFormGroup;
@@ -52,7 +54,8 @@ export class IniClienteComponent {
     private anticipoClienteService: AnticipoClienteService,
     private archivoService: ArchivosService,
     private formBuilder: UntypedFormBuilder,
-    private notificacion: NotificacionService
+    private notificacion: NotificacionService,
+    private inicializacionService: InicializacionesService
   ) {}
 
   ngOnInit() {
@@ -95,7 +98,26 @@ export class IniClienteComponent {
     }
   }
 
-  descargarPlantilla() {
+  descargarPlantilla(codigo) {
+    console.log(codigo);
+    if(this.formDownloadTemplateClient.valid){
+      this.inicializacionService
+      .exportarPlantillaInicializacion(codigo, this.formDownloadTemplateClient.value)
+      .subscribe({
+        next: (data) => {
+          this.archivoService.generar64aExcel(
+            data.data.content,
+            "Anticipos-Clientes-Plantilla-Saldos-Iniciales"
+          );
+          this.formDownloadTemplateClient.reset();
+        },
+        error: (err) => console.log(err),
+      });
+    }
+    this.submittedDownload = true;
+  }
+
+/*   descargarPlantilla() {
     this.anticipoClienteService
       .exportarPlantillaInicializacion(this.formDownloadTemplateClient.value)
       .subscribe({
@@ -107,7 +129,7 @@ export class IniClienteComponent {
         },
         error: (err) => console.log(err),
       });
-  }
+  } */
 
   recibirExcel = (archivo): void => {
     const target: DataTransfer = <DataTransfer>archivo.target;
