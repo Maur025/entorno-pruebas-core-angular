@@ -28,8 +28,7 @@ Antes de proceder con el login, verifica si ya tienes configurado tu token de au
 
 Si ya has iniciado sesión previamente, tu archivo `.npmrc` debería contener una línea similar a esta:
 
-```bash
-//registry.kernotec.com/repository/npm-public/:_authToken=tu_token_de_autenticacion
+`//registry.kernotec.com/repository/npm-public/:_authToken=tu_token_de_autenticacion`
 
 (Si ya has iniciado sesión y el archivo .npmrc está configurado correctamente, no es necesario seguir el paso 2.)
 
@@ -39,6 +38,7 @@ Para acceder al repositorio de Nexus y descargar las dependencias, debes iniciar
 
 ```bash
 npm login --registry=https://registry.kernotec.com/repository/npm-public
+```
 
 Sigue las instrucciones e ingresa las siguientes credenciales cuando se te solicite:
 
