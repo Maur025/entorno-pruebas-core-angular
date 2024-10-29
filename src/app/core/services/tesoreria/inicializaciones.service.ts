@@ -39,4 +39,18 @@ export class InicializacionesService {
         console.error("No se encontro el codigo----->" + codigo);
     }
   }
+
+  exportarPlantillaInicializacionProveedor(codigo, dataProveedor) {
+
+    switch(codigo){
+      case "ANT_PROVEEDOR":
+        return this.apiService.tesoreria.post(this.prefix + `/anticipo_proveedor/${this.apiNameExport}`, dataProveedor);
+        break;
+      case "ANT_CLIENTE":
+        return this.apiService.tesoreria.post(this.prefix + `/anticipos-cliente/${this.apiNameExport}`, dataProveedor);
+        break;
+      default:
+        console.error("No se encontro el codigo----->" + codigo);
+    }
+  }
 }

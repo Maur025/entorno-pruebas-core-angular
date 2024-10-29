@@ -8,9 +8,10 @@ import { UIModule } from "src/app/shared/ui/ui.module";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { IniClienteComponent } from "./ini-cliente/ini-cliente.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { IniProveedorComponent } from './ini-proveedor/ini-proveedor.component';
 
 @NgModule({
-  declarations: [InicializacionComponent, IniClienteComponent],
+  declarations: [InicializacionComponent, IniClienteComponent, IniProveedorComponent],
   imports: [
     CommonModule,
     InicializacionRoutingModule,

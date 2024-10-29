@@ -1,0 +1,36 @@
+<ng-template
+*ngIf="importarDescargar; then downloadTemplateClient; else importDataProcess"
+/>
+
+<ng-template #downloadTemplateClient>
+  <div class="row">
+    <div class="hstack gap-2 justify-content-center">
+      <div class="col-lg-8 border">
+        <div class="m-3">
+          <form
+            [formGroup]="formDownloadTemplateProveedor"
+            (ngSubmit)="descargarPlantilla(codeProveedor)"
+          >
+            <h6 class="fw-bold text-secondary">
+              Seleccione un proveedor antes de descargar la plantilla
+            </h6>
+            <div class="d-flex">
+              <ng-select
+                class="me-3 col-9"
+                formControlName="id"
+                placeholder="Seleccione Cliente"
+                [items]="proveedoresList"
+                bindLabel="nombre"
+                bindValue="id"
+                (change)="selectProveedor($event)"
+              />
+              <button type="submit" class="btn btn-info">Descargar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #importDataProcess>
+</ng-template>
