@@ -7,24 +7,36 @@ import { ConsumoApiService } from '../consumoApi.service';
 export class InicializacionesService {
 
   constructor(private apiService: ConsumoApiService) {}
-  apiName: string = "exportar/plantilla";
+  apiNameExport: string = "exportar/plantilla";
+  apiNameImport: string = "importar/saldos-iniciales";
   apiUrl: string = "";
   prefix: string = "";
 
-  exportarPlantillaInicializacion(codigo, dataClient) {
-
+  importarInicializacionCliente(codigo, file){
     switch(codigo){
       case "COB_CLIENTE":
-        return this.apiService.tesoreria.post(this.prefix + `/cobros/${this.apiName}`, dataClient);
+        return this.apiService.tesoreria.post(this.prefix + `/cobros/${this.apiNameImport}`, file);
         break;
       case "ANT_CLIENTE":
-        return this.apiService.tesoreria.post(this.prefix + `/anticipos-cliente/${this.apiName}`, dataClient);
+        return this.apiService.tesoreria.post(this.prefix + `/anticipos-cliente/${this.apiNameImport}`, file);
         break;
       default:
         console.error("No se encontro el codigo----->" + codigo);
 
     }
+  }
 
-    //return this.apiService.tesoreria.post(this.prefix + `/${this.apiName}/exportar/plantilla`, dataClient);
+  exportarPlantillaInicializacion(codigo, dataClient) {
+
+    switch(codigo){
+      case "COB_CLIENTE":
+        return this.apiService.tesoreria.post(this.prefix + `/cobros/${this.apiNameExport}`, dataClient);
+        break;
+      case "ANT_CLIENTE":
+        return this.apiService.tesoreria.post(this.prefix + `/anticipos-cliente/${this.apiNameExport}`, dataClient);
+        break;
+      default:
+        console.error("No se encontro el codigo----->" + codigo);
+    }
   }
 }
