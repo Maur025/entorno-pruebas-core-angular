@@ -97,6 +97,10 @@
           *ngSwitchCase="'ANT_PROVEEDOR'"
           [ngTemplateOutlet]="ini_provider_template"
         />
+        <ng-template
+          *ngSwitchCase="'CRED_PROVEEDOR'"
+          [ngTemplateOutlet]="ini_provider_template"
+        />
 
       </ng-container>
       <ng-template #ini_cliente_template>

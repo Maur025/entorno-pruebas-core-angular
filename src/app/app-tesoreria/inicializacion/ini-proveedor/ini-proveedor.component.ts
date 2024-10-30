@@ -1,17 +1,20 @@
-import { Component, Input } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { ArchivosService } from 'src/app/core/services/archivos.service';
-import { ProveedorService } from 'src/app/core/services/compras/proveedor.service';
-import { NotificacionService } from 'src/app/core/services/notificacion.service';
-import { InicializacionesService } from 'src/app/core/services/tesoreria/inicializaciones.service';
-import { ErrorDetailDataResponseStandard, ErrorDetailResponseStandard, ErrorResponseStandard } from 'src/app/shared/interface/common-api-response';
-import { read, utils, WorkBook, WorkSheet } from 'xlsx';
+import { Component, Input } from "@angular/core";
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from "@angular/forms";
+import { ArchivosService } from "src/app/core/services/archivos.service";
+import { ProveedorService } from "src/app/core/services/compras/proveedor.service";
+import { NotificacionService } from "src/app/core/services/notificacion.service";
+import { InicializacionesService } from "src/app/core/services/tesoreria/inicializaciones.service";
+import {
+  ErrorDetailDataResponseStandard,
+  ErrorDetailResponseStandard,
+  ErrorResponseStandard,
+} from "src/app/shared/interface/common-api-response";
+import { read, utils, WorkBook, WorkSheet } from "xlsx";
 
-interface Proveedor {
-  codigoProveedor: string;
-  razonSocial: string;
-  numeroDocumento: string;
-}
 interface DataImporAnticipoProveedor {
   filaError: number | null;
   error: boolean | null;
@@ -23,24 +26,31 @@ interface DataImporAnticipoProveedor {
   messageError: string | null;
   columnError: { [key: string]: any } | null;
 }
+
+interface Proveedor {
+  codigoProveedor: string;
+  razonSocial: string;
+  numeroDocumento: string;
+}
 @Component({
-  selector: 'app-ini-proveedor',
-  templateUrl: './ini-proveedor.component.html',
-  styleUrls: ['./ini-proveedor.component.scss']
+  selector: "app-ini-proveedor",
+  templateUrl: "./ini-proveedor.component.html",
+  styleUrls: ["./ini-proveedor.component.scss"],
 })
+
 export class IniProveedorComponent {
   @Input() codeProveedor;
   @Input() importarDescargar: boolean;
   formDownloadTemplateProveedor: UntypedFormGroup;
   excelForm: UntypedFormGroup;
   proveedoresList;
-  submittedDownload:boolean=false;
-  submitted: boolean=false;
+  submittedDownload: boolean = false;
+  submitted: boolean = false;
   dataXLSX;
   dataProveedor;
   dataFila: any[];
-  archivoCSV
-  cargandoContenido
+  archivoCSV;
+  cargandoContenido;
 
   constructor(
     private archivoService: ArchivosService,
@@ -61,11 +71,13 @@ export class IniProveedorComponent {
     return this.excelForm.controls;
   }
 
-  getProveedores(){
-    this.proveedorService.habilitados().subscribe(data=>{
-      this.proveedoresList = data['content'];
-    }, error=>this.notificacion.alertError(error));
-
+  getProveedores() {
+    this.proveedorService.habilitados().subscribe(
+      (data) => {
+        this.proveedoresList = data["content"];
+      },
+      (error) => this.notificacion.alertError(error)
+    );
   }
   setForm() {
     this.formDownloadTemplateProveedor = this.formBuilder.group({
@@ -74,11 +86,9 @@ export class IniProveedorComponent {
       nroDocumento: [Validators.required],
     });
   }
-  selectProveedor(data){
+  selectProveedor(data) {
     if (data != undefined) {
-      this.formDownloadTemplateProveedor.controls["id"].setValue(
-        data["id"]
-      );
+      this.formDownloadTemplateProveedor.controls["id"].setValue(data["id"]);
       this.formDownloadTemplateProveedor.controls["razonSocial"].setValue(
         data["nombre"]
       );
@@ -88,25 +98,31 @@ export class IniProveedorComponent {
     }
   }
 
-  descargarPlantilla(codeProveedor){
-    if(this.formDownloadTemplateProveedor.valid){
+  descargarPlantilla(codeProveedor) {
+    if (this.formDownloadTemplateProveedor.valid) {
       this.inicializacionService
-      .exportarPlantillaInicializacionProveedor(codeProveedor, this.formDownloadTemplateProveedor.value)
-      .subscribe({
-        next: (data) => {
-          this.archivoService.generar64aExcel(
-            data.data.content,
-            `${this.formDownloadTemplateProveedor.get('razonSocial').value}-Plantilla Anticipo`
-          );
-          this.formDownloadTemplateProveedor.reset();
-        },
-        error: (err) => console.log(err),
-      });
+        .exportarPlantillaInicializacionProveedor(
+          codeProveedor,
+          this.formDownloadTemplateProveedor.value
+        )
+        .subscribe({
+          next: (data) => {
+            let fileName = this.formDownloadTemplateProveedor
+              .get("razonSocial")
+              .value.replace(/[^a-zA-Z0-9 ]/g, "");
+            this.archivoService.generar64aExcel(
+              data.data.content,
+              `Plantilla Anticipo-${fileName}`
+            );
+            this.formDownloadTemplateProveedor.reset();
+          },
+          error: (err) => console.log(err),
+        });
     }
     this.submittedDownload = true;
   }
 
-  recibirExcelProveedor=(file, codeProveedor):void =>{
+  recibirExcelProveedor = (file, codeProveedor): void => {
     const target: DataTransfer = <DataTransfer>file.target;
     if (target.files.length !== 1) {
       this.notificacion.alertError(null, {
@@ -123,25 +139,25 @@ export class IniProveedorComponent {
       this.dataXLSX = utils.sheet_to_json(ws, { header: 1 });
 
       let dataProveedor = this.dataXLSX.slice(1, 2);
-      dataProveedor.forEach(element => {
-        const referencia : Proveedor = {
+      dataProveedor.forEach((element) => {
+        const referencia: Proveedor = {
           codigoProveedor: element[0],
-          razonSocial:element[1],
-          numeroDocumento:element[2]
-        }
+          razonSocial: element[1],
+          numeroDocumento: element[2],
+        };
         this.dataProveedor = referencia;
       });
       /* Eliminar las filas del dato del proveedor*/
       this.dataXLSX.splice(0, 2);
 
-      switch(codeProveedor){
-        case "ANT_PROVEEDOR" :
+      switch (codeProveedor) {
+        case "ANT_PROVEEDOR":
           this.dataFila = this.readerAdvancedData();
           break;
-        case "CRED_PROVEEDOR" :
+        case "CRED_PROVEEDOR":
           this.dataFila = this.readerCreditData();
           break;
-   /*      case "" :
+        /*      case "" :
           break;   */
       }
       this.archivoCSV = utils.sheet_to_csv(ws);
@@ -149,9 +165,9 @@ export class IniProveedorComponent {
       this.archivoCSV = new File([csvFile], "file.csv", { type: "text/csv" });
     };
     reader.readAsArrayBuffer(target.files[0]);
-  }
+  };
 
-  readerAdvancedData=(): DataImporAnticipoProveedor[]=>{
+  readerAdvancedData = (): DataImporAnticipoProveedor[] => {
     const arrayObject: DataImporAnticipoProveedor[] = this.dataXLSX?.map(
       (element: object, index: number) => {
         const dataRow: DataImporAnticipoProveedor = {
@@ -169,21 +185,22 @@ export class IniProveedorComponent {
       }
     );
     return arrayObject;
-  }
+  };
 
-  readerCreditData=(): DataImporAnticipoProveedor[]=>{
+  readerCreditData = (): DataImporAnticipoProveedor[] => {
     return null;
-  }
+  };
 
-  importarExcelProveedor(codeProveedor){
+  importarExcelProveedor(codeProveedor) {
     this.submitted = true;
     this.cargandoContenido = true;
     const archivoData = new FormData();
     archivoData.append("file", this.archivoCSV);
-    if(this.excelForm.valid){
-      this.inicializacionService.importarInicializacionProveedor
-        (codeProveedor, archivoData).subscribe({
-          next:() =>{
+    if (this.excelForm.valid) {
+      this.inicializacionService
+        .importarInicializacionProveedor(codeProveedor, archivoData)
+        .subscribe({
+          next: () => {
             this.excelForm.reset();
             this.notificacion.successStandar(
               "IMPORTACIÓN REALIZADA EXITOSAMENTE"
@@ -192,18 +209,22 @@ export class IniProveedorComponent {
             this.submitted = false;
             this.dataFila = [];
             this.dataProveedor = [];
-          }, error:(error: ErrorResponseStandard)=>{
-            if (error?.error.data) this.getErrorsImportProveedor(codeProveedor,error?.error);
+          },
+          error: (error: ErrorResponseStandard) => {
+            if (error?.error.data)
+              this.getErrorsImportProveedor(codeProveedor, error?.error);
             this.cargandoContenido = false;
             this.submitted = false;
             this.notificacion.alertError(error);
-          }
+          },
         });
-
     }
   }
 
-  getErrorsImportProveedor=(codeProveedor:string, errorDetail: ErrorDetailResponseStandard):void=>{
+  getErrorsImportProveedor = (
+    codeProveedor: string,
+    errorDetail: ErrorDetailResponseStandard
+  ): void => {
     const errorData: ErrorDetailDataResponseStandard[] = errorDetail?.data?.map(
       (rowData: ErrorDetailDataResponseStandard) => {
         rowData.propertyPath = JSON.parse(rowData.propertyPath);

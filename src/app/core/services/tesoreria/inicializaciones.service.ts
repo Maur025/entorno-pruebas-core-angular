@@ -47,7 +47,7 @@ export class InicializacionesService {
         return this.apiService.tesoreria.post(this.prefix + `/anticipo_proveedor/${this.apiNameExport}`, dataProveedor);
         break;
       case "CRED_PROVEEDOR":
-        return this.apiService.tesoreria.post(this.prefix + `/anticipos-cliente/${this.apiNameExport}`, dataProveedor);
+        return this.apiService.tesoreria.post(this.prefix + `/pago/${this.apiNameExport}`, dataProveedor);
         break;
       default:
         console.error("No se encontro el codigo----->" + codigo);
@@ -60,7 +60,7 @@ export class InicializacionesService {
         return this.apiService.tesoreria.post(this.prefix + `/anticipo_proveedor/${this.apiNameImport}`, file);
         break;
       case "CRED_PROVEEDOR":
-        return this.apiService.tesoreria.post(this.prefix + `/anticipos-cliente/${this.apiNameImport}`, file);
+        return this.apiService.tesoreria.post(this.prefix + `/pago/${this.apiNameImport}`, file);
         break;
       default:
         console.error("No se encontro el codigo----->" + codigo);
