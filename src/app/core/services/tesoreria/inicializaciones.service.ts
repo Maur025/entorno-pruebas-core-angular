@@ -55,7 +55,6 @@ export class InicializacionesService {
   }
 
   importarInicializacionProveedor(codigo, file){
-    console.log("SER + " + codigo);
     switch(codigo){
       case "ANT_PROVEEDOR":
         return this.apiService.tesoreria.post(this.prefix + `/anticipo_proveedor/${this.apiNameImport}`, file);

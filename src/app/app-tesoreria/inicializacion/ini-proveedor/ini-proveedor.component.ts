@@ -242,21 +242,23 @@ export class IniProveedorComponent {
 
       importDatafound.filaError = errorRow.propertyPath?.row;
 
-      switch (codeProveedor) {
+      switch(codeProveedor){
         case "ANT_CLIENTE":
-          this.errorsAdvances(errorRow, importDatafound);
+          this.errorsAdvances(errorRow,importDatafound);
           break;
         case "COB_CLIENTE":
-          this.errorsCredit(errorRow, importDatafound);
+          this.errorsCredit(errorRow,importDatafound);
           break;
         case "":
           break;
       }
     }
-  };
-  errorsCredit = (errorRow, importDatafound): void => {};
+  }
+  errorsCredit=(errorRow, importDatafound):void=>{
 
-  errorsAdvances = (errorRow, importDatafound): void => {
+  }
+
+  errorsAdvances=(errorRow, importDatafound):void=>{
     switch (errorRow.propertyPath?.column) {
       case "FECHA":
         importDatafound.columnError = {
@@ -283,9 +285,9 @@ export class IniProveedorComponent {
         };
         break;
     }
-  };
+  }
 
-  limpiarInputFile() {
+  limpiarInputFile(){
     this.excelForm.controls["archivoXLSX"].reset();
     this.dataFila = [];
     this.dataProveedor = [];
