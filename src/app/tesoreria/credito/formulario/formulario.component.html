@@ -1,0 +1,275 @@
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-lg-12">
+      <form (ngSubmit)="guardar()" [formGroup]="formGroup">
+        <div class="card">
+          <div class="card-body row">
+
+
+
+                <div class="mb-6 col-sm-12 d-none">
+                    <label for="nombre">id </label>
+                    <input type="text"  class="form-control uppercase" id="id" (click)="alCambiar(form)"  formControlName="id" [ngClass]="{ 'is-invalid': submitted && form['id'].errors }">
+                    <div *ngIf="submitted && form['id'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['id'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['id'].errors['minlength']">Debe tener al menos {{form['id'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['id'].errors['maxlength']">Debe tener menos de {{form['id'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['id'].errors['min']">Debe tener mayor o igual que {{form['id'].errors['min']['min']}} </div>
+                    <div *ngIf="form['id'].errors['max']">Debe tener menor o igual que {{form['id'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-4 ">
+                    <label for="nombre">Capital </label>
+                    <input type="text"  class="form-control uppercase" id="capital" (click)="alCambiar(form)"  formControlName="capital" [ngClass]="{ 'is-invalid': submitted && form['capital'].errors }">
+                    <div *ngIf="submitted && form['capital'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['capital'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['capital'].errors['minlength']">Debe tener al menos {{form['capital'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['capital'].errors['maxlength']">Debe tener menos de {{form['capital'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['capital'].errors['min']">Debe tener mayor o igual que {{form['capital'].errors['min']['min']}} </div>
+                    <div *ngIf="form['capital'].errors['max']">Debe tener menor o igual que {{form['capital'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-4 ">
+                    <label for="nombre">Cuotas </label>
+                    <input type="number"  class="form-control uppercase" id="cuotas" (click)="alCambiar(form)"  formControlName="cuotas" [ngClass]="{ 'is-invalid': submitted && form['cuotas'].errors }">
+                    <div *ngIf="submitted && form['cuotas'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['cuotas'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['cuotas'].errors['minlength']">Debe tener al menos {{form['cuotas'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['cuotas'].errors['maxlength']">Debe tener menos de {{form['cuotas'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['cuotas'].errors['min']">Debe tener mayor o igual que {{form['cuotas'].errors['min']['min']}} </div>
+                    <div *ngIf="form['cuotas'].errors['max']">Debe tener menor o igual que {{form['cuotas'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-4 ">
+                    <app-selector-add #cuotas_tiempoSelector  label="Cuotas - Tiempo" [campoNombre]="'nombre'" [campoValor]="'id'" [templateEditar]="cuotas_tiempoTemplateEditar" [templateNuevo]="cuotas_tiempoTemplateNuevo" name="cuotasTiempoId" [submitted]="submitted" [dataArray]="cuotas_tiempo" formControlName="cuotasTiempoId"  ></app-selector-add>
+                    <ng-template #cuotas_tiempoTemplateNuevo>
+                        <app-formulario-cuotastiempo [esModal]="true" (alGuardar)="cargarArrays();cuotas_tiempoSelector.close()" ></app-formulario-cuotastiempo>
+                    </ng-template>
+                    <ng-template #cuotas_tiempoTemplateEditar>
+                        <app-formulario-cuotastiempo [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(cuotas_tiempo, 'cuotasTiempoId')" (alActualizar)="cuotas_tiempoSelector.close();setDataFromFormname(cuotas_tiempo, 'cuotasTiempoId',$event)" ></app-formulario-cuotastiempo>
+                    </ng-template>
+                </div>
+
+                <div class="mb-6 col-sm-4 ">
+                    <label for="nombre">Interés </label>
+                    <input type="text"  class="form-control uppercase" id="interes" (click)="alCambiar(form)"  formControlName="interes" [ngClass]="{ 'is-invalid': submitted && form['interes'].errors }">
+                    <div *ngIf="submitted && form['interes'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['interes'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['interes'].errors['minlength']">Debe tener al menos {{form['interes'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['interes'].errors['maxlength']">Debe tener menos de {{form['interes'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['interes'].errors['min']">Debe tener mayor o igual que {{form['interes'].errors['min']['min']}} </div>
+                    <div *ngIf="form['interes'].errors['max']">Debe tener menor o igual que {{form['interes'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-4 ">
+                    <app-selector-add #tiempo_interesSelector  label="Tiempo de Interés" [campoNombre]="'nombre'" [campoValor]="'id'" [templateEditar]="tiempo_interesTemplateEditar" [templateNuevo]="tiempo_interesTemplateNuevo" name="tiempoInteresId" [submitted]="submitted" [dataArray]="tiempo_interes" formControlName="tiempoInteresId"  ></app-selector-add>
+                    <ng-template #tiempo_interesTemplateNuevo>
+                        <app-formulario-tiempointeres [esModal]="true" (alGuardar)="cargarArrays();tiempo_interesSelector.close()" ></app-formulario-tiempointeres>
+                    </ng-template>
+                    <ng-template #tiempo_interesTemplateEditar>
+                        <app-formulario-tiempointeres [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(tiempo_interes, 'tiempoInteresId')" (alActualizar)="tiempo_interesSelector.close();setDataFromFormname(tiempo_interes, 'tiempoInteresId',$event)" ></app-formulario-tiempointeres>
+                    </ng-template>
+                </div>
+
+                <div class="mb-6 col-sm-4 ">
+                    <app-selector-add #tipo_interesSelector  label="Tipo de Interés" [campoNombre]="'nombre'" [campoValor]="'id'" [templateEditar]="tipo_interesTemplateEditar" [templateNuevo]="tipo_interesTemplateNuevo" name="tipoInteresId" [submitted]="submitted" [dataArray]="tipo_interes" formControlName="tipoInteresId"  ></app-selector-add>
+                    <ng-template #tipo_interesTemplateNuevo>
+                        <app-formulario-tipointeres [esModal]="true" (alGuardar)="cargarArrays();tipo_interesSelector.close()" ></app-formulario-tipointeres>
+                    </ng-template>
+                    <ng-template #tipo_interesTemplateEditar>
+                        <app-formulario-tipointeres [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(tipo_interes, 'tipoInteresId')" (alActualizar)="tipo_interesSelector.close();setDataFromFormname(tipo_interes, 'tipoInteresId',$event)" ></app-formulario-tipointeres>
+                    </ng-template>
+                </div>
+
+                <div class="mb-6 col-sm-6 ">
+                    <label for="nombre">Tiene IVA? </label>
+                    <select class="form-control form-select" id="tieneiva" formControlName="tieneiva"  [ngClass]="{ 'is-invalid': submitted && form['tieneiva'].errors }"><option value=true default>Sí</option><option value=false>No</option></select>
+                    <div *ngIf="submitted && form['tieneiva'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['tieneiva'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['tieneiva'].errors['minlength']">Debe tener al menos {{form['tieneiva'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['tieneiva'].errors['maxlength']">Debe tener menos de {{form['tieneiva'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['tieneiva'].errors['min']">Debe tener mayor o igual que {{form['tieneiva'].errors['min']['min']}} </div>
+                    <div *ngIf="form['tieneiva'].errors['max']">Debe tener menor o igual que {{form['tieneiva'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-6 ">
+                    <label for="nombre">Redondear </label>
+                    <select class="form-control form-select" id="redondear" formControlName="redondear"  [ngClass]="{ 'is-invalid': submitted && form['redondear'].errors }"><option value=true default>Sí</option><option value=false>No</option></select>
+                    <div *ngIf="submitted && form['redondear'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['redondear'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['redondear'].errors['minlength']">Debe tener al menos {{form['redondear'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['redondear'].errors['maxlength']">Debe tener menos de {{form['redondear'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['redondear'].errors['min']">Debe tener mayor o igual que {{form['redondear'].errors['min']['min']}} </div>
+                    <div *ngIf="form['redondear'].errors['max']">Debe tener menor o igual que {{form['redondear'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-6 ">
+                    <app-selector-add #forma_pagoSelector  label="Forma de Pago" [campoNombre]="'nombre'" [campoValor]="'id'" [templateEditar]="forma_pagoTemplateEditar" [templateNuevo]="forma_pagoTemplateNuevo" name="formaPagoId" [submitted]="submitted" [dataArray]="forma_pago" formControlName="formaPagoId"  ></app-selector-add>
+                    <ng-template #forma_pagoTemplateNuevo>
+                        <app-formulario-formapago [esModal]="true" (alGuardar)="cargarArrays();forma_pagoSelector.close()" ></app-formulario-formapago>
+                    </ng-template>
+                    <ng-template #forma_pagoTemplateEditar>
+                        <app-formulario-formapago [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(forma_pago, 'formaPagoId')" (alActualizar)="forma_pagoSelector.close();setDataFromFormname(forma_pago, 'formaPagoId',$event)" ></app-formulario-formapago>
+                    </ng-template>
+                </div>
+
+                <div class="mb-6 col-sm-6 ">
+                    <app-selector-add #tipo_pagoSelector  label="Tipo de Pago" [campoNombre]="'nombre'" [campoValor]="'id'" [templateEditar]="tipo_pagoTemplateEditar" [templateNuevo]="tipo_pagoTemplateNuevo" name="tipoPagoId" [submitted]="submitted" [dataArray]="tipo_pago" formControlName="tipoPagoId"  ></app-selector-add>
+                    <ng-template #tipo_pagoTemplateNuevo>
+                        <app-formulario-tipopago [esModal]="true" (alGuardar)="cargarArrays();tipo_pagoSelector.close()" ></app-formulario-tipopago>
+                    </ng-template>
+                    <ng-template #tipo_pagoTemplateEditar>
+                        <app-formulario-tipopago [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(tipo_pago, 'tipoPagoId')" (alActualizar)="tipo_pagoSelector.close();setDataFromFormname(tipo_pago, 'tipoPagoId',$event)" ></app-formulario-tipopago>
+                    </ng-template>
+                </div>
+
+                <div class="mb-6 col-sm-6 ">
+                    <label for="nombre">Monto Aprobado </label>
+                    <input type="text"  class="form-control uppercase" id="montoaprobado" (click)="alCambiar(form)"  formControlName="montoaprobado" [ngClass]="{ 'is-invalid': submitted && form['montoaprobado'].errors }">
+                    <div *ngIf="submitted && form['montoaprobado'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['montoaprobado'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['montoaprobado'].errors['minlength']">Debe tener al menos {{form['montoaprobado'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['montoaprobado'].errors['maxlength']">Debe tener menos de {{form['montoaprobado'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['montoaprobado'].errors['min']">Debe tener mayor o igual que {{form['montoaprobado'].errors['min']['min']}} </div>
+                    <div *ngIf="form['montoaprobado'].errors['max']">Debe tener menor o igual que {{form['montoaprobado'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-6 ">
+                    <label for="nombre">Monto Desembolsado </label>
+                    <input type="text"  class="form-control uppercase" id="montodesembolsado" (click)="alCambiar(form)"  formControlName="montodesembolsado" [ngClass]="{ 'is-invalid': submitted && form['montodesembolsado'].errors }">
+                    <div *ngIf="submitted && form['montodesembolsado'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['montodesembolsado'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['montodesembolsado'].errors['minlength']">Debe tener al menos {{form['montodesembolsado'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['montodesembolsado'].errors['maxlength']">Debe tener menos de {{form['montodesembolsado'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['montodesembolsado'].errors['min']">Debe tener mayor o igual que {{form['montodesembolsado'].errors['min']['min']}} </div>
+                    <div *ngIf="form['montodesembolsado'].errors['max']">Debe tener menor o igual que {{form['montodesembolsado'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-6 ">
+                    <label for="nombre">Plazo </label>
+                    <input type="date"  class="form-control uppercase" id="plazo" (click)="alCambiar(form)"  formControlName="plazo" [ngClass]="{ 'is-invalid': submitted && form['plazo'].errors }">
+                    <div *ngIf="submitted && form['plazo'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['plazo'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['plazo'].errors['minlength']">Debe tener al menos {{form['plazo'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['plazo'].errors['maxlength']">Debe tener menos de {{form['plazo'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['plazo'].errors['min']">Debe tener mayor o igual que {{form['plazo'].errors['min']['min']}} </div>
+                    <div *ngIf="form['plazo'].errors['max']">Debe tener menor o igual que {{form['plazo'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-6 ">
+                    <label for="nombre">Días </label>
+                    <input type="number"  class="form-control uppercase" id="dias" (click)="alCambiar(form)"  formControlName="dias" [ngClass]="{ 'is-invalid': submitted && form['dias'].errors }">
+                    <div *ngIf="submitted && form['dias'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['dias'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['dias'].errors['minlength']">Debe tener al menos {{form['dias'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['dias'].errors['maxlength']">Debe tener menos de {{form['dias'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['dias'].errors['min']">Debe tener mayor o igual que {{form['dias'].errors['min']['min']}} </div>
+                    <div *ngIf="form['dias'].errors['max']">Debe tener menor o igual que {{form['dias'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-6 ">
+                    <app-selector-add #acreedorSelector  label="Acreedor" [campoNombre]="'entidad.nombre'" [campoValor]="'id'" [templateEditar]="acreedorTemplateEditar" [templateNuevo]="acreedorTemplateNuevo" name="acreedorId" [submitted]="submitted" [dataArray]="acreedor" formControlName="acreedorId"  ></app-selector-add>
+                    <ng-template #acreedorTemplateNuevo>
+                        <app-formulario-acreedor [esModal]="true" (alGuardar)="cargarArrays();acreedorSelector.close()" ></app-formulario-acreedor>
+                    </ng-template>
+                    <ng-template #acreedorTemplateEditar>
+                        <app-formulario-acreedor [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(acreedor, 'acreedorId')" (alActualizar)="acreedorSelector.close();setDataFromFormname(acreedor, 'acreedorId',$event)" ></app-formulario-acreedor>
+                    </ng-template>
+                </div>
+
+                <div class="mb-6 col-sm-6 ">
+                    <app-selector-add #deudorSelector  label="Deudor" [campoNombre]="'entidad.nombre'" [campoValor]="'id'" [templateEditar]="deudorTemplateEditar" [templateNuevo]="deudorTemplateNuevo" name="deudorId" [submitted]="submitted" [dataArray]="deudor" formControlName="deudorId"  ></app-selector-add>
+                    <ng-template #deudorTemplateNuevo>
+                        <app-formulario-deudor [esModal]="true" (alGuardar)="cargarArrays();deudorSelector.close()" ></app-formulario-deudor>
+                    </ng-template>
+                    <ng-template #deudorTemplateEditar>
+                        <app-formulario-deudor [esModal]="true" [show_rel]="false" [dataEdit]="getDataFromFormname(deudor, 'deudorId')" (alActualizar)="deudorSelector.close();setDataFromFormname(deudor, 'deudorId',$event)" ></app-formulario-deudor>
+                    </ng-template>
+                </div>
+
+                <div class="mb-6 col-sm-6 ">
+                    <label for="nombre">Fecha de Crédito </label>
+                    <input type="date"  class="form-control uppercase" id="creditofecha" (click)="alCambiar(form)"  formControlName="creditofecha" [ngClass]="{ 'is-invalid': submitted && form['creditofecha'].errors }">
+                    <div *ngIf="submitted && form['creditofecha'].errors" class="invalid-feedback" align="left">
+                    <div *ngIf="form['creditofecha'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['creditofecha'].errors['minlength']">Debe tener al menos {{form['creditofecha'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['creditofecha'].errors['maxlength']">Debe tener menos de {{form['creditofecha'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['creditofecha'].errors['min']">Debe tener mayor o igual que {{form['creditofecha'].errors['min']['min']}} </div>
+                    <div *ngIf="form['creditofecha'].errors['max']">Debe tener menor o igual que {{form['creditofecha'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-12 d-none">
+                    <label for="formrow-firstname-input ">Estados</label>
+                    <select class="form-control form-select" id="estados"  formControlName="estados" name="estados" [ngClass]="{ 'is-invalid': submitted && form['estados'].errors }">
+                    <option *ngFor="let t of credito_estado" value="{{t.id}}"  >{{t.creditoId}} </option>
+                    </select>
+                    <div *ngIf="submitted && form['estados'].errors" class="invalid-feedback" align="left" >
+                    <div *ngIf="form['estados'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['estados'].errors['minlength']">Debe tener al menos {{form['estados'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['estados'].errors['maxlength']">Debe tener menos de {{form['estados'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['estados'].errors['min']">Debe tener mayor o igual que {{form['estados'].errors['min']['min']}} </div>
+                    <div *ngIf="form['estados'].errors['max']">Debe tener menor o igual que {{form['estados'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-12 d-none">
+                    <label for="formrow-firstname-input ">Pagos</label>
+                    <select class="form-control form-select" id="pagos"  formControlName="pagos" name="pagos" [ngClass]="{ 'is-invalid': submitted && form['pagos'].errors }">
+                    <option *ngFor="let t of credito_pagos" value="{{t.id}}"  >{{t.creditoId}} </option>
+                    </select>
+                    <div *ngIf="submitted && form['pagos'].errors" class="invalid-feedback" align="left" >
+                    <div *ngIf="form['pagos'].errors['required']">Es requerido</div>
+                    <div *ngIf="form['pagos'].errors['minlength']">Debe tener al menos {{form['pagos'].errors['minlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['pagos'].errors['maxlength']">Debe tener menos de {{form['pagos'].errors['maxlength']['requiredLength']}} caracteres</div>
+                    <div *ngIf="form['pagos'].errors['min']">Debe tener mayor o igual que {{form['pagos'].errors['min']['min']}} </div>
+                    <div *ngIf="form['pagos'].errors['max']">Debe tener menor o igual que {{form['pagos'].errors['max']['max']}} </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 col-sm-12" *ngIf="dataEdit">
+                    <hr>
+                    <ul class="nav nav-tabs nav-tabs-dark" role="tablist">
+
+                    <li class="nav-item" >
+                        <a class="nav-link atabx active" data-bs-toggle="tab" data-bs-target="#tab-creditoestado" role="button" aria-current="page" href="#">Estados</a>
+                    </li>
+
+                    <li class="nav-item" >
+                        <a class="nav-link atabx " data-bs-toggle="tab" data-bs-target="#tab-creditopagos" role="button" aria-current="page" href="#">Pagos</a>
+                    </li>
+                    </ul>
+                    <div class="tab-content">
+
+                    <div class="tab-pane border active" id="tab-creditoestado" >
+                        <app-listado-creditoestado *ngIf="rel_prefix" [rel_prefix]="rel_prefix" [rel_field]="'creditoId'" > </app-listado-creditoestado>
+                    </div>
+
+                    <div class="tab-pane border " id="tab-creditopagos" >
+                        <app-listado-creditopagos *ngIf="rel_prefix" [rel_prefix]="rel_prefix" [rel_field]="'creditoId'" > </app-listado-creditopagos>
+                    </div>
+                    </div>
+                </div>
+            <hr>
+            <div class="col-lg-6">
+              <button *ngIf="!dataEdit" type="submit" class="btn btn-primary w-md">Registrar</button>
+              <button *ngIf="dataEdit" type="submit" class="btn btn-primary w-md">Guardar</button>
+              <span *ngIf="!esModal" (click)="volver()"  class="btn btn-secondary w-md">Volver</span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

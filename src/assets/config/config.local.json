@@ -1,0 +1,8 @@
+{
+    "production": false,
+    "comprasApiKerno": "http://172.20.50.24:8080/api/compras",
+    "contabilidadApiKerno": "http://172.20.50.24:8081/api/contabilidad",
+    "inventariosApiKerno": "http://172.20.50.24:8000/api/v1",
+    "tesoreriaApiKerno": "http://172.20.50.24:8082/api/tesoreria",
+    "accountApiKerno": "http://172.20.50.24:8083/api/config"
+  }
