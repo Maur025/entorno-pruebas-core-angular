@@ -18,7 +18,7 @@
               <ng-select
                 class="me-3 col-9"
                 formControlName="id"
-                placeholder="Seleccione Cliente"
+                placeholder="Seleccione proveedor"
                 [items]="proveedoresList"
                 bindLabel="nombre"
                 bindValue="id"
@@ -33,4 +33,153 @@
   </div>
 </ng-template>
 <ng-template #importDataProcess>
+
+  <div class="hstack gap-2 justify-content-center">
+    <div class="col-md-10">
+      <form (ngSubmit)="importarExcelProveedor(codeProveedor)" [formGroup]="excelForm">
+        <div>
+          <div class="mb-3 position-relative">
+            <h6 class="fw-bold text-secondary">
+              Adjunte un documento Excel(*.xlsx) con los datos a importar
+            </h6>
+            <input
+              class="form-control"
+              type="file"
+              formControlName="archivoXLSX"
+              (change)="recibirExcelProveedor($event, codeProveedor)"
+              multiple="false"
+              [ngClass]="{
+                'is-invalid': submitted && formE['archivoXLSX'].errors
+              }"
+            />
+            <div
+              *ngIf="submitted && formE['archivoXLSX'].errors"
+              class="invalid-tooltip end-0"
+            >
+              <div *ngIf="formE['archivoXLSX'].errors['required']">
+                No ha ingresado ningun documento excel
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <ng-container [ngSwitch]="codeProveedor">
+            <ng-template
+              *ngSwitchCase="'ANT_PROVEEDOR'"
+              [ngTemplateOutlet]="preview_advanced"
+            />
+            <ng-template
+              *ngSwitchCase="'CRED_PROVEEDOR'"
+              [ngTemplateOutlet]="preview_credit"
+            />
+          </ng-container>
+        </div>
+        <div class="row">
+          <div class="hstack gap-2 justify-content-end">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              (click)="limpiarInputFile()"
+            >
+              Limpiar
+            </button>
+            <button type="submit" class="btn btn-success">
+              Realizar Importación
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Vista previa anticipos -->
+   <ng-template #preview_advanced>
+    <div class="table-responsive seccion-data-import" *ngIf="dataFila">
+      <table class="table table-hover mb-0 table-bordered table-sm m-0">
+        <tbody>
+          <tr>
+            <td></td>
+            <td colspan="3">
+              <div class="d-flex">
+                <h6 class="fw-bold text-primary">Proveedor :</h6>
+                <h6 class="text-primary">{{ dataProveedor['razonSocial'] }}</h6>
+              </div>
+            </td>
+            <td colspan="2">
+              <div class="d-flex">
+                <h6 class="fw-bold text-primary">Nº documento :</h6>
+                <h6 class="text-primary">{{ dataProveedor['numeroDocumento'] }}</h6>
+              </div>
+            </td>
+          </tr>
+          <tr
+            *ngFor="let data of dataFila; let i = index"
+            [class]="{ 'table-danger': data['messageError']}">
+
+            <td
+              class="text-secondary"
+              [class]="{ error: data['error'], 'bg-light': i == 0 }"
+            >
+              <b *ngIf="i != 0">{{ i }}</b>
+            </td>
+            <td>
+              <span
+                [ngClass]="{
+                  'text-secondary fw-semibold semi font-size-13': i == 0
+                }"
+              >
+                {{ data["descripcion"] }}
+              </span>
+            </td>
+            <td>
+              <span
+                [ngClass]="{
+                  'text-secondary fw-semibold semi font-size-13': i == 0
+                }"
+              >
+                {{ data["nroReferencia"] }}
+              </span>
+            </td>
+            <td>
+              <span
+                [ngClass]="{
+                  'text-secondary fw-semibold semi font-size-13': i == 0
+                }"
+              >
+                {{ data["fecha"] }}
+              </span>
+            </td>
+            <td>
+              <span
+                [ngClass]="{
+                  'text-secondary fw-semibold semi font-size-13': i == 0
+                }"
+              >
+                {{ data["monto"] }}
+              </span>
+            </td>
+            <td>
+              <span
+                [ngClass]="{
+                  'text-secondary fw-semibold semi font-size-13': i == 0
+                }"
+              >
+                {{ data["centroCosto"] }}
+              </span>
+            </td>
+            <td
+              *ngIf="data['messageError']"
+              [ngStyle]="{ width: '22%' }"
+            >
+              <p class="error" [innerHTML]="data.messageError"></p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+   </ng-template>
+  <!-- Vista previa creditos -->
+  <ng-template #preview_credit>
+    credito
+  </ng-template>
 </ng-template>

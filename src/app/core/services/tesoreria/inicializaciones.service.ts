@@ -46,11 +46,25 @@ export class InicializacionesService {
       case "ANT_PROVEEDOR":
         return this.apiService.tesoreria.post(this.prefix + `/anticipo_proveedor/${this.apiNameExport}`, dataProveedor);
         break;
-      case "ANT_CLIENTE":
+      case "CRED_PROVEEDOR":
         return this.apiService.tesoreria.post(this.prefix + `/anticipos-cliente/${this.apiNameExport}`, dataProveedor);
         break;
       default:
         console.error("No se encontro el codigo----->" + codigo);
+    }
+  }
+
+  importarInicializacionProveedor(codigo, file){
+    switch(codigo){
+      case "ANT_PROVEEDOR":
+        return this.apiService.tesoreria.post(this.prefix + `/anticipo_proveedor/${this.apiNameImport}`, file);
+        break;
+      case "CRED_PROVEEDOR":
+        return this.apiService.tesoreria.post(this.prefix + `/anticipos-cliente/${this.apiNameImport}`, file);
+        break;
+      default:
+        console.error("No se encontro el codigo----->" + codigo);
+
     }
   }
 }
