@@ -1,0 +1,125 @@
+<app-page-title title="Transacciones" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+<div *ngIf="modulo">
+  <tabset [justified]="false" class="nav-tabs">
+    <tab *ngFor="let estado of listaEstadosIntegracion" heading="{{estado.nombre}}" id="{{estado.codigo}}" (selectTab)="onSelect($event, tabla)"></tab>
+  </tabset>
+  <ng-template *ngIf="['PORPROC', 'PROCE'].includes(this.tabId); then isTemplateEsquemas; else isTemplateMovimientos"></ng-template>
+  <ng-template #isTemplateEsquemas>
+    <krn-tabla
+    #tabla
+    [titulo]="titulo"
+    [datosService]="esquemasService"
+    getAll="filter"
+    [formato]="formato"
+    [textoBuscar]="textoBuscar"
+    [isSubtable]="rel_prefix?true:false"
+    [smallTable]="false"
+    [softDelete]="false"
+    (crearNuevo)="null"
+    (alActualizar)="null"
+    (alFiltrar)="null"
+    campoEstado="estado"
+    valueEstado="habilitado"
+    [templateFila]="templateFila"
+    [templateFiltrar]="templateFiltrar"
+    [conOpciones]="false"
+    [botonExportar]="false"
+    [botonImportar]="false"
+    [botonNuevo]="false"
+    [filtros]="filtrosData"
+    [filtrosNoRefresh]="filtrosNoRefresh">
+    </krn-tabla>
+
+    <ng-template #templateFiltrar>
+      <div class="nav">
+        <div class="col-6 nav">
+          <div class="mt-3 input-group">
+            <div class="input-group-text">Fecha (Desde-Hasta) </div>
+            <input type="text" [(ngModel)]="filtroFecha" placeholder="dd/mm/AAAA - dd/mm/AAAA" class="form-control date" name="daterange" autocomplete="off" bsDaterangepicker (bsValueChange)="cambioFecha($event)"/>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras" >
+      <ng-template ngFor let-campo [ngForOf]="cabeceras">
+        <ng-template *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"></ng-template>
+        <ng-template #tempTD>
+          <td [ngSwitch]="campo">
+            <div *ngSwitchCase="'id'">
+            {{fila[campo]}}
+            </div>
+            <div *ngSwitchCase="'acciones'">
+              <ul class="list-unstyled hstack gap-1 mb-0">
+                <li data-bs-toggle="tooltip" data-bs-placement="top" title="Contabilizar" *ngIf="this.tabId == 'PORPROC'">
+                  <button class="btn btn-sm btn-primary" [disabled]="fila.deleted" (click)="modalProcesarTransaccionKafka(modalGeneral, fila)"><i class="mdi mdi-check-bold"></i></button>
+                </li>
+              </ul>
+            </div>
+            <div *ngSwitchCase="'fechaEnvio'">
+              {{fila.fechaEnvio | date:"dd-MM-yyyy hh:mm"}}
+            </div>
+            <div *ngSwitchCase="'centroCosto'">
+              {{fila.centroCosto.nombre}}
+            </div>
+            <div *ngSwitchCase="'datos'">
+              <button class="btn btn-sm btn-soft-secondary" (click)="verDatos(modalDatos, fila)"><i class="bx bx-search-alt-2 me-2"></i>Ver Datos</button>
+            </div>
+            <div *ngSwitchCase="'procesado'">
+              <span style="width: 30px;" class="badge font-size-12" [ngClass]="{'bg-success': fila.transaccionKafka.procesado, 'bg-secondary': !fila.transaccionKafka.procesado}">{{fila.transaccionKafka.procesado ? 'SI': 'NO'}}</span>
+            </div>
+            <div *ngSwitchCase="'estado'">
+              {{fila.estadoIntegracion.nombre}}
+            </div>
+            <div *ngSwitchCase="'deleted'">
+              <span class="badge font-size-10" [ngClass]="{'bg-danger': fila.deleted, 'bg-success': !fila.deleted}"><i class="mdi me-1" [ngClass]="{'mdi-lock': fila.deleted, 'mdi-lock-open': !fila.deleted}"></i> {{fila.deleted ? 'Inhabilitado': 'Habilitado'}}</span>
+            </div>
+            <div *ngSwitchDefault>
+              {{fila[campo]}}
+            </div>
+          </td>
+        </ng-template>
+      </ng-template>
+    </ng-template>
+
+    <ng-template #modalGeneral role="document" let-modal>
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{modalTitle}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()"></button>
+      </div>
+      <div class="modal-body">
+        <app-formulario-modulo #appFormModulo [esquema]="esquema" [transaccion]="transaccion" [modulo]="modulo" [moduloId]="moduloId" (alProcesar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-modulo>
+      </div>
+      <div class="modal-footer">
+        <div class="hstack gap-2 justify-content-end">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modalRef.hide()">Cerrar</button>
+          <button *ngIf="esquema.codigoProceso == 'RENDFO'" type="button" class="btn btn-success" (click)="rendirFormulario(appFormModulo)">Procesar</button>
+          <button *ngIf="esquema.codigoProceso == 'PAG'" type="button" class="btn btn-success" (click)="procesarFormaPago(appFormModulo)">Procesar</button>
+          <button *ngIf="esquema.codigoProceso == 'RENDFR'" type="button" class="btn btn-success" (click)="procesarFondoRendir(appFormModulo)">Procesar</button>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #modalDatos role="document" let-modal>
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{modalTitle}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef.hide()"></button>
+      </div>
+      <div class="modal-body" [ngClass]="{'p-0 m-0': procesar}">
+        <pre *ngIf="!procesar" class="font-size-12">{{esquema.transaccionKafka.datos | json}}</pre>
+      </div>
+      <div class="modal-footer">
+        <div class="hstack gap-2 justify-content-end">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="modalRef.hide()">Cerrar</button>
+        </div>
+      </div>
+    </ng-template>
+  </ng-template>
+
+  <ng-template #isTemplateMovimientos>
+    <!-- <app-lista-ingresos *ngIf="this.tabId == 'ING'" [titulo]="false"></app-lista-ingresos>
+    <app-lista-salidas *ngIf="this.tabId == 'SAL'" [titulo]="false"></app-lista-salidas> -->
+  </ng-template>
+
+</div>
+

@@ -4,17 +4,17 @@ name: building
 
 steps:
   - name: compile
-    image: node:14
+    image: node:20.11.0
     commands:
-      - npm config set registry https://registry.kernotec.com/repository/npm-central/
-      - npm config set _auth=Z2l0aHViOnRST0NBVkxQcmVzcDVmaVBoZXBy
-      - npm config set always-auth=true
+      - npm install -g npm@latest
+      - npm cache clean --force
+      - npm config set registry https://registry.kernotec.com/repository/npm-public/
+      - npm config set //registry.kernotec.com/repository/npm-public/:_auth=Z2l0aHViOnRST0NBVkxQcmVzcDVmaVBoZXBy
+      - npm config list
+      - npm install -g @angular/cli
       - cp src/environments/environment.prod.ts src/environments/environment.ts
-      - rm -f package-lock.json
-      - rm -f yarn.lock
-      - npm install @angular/cli@14.2.10
-      - npm install
-      - rm -rf dist && npm run build --configuration=production
+      - npm install --legacy-peer-deps
+      - ng build --configuration=production
     when:
       repo:
         - KernoTec/${DRONE_REPO_NAME}
@@ -23,12 +23,12 @@ steps:
         - pull_request
         - tag
 
-  - name: docker_pull_request
+  - name: docker-pr
     image: plugins/docker
     settings:
       dockerfile: docker/Dockerfile
       registry: hub.kernotec.com
-      repo: hub.kernotec.com/kernotec/${DRONE_REPO_NAME}
+      repo: hub.kernotec.com/kernotec/kbi-tesoreria-ui
       tags: ${DRONE_PULL_REQUEST}
       username:
         from_secret: kernotec_username
@@ -40,36 +40,83 @@ steps:
       event:
         - pull_request
 
-  - name: docker_push
+  - name: docker-push-env
     image: plugins/docker
     settings:
       dockerfile: docker/Dockerfile
       registry: hub.kernotec.com
-      repo: hub.kernotec.com/kernotec/${DRONE_REPO_NAME}
+      repo: hub.kernotec.com/kernotec/kbi-tesoreria-ui
       tags: ${DRONE_BRANCH/\//_}
       username:
         from_secret: kernotec_username
       password:
         from_secret: kernotec_password
     when:
+      branch:
+        - develop
+        - staging
       repo:
         - KernoTec/${DRONE_REPO_NAME}
       event:
         - push
 
-  - name: docker_tag
+  - name: docker-push-latest
     image: plugins/docker
     settings:
       dockerfile: docker/Dockerfile
       registry: hub.kernotec.com
-      repo: hub.kernotec.com/kernotec/${DRONE_REPO_NAME}
-      tags: ${DRONE_TAG}
+      repo: hub.kernotec.com/kernotec/kbi-tesoreria-ui
+      tags: latest
       username:
         from_secret: kernotec_username
       password:
         from_secret: kernotec_password
     when:
+      branch:
+        - main
       repo:
         - KernoTec/${DRONE_REPO_NAME}
       event:
-        - tag
+        - push
+
+  - name: deploy-sandbox-tesoreria-ui
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: k8s_sandbox_host
+      username:
+        from_secret: k8s_sandbox_username
+      password:
+        from_secret: k8s_sandbox_password
+      port: 22
+      command_timeout: 2m
+      script:
+        - k8s-service-deploy sandbox tesoreria-ui
+    when:
+      branch:
+        - develop
+      repo:
+        - KernoTec/${DRONE_REPO_NAME}
+      event:
+        - push
+
+  - name: deploy-staging-tesoreria-ui
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: k8s_staging_host
+      username:
+        from_secret: k8s_staging_username
+      password:
+        from_secret: k8s_staging_password
+      port: 22
+      command_timeout: 3m
+      script:
+        - k8s-service-deploy staging tesoreria-ui
+    when:
+      branch:
+        - staging
+      repo:
+        - KernoTec/${DRONE_REPO_NAME}
+      event:
+        - push

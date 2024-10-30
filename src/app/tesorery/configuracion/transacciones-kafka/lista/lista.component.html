@@ -1,0 +1,96 @@
+
+<div>
+  <tabset [justified]="false" class="nav-tabs">
+    <tab *ngFor="let estado of listaEstadosSagas" heading="{{estado.nombre}}" id="{{estado.id}}" (selectTab)="tabSelect($event)">
+    </tab>
+  </tabset>
+</div>
+<div *ngIf="tabId">
+  <krn-tabla
+  #tabla
+  [titulo]="titulo"
+  [datosService]="transaccionService"
+  getAll="getAll"
+  [formato]="formato"
+  [textoBuscar]="textoBuscar"
+  [isSubtable]="rel_prefix ? true : false"
+  [templateFila]="undefined"
+  [smallTable]="false"
+  [softDelete]="false"
+  (crearNuevo)="(null)"
+  (alCrear)="(null)"
+  (alActualizar)="(null)"
+  (alFiltrar)="(null)"
+  (alEditar)="(null)"
+  campoEstado="estado"
+  valueEstado="habilitado"
+  (alHabilitar)="(null)"
+  (alDeshabilitar)="(null)"
+  (alEliminar)="(null)"
+  [botonNuevo]="false"
+  [botonExportar]="false"
+  [botonImportar]="false"
+  [conOpciones]="false"
+  [templateFila]="templateFila"
+  [idRuta]="tabId">
+  </krn-tabla>
+
+  <ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras" >
+    <ng-template ngFor let-campo [ngForOf]="cabeceras">
+      <ng-template *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"></ng-template>
+      <ng-template #tempTD>
+        <td [ngSwitch]="campo">
+          <div *ngSwitchCase="'acciones'">
+            <ul class="list-unstyled hstack gap-1 mb-0">
+              <li data-bs-toggle="tooltip" data-bs-placement="top" title="Operaciones">
+                <div class="btn-group" dropdown container="body" [isDisabled]="fila.deleted || opciones.length == 0" [insideClick]="true">
+                  <button id="button-basic" dropdownToggle type="button" class="btn btn-sm btn-info dropdown-toggle" aria-controls="dropdown-basic">
+                    <i class="fas fa-cogs"></i><span class="mdi mdi-chevron-down"></span>
+                  </button>
+                  <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu text-center"role="menu" aria-labelledby="button-basic" >
+                    <ng-template ngFor let-estado [ngForOf]="opciones" let-index="index">
+                      <li role="menuitem">
+                        <button class="dropdown-item font-size-11" (click)="operacion(fila, estado, tabla)">{{estado.nombre}} </button>
+                      </li>
+                    </ng-template>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div *ngSwitchCase="'procesado'">
+            <span class="badge font-size-12" [ngClass]="{'bg-success': fila.procesado, 'bg-secondary': !fila.procesado}" style="width: 30px;" >{{fila.procesado ? 'SI': 'NO'}}</span>
+          </div>
+          <div *ngSwitchCase="'estadoSaga'">
+            {{fila.estadoSaga.nombre}}
+          </div>
+          <div *ngSwitchCase="'datos'">
+            <button class="btn btn-sm btn-soft-secondary" (click)="verDatos(modalDatos, fila)"><i class="bx bx-search-alt-2 me-2"></i>Ver Datos</button>
+          </div>
+          <div *ngSwitchCase="'deleted'">
+            <span class="badge font-size-10" [ngClass]="{'bg-danger': fila.deleted, 'bg-success': !fila.deleted}"><i class="mdi me-1" [ngClass]="{'mdi-lock': fila.deleted, 'mdi-lock-open': !fila.deleted}"></i> {{fila.deleted ? 'Inhabilitado': 'Habilitado'}}</span>
+          </div>
+          <div *ngSwitchDefault>
+            {{fila[campo]}}
+          </div>
+        </td>
+      </ng-template>
+    </ng-template>
+  </ng-template>
+
+  <ng-template #modalDatos role="document" let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Ver Datos</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal"aria-label="Close"id="close-modal" (click)="modalRef.hide()"></button>
+    </div>
+    <div class="modal-body">
+      <pre class="font-size-12">{{transaccion.datos | json}}</pre>
+    </div>
+    <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
+      </div>
+    </div>
+  </ng-template>
+</div>
+

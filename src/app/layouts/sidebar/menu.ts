@@ -1,460 +1,242 @@
 import { MenuItem } from "./menu.model";
 
 export const MENU: MenuItem[] = [
-
-{
+  {
     id: 1,
-    label: 'Solicitudes',
-    link : 'solicitudes',
-    icon: 'fas fa-file-import',
-},
-
-
-
-
-{
+    label: "General",
+    isTitle: true,
+  },
+  {
+    id: 10,
+    label: "Inicio",
+    icon: "mdi mdi-view-dashboard",
+    link: "",
+  },
+  {
+    id: 10,
+    label: "Apertura/Cierre",
+    icon: "mdi mdi-calendar",
+    link: "gestion/apertura-cierre",
+  },
+  {
+    id: 10,
+    label: "Empleados",
+    icon: "mdi mdi-card-account-details",
+    link: "gestion/empleado",
+  },
+  {
     id: 1,
-    label: 'Documentos Registrados',
-    link : 'documento',
-    icon: 'fas fa-file-alt',
-},
-
-{
-  id: 10,
-  label: 'Fondos',
-  icon: 'fas fa-balance-scale-right',
-  subItems : [
-    {
-      id: 11,
-      label: 'Administrar Fondos',
-      link : 'fondo',
-      icon: 'fas fa-landmark',
-    },
-    {
-      id: 12,
-      label: 'Tipos de Fondo',
-      link : 'fondotipo',
-      icon: 'fas fa-calendar-check',
-    },
-  ]
-},
-{
-  id: 20,
-  label: 'Créditos',
-  icon: 'fas fa-money-bill-wave',
-  subItems : [
-    {
-        id: 21,
-        label: 'Créditos',
-        link : 'credito',
-        icon: 'far fa-handshake',
-    },
-    {
-        id: 22,
-        label: 'Pagos',
-        link : 'pagos',
-        icon: 'fas fa-hand-holding-usd',
-    },
-    {
-        id: 23,
-        label: 'Cobros',
-        link : 'cobros',
-        icon: 'fas fa-hand-holding-usd',
-    },
-    {
-        id: 24,
-        label: 'Cuentas de deudores',
-        link : 'deudorcuenta',
-        icon: 'fas fa-user-tie',
-    },
-
-    {
-        id: 25,
-        label: 'Cuentas de Acreedores',
-        link : 'acreedorcuenta',
-        icon: 'fas fa-user-check',
-    },
-
-
-  ]
-},
-{
-  id: 30,
-  label: 'Cajas',
-  icon: 'fas fa-kaaba',
-  subItems : [
-    {
-        id: 31,
-        label: 'Horarios',
-        link : 'horarios',
-        icon: 'fas fa-calendar-alt',
-    },
-    {
-        id: 32,
-        label: 'Administrar Cajas',
-        link : 'caja',
-        icon: 'fas fa-laptop-house',
-    },
-
-  ]
-},
-{
-  id: 40,
-  label: 'Bancos',
-  icon: 'fas fa-kaaba',
-  subItems : [
-
-    {
-      id: 41,
-      label: 'Administrar bancos',
-      link : 'banco',
-      icon: 'fas fa-building',
-    },
-
-  ]
-},
-{
-  id: 70,
-  label: 'Movimientos',
-  icon: 'fas fa-exchange-alt',
-  subItems :[
-
-    {
-      id: 1,
-      label: 'Anticipos',
-      link : 'anticipo',
-      icon: 'fas fa-edit',
-    },
-
-    {
-      id: 1,
-      label: 'Movimientos de Cuenta',
-      link : 'movimientocuenta',
-      icon: 'fas fa-exchange-alt',
-    },
-
-  ]
-},
-{
-  id: 50,
-  label: 'Configuración',
-  icon: 'fas fa-tools',
-  subItems : [
-    {
-        id: 51,
-        label: 'Monedas',
-        link : 'moneda',
-        icon: 'fas fa-money-bill',
-    },
-    {
-        id: 52,
-        label: 'Formas de Pago',
-        link : 'formapago',
-        icon: 'fas fa-hand-holding-usd',
-    },
-    {
-        id: 53,
-        label: 'Medios de transferencia',
-        link : 'mediotransferencia',
-        icon: 'fas fa-exchange-alt',
-    },
-    {
-        id: 54,
-        label: 'Vías',
-        link : 'vias',
-        icon: 'fas fa-code-branch',
-    },
+    label: "TESORERIA",
+    isTitle: true,
+  },
+  {
+    id: 42,
+    label: "Bancos",
+    icon: "bx bxs-bank",
+    link: "bancos",
+  },
+  {
+    id: 42,
+    label: "Cajas",
+    icon: "mdi mdi-archive",
+    link: "cajas",
+  },
+  {
+    id: 42,
+    label: "Fondos",
+    icon: "mdi mdi-cube",
+    subItems: [
       {
-        id: 55,
-        label: 'Tipos de pago',
-        link : 'tipopago',
-        icon: 'fas fa-money-check-alt',
-    },
-    {
-        id: 56,
-        label: 'Deudores',
-        link : 'deudor',
-        icon: 'fas fa-user-tag',
-    },
+        id: 321,
+        label: "Fondos Operativos",
+        link: "/fondo-operativo",
+      },
+      {
+        id: 322,
+        label: "Fondos a Rendir",
+        link: "/fondo-rendir",
+      },
+    ],
+  },
+  {
+    id: 9,
+    label: "MOVIMIENTOS",
+    isTitle: true,
+  },
+  {
+    id: 42,
+    label: "Proveedores",
+    icon: "bx bxs-collection",
+    subItems: [
+      {
+        id: 322,
+        label: "Anticipos",
+        link: "/anticipo-proveedor",
+      },
+      {
+        id: 321,
+        label: "Pagos",
+        link: "/pagos",
+      },
+      {
+        id: 321,
+        label: "Devengados",
+        link: "/devengado-proveedor",
+      },
+    ],
+  },
+  {
+    id: 42,
+    label: "Clientes",
+    icon: "bx bxs-collection",
+    subItems: [
+      {
+        id: 43,
+        label: "Anticipos",
+        link: "/anticipo-cliente",
+      },
+      {
+        id: 44,
+        label: "Cobros",
+        link: "/cobros",
+      },
+      {
+        id: 45,
+        label: "Devengados",
+        link: "/ventas-devengadas",
+      },
+    ],
+  },
+  {
+    id: 43,
+    label: "Pagos Varios",
+    link: "/pagos-varios",
+    icon: "mdi mdi-cash-multiple",
+  },
+  {
+    id: 44,
+    label: "Cobros Varios",
+    link: "/cobros-varios",
+    icon: "fas fa-hand-holding-usd",
+  },
+  {
+    id: 45,
+    label: "Compensaciones",
+    link: "/compensacion",
+    icon: "mdi mdi-scale-balance",
+  },
+  {
+    id: 9,
+    label: "SALDOS INICIALES",
+    isTitle: true,
+  },
+  {
+    id: 45,
+    label: "Inicialización",
+    link: "/inicializacion",
+    icon: "mdi mdi-clipboard-arrow-up",
+  },
+  /*  {
+		id: 1,
+		label: 'antiguo',
+		isTitle: true,
+	},
 
-    {
-        id: 57,
-        label: 'Acreedores',
-        link : 'acreedor',
-        icon: 'fas fa-user-tag',
-    },
-    {
-        id: 58,
-        label: 'Grupo de Contactos',
-        link : 'grupo',
-        icon: 'fas fa-users',
-    },
-    {
-        id: 59,
-        label: 'Contactos',
-        link : 'contacto',
-        icon: 'fas fa-address-card',
-    },
-    {
-        id: 510,
-        label: 'Tipo de Interés',
-        link : 'tipointeres',
-        icon: 'fas fa-percentage',
-    },
-    {
-        id: 511,
-        label: 'Formas de Cobro',
-        link : 'formacobro',
-        icon: 'far fa-dot-circle',
-    },
-    {
-        id: 512,
-        label: 'Tipo de Documento',
-        link : 'documentotipo',
-        icon: 'fas fa-newspaper',
-    },
-    {
-        id: 513,
-        label: 'tipodecuenta',
-        link : 'tipodecuenta',
-        icon: 'fas fa-bookmark',
-    },
-    {
-        id: 514,
-        label: 'Cuentas',
-        link : 'cuenta',
-        icon: 'fas fa-book-open',
-    },
-    {
-        id: 515,
-        label: 'Usuarios',
-        link : 'usuarios',
-        icon: 'fas fa-user-friends',
-    },
-    {
-        id: 516,
-        label: 'Tipo de Solicitudes',
-        link : 'tiposolicitud',
-        icon: 'far fa-file-alt',
-    },
-    {
-        id: 517,
-        label: 'Centros de Costos',
-        link : 'centrodecostos',
-        icon: 'fas fa-city',
-    },
+	{
+		id: 1,
+		label: 'TESORERIA',
+		isTitle: true,
+	},
+	{
+		id: 11,
+		label: 'Inicio',
+		link: '/inicio',
+		icon: 'bx bx-home',
+	},
+	{
+		id: 12,
+		label: 'Aperturas y Cierres',
+		link: '/gestion/aperturaCierre',
+		icon: 'bx bx-calendar-check',
+	},
+	{
+		id: 2,
+		label: 'GESTIÓN',
+		isTitle: true,
+	},
+	{
+		id: 21,
+		label: 'Bancos',
+		icon: 'bx bxs-bank',
+		link: '/banco',
+	},
 
-
-
-
-
-
-  ]
-},
-{
-  id: 60,
-  label: 'Parámetros',
-  icon: 'fas fa-wrench',
-  subItems : [
-    {
-        id: 61,
-        label: 'Variables de Configuración',
-        link : 'variablesconfiguracion',
-        icon: 'fas fa-list-ul',
-    },
-    {
-        id: 62,
-        label: 'Tipos de Datos',
-        link : 'tipodato',
-        icon: 'fas fa-dice-d6',
-    },
-    {
-        id: 63,
-        label: 'Tipos de Entidad',
-        link : 'tipoentidad',
-        icon: 'fas fa-id-card',
-    },
-    {
-        id: 64,
-        label: 'Entidades',
-        link : 'entidades',
-        icon: 'fas fa-users-cog',
-    },
-    {
-        id: 65,
-        label: 'Tipos de Identificación',
-        link : 'tipoidentificacion',
-        icon: 'far fa-credit-card',
-    },
-    {
-        id: 66,
-        label: 'Estado de Créditos',
-        link : 'estadocredito',
-        icon: 'fas fa-ellipsis-h',
-    },
-    {
-        id: 67,
-        label: 'Tipo de movimiento',
-        link : 'tipomovimiento',
-        icon: 'fas fa-reply-all',
-    },
-
-
-  ]
-},
-/*
-{
-  id: 90,
-  label: 'Dependencias',
-  subItems : [
-    {
-        id: 91,
-        label: 'Cuotas Tiempo',
-        link : 'cuotastiempo',
-        icon: 'fas fa-angle-double-right',
-    },
-    {
-        id: 92,
-        label: 'Tiempo-Interés',
-        link : 'tiempointeres',
-        icon: 'fas fa-clock',
-    },
-    {
-        id: 93,
-        label: 'Pagos - Medios de transferencia',
-        link : 'tipopagomedios',
-        icon: 'fas fa-money-bill-wave',
-    },
-    {
-        id: 94,
-        label: 'Tipo de Pago - Via',
-        link : 'tipopagovia',
-        icon: 'fas fa-money-bill',
-    },
-    {
-        id: 95,
-        label: 'Tipos de Entidad - Entidades',
-        link : 'entidadestipoentidad',
-        icon: 'fas fa-user-friends',
-    },
-    {
-        id: 96,
-        label: 'Contacto - Grupo',
-        link : 'contactogrupo',
-        icon: 'fas fa-user-friends',
-    },
-    {
-        id: 97,
-        label: 'Crédito - Estado',
-        link : 'creditoestado',
-        icon: 'fas fa-spell-check',
-    },
-    {
-        id: 98,
-        label: 'Crédito - Pagos',
-        link : 'creditopagos',
-        icon: 'far fa-handshake',
-    },
-    {
-        id: 99,
-        label: 'Tipo de Cobro - Via',
-        link : 'tipocobrovia',
-        icon: 'fas fa-hand-holding-usd',
-    },
-    {
-        id: 910,
-        label: 'Tipo de Cobro - Medios',
-        link : 'tipocobromedios',
-        icon: 'fas fa-hand-point-left',
-    },
-    {
-        id: 911,
-        label: 'Fondo - Responsables',
-        link : 'fondoresponsables',
-        icon: 'fas fa-user-check',
-    },
-    {
-        id: 912,
-        label: 'Fondo - Forma de cobro',
-        link : 'fondoformacobro',
-        icon: 'fab fa-cc-amex',
-    },
-    {
-        id: 913,
-        label: 'Fondo - Centro de Costos',
-        link : 'fondocentrodecostos',
-        icon: 'fas fa-building',
-    },
-    {
-        id: 914,
-        label: 'Días',
-        link : 'dias',
-        icon: 'fas fa-calendar',
-    },
-    {
-        id: 915,
-        label: 'Horarios - Días',
-        link : 'horariosdia',
-        icon: 'fas fa-calendar-check',
-    },
-    {
-        id: 916,
-        label: 'Horarios - Cajas',
-        link : 'cajahorarios',
-        icon: 'fas fa-user-tie',
-    },
-    {
-        id: 917,
-        label: 'Banco - Medios de Transferencia',
-        link : 'bancomediostransferencia',
-        icon: 'fas fa-arrows-alt-h',
-    },
-    {
-        id: 918,
-        label: 'Líneas de créditos - banco',
-        link : 'lineacreditobanco',
-        icon: 'far fa-credit-card',
-    },
-    {
-        id: 919,
-        label: 'Banco - Cuentas',
-        link : 'cuentabanco',
-        icon: 'fas fa-university',
-    },
-    {
-        id: 920,
-        label: 'Banco - Contactos',
-        link : 'contactobanco',
-        icon: 'fas fa-city',
-    },
-    {
-        id: 921,
-        label: 'Anticipo - movimiento cuenta',
-        link : 'anticipomovimientocuenta',
-        icon: 'fas fa-arrows-alt-v',
-    },
-    {
-        id: 922,
-        label: 'Medio - Forma de Pago',
-        link : 'medioformapago',
-        icon: 'far fa-credit-card',
-    },
-
-    {
-        id: 923,
-        label: 'Caja - banco - transferencia',
-        link : 'cajabancotransferencia',
-        icon: 'fas fa-hotel',
-    },
-
-    {
-        id: 924,
-        label: 'Caja - banco - Medio',
-        link : 'cajabancomedio',
-        icon: 'fas fa-hotel',
-    },
-  ]
-},
-*/
-
+	{
+		id: 22,
+		label: 'Cajas',
+		icon: 'mdi mdi-cash-register',
+		link: '/caja',
+	},
+	{
+		id: 23,
+		label: 'Empleado - Responsable',
+		icon: 'mdi mdi-account-group',
+		link: '/empleado',
+	},
+	{
+		id: 3,
+		label: 'REGISTRAR',
+		isTitle: true,
+	},
+	{
+		id: 31,
+		label: 'Anticipos',
+		icon: 'mdi mdi-cash-multiple',
+		subItems: [
+			{
+				id: 311,
+				label: 'Proveedor',
+				link: '/anticipo',
+			},
+			{
+				id: 312,
+				label: 'Cliente',
+				link: '/anticipo/cliente',
+			},
+		],
+	},
+	{
+		id: 32,
+		label: 'Fondos',
+		icon: 'mdi mdi-safe',
+		subItems: [
+			{
+				id: 321,
+				label: 'Fondos Operativos',
+				link: '/fondo/operativos',
+			},
+			{
+				id: 322,
+				label: 'Fondos a Rendir',
+				link: '/fondo/rendir',
+			},
+		],
+	},
+	{
+		id: 4,
+		label: 'OPERACIONES FINANCIERAS',
+		isTitle: true,
+	},
+	{
+		id: 41,
+		label: 'Efectuar Pago',
+		icon: 'mdi mdi-cash-minus',
+		link: '/operacion_financiera/efectuar_pago',
+	},
+	{
+		id: 42,
+		label: 'Efectuar Cobro',
+		icon: 'mdi mdi-cash-plus',
+		link: '/operacion_financiera/efectuar_cobro',
+	}, */
 ];

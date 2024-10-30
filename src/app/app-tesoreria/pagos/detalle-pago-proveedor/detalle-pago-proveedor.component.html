@@ -1,0 +1,122 @@
+<div id="accountFormModalBodyDiv">
+  <div class="col-xl-12 border-bottom p-4 pb-2">
+      <div class="float-end ms-2">
+        <h6 class="fs-14 mb-0 ms-1 text-secondary fw-bold">DETALLE DEL PAGOS DEL PROVEEDOR</h6>
+      </div>
+      <div class="d-flex">
+        <div class="flex-grow-1 align-self-center">
+            <div class="text-muted">
+                <h5 class="mb-1">{{dataProveedor['razonSocial']}}</h5>
+                <p class="mb-0">Nombre comercial: {{dataProveedor['nombreComercial']}}</p>
+                <p class="mb-0">Nº documento: {{dataProveedor['nroDocumento']}}</p>
+                <p class="mb-0 fw-medium">Total credito:{{dataProveedor['totalCredito']}}</p>
+                <p class="mb-0 fw-medium">Total pagado:{{dataProveedor['totalPago']}}</p>
+                <p class="mb-0 fw-medium">Saldo:{{dataProveedor['totalSaldo']}}</p>
+            </div>
+        </div>
+    </div>
+  </div>
+  <div class="row p-3">
+    <h6 class="fs-14 mt-0 mb-2 ms-1 text-primary">
+      Pagos pendientes del proveedor
+    </h6>
+
+    <div class="" [ngClass]="verDetalle?'col-md-7':'col-md-12'">
+      <div class="table-responsive">
+        <table class="table table-sm m-0">
+          <thead>
+            <tr>
+              <th></th>
+              <th  class="text-muted fs-14 mb-2">Compra</th>
+              <th  class="text-muted fs-14 mb-2">Fecha</th>
+              <th  class="text-muted fs-14 mb-2">Total</th>
+              <th  class="text-muted fs-14 mb-2">Saldo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let compra of listCompras" [ngStyle]="{'background-color':verDetalle ? '#e9eafa':''}">
+              <td>
+                <button
+                type="button"
+                class="btn btn-secondary btn-sm ms-2 py-0 px-1"
+                tooltip="Ver mas"
+                (click)="verMas(compra)"
+              >
+                <i
+                  class="mdi m-0 p-0"
+                  [ngClass]="{
+                    'mdi-plus': !compra.showForm,
+                    'mdi-minus': compra.showForm
+                  }"
+                  style="font-size: 15px"
+                ></i>
+              </button>
+              </td>
+              <td>
+                <p class="mb-0 text-muted"><b>{{compra['tipo']}} :</b> {{compra['nroFacturaRecibo']}}</p>
+              </td>
+              <td>
+                {{compra['fechaCompra']|fechaFormat}}
+              </td>
+              <td>
+                {{compra['total']|decimalAmount}}
+              </td>
+              <td>
+                {{compra['saldo']|decimalAmount}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-5">
+
+      <div class="card seccion-pagos" *ngIf="verDetalle">
+        <div class="card-body">
+          <p class="mb-2 ms-2 text-muted"><b>Pagos - {{detalleCompra['tipo']}} : {{detalleCompra['nroFacturaRecibo']}}</b></p>
+
+          <div class="border p-3" *ngFor="let pago of detalleCompra['planPagos']; let index=index">
+            <p class="mb-1 text-muted text-center">{{index+1}}</p>
+            <p class="mb-0 text-muted"  *ngIf="pago['conSaldo']">
+              <span class="text-primary mdi mdi-check-circle me-1 fs-5"></span>
+              Pendiente de pago
+            </p>
+            <p class="mb-0 text-muted"  *ngIf="!pago['conSaldo']">4545
+              <span class="text-primary mdi mdi-check-circle me-1 fs-5"></span>
+              Pago realizado
+            </p>
+
+            <p class="mb-0 text-muted"  *ngIf="pago['conSaldo']">
+              <span class="text-primary mdi mdi-check-circle me-1 fs-5"></span>
+              Total pagar : {{pago['monto']}}
+            </p>
+            <p class="mb-0 text-muted">
+              <span class="text-primary mdi mdi-check-circle me-1 fs-5"></span>
+              Saldo pagar : {{pago['saldoPagar']}}
+            </p>
+            <p class="mb-0 text-muted"  *ngIf="pago['conSaldo']">
+              <span class="text-primary mdi mdi-check-circle me-1 fs-5"></span>
+              Fecha limite de pago : {{pago['fechaLimitePago']|fechaFormat}}
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+  <div class="row mt-3 mb-3 me-3">
+    <div class="hstack gap-2 justify-content-end">
+        <button
+            type="button"
+            class="btn btn-light"
+            data-bs-dismiss="modal"
+            (click)="this.cerrarModal.emit()"
+           >
+            Cerrar
+        </button>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,42 @@
 {
-    "/api/*": {
-        "target": "http://localhost:8080",
+    "/api/contabilidad/*": {
+        "target": "https://sandbox-contabilidad-api.kernotec.com/",
         "secure": false,
+        "changeOrigin": true,
+        "rejectUnauthorized": false,
         "logLevel": "debug"
-    }
+    },
+    "/api/v1/*": {
+        "target": "http://localhost:8000",
+        "secure": false,
+        "changeOrigin": true,
+        "rejectUnauthorized": false,
+        "logLevel": "debug"
+    },
+    "/api/compras/*": {
+        "target": "https://sandbox-compras-api.kernotec.com",
+        "secure": false,
+        "changeOrigin": true,
+        "rejectUnauthorized": false,
+        "logLevel": "debug"
+    },
+    "/api/tesoreria/*": {
+        "target": "https://sandbox-tesoreria-api.kernotec.com",
+        "secure": false,
+        "changeOrigin": true,
+        "rejectUnauthorized": false,
+        "logLevel": "debug"
+    },
+    "/api/ventas/*": {
+      "target": "https://sandbox-ventas-api.kernotec.com",
+      "secure": false,
+      "changeOrigin": true,
+      "rejectUnauthorized": false,
+      "logLevel": "debug"
+  },
+    "/api/config/*": {
+		"target": "https://sandbox-config-api.kernotec.com",
+		"secure": false,
+		"changeOrigin": true
+	}
 }

@@ -1,0 +1,73 @@
+<form [formGroup]="formGroup">
+	<p class="mb-3 col-12">
+		Los campos marcados con asterisco (*) son obligatorios.
+	</p>
+	<div class="nav">
+		<div class="col mb-3 px-1">
+			<label class="mb-2" for="cashName">(*) Nombre </label>
+			<input
+				id="cashName"
+				type="text"
+				class="form-control"
+				formControlName="nombre"
+				[ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }"
+				placeholder="NOMBRE DE LA CAJA"
+				(input)="utilityService?.convertUppercase('nombre', $event, formGroup)"
+			/>
+			<div *ngIf="submitted && form['nombre'].errors" class="col-sm-12">
+				<div
+					*ngIf="form['nombre'].errors['required']"
+					class="text-danger mt-1 font-size-10"
+				>
+					El nombre es obligatorio
+				</div>
+			</div>
+		</div>
+		<div class="col-6 mb-3 px-1" *ngIf="form.empleadoId">
+			<label class="mb-2" for="cashEmployeeId">(*) Responsable </label>
+			<ng-select
+				id="cashEmployeeId"
+				class="uppercase"
+				formControlName="empleadoId"
+				placeholder="SELECCIONE RESPONSABLE"
+				[items]="listaResponsables"
+				bindLabel="nombre"
+				bindValue="id"
+				[ngClass]="{
+					'ngselect-invalid': submitted && form['empleadoId'].errors != null
+				}"
+			/>
+			<div *ngIf="submitted && form['empleadoId'].errors" class="col-sm-12">
+				<div
+					*ngIf="form['empleadoId'].errors['required']"
+					class="text-danger mt-1 font-size-10"
+				>
+					El responsable es obligatorio
+				</div>
+			</div>
+		</div>
+		<div class="col-6 mb-3 px-1" *ngIf="form.centroCostoId">
+			<label class="mb-2" for="cashCostCenterId">(*) Centro de Costos </label>
+			<ng-select
+				id="cashCostCenterId"
+				class="uppercase"
+				formControlName="centroCostoId"
+				placeholder="SELECCION CENTRO DE COSTOS"
+				[items]="listaCentroCostos"
+				bindLabel="nombre"
+				bindValue="id"
+				[ngClass]="{
+					'ngselect-invalid': submitted && form['centroCostoId'].errors != null
+				}"
+			/>
+			<div *ngIf="submitted && form['centroCostoId'].errors" class="col-sm-12">
+				<div
+					*ngIf="form['centroCostoId'].errors['required']"
+					class="text-danger mt-1 font-size-10"
+				>
+					El centro de costos es obligatorio
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

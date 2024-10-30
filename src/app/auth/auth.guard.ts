@@ -22,12 +22,12 @@ export class AuthGuard extends KeycloakAuthGuard {
     }
 
     const requiredRoles = route.data.roles;
-      console.log("requiredRoles", requiredRoles);
+      //console.log("requiredRoles", requiredRoles);
     if (!(requiredRoles instanceof Array) || requiredRoles.length === 0) {
       return true;
     }
 
-    console.log("kc roles",this.roles);
+    //console.log("kc roles",this.roles);
     if (requiredRoles.every((role) => this.roles.includes(role)))
       return true;
     else

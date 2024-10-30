@@ -1,33 +1,28 @@
-.table-responsive{
-  min-height: 100px;
-  /*max-height: 500px;*/
-  overflow-y: auto;
+.data-table th  {
+  background-color: #f8f8fb;
+  color:#2a3042;
 }
 
-.data-table th  {
-  background-color: #e6e6e6;
+td {
+  background-color: white;
   color:#2a3042;
 }
 
 .data-table th button {
   /*background-color: #fbfbfb;*/
-  background-color: #e6e6e6;
+  background-color: #f8f8fb;
   color:#2a3042;
-  text-transform: uppercase;
   border: none;
   cursor: pointer;
   display: block;
   font: inherit;
   height: 100%;
-  margin: 0;
   min-width: max-content;
-  padding: 0.5rem 1rem;
-  position: relative;
+  padding: 0.5rem 0;
   text-align: left;
   width: 100%;
   font-size: 12px;
 }
-
 
 .data-table th button::after {
   position: absolute;
@@ -50,7 +45,14 @@
 .isDisabled{
   background-color: #eff2f7;
 }
+
 .table-condensed{
   font-size: 12px;
 }
+thead th { position: sticky; top: 0; z-index: 1; }
 
+.container-scroll {
+  height: 490px;
+  overflow-y: auto;
+}
+tfoot { position: sticky; bottom: 0;}

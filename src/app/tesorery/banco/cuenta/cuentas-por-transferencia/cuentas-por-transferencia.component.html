@@ -1,0 +1,74 @@
+<form [formGroup]="formCuentaBanco" class="mb-3">
+    <div formArrayName="movimientosCuentaBanco">
+        <div class="table-responsive">
+            <table class="table table-borderless mb-0">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th class="select">(*)Medio Transferencia</th>
+                    <th class="select">{{destino}}</th>
+                    <th class="select" style="display: none;" #thBanco>N° de cuenta</th>
+                    <th class="inputSelect">N° referencia</th>
+                    <th class="inputSelect">(*)Monto</th>
+                  </tr>
+                </thead>
+                <tbody *ngFor="let data1 of formDataCuenta()?.controls; let i=index;">
+                  <tr [formGroupName]="i">
+                    <td>
+                      <button *ngIf="i!== 0"
+                      class="btn btn-sm btn-danger"
+                      tooltip="Quitar cuenta"
+                      (click)="eliminarItem(i)">
+                        <i class="mdi mdi-close"></i>
+                    </button>
+                    </td>
+                    <td>
+                      <ng-select
+                      formControlName="medioTrasferenciaId"
+                       [items]="transferMediumDataSelect"
+                       bindLabel="medio"
+                       bindValue="id"
+                       appendTo="#accountFormModalBodyDiv"
+                       (change)="selectTransferMedium($event)"
+                       class="input-sm">
+                      </ng-select>
+                    </td>
+                    <td>
+                      <ng-select
+                      placeholder="Seleccione {{destino}}"
+                      [items]="cajaBancoList"
+                      bindLabel="nombre"
+                      bindValue="id"
+                      appendTo="#accountFormModalBodyDiv"
+                      (change)="selectCajaBancoList($event)">
+                      </ng-select>
+                    </td>
+                    <td style="display: none;" #tdBanco>
+                      <ng-select
+                      placeholder="Seleccione cuenta bancaria"
+                      [items]="cuentasBancList"
+                      bindLabel="nroCuenta"
+                      bindValue="id"
+                      appendTo="#accountFormModalBodyDiv"
+                      [notFoundText]="'Sin cuentas bancarias'">
+                      </ng-select>
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        class="form-control text-end"
+                        />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        class="form-control text-end"
+                        placeholder="Monto a transferir"
+                        />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+    </div>
+</form>

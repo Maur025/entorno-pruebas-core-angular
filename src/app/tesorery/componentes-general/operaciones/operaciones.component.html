@@ -1,0 +1,422 @@
+<form [formGroup]="formGroup">
+	<div class="nav col-12">
+		<div class="card-body">
+			<div class="nav justify-content-between align-items-center py-3">
+				<h4 class="card-title m-0">Lista de Transacciones</h4>
+				<div>
+					<button
+						[disabled]="!montoPagar"
+						type="button"
+						class="btn btn-sm btn-primary float-end"
+						(click)="addOperacion()"
+					>
+						<i class="mdi mdi-plus"></i>Añadir Transacción
+					</button>
+					<div
+						*ngIf="submitted && operaciones.errors?.required"
+						class="text-danger mt-1 font-size-11"
+					>
+						Debe registrar al menos una transacción.
+					</div>
+				</div>
+			</div>
+			<div *ngIf="listaOperaciones.length == 0">
+				<span class="fw-semibold semi text-warning ps-2"
+					>Sin Transacciones Registradas</span
+				>
+			</div>
+			<div formArrayName="operaciones">
+				<div
+					class="card card-body shadow-lg mb-3 pb-0"
+					*ngFor="let operacion of listaOperaciones; index as i"
+					[ngClass]="{
+						'border border-danger border-2':
+							submitted &&
+							operaciones.controls[i]['controls']['tipoOperacion'].value == null
+					}"
+				>
+					<div [formGroupName]="i">
+						<div
+							class="nav justify-content-between border-bottom align-items-center"
+						>
+							<div class="col-3 col-lg-2 border-end pb-3">
+								<span
+									class="fw-semibold semi text-primary px-0 px-md-1 px-xl-2"
+								>
+									N° {{ i + 1 }}
+								</span>
+							</div>
+							<div class="col-9 col-lg-8 ps-2">
+								<div class="row pb-3">
+									<p
+										class="col-form-label"
+										[ngClass]="{
+											'col-12': simulateSmallWindow,
+											'col-12 col-lg-3': !simulateSmallWindow
+										}"
+									>
+										(*) Transacción :
+									</p>
+									<div
+										*ngFor="let tipoOp of tipoOperacion; let index = index"
+										class="form-check col nav align-items-center"
+										[ngClass]="{
+											'col-6': simulateSmallWindow,
+											'col-6 col-lg-3': !simulateSmallWindow
+										}"
+									>
+										<input
+											#radioButton
+											[id]="'transacctionOptionP' + i + 'C' + index"
+											class="custom-control-input"
+											style="transform: scale(1.3)"
+											type="radio"
+											formControlName="tipoOperacion"
+											[value]="tipoOp.value"
+											(change)="cambiaOperacion(i)"
+										/>
+										<label
+											class="form-check-label ps-2"
+											[for]="'transacctionOptionP' + i + 'C' + index"
+										>
+											{{ tipoOp.name }}
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-1 pb-3">
+								<div
+									*ngIf="
+										submitted &&
+										operaciones.controls[i]['controls']['tipoOperacion'].errors
+									"
+								>
+									<div
+										*ngIf="
+											operaciones.controls[i]['controls']['tipoOperacion']
+												.errors['required']
+										"
+										class="text-danger mt-1 font-size-11"
+									>
+										Seleccione un tipo de transacción.
+									</div>
+								</div>
+							</div>
+							<div class="col-1 pb-3">
+								<button
+									class="btn btn-sm btn-danger me-2 float-end"
+									(click)="removeOperacion(i)"
+								>
+									<i class="mdi mdi-trash-can-outline"></i>
+								</button>
+							</div>
+						</div>
+						<div
+							[collapse]="
+								operaciones.controls[i]['controls']['tipoOperacion']['value'] !=
+								null
+									? false
+									: true
+							"
+							[isAnimated]="true"
+						>
+							<div class="nav py-3">
+								<div
+									class="nav"
+									[ngClass]="{
+										'col-12': simulateSmallWindow,
+										'col-12 col-lg-9': !simulateSmallWindow
+									}"
+									*ngIf="
+										operaciones.controls[i]['controls']['tipoOperacion'][
+											'value'
+										] == 'BN'
+									"
+								>
+									<div class="col-6 mb-3 px-1">
+										<label class="mb-2">(*) Banco </label>
+										<ng-select
+											appendTo="body"
+											class="uppercase"
+											formControlName="bancoId"
+											placeholder="Seleccione un banco"
+											(change)="cambiaBanco(i)"
+											[items]="listaBancos"
+											bindLabel="nombre"
+											bindValue="id"
+											[ngClass]="{
+												'ngselect-invalid':
+													submitted &&
+													operaciones.controls[i]['controls']['bancoId']
+														.errors != null
+											}"
+										></ng-select>
+										<div
+											*ngIf="
+												submitted &&
+												operaciones.controls[i]['controls']['bancoId'].errors
+											"
+											class="col-sm-12"
+										>
+											<div
+												*ngIf="
+													operaciones.controls[i]['controls']['bancoId'].errors[
+														'required'
+													]
+												"
+												class="text-danger mt-1 font-size-10"
+											>
+												El banco es obligatoria
+											</div>
+										</div>
+									</div>
+									<div class="col-6 mb-3 px-1">
+										<label class="mb-2">(*) Medio Transferencia </label>
+										<ng-select
+											appendTo="body"
+											class="uppercase"
+											formControlName="medioTransferenciaId"
+											placeholder="Seleccione un medio de transferencia"
+											[items]="listaMedioTransferencias"
+											bindLabel="medio"
+											bindValue="id"
+											[ngClass]="{
+												'ngselect-invalid':
+													submitted &&
+													operaciones.controls[i]['controls'][
+														'medioTransferenciaId'
+													].errors != null
+											}"
+										></ng-select>
+										<div
+											*ngIf="
+												submitted &&
+												operaciones.controls[i]['controls'][
+													'medioTransferenciaId'
+												].errors
+											"
+											class="col-sm-12"
+										>
+											<div
+												*ngIf="
+													operaciones.controls[i]['controls'][
+														'medioTransferenciaId'
+													].errors['required']
+												"
+												class="text-danger mt-1 font-size-10"
+											>
+												El medio de transferencia es obligatoria
+											</div>
+										</div>
+									</div>
+									<div
+										class="col mb-3 px-1"
+										*ngIf="
+											operaciones.controls[i]['controls']['bancoId']['value'] !=
+											null
+										"
+									>
+										<label class="mb-2">(*) Cuenta Bancaria </label>
+										<ng-select
+											appendTo="body"
+											class="uppercase"
+											formControlName="cuentaBancoId"
+											placeholder="Seleccione una cuenta"
+											(change)="cambioCuentaBancaria(i)"
+											[items]="this.listaOperaciones[i].listaCuentasBanco"
+											bindLabel="nroCuenta"
+											bindValue="id"
+											[ngClass]="{
+												'ngselect-invalid':
+													submitted &&
+													operaciones.controls[i]['controls']['cuentaBancoId']
+														.errors != null
+											}"
+										></ng-select>
+										<div
+											*ngIf="
+												submitted &&
+												operaciones.controls[i]['controls']['cuentaBancoId']
+													.errors
+											"
+											class="col-sm-12"
+										>
+											<div
+												*ngIf="
+													operaciones.controls[i]['controls']['cuentaBancoId']
+														.errors['required']
+												"
+												class="text-danger mt-1 font-size-10"
+											>
+												La cuenta bancaria es obligatoria
+											</div>
+										</div>
+									</div>
+									<div
+										class="col-3 mb-3 px-1"
+										*ngIf="
+											operaciones.controls[i]['controls']['cuentaBancoId'][
+												'value'
+											] != null
+										"
+									>
+										<label class="mb-2">Saldo </label>
+										<input
+											type="number"
+											class="form-control uppercase text-end"
+											formControlName="saldo"
+										/>
+									</div>
+								</div>
+								<div
+									class="nav"
+									[ngClass]="{
+										'col-12': simulateSmallWindow,
+										'col-12 col-lg-9': !simulateSmallWindow
+									}"
+									*ngIf="
+										operaciones.controls[i]['controls']['tipoOperacion'][
+											'value'
+										] == 'CAJ'
+									"
+								>
+									<div class="col mb-3 px-1">
+										<label class="mb-2">(*) Caja </label>
+										<ng-select
+											appendTo="body"
+											class="uppercase"
+											formControlName="cajaId"
+											(change)="cambioCaja(i)"
+											placeholder="Seleccione una caja"
+											[items]="listaCajas"
+											bindLabel="nombre"
+											bindValue="id"
+											[ngClass]="{
+												'ngselect-invalid':
+													submitted &&
+													operaciones.controls[i]['controls']['cajaId']
+														.errors != null
+											}"
+										></ng-select>
+										<div
+											*ngIf="
+												submitted &&
+												operaciones.controls[i]['controls']['cajaId'].errors
+											"
+											class="col-sm-12"
+										>
+											<div
+												*ngIf="
+													operaciones.controls[i]['controls']['cajaId'].errors[
+														'required'
+													]
+												"
+												class="text-danger mt-1 font-size-10"
+											>
+												La caja es obligatoria
+											</div>
+										</div>
+									</div>
+									<div
+										class="col-3 mb-3 px-1"
+										*ngIf="
+											operaciones.controls[i]['controls']['cajaId']['value'] !=
+											null
+										"
+									>
+										<label class="mb-2">Saldo </label>
+										<input
+											type="number"
+											class="form-control uppercase text-end"
+											formControlName="saldo"
+										/>
+									</div>
+								</div>
+								<div
+									[ngClass]="{
+										'col-12': simulateSmallWindow,
+										'col-12 col-lg-3': !simulateSmallWindow
+									}"
+								>
+									<div class="col-12 mb-3 px-1">
+										<label class="mb-2">(*) Monto Sub </label>
+										<input
+											type="number"
+											class="form-control uppercase text-end"
+											formControlName="monto"
+											[ngClass]="{
+												'is-invalid':
+													submitted &&
+													(operaciones.controls[i]['controls']['monto']
+														.errors ||
+														(listaOperaciones[i].datos &&
+															operaciones.controls[i].errors &&
+															operaciones.controls[i].errors[
+																'montoNoMayorQueSaldo'
+															]))
+											}"
+											(change)="calcularMontos()"
+										/>
+										<div
+											*ngIf="
+												submitted &&
+												operaciones.controls[i]['controls']['monto'].errors
+											"
+											class="col-sm-12"
+										>
+											<div
+												*ngIf="
+													operaciones.controls[i]['controls']['monto'].errors[
+														'min'
+													]
+												"
+												class="text-danger mt-1 font-size-10"
+											>
+												El monto debe ser mayor a 0
+											</div>
+											<div
+												*ngIf="
+													operaciones.controls[i]['controls']['monto'].errors[
+														'required'
+													]
+												"
+												class="text-danger mt-1 font-size-10"
+											>
+												El monto es obligatorio
+											</div>
+											<div
+												*ngIf="
+													operaciones.controls[i]['controls']['monto'].errors[
+														'pattern'
+													]
+												"
+												class="text-danger mt-1 font-size-10"
+											>
+												El monto solo acepta carácteres numéricos y un punto
+												decimal
+											</div>
+										</div>
+										<div
+											*ngIf="submitted && operaciones.controls[i].errors"
+											class="col-sm-12"
+										>
+											<div
+												*ngIf="
+													listaOperaciones[i].datos &&
+													operaciones.controls[i].errors['montoNoMayorQueSaldo']
+												"
+												class="text-danger font-size-10 mt-1"
+											>
+												El monto no debe superar al saldo
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

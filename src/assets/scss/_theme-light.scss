@@ -1,8 +1,10 @@
 :root {
-    //topbar 
-    --#{$prefix}heading-bg:              #{$white};
+    //topbar
+     --#{$prefix}heading-bg:              #{$white};
+  /*   --#{$prefix}heading-bg:              #74988c; */ /* color de la plantilla del anterior conta (#8ebaac un tono mas sueve)*/
     --#{$prefix}topbar-search-bg:        #f3f3f9;
     --#{$prefix}header-item-color:       #555b6d;
+   /*  --#{$prefix}header-item-color:       #f3f3f9; */
 
 
     --#{$prefix}boxed-body-bg:           #ebebf4;

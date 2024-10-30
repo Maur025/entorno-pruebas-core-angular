@@ -1,0 +1,148 @@
+<div id="accountFormModalBodyDiv">
+  <div class="col-xl-12 border-bottom p-4 pb-2">
+      <div class="float-end ms-2">
+        <h6 class="fs-14 mb-0 ms-1 text-secondary fw-bold">MOVIMIENTOS DE LA CUENTA DE BANCO</h6>
+      </div>
+      <div class="d-flex">
+        <div class="flex-grow-1 align-self-center">
+            <div class="text-muted">
+                <p class="mb-2">Referencia:{{fondoRendirData['nroReferencia']}}</p>
+                <h5 class="mb-1">Descripción :{{fondoRendirData['descripcion']}}</h5>
+                <p class="mb-0">Monto desembolso: {{fondoRendirData['desembolso']}}</p>
+                <p class="mb-0 fw-medium">Saldo neto: {{fondoRendirData['saldoNeto']}}</p>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="row mt-1 mb-0 m-3">
+    <div class="card">
+      <div class="card-body">
+        <div style="cursor: pointer;">
+          <h5 class="fs-14 mb-2 ms-1 fw-bold"
+            [ngClass]="filtrosView?'text-primary':'text-secondary'"
+            (click)="verFiltros()">
+            <i class="mdi font-size-16"
+            [ngClass]="filtrosView? 'mdi-filter-plus':'mdi-filter-minus-outline'"></i>
+            Filtros
+          </h5>
+        </div>
+        <ng-template *ngIf="filtrosView; then filtrosMovimientos"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="row pt-1 p-3">
+    <div class="table-responsive">
+      <table class="table table-sm m-0">
+        <thead>
+          <tr>
+            <th>Estado</th>
+            <th>Fecha</th>
+            <th>Monto</th>
+            <th>Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let mov of movimientosList">
+            <td>
+              <span class="badge bg-info font-size-10">
+              {{mov['estadoFondoRendir']['nombre']}}
+            </span>
+
+            </td>
+            <td>{{ mov['fecha']|fechaFormat}}</td>
+            <td>{{mov['monto']}}</td>
+            <td>{{mov['descripcion']}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <div class="row mt-3 mb-3 me-3">
+    <div class="hstack gap-2 justify-content-end">
+        <button
+            type="button"
+            class="btn btn-light"
+            data-bs-dismiss="modal"
+            (click)="this.cerrarModal.emit()"
+          >
+            Cerrar
+        </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #filtrosMovimientos>
+  <div class="p-2 pb-0" >
+    <div class="row">
+      <div class="col-md-6">
+        <p class="text-muted fs-14 mb-0">Descripción</p>
+        <input
+          type="text"
+          class="form-control form-control-sm uppercase"
+          [(ngModel)]="descripcion"
+        />
+      </div>
+      <div class="col-md-2">
+        <div class="d-flex mt-3">
+          <p class="text-muted fs-14 mb-0">¿Rango de fecha?</p>
+            <p class="text-muted fs-14 mb-0 ms-2 fw-bold">{{!rangoFechas?'NO':'SI'}}</p>
+            <div class="form-check form-check-success m-0 p-0 ms-5">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                style="transform: scale(1.7)"
+                placement="top"
+                [ngModel]="rangoFechas"
+                (ngModelChange)="rangoFechas=$event"
+                />
+            </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div>
+          <ng-template *ngIf="rangoFechas; then inputRango else inputFecha"/>
+          <ng-template #inputRango>
+            <p class="text-muted fs-14 mb-0">Fecha (Desde-Hasta)</p>
+            <input
+              type="text"
+              [(ngModel)]="filtroFecha"
+              placeholder="dd/mm/AAAA - dd/mm/AAAA"
+              class="form-control date"
+              name="daterange"
+              autocomplete="off"
+              bsDaterangepicker
+              [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }"
+              (bsValueChange)="getFechas($event)"
+            />
+          </ng-template>
+          <ng-template #inputFecha>
+            <p class="text-muted fs-14 mb-0">Fecha</p>
+            <input
+            type="text"
+            placeholder="dd-mm-AA"
+            class="form-control"
+            bsDatepicker
+            [(ngModel)]="filtroFecha"
+            [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }"
+            (bsValueChange)="getFechas($event)"
+            />
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="hstack gap-2 justify-content-end">
+        <button
+            type="button"
+            class="btn btn-success"
+            (click)="filtrar()"
+           >Filtrar</button>
+
+      </div>
+    </div>
+  </div>
+</ng-template>

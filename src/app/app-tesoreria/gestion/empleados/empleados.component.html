@@ -1,0 +1,161 @@
+<app-page-title title="Empleado" [breadcrumbItems]="breadCrumbItems" />
+<app-tabla-new
+  #tabla
+  [botonNuevo]="true"
+  [smallTable]="false"
+  [conOpciones]="false"
+  [formato]="formato"
+  [datosService]="empleadoService"
+  getAll="getAll"
+  [templateFila]="templateFila"
+  [botonNuevo]="true"
+  (alCrear)="nuevoEmpleado(empleadoModal)"
+></app-tabla-new>
+
+<ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">
+  <ng-template ngFor let-campo [ngForOf]="cabeceras">
+    <ng-template
+      *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"
+    ></ng-template>
+    <ng-template #tempTD>
+      <td [ngSwitch]="campo">
+        <div *ngSwitchCase="'acciones'">
+          <button
+            class="btn btn-sm me-1 btn-soft-info"
+            [disabled]="fila.deleted"
+            (click)="editar(fila, empleadoModal)"
+          >
+            <i class="mdi mdi-pencil-outline"></i>
+          </button>
+          <button
+            class="btn btn-sm me-1"
+            [tooltip]="!fila.deleted ? 'Deshabilitar' : 'Habilitar'"
+            [ngClass]="fila.deleted ? 'btn-success' : 'btn-danger'"
+            (click)="
+              habilitar(fila, !fila.deleted ? 'inhabilitar' : 'habilitar')
+            "
+          >
+            <i class="mdi mdi-power"></i>
+          </button>
+        </div>
+        <div *ngSwitchCase="'nombre'">
+          {{ fila["nombre"] }}
+        </div>
+        <div *ngSwitchCase="'nitCi'">
+          {{ fila["nitCi"] }}
+        </div>
+        <div *ngSwitchCase="'estado'">
+          <span *ngIf="!fila.deleted" class="badge bg-success font-size-10">
+            <i class="mdi mdi-lock-open me-1"></i> Habilitado
+          </span>
+          <span *ngIf="fila.deleted" class="badge bg-danger font-size-10">
+            <i class="mdi mdi-lock me-1"></i> Inhabilitado
+          </span>
+        </div>
+      </td>
+    </ng-template>
+  </ng-template>
+</ng-template>
+
+<ng-template #empleadoModal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">
+      {{ titleModal }}
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="cerrarModal()"
+      [disabled]="onSubmitFormStatus"
+    ></button>
+  </div>
+  <form [formGroup]="formEmpleado" (ngSubmit)="confirmAndContinueSaving()">
+    <div class="modal-body" id="form-create-employe">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="mb-3 px-1">
+            <label class="mb-2" for="name">(*) Nombre </label>
+            <input
+              id="name"
+              type="text"
+              class="form-control"
+              formControlName="nombre"
+              [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }"
+              placeholder="Ingrese nombre del empleado"
+              (input)="
+                utilityService.convertUppercase('nombre', $event, formEmpleado)
+              "
+            />
+            <div *ngIf="submitted && form['nombre'].errors" class="col-sm-12">
+              <div
+                *ngIf="form['nombre'].errors['required']"
+                class="text-danger mt-1 font-size-10"
+              >
+                El nombre es obligatorio
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="mb-3 px-1">
+            <label class="mb-2" for="name">(*) NIT/CI </label>
+            <input
+              id="name"
+              type="text"
+              class="form-control uppercase"
+              formControlName="nitCi"
+              [ngClass]="{ 'is-invalid': submitted && form['nitCi'].errors }"
+              placeholder="Ingrese el nro de documento"
+              (input)="
+                utilityService?.convertUppercase('nitCi', $event, formEmpleado)
+              "
+            />
+            <div *ngIf="submitted && form['nitCi'].errors" class="col-sm-12">
+              <div
+                *ngIf="form['nitCi'].errors['required']"
+                class="text-danger mt-1 font-size-10"
+              >
+                Ingrese el nro de documento
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+        <button
+          type="button"
+          class="btn btn-light"
+          data-bs-dismiss="modal"
+          (click)="cerrarModal()"
+          [disabled]="onSubmitFormStatus"
+        >
+          Cerrar
+        </button>
+        <button
+          [disabled]="isStatusSubmit"
+          type="submit"
+          class="btn d-flex gap-1 align-items-center"
+          [ngStyle]="{ padding: isStatusSubmit ? '6px' : '7.52px' }"
+          [class]="{
+            'btn-warning': empleado,
+            'btn-success': !empleado
+          }"
+        >
+          <app-loader-button *ngIf="isStatusSubmit" />
+          {{
+            isStatusSubmit
+              ? " Espere un momento..."
+              : empleado
+              ? "Guardar"
+              : "Registrar"
+          }}
+        </button>
+      </div>
+    </div>
+  </form>
+</ng-template>

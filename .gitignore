@@ -6,6 +6,8 @@
 /out-tsc
 # Only exists if Bazel was run
 /bazel-out
+package-lock.json
+yarn.lock
 
 # dependencies
 /node_modules
@@ -46,3 +48,9 @@ testem.log
 .DS_Store
 Thumbs.db
 src/environments/environment.ts
+
+#Prettier
+.prettierrc.json
+
+#ESLint
+eslint.config.mjs

@@ -1,0 +1,166 @@
+<div id="accountFormModalBodyDiv">
+  <div class="col-xl-12 border-bottom p-4 pb-2">
+    <div class="float-end ms-2">
+      <small> Los campos marcados con asterisco (*) son requeridos. </small>
+    </div>
+    <div class="d-flex">
+      <div>
+        <h6 class="fs-14 mb-0 ms-1 text-secondary">{{ title }}</h6>
+        <!-- <small class="text-muted mb-0 ms-1">Nueva cuenta de banco</small> -->
+      </div>
+    </div>
+  </div>
+  <form [formGroup]="formAnticipo" (ngSubmit)="confirmAndContinueSaving()">
+    <div class="ms-4 me-4 m-2 mt-3">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="mb-3 px-1">
+            <p class="text-muted mb-1">(*) {{ label }}</p>
+            <ng-select
+              class="uppercase"
+              formControlName="clienteRefId"
+              placeholder="Seleccione Cliente"
+              [items]="data"
+              bindLabel="nombre"
+              bindValue="id"
+              (change)="selectData($event)"
+              (search)="searchData($event)"
+              [ngClass]="{
+                'ngselect-invalid':
+                  submitted && form['clienteRefId'].errors != null
+              }"
+            />
+            <div *ngIf="submitted && form['clienteRefId'].errors">
+              <div
+                class="text-danger mt-1 font-size-10"
+                *ngIf="form['clienteRefId'].errors['required']"
+              >
+                Cliente es obligatorio
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <p class="text-muted mb-1">(*) Nº anticipo</p>
+          <input
+            type="text"
+            class="form-control text-end"
+            formControlName="nroReferencia"
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8">
+          <div class="mb-3 px-1">
+            <p class="text-muted mb-1">(*) Centro Costos</p>
+            <ng-select
+              class="uppercase"
+              formControlName="centroCostoId"
+              placeholder="Seleccione Centro de Costo"
+              [items]="listaCentroCostos"
+              bindLabel="nombre"
+              bindValue="id"
+              [ngClass]="{
+                'ngselect-invalid':
+                  submitted && form['centroCostoId'].errors != null
+              }"
+            />
+            <div *ngIf="submitted && form['centroCostoId'].errors">
+              <div
+                class="text-danger mt-1 font-size-10"
+                *ngIf="form['centroCostoId'].errors['required']"
+              >
+                El centro de costos es obligatorio
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <input-fecha
+            [formPadre]="formAnticipo"
+            [submitted]="submitted"
+            labelFecha="Fecha de anticipo"
+            (alRedirigir)="alAperturar()"
+          ></input-fecha>
+        </div>
+      </div>
+
+      <div class="row">
+        <transaccion-array
+          [formPadre]="formAnticipo"
+          labelTransferencia="el anticipo"
+          [submitted]="submitted"
+          (alIngresarMonto)="recibirMontoTotal($event)"
+        ></transaccion-array>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-md-8">
+          <p class="text-muted mb-1">(*) Descripción</p>
+          <textarea
+            formControlName="descripcion"
+            class="form-control uppercase"
+            rows="2"
+            placeholder="Descripción anticipo a cliente"
+            [ngClass]="{
+              'is-invalid': submitted && form['descripcion'].errors
+            }"
+          ></textarea>
+          <div
+            *ngIf="submitted && form['descripcion'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="formAnticipo.get('descripcion').errors?.required">
+              La descripción para el anticipo es obligatorio.
+            </div>
+            <div *ngIf="form['descripcion'].errors['maxlength']">
+              Debe tener menos de
+              {{
+                form["descripcion"].errors["maxlength"]["requiredLength"]
+              }}carácteres
+            </div>
+            <div *ngIf="form['descripcion'].errors['minlength']">
+              Debe tener mas de
+              {{
+                form["descripcion"].errors["minlength"]["requiredLength"]
+              }}carácteres
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 border p-3">
+          <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary">
+            <b> (*) Monto total del Anticipo </b>
+          </h6>
+          <div class="hstack gap-2 justify-content-end me-4">
+            <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary">
+              <b>{{ formAnticipo.get("monto").value }}</b>
+            </h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3 mb-3 me-3 pt-4 border-top">
+        <div class="hstack gap-2 justify-content-end">
+          <button
+            type="button"
+            class="btn btn-light"
+            data-bs-dismiss="modal"
+            (click)="this.cerrarModal.emit()"
+          >
+            Cerrar
+          </button>
+          <button
+            [disabled]="isStatusSubmit"
+            type="submit"
+            [ngStyle]="{ padding: isStatusSubmit ? '6px' : '7.52px' }"
+            class="btn btn-success d-flex gap-1 align-items-center"
+          >
+            <app-loader-button *ngIf="this.isStatusSubmit" />
+            {{ isStatusSubmit ? " Espere un momento..." : "Crear anticipo" }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

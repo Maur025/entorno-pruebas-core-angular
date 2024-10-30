@@ -43,9 +43,11 @@
     "bootstrap": "^5.2.0",
     "chart.js": "^2.9.4",
     "chartist": "^0.11.4",
+    "decimal.js": "^10.4.3",
     "echarts": "^5.4.1",
     "firebase": "^9.15.0",
     "flatpickr": "^4.6.13",
+    "html-to-image": "^1.11.11",
     "keycloak-angular": "^14.0.0",
     "keycloak-js": "^22.0.0",
     "leaflet": "^1.9.3",
@@ -90,6 +92,7 @@
     "@angular/cli": "^15.1 .4",
     "@angular/compiler-cli": "^15.1.2",
     "@angular/language-service": "^15.1.2",
+    "@eslint/js": "^9.1.1",
     "@juggle/resize-observer": "^3.4.0",
     "@types/jasmine": "^4.3.1",
     "@types/jasminewd2": "^2.0.10",
@@ -97,6 +100,8 @@
     "@types/node": "^18.11.17",
     "@types/youtube": "^0.0.47",
     "codelyzer": "^6.0.2",
+    "eslint": "^9.1.1",
+    "globals": "^15.1.0",
     "jasmine-core": "^4.5.0",
     "jasmine-spec-reporter": "^7.0.0",
     "karma": "^6.4.1",
@@ -106,6 +111,7 @@
     "karma-jasmine-html-reporter": "^2.0.0",
     "protractor": "~7.0.0",
     "ts-node": "^10.9.1",
-    "typescript": "^4.8.4"
+    "typescript": "^4.8.4",
+    "typescript-eslint": "^7.8.0"
   }
 }

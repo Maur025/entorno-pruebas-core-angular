@@ -1,0 +1,409 @@
+<app-page-title title="COMPENSACIONES" [breadcrumbItems]="breadCrumbItems" />
+<div class="card">
+  <div class="card-body" id="accountFormModalBodyDiv">
+    <div class="col-xl-12 border-bottom mb-4">
+      <div class="float-end ms-2">
+        <small class="mb-4" style="color: #f46a6a"
+          >Los campos marcados con asterisco (*) son obligatorios.</small
+        >
+      </div>
+      <div class="d-flex">
+        <i class="mdi mdi-square-rounded text-primary"></i>
+        <div>
+          <h6 class="fs-14 mb-2 ms-1 text-primary">
+            DATOS PARA LA COMPENSACIÓN
+          </h6>
+        </div>
+      </div>
+    </div>
+    <form
+      [formGroup]="compensationForm"
+      (ngSubmit)="confirmAndContinueSaving()"
+    >
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <input-fecha
+            [formPadre]="compensationForm"
+            [submitted]="submitted"
+            labelFecha="(*)Fecha de pago"
+          ></input-fecha>
+        </div>
+        <div class="col-md-6">
+          <div class="px-1">
+            <p class="text-muted mb-1">(*) Centro Costos</p>
+            <ng-select
+              class="uppercase"
+              formControlName="centroCostoId"
+              placeholder="Seleccione Centro de Costo"
+              [items]="costCenterList"
+              appendTo="#accountFormModalBodyDiv"
+              bindLabel="nombre"
+              bindValue="id"
+              [ngClass]="{
+                'ngselect-invalid':
+                  submitted && form['centroCostoId'].errors != null
+              }"
+            />
+            <div *ngIf="submitted && form['centroCostoId'].errors">
+              <div
+                class="text-danger mt-1 font-size-10"
+                *ngIf="form['centroCostoId'].errors['required']"
+              >
+                El centro de costos es obligatorio
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <p class="text-muted mb-1">(*) Descripción</p>
+            <textarea
+              formControlName="descripcion"
+              class="form-control"
+              rows="2"
+              placeholder="Descripción de la compensación"
+              [ngClass]="{
+                'is-invalid': submitted && form['descripcion'].errors
+              }"
+              (input)="
+                _utilityService?.convertUppercase(
+                  'descripcion',
+                  $event,
+                  compensationForm
+                )
+              "
+            ></textarea>
+            <div
+              *ngIf="submitted && form['descripcion'].errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="compensationForm.get('descripcion').errors?.required">
+                La descripción para la compensación es obligatorio
+              </div>
+              <div *ngIf="form['descripcion'].errors['maxlength']">
+                Debe tener menos de
+                {{
+                  form["descripcion"].errors["maxlength"]["requiredLength"]
+                }}carácteres
+              </div>
+              <div *ngIf="form['descripcion'].errors['minlength']">
+                Debe tener mas de
+                {{
+                  form["descripcion"].errors["minlength"]["requiredLength"]
+                }}carácteres
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ms-2 me-4 m-2">
+        <div
+          class="mb-3 border border-danger rounded p-3"
+          formGroupName="datosOrigen"
+        >
+          <div class="d-flex justify-content-between">
+            <h5 class="fw-300 fs-5 mb-3 text-primary">Datos de origen</h5>
+            <h5
+              class="fw-300 fs-5 mb-3"
+              [ngClass]="{
+                'text-danger': getClassDifferentAmounts(),
+                'text-success': getClassEqualAmounts(),
+                'text-primary': getClassEqualToZero()
+              }"
+            >
+              <span class="fw-bold">TOTAL ORIGEN: </span>
+              <span class="fw-bolder fs-4">{{
+                compensationForm.get("montoOrigin").value
+              }}</span>
+            </h5>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <div class="px-1">
+                <label class="mb-2" for="tipoPersonaId">(*) Operador </label>
+                <ng-select
+                  formControlName="tipoPersonaId"
+                  notFoundText="Sin registros"
+                  placeholder="Seleccione empleado"
+                  (change)="onChangeOrigin($event)"
+                  [disabled]="isSelected"
+                  [items]="operatorListOrigin"
+                  bindLabel="nombre"
+                  bindValue="id"
+                />
+                <div
+                  *ngIf="submitted && datosOrigen.get('tipoPersonaId').errors"
+                  class="col-sm-12"
+                >
+                  <div
+                    *ngIf="datosOrigen.get('tipoPersonaId').errors['required']"
+                    class="text-danger mt-1 font-size-10"
+                  >
+                    Seleccione responsable.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="px-1">
+                <label class="mb-2" for="personaReferenciaId"
+                  >(*) {{ getLabelPerson(selectedClientType) }}
+                </label>
+                <ng-select
+                  formControlName="personaReferenciaId"
+                  notFoundText="Sin registros"
+                  placeholder="Seleccione empleado"
+                  (change)="onChangeClientOrigin($event)"
+                  [items]="itemsClientGeneralOrigin"
+                  bindLabel="nameGeneral"
+                  bindValue="id"
+                />
+                <div
+                  *ngIf="
+                    submitted && datosOrigen.get('personaReferenciaId').errors
+                  "
+                  class="col-sm-12"
+                >
+                  <div
+                    *ngIf="
+                      datosOrigen.get('personaReferenciaId').errors['required']
+                    "
+                    class="text-danger mt-1 font-size-10"
+                  >
+                    Seleccione cliente.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="px-1">
+                <label class="mb-2" for="cashEmployeeId">(*) Operación </label>
+                <ng-select
+                  formControlName="operacionId"
+                  notFoundText="Sin registros"
+                  placeholder="Seleccione empleado"
+                  (change)="onChangeOperationOrigin($event)"
+                  [items]="itemsOperatiorGeneralOrigin"
+                  bindLabel="nombre"
+                  bindValue="id"
+                />
+                <div
+                  *ngIf="submitted && datosOrigen.get('operacionId').errors"
+                  class="col-sm-12"
+                >
+                  <div
+                    *ngIf="datosOrigen.get('operacionId').errors['required']"
+                    class="text-danger mt-1 font-size-10"
+                  >
+                    Seleccione Operación.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center">
+            <div class="col-md-12">
+              <div class="loader-paymentBox" *ngIf="isStatusData">
+                <div class="loader-paymentMethod"></div>
+              </div>
+              <compensaciones-movimiento-origen
+                *ngIf="
+                  operationOriginId && this.listMovesOrigin.length != 0;
+                  else elseOrigin
+                "
+                [selectedClientType]="selectedClientType"
+                [labelOperation]="labelOperationOrigin"
+                [listMoves]="listMovesOrigin"
+                [formMain]="compensationForm"
+              />
+              <ng-template #elseOrigin>
+                <div
+                  *ngIf="operationOriginId && isEmptyOrigin"
+                  class="alert alert-warning d-flex align-items-center"
+                  role="alert"
+                >
+                  <i class="mdi mdi-information me-2 text-dark fs-4"></i>
+                  <div>No se encontraron movimientos registrados</div>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="mb-3 border border-primary rounded p-3"
+          formGroupName="datosContraparte"
+        >
+          <div class="d-flex justify-content-between">
+            <h5 class="fw-300 fs-5 mb-3 text-primary">Datos Contraparte</h5>
+            <h5
+              class="fw-300 fs-5 mb-3"
+              [ngClass]="{
+                'text-danger': getClassDifferentAmounts(),
+                'text-success': getClassEqualAmounts(),
+                'text-primary': getClassEqualToZero()
+              }"
+            >
+              <span class="fw-bold">TOTAL CONTRAPARTE: </span>
+              <span class="fw-bolder fs-4">{{
+                compensationForm.get("montoNoOrigin").value
+              }}</span>
+            </h5>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <div class="px-1">
+                <label class="mb-2" for="tipoPersonaId">(*) Operador </label>
+                <ng-select
+                  formControlName="tipoPersonaId"
+                  notFoundText="Sin registros"
+                  placeholder="Seleccione empleado"
+                  (change)="onChangeNoOrigin($event)"
+                  [items]="itemsOperatorGeneralNoOrigin"
+                  bindLabel="nombre"
+                  bindValue="id"
+                />
+                <div
+                  *ngIf="
+                    submitted && datosContraparte.get('tipoPersonaId').errors
+                  "
+                  class="col-sm-12"
+                >
+                  <div
+                    *ngIf="
+                      datosContraparte.get('tipoPersonaId').errors['required']
+                    "
+                    class="text-danger mt-1 font-size-10"
+                  >
+                    Seleccione Operador.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="px-1">
+                <label class="mb-2" for="personaReferenciaId"
+                  >(*) {{ getLabelPerson(selectedClientTypeNoOrigin) }}
+                </label>
+                <ng-select
+                  formControlName="personaReferenciaId"
+                  notFoundText="Sin registros"
+                  placeholder="Seleccione empleado"
+                  (change)="onChangeClientNoOrigin($event)"
+                  [items]="clientListNoOrigin"
+                  bindLabel="nameGeneral"
+                  bindValue="id"
+                />
+                <div
+                  *ngIf="
+                    submitted &&
+                    datosContraparte.get('personaReferenciaId').errors
+                  "
+                  class="col-sm-12"
+                >
+                  <div
+                    *ngIf="
+                      datosContraparte.get('personaReferenciaId').errors[
+                        'required'
+                      ]
+                    "
+                    class="text-danger mt-1 font-size-10"
+                  >
+                    Seleccione Cliente.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="px-1">
+                <label class="mb-2" for="cashEmployeeId">(*) Operación </label>
+                <ng-select
+                  formControlName="operacionId"
+                  notFoundText="Sin registros"
+                  placeholder="Seleccione empleado"
+                  (change)="onChangeOperationNoOrigin($event)"
+                  [items]="itemsOperatiorGeneralNoOrigin"
+                  bindLabel="nombre"
+                  bindValue="id"
+                />
+                <div
+                  *ngIf="
+                    submitted && datosContraparte.get('operacionId').errors
+                  "
+                  class="col-sm-12"
+                >
+                  <div
+                    *ngIf="
+                      datosContraparte.get('operacionId').errors['required']
+                    "
+                    class="text-danger mt-1 font-size-10"
+                  >
+                    Seleccione responsable.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center">
+            <div class="col-md-12">
+              <div class="loader-paymentBox" *ngIf="isStatusDataNoOrigin">
+                <div class="loader-paymentMethod"></div>
+              </div>
+              <compensaciones-movimientos-no-origin
+                *ngIf="
+                  operationNoOriginId && this.listMovesNoOrigin.length != 0;
+                  else elseNoOrigin
+                "
+                [selectedClientType]="selectedClientTypeNoOrigin"
+                [labelOperation]="labelOperationNoOrigin"
+                [listMoves]="listMovesNoOrigin"
+                [formMain]="compensationForm"
+              />
+              <ng-template #elseNoOrigin>
+                <div
+                  *ngIf="operationNoOriginId && isEmptyNoOrigin"
+                  class="alert alert-warning d-flex align-items-center"
+                  role="alert"
+                >
+                  <i class="mdi mdi-information me-2 text-dark fs-4"></i>
+                  <div>No se encontraron movimientos registrados</div>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="row mt-3 mb-3 me-3">
+          <div class="hstack gap-2 justify-content-end">
+            <button
+              type="button"
+              class="btn btn-light"
+              data-bs-dismiss="modal"
+              [routerLink]="'/compensacion'"
+              [disabled]="isStatusSubmit"
+            >
+              Cerrar
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success d-flex gap-1 align-items-center"
+              [disabled]="isStatusSubmit"
+            >
+              <app-loader-button *ngIf="isStatusSubmit" />
+              {{
+                isStatusSubmit
+                  ? " Espere un momento..."
+                  : "Realizar compensación"
+              }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

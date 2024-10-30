@@ -1,35 +1,59 @@
 /* Importing Bootstrap SCSS file. */
 // @import '~bootstrap/scss/bootstrap';
 
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import 'src/assets/styles/bs-datepicker.css';
+
 /* You can add global styles to this file, and also import other style files */
 .modal-holder {
-  animation-name: example;
-  animation-duration: 0.3s;
+	animation-name: example;
+	animation-duration: 0.3s;
 }
 
 @keyframes example {
-  0% {
-    transform: scale(0.5)
-  }
+	0% {
+		transform: scale(0.5);
+	}
 
-  100% {
-    transform: scale(1)
-  }
+	100% {
+		transform: scale(1);
+	}
 }
 
 .carousel-item {
-  transition: opacity 0.7s ease !important;
-  position: absolute !important;
-  display: block !important;
-  opacity: 0;
+	transition: opacity 0.7s ease !important;
+	position: absolute !important;
+	display: block !important;
+	opacity: 0;
 }
 
 .carousel-item.active {
-  position: relative !important;
-  opacity: 1;
+	position: relative !important;
+	opacity: 1;
 }
 
-.atabx{
-  border-radius: 5px 5px 0 0 !important;
+.atabx {
+	border-radius: 5px 5px 0 0 !important;
 }
 
+ng-select.ngselect-invalid .ng-select-container {
+	border-color: #f46a6a;
+}
+
+input.uppercase,
+textarea.uppercase {
+	text-transform: uppercase;
+}
+
+.customClassPopOver .popover-arrow.arrow::after {
+	border-left-color: #50a5f1 !important;
+	border-right-color: #50a5f1 !important;
+}
+.customClassPopOver .popover-content.popover-body {
+	border: solid #c4c8dd 2px !important;
+}
+
+.ng-select-container {
+	min-height: 0px;
+	border-radius: 0;
+}

@@ -1,0 +1,180 @@
+<div id="accountFormModalBodyDiv">
+  <div class="col-xl-12 border-bottom p-4 pb-2">
+    <div class="float-end ms-2">
+      <small> Los campos marcados con asterisco (*) son requeridos. </small>
+    </div>
+    <div class="d-flex">
+      <div>
+        <h6 class="fs-14 mb-0 ms-1 text-secondary">
+          Registro de desembolso al empleado
+        </h6>
+      </div>
+    </div>
+  </div>
+  <form [formGroup]="formDesembolso" (ngSubmit)="confirmAndContinueSaving()">
+    <div class="ms-4 me-4 m-2 mt-3">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="mb-3 px-1">
+            <p class="text-muted mb-1">(*)Empleado</p>
+            <ng-select
+              formControlName="empleadoId"
+              notFoundText="Sin registros"
+              placeholder="Seleccione empleado"
+              appendTo="#accountFormModalBodyDiv">
+              <ng-option *ngFor="let item of listaResponsables" [value]="item['id']">
+                {{item.nombre}} ({{item['nitCi']}})
+              </ng-option>
+            </ng-select>
+
+            <div *ngIf="submitted && form['empleadoId'].errors">
+              <div
+                class="text-danger mt-1 font-size-10"
+                *ngIf="form['empleadoId'].errors['required']"
+              >
+                Seleccione el empleado
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <p class="text-muted mb-1">Nº desembolso</p>
+          <input
+            type="text"
+            class="form-control text-end"
+            formControlName="nroReferencial"
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-8">
+          <div class="mb-3 px-1">
+            <p class="text-muted mb-1">(*) Centro Costos</p>
+            <ng-select
+              class="uppercase"
+              formControlName="centroCostoId"
+              placeholder="Seleccione Centro de Costo"
+              [items]="listaCentroCostos"
+              bindLabel="nombre"
+              bindValue="id"
+              [ngClass]="{
+                'ngselect-invalid':
+                  submitted && form['centroCostoId'].errors != null
+              }"
+            />
+            <div *ngIf="submitted && form['centroCostoId'].errors">
+              <div
+                class="text-danger mt-1 font-size-10"
+                *ngIf="form['centroCostoId'].errors['required']"
+              >
+                El centro de costos es obligatorio
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <input-fecha
+            [formPadre]="formDesembolso"
+            [submitted]="submitted"
+            labelFecha="(*)Fecha desembolso"
+            (alRedirigir)="alAperturar()"
+          ></input-fecha>
+        </div>
+      </div>
+
+      <div class="row">
+        <transaccion-array
+          [formPadre]="formDesembolso"
+          labelTransferencia="el desembolso"
+          [submitted]="submitted"
+          (alIngresarMonto)="recibirMontoTotal($event)"
+        ></transaccion-array>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-md-8">
+          <p class="text-muted mb-1">(*) Descripción </p>
+          <textarea
+            formControlName="descripcionDesembolso"
+            class="form-control"
+            rows="2"
+            placeholder="Descripción del desembolso"
+            [ngClass]="{
+              'is-invalid': submitted && form['descripcionDesembolso'].errors
+            }"
+            (input)="
+              utilityService?.convertUppercase(
+                'descripcionDesembolso',
+                $event,
+                formDesembolso
+              )
+            "
+          ></textarea>
+          <div
+            *ngIf="submitted && form['descripcionDesembolso'].errors"
+            class="invalid-feedback"
+          >
+            <div
+              *ngIf="
+                formDesembolso.get('descripcionDesembolso').errors?.required
+              "
+            >
+              La descripción para el desmbolso es obligatorio
+            </div>
+            <div *ngIf="form['descripcionDesembolso'].errors['maxlength']">
+              Debe tener menos de
+              {{
+                form["descripcionDesembolso"].errors["maxlength"][
+                  "requiredLength"
+                ]
+              }}carácteres
+            </div>
+            <div *ngIf="form['descripcionDesembolso'].errors['minlength']">
+              Debe tener mas de
+              {{
+                form["descripcionDesembolso"].errors["minlength"][
+                  "requiredLength"
+                ]
+              }}carácteres
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 border p-3">
+          <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary">
+            <b> (*) Monto total de desembolso </b>
+          </h6>
+          <div class="hstack gap-2 justify-content-end me-4">
+            <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary">
+              <b>{{ formDesembolso.get("importeDesembolso").value }}</b>
+            </h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3 mb-3 me-3 pt-4 border-top">
+        <div class="hstack gap-2 justify-content-end">
+          <button
+            type="button"
+            class="btn btn-light"
+            data-bs-dismiss="modal"
+            (click)="this.cerrarModal.emit()"
+          >
+            Cerrar
+          </button>
+          <button
+            [disabled]="isStatusSubmit"
+            type="submit"
+            class="btn btn-success d-flex gap-1 align-items-center"
+            [ngStyle]="{ padding: isStatusSubmit ? '6px' : '7.52px' }"
+          >
+            <app-loader-button *ngIf="isStatusSubmit" />
+            {{
+              isStatusSubmit ? " Espere un momento..." : "Realizar desembolso"
+            }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,197 @@
+
+<div id="accountFormModalBodyDiv">
+  <div class="col-xl-12 border-bottom p-4 pb-2">
+      <div class="float-end ms-2">
+        <h6 class="fs-14 mb-0 ms-1 text-secondary fw-bold">MOVIMIENTOS DE LA CUENTA DE BANCO</h6>
+      </div>
+      <div class="d-flex">
+        <div class="flex-grow-1 align-self-center">
+            <div class="text-muted">
+                <h5 class="mb-2">{{cuentaBanco['banco']['nombre']}}</h5>
+                <h5 class="mb-1">Nº de cuenta: {{cuentaBanco['nroCuenta']}}</h5>
+                <p class="mb-0">Moneda: {{cuentaBanco['moneda']['sigla']}} - {{cuentaBanco['moneda']['nombre']}}</p>
+                <p class="mb-0 fw-medium">Saldo Cuenta: {{cuentaBanco['saldo']}}</p>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="row mt-1 mb-0 m-3">
+    <div class="card">
+      <div class="card-body">
+        <div style="cursor: pointer;">
+          <h5 class="fs-14 mb-2 ms-1 fw-bold"
+            [ngClass]="filtrosView?'text-primary':'text-secondary'"
+            (click)="verFiltros()">
+            <i class="mdi font-size-16"
+            [ngClass]="filtrosView? 'mdi-filter-plus':'mdi-filter-minus-outline'"></i>
+            Filtros
+          </h5>
+        </div>
+        <ng-template *ngIf="filtrosView; then filtrosMovimientos"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="row pt-1 p-3">
+    <div class="table-responsive">
+      <table class="table table-sm m-0">
+        <thead>
+          <tr>
+            <th>Acciones</th>
+            <th>Movimiento</th>
+            <th>Fecha</th>
+            <th>Medio de Movimiento</th>
+            <th>Nº Referencia</th>
+            <th class="text-end">Monto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let mov of movimientosList">
+            <td>
+              <button
+                class="btn btn-sm btn-warning"
+                (click)="descargarComprobante(mov.id)"
+                tooltip="Imprimir Comprobante"
+              >
+                <i class="mdi mdi-download"></i>
+              </button>
+            </td>
+            <td>
+              <span
+              *ngIf="mov['ingresoEgreso']"
+              class="badge bg-success font-size-10"
+            >
+              INGRESO
+            </span>
+            <span
+              *ngIf="!mov['ingresoEgreso']"
+              class="badge bg-danger font-size-10"
+            >
+              EGRESO
+            </span>
+            </td>
+            <td>
+              <div>
+                <p class="mb-0 text-muted">
+                  {{ mov['fecha']|fechaFormat}}
+                </p>
+                <small class="text-muted text-end mb-0"
+                  >{{mov['descripcion']}}</small
+                >
+              </div>
+            </td>
+            <td>{{mov['medioTransferencia']?mov['medioTransferencia']['medio']:''}}</td>
+            <td>{{mov['nroReferencia']}}</td>
+            <td class="text-end">{{mov['monto']|decimalAmount}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <div class="row mt-3 mb-3 me-3">
+    <div class="hstack gap-2 justify-content-end">
+        <button
+            type="button"
+            class="btn btn-light"
+            data-bs-dismiss="modal"
+            (click)="this.cerrarModal.emit()"
+           >
+            Cerrar
+        </button>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #filtrosMovimientos>
+  <div class="p-2 pb-0" >
+    <div class="row">
+      <div class="col-md-8">
+        <p class="text-muted fs-14 mb-0">Descripción</p>
+        <input
+          type="text"
+          class="form-control form-control-sm uppercase"
+          [(ngModel)]="descripcion"
+        />
+      </div>
+      <div class="col-md-4">
+        <div class="d-flex mt-3">
+          <p class="text-muted fs-14 mb-0">Rango de fecha?</p>
+            <p class="text-muted fs-14 mb-0 ms-4 fw-bold">{{!rangoFechas?'NO':'SI'}}</p>
+            <div class="form-check form-check-success m-0 p-0 ms-5">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                style="transform: scale(1.7)"
+                placement="top"
+                [ngModel]="rangoFechas"
+                (ngModelChange)="rangoFechas=$event"
+                />
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-4">
+        <p class="text-muted fs-14 mb-0">Medio transferencia</p>
+            <ng-select [(ngModel)]="medioTransferenciaSelect">
+              <ng-option
+                *ngFor="let medio of medioTransferenciaList"
+                [value]="medio.id"
+              >{{ medio['medio']}}
+              </ng-option>
+            </ng-select>
+      </div>
+      <div class="col-md-4">
+        <p class="text-muted fs-14 mb-0">Tipo movimiento</p>
+            <ng-select [(ngModel)]="tipoMovimiento">
+              <ng-option
+                *ngFor="let movimiento of movimientosTipoList"
+                [value]="movimiento.value"
+              >{{ movimiento['label']}}
+              </ng-option>
+            </ng-select>
+      </div>
+      <div class="col-md-4">
+        <ng-template *ngIf="rangoFechas; then inputRango else inputFecha"/>
+        <ng-template #inputRango>
+          <p class="text-muted fs-14 mb-0">Fecha (Desde-Hasta)</p>
+          <input
+            type="text"
+            [(ngModel)]="filtroFecha"
+            placeholder="dd/mm/AAAA - dd/mm/AAAA"
+            class="form-control date"
+            name="daterange"
+            autocomplete="off"
+            bsDaterangepicker
+            (bsValueChange)="getFechas($event)"
+          />
+        </ng-template>
+        <ng-template #inputFecha>
+          <p class="text-muted fs-14 mb-0">Fecha</p>
+          <input
+          type="text"
+          placeholder="dd-mm-AA"
+          class="form-control"
+          bsDatepicker
+          [(ngModel)]="filtroFecha"
+          (bsValueChange)="getFechas($event)"
+          />
+        </ng-template>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="hstack gap-2 justify-content-end">
+        <button
+            type="button"
+            class="btn btn-success"
+            (click)="filtrar()"
+           >Filtrar</button>
+
+      </div>
+    </div>
+  </div>
+</ng-template>

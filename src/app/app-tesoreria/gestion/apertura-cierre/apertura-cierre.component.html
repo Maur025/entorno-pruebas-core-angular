@@ -1,0 +1,76 @@
+<app-page-title title="Lista de Meses"/>
+<app-tabla-new
+#tabla
+*ngIf="filterData && filterData.gestionId"
+[botonNuevo]="false"
+[smallTable]="false"
+[conOpciones]="false"
+[formato]="formatList"
+[datosService]="aperturaCierreService"
+getAll="filterRecords"
+[templateFila]="templateFila"
+[filtros]="filterData"
+[filtrosNoRefresh]="['gestionId']"
+></app-tabla-new>
+
+<ng-template #templateFila let-row="fila" let-headers="cabeceras">
+	<ng-template ngFor let-field [ngForOf]="headers">
+		<ng-template
+			*ngIf="formatList?.cabeceras[field]?.visibleCheck; then tempTd"
+		/>
+		<ng-template #tempTd>
+			<td [ngSwitch]="field">
+				<div *ngSwitchCase="'acciones'">
+					<ul class="list-unstyled hstack gap-1 mb-0">
+						<li
+							data-bs-toggle="tooltip"
+							data-bs-placement="top"
+							[title]="row.aperturado ? 'Cierre' : 'Apertura'"
+						>
+							<a
+								data-bs-toggle="modal"
+								class="btn btn-sm"
+								[ngClass]="
+									row.aperturado === true ? 'btn-success' : 'btn-danger'
+								"
+								(click)="toggleStatus(row)"
+							>
+								<i class="mdi mdi-power"></i>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<div *ngSwitchCase="'deleted'">
+					<span
+						class="badge font-size-10"
+						[ngClass]="{
+							'bg-danger': !row.aperturado,
+							'bg-success': row.aperturado
+						}"
+					>
+						<i
+							class="mdi me-1"
+							[ngClass]="{
+								'mdi-lock': !row.aperturado,
+								'mdi-lock-open': row.aperturado
+							}"
+						></i>
+						{{ row.aperturado ? 'APERTURADO' : 'SIN APERTURAR' }}
+					</span>
+				</div>
+
+				<div *ngSwitchCase="'fechaIni'">
+					{{ row.fechaIni|fechaFormat }}
+				</div>
+				<div *ngSwitchCase="'fechaFin'">
+					{{ row.fechaFin|fechaFormat }}
+				</div>
+
+				<div *ngSwitchDefault>
+					{{ row[field] }}
+				</div>
+			</td>
+		</ng-template>
+	</ng-template>
+</ng-template>

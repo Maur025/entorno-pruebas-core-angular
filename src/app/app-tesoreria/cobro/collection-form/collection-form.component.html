@@ -1,0 +1,213 @@
+<app-page-title title="COBROS" [breadcrumbItems]="breadCrumbItems" />
+<div class="card">
+  <div class="card-body" id="salePendingCollectionForm">
+    <div class="col-xl-12 border-bottom mb-2">
+      <div class="float-end ms-2">
+        <small class="mb-4" style="color: #f46a6a">
+          Los campos marcados con asterisco (*) son obligatorios.
+        </small>
+      </div>
+      <div class="d-flex">
+        <i class="mdi mdi-square-rounded text-primary"></i>
+        <div>
+          <h6 class="fs-14 mb-2 ms-1 text-primary">
+            DATOS PARA LA TRANSACCIÓN
+          </h6>
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="collectionForm" (ngSubmit)="confirmAndContinueSaving()">
+      <div class="row mt-3 mb-3 me-3 pt-4 border-top">
+        <div class="ms-2 me-4 m-2">
+          <div class="row mb-2">
+            <div class="col-md-4">
+              <input-fecha
+                [formPadre]="collectionForm"
+                [submitted]="submitted"
+                labelFecha="(*)Fecha de cobro"
+              />
+            </div>
+            <div class="col-md-4 mb-2">
+              <p class="text-muted mb-1">(*)Cliente</p>
+              <ng-select
+                formControlName="clienteId"
+                placeholder="SELECCIONE CLIENTE"
+                [items]="clientDataList"
+                bindLabel="razonSocial"
+                bindValue="id"
+                [ngClass]="{
+                  'ngselect-invalid':
+                    submitted &&
+                    collectionForm?.get('clienteId')?.errors != null
+                }"
+                [loading]="clienteSelectLoading"
+                notFoundText="No se encontraron clientes disponibles"
+                (search)="searchInClientSelect($event)"
+                (change)="onChangeSelectClient($event)"
+              />
+              <div
+                *ngIf="submitted && collectionForm?.get('clienteId')?.errors"
+              >
+                <div
+                  class="text-danger mt-1 font-size-10"
+                  *ngIf="collectionForm?.get('clienteId')?.errors?.required"
+                >
+                  Seleccione proveedor.
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mb-2">
+              <p class="text-muted mb-1">Nº Referencia</p>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Referencia documento"
+                formControlName="nroReferencia"
+                (input)="
+                  utilityService?.convertUppercase(
+                    'nroReferencia',
+                    $event,
+                    collectionForm
+                  )
+                "
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12 border-bottom mb-2">
+              <div class="d-flex">
+                <div>
+                  <h6
+                    class="fs-14 mb-2 ms-1 text-primary"
+                    *ngIf="!currentlyClientData?.id"
+                  >
+                    Ventas al cliente
+                    <i>(Para listar ventas seleccione a un cliente)</i>
+                  </h6>
+                  <h6
+                    class="fs-14 mb-2 ms-1 text-primary"
+                    *ngIf="currentlyClientData?.id"
+                  >
+                    Ventas al cliente :
+                    {{ currentlyClientData?.razonSocial || "N/A" }}
+                  </h6>
+                </div>
+              </div>
+            </div>
+            <app-sale-pending-collection-list
+              *ngIf="currentlyClientData?.id"
+              [parentForm]="collectionForm"
+              [clientData]="currentlyClientData"
+              [salesPendingCollectionList]="salesPendingCollection"
+              [submitted]="submitted"
+              (fillSalesPendingCollection)="
+                getSalesPendingCollectionList($event)
+              "
+              (updateCollectionTotal)="getCollectionTotalAmount($event)"
+            />
+          </div>
+          <div
+            class="row"
+            [ngClass]="{
+              'disable-transacciones': salesPendingCollection?.length <= 0
+            }"
+          >
+            <transaccion-array
+              [formPadre]="collectionForm"
+              labelTransferencia="realizar el cobro"
+              [submitted]="submitted"
+              (alIngresarMonto)="getTotalTransactionAmount($event)"
+              appendToLabel="salePendingCollectionForm"
+            />
+          </div>
+
+          <div class="row mt-2">
+            <div class="col-md-8">
+              <label class="mb-2 mt-2" for="fieldDescripcion">
+                (*) Descripción
+              </label>
+              <textarea
+                id="fieldDescripcion"
+                formControlName="descripcion"
+                class="form-control"
+                rows="2"
+                placeholder="Descripción del pago"
+                [ngClass]="{
+                  'is-invalid':
+                    submitted && collectionForm?.get('descripcion')?.errors
+                }"
+                (input)="
+                  utilityService?.convertUppercase(
+                    'descripcion',
+                    $event,
+                    collectionForm
+                  )
+                "
+              ></textarea>
+              <div
+                *ngIf="submitted && collectionForm?.get('descripcion')?.errors"
+                class="invalid-feedback"
+              >
+                <div
+                  *ngIf="collectionForm?.get('descripcion')?.errors?.required"
+                >
+                  La descripción para la apertura de caja es obligatoria
+                </div>
+                <div
+                  *ngIf="collectionForm?.get('descripcion')?.errors?.maxlength"
+                >
+                  Debe tener menos de
+                  {{
+                    collectionForm?.get("descripcion")?.errors?.maxlength
+                      ?.requiredLength
+                  }}
+                  carácteres
+                </div>
+                <div
+                  *ngIf="collectionForm?.get('descripcion')?.errors?.minlength"
+                >
+                  Debe tener mas de
+                  {{
+                    collectionForm?.get("descripcion")?.errors?.minlength
+                      ?.requiredLength
+                  }}
+                  carácteres
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 border p-3">
+              <h6 class="fs-14 mt-0 mb-2 ms-1 text-secondary">
+                <b> (*) Monto total a cobrar </b>
+              </h6>
+              <div class="hstack gap-2 justify-content-end me-4">
+                <h5 class="fs-14 mt-2 mb-2 ms-1 text-primary">
+                  <b>{{ collectionForm?.get("montoCobrado")?.value }}</b>
+                </h5>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hstack gap-2 justify-content-end">
+          <button
+            type="button"
+            class="btn btn-light"
+            [disabled]="isSubmitStatus"
+          >
+            Cerrar
+          </button>
+          <button
+            [disabled]="isSubmitStatus"
+            type="submit"
+            [ngStyle]="{ padding: isSubmitStatus ? '6px' : '7.52px' }"
+            class="btn btn-success d-flex gap-1 align-items-center"
+          >
+            <app-loader-button *ngIf="isSubmitStatus" />
+            {{ isSubmitStatus ? " Espere un momento..." : "Realizar Cobro" }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

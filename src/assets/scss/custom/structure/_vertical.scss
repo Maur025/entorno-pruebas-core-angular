@@ -117,7 +117,7 @@
                 li {
 
                     a {
-                        padding: .4rem 0.5rem .4rem 2.5rem;
+                        padding: .4rem 1.5rem .4rem 3.5rem;
                         font-size: 13px;
                         color: $sidebar-menu-sub-item-color;
                         &:hover {
@@ -130,7 +130,7 @@
 
                         li {
                             a {
-                                padding: .4rem 0.5rem .4rem 2.5rem;
+                                padding: .4rem 1.5rem .4rem 4.5rem;
                                 font-size: 13px;
 
 
@@ -493,73 +493,146 @@ body[data-layout="horizontal"] {
 // Compact Sidebar
 
 body[data-sidebar-size="small"] {
-    .navbar-brand-box{
-        width: $sidebar-width-sm;
-    }
-    .vertical-menu{
-        width: $sidebar-width-sm;
-        text-align: center;
+  .navbar-brand-box{
+      width: $sidebar-width-sm;
+  }
+  .vertical-menu{
+      width: $sidebar-width-sm;
+      text-align: center;
 
-        .has-arrow:after,
-        .badge {
-            display: none !important;
-        }
-    }
-    .main-content {
-        margin-left: $sidebar-width-sm;
-    }
-    .footer {
-        left: $sidebar-width-sm;
-        @media (max-width: 991.98px) {
-            left: 0;
-        }
-    }
+      .has-arrow:after,
+      .badge {
+          display: none !important;
+      }
+  }
+  .main-content {
+      margin-left: $sidebar-width-sm;
+  }
+  .footer {
+      left: $sidebar-width-sm;
+      @media (max-width: 991.98px) {
+          left: 0;
+      }
+  }
 
-    #sidebar-menu {
-        ul li {
-            &.menu-title{
-                background-color: lighten($sidebar-dark-bg, 2%);
-            }
-            a{
-                i{
-                    display: block;
-                }
-            }
-            ul.sub-menu {
-                li {
-                    a{
-                        padding-left: 1.5rem;
-                    }
+  #sidebar-menu {
+      ul li {
+          &.menu-title{
+              background-color: lighten($sidebar-dark-bg, 2%);
+          }
+          a{
+              i{
+                  display: block;
+              }
+          }
+          ul.sub-menu {
+              li {
+                  a{
+                      padding-left: 1.5rem;
+                  }
 
-                    ul.sub-menu li a {
-                        padding-left: 1.5rem;
-                    }
-                }
-            }
-        }
-    }
-    &.vertical-collpsed {
-        .main-content {
-            margin-left: $sidebar-collapsed-width;
-        }
-        .vertical-menu {
-            #sidebar-menu{
-                text-align: left;
-                >ul{
-                    >li{
-                        >a {
-                            i{
-                                display: inline-block;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        .footer {
-            left: $sidebar-collapsed-width;
-        }
-    }
+                  ul.sub-menu li a {
+                      padding-left: 1.5rem;
+                  }
+              }
+          }
+      }
+  }
+  &.vertical-collpsed {
+      .main-content {
+          margin-left: $sidebar-collapsed-width;
+      }
+      .vertical-menu {
+          #sidebar-menu{
+              text-align: left;
+              >ul{
+                  >li{
+                      >a {
+                          i{
+                              display: inline-block;
+                          }
+                      }
+                  }
+              }
+          }
+      }
+      .footer {
+          left: $sidebar-collapsed-width;
+      }
+  }
+}
+
+//ocultar sidebar
+
+body[data-sidebar-size="hidesidebar"] {
+  .navbar-brand-box{
+      width: $sidebar-width-sm;
+  }
+  .vertical-menu{
+      width: $sidebar-width-sm;
+      text-align: center;
+
+      .has-arrow:after,
+      .badge {
+          display: none !important;
+      }
+  }
+  .main-content {
+      margin-left: $sidebar-width-sm;
+  }
+  .footer {
+      left: $sidebar-width-sm;
+      @media (max-width: 991.98px) {
+          left: 0;
+      }
+  }
+
+  #sidebar-menu {
+    display:none;
+      ul li {
+          &.menu-title{
+              background-color: lighten($sidebar-dark-bg, 2%);
+          }
+          a{
+              i{
+                  display: block;
+              }
+          }
+          ul.sub-menu {
+              li {
+                  a{
+                      padding-left: 1.5rem;
+                  }
+
+                  ul.sub-menu li a {
+                      padding-left: 1.5rem;
+                  }
+              }
+          }
+      }
+  }
+  &.vertical-collpsed {
+      .main-content {
+          margin-left: $sidebar-collapsed-width;
+      }
+      .vertical-menu {
+          #sidebar-menu{
+              text-align: left;
+              >ul{
+                  >li{
+                      >a {
+                          i{
+                              display: inline-block;
+                          }
+                      }
+                  }
+              }
+          }
+      }
+      .footer {
+          left: $sidebar-collapsed-width;
+      }
+  }
 }
 
 // colored sidebar

@@ -1,0 +1,117 @@
+<app-page-title title="Fondo a rendir" [breadcrumbItems]="breadCrumbItems" />
+<app-tabla-new
+  #tabla
+  [botonNuevo]="true"
+  [smallTable]="false"
+  [conOpciones]="false"
+  [formato]="formato"
+  [datosService]="fondoRendirService"
+  getAll="getAll"
+  [templateFila]="templateFila"
+  [botonNuevo]="true"
+  labelNuevo="Nuevo desembolso"
+  (alCrear)="nuevoDesembolso(desembolsoModal)"
+></app-tabla-new>
+
+<ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">
+  <ng-template ngFor let-campo [ngForOf]="cabeceras">
+    <ng-template
+      *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"
+    ></ng-template>
+    <ng-template #tempTD>
+      <td [ngSwitch]="campo">
+        <div *ngSwitchCase="'acciones'">
+          <button
+            *ngIf="fila['saldoReembolsar'] > 0"
+            class="btn btn-sm btn-warning me-2"
+            tooltip="Pagar reembolso"
+            (click)="pagoReemblosoForm(fila, pagoModal)"
+          >
+            <i class="mdi mdi-contactless-payment"></i>
+          </button>
+          <button
+            *ngIf="fila['saldoDesembolso'] > 0"
+            class="btn btn-sm btn-primary me-2"
+            tooltip="Pago por devolución"
+            (click)="pagoDevolucionForm(fila, pagoModal)"
+          >
+            <i class="mdi mdi-keyboard-backspace"></i>
+          </button>
+          <button
+            class="btn btn-sm btn-secondary me-1"
+            tooltip="Ver movimientos"
+            (click)="verMovimientos(fila, modalMovimientos)"
+          >
+            <i class="mdi mdi-file-replace"></i>
+          </button>
+        </div>
+        <div *ngSwitchCase="'nombre'" style="width: 180px">
+          <div>
+            <p class="mb-0 text-muted">
+              {{ fila["nombre"] }}
+            </p>
+            <small class="text-muted text-end mb-0"
+              >NIT / CI: <b>{{ fila["nitCi"] }}</b></small
+            >
+          </div>
+        </div>
+        <div *ngSwitchCase="'desembolso'" class="text-end">
+          {{ fila["totalDesembolso"] | decimalAmount }}
+        </div>
+        <div *ngSwitchCase="'descargo'" class="text-end">
+          {{ fila["totalDescargo"] | decimalAmount }}
+        </div>
+        <div *ngSwitchCase="'saldoDesembolso'" class="text-end">
+          <p
+            [ngClass]="
+              fila['saldoDesembolso'] >= 0 ? 'text-success' : 'text-danger'
+            "
+          >
+            {{ fila["saldoDesembolso"] | decimalAmount }}
+          </p>
+        </div>
+        <div *ngSwitchCase="'reembolso'" class="text-end">
+          {{ fila["totalReembolso"] | decimalAmount }}
+        </div>
+        <div *ngSwitchCase="'pagoReembolso'" class="text-end">
+          {{ fila["totalPagoReembolso"] | decimalAmount }}
+        </div>
+        <div *ngSwitchCase="'saldoReembolso'" class="text-end">
+          <p
+            [ngClass]="
+              fila['saldoReembolsar'] > 0 ? 'text-danger' : 'text-success'
+            "
+          >
+            {{ fila["saldoReembolsar"] | decimalAmount }}
+          </p>
+        </div>
+        <div *ngSwitchCase="'saldoNeto'" class="text-end">
+          <p
+            class="fw-bold"
+            [ngClass]="fila['saldoNeto'] >= 0 ? 'text-success' : 'text-danger'"
+          >
+            {{ fila["saldoNeto"] | decimalAmount }}
+          </p>
+        </div>
+      </td>
+    </ng-template>
+  </ng-template>
+</ng-template>
+
+<ng-template #desembolsoModal>
+  <form-desembolso
+    (cerrarModal)="cerrarModal()"
+    (alActualizar)="cerrarModal()"
+  ></form-desembolso>
+</ng-template>
+
+<ng-template #pagoModal>
+  <form-pago
+    [operacion]="operacion"
+    [fondoRendirData]="dataFondoRendir"
+    (cerrarModal)="cerrarModal()"
+    (alActualizar)="cerrarModal()"
+  ></form-pago>
+</ng-template>
+
+<ng-template #modalMovimientos> </ng-template>

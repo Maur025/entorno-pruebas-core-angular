@@ -1,0 +1,474 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row mb-2">
+            <div class="col-md-3">
+              <div class="text-sm-start">
+                <a
+                  *ngIf="botonNuevo"
+                  class="btn btn-primary btn-rounded mb-2 mr-2"
+                  (click)="alCrear.emit()"
+                  routerLinkActive="active"
+                >
+                  <i class="mdi mdi-plus me-1"></i>
+                  <ng-template
+                    *ngIf="
+                      labelNuevo.length >= 8;
+                      then labelSmall;
+                      else labelNormal
+                    "
+                  />
+                  <ng-template #labelSmall>
+                    <small>{{ labelNuevo }}</small>
+                  </ng-template>
+                  <ng-template #labelNormal>{{ labelNuevo }}</ng-template>
+                </a>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div *ngIf="viewTools" class="bg-transparent position-relative">
+                <div
+                  class="contact-links d-flex font-size-20 position-absolute end-0 border-bottom"
+                >
+                  <div
+                    class="me-4 ms-4"
+                    *ngFor="let itemOption of opcionesPage"
+                  >
+                    <a
+                      href="javascript: void(0);"
+                      [tooltip]="itemOption.label"
+                      (click)="accionPage($event, itemOption)"
+                    >
+                      <i
+                        *ngIf="!itemOption.stateImage"
+                        class="{{ itemOption.icon }} font-size-24 ms-0"
+                      ></i>
+                      <img
+                        class="icon-export"
+                        *ngIf="itemOption.stateImage"
+                        [src]="itemOption.image"
+                        [alt]="itemOption.label"
+                      />
+                    </a>
+                  </div>
+                  <div class="ms-4">
+                    <ng-container
+                      *ngTemplateOutlet="contenidoColumnas"
+                    ></ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-1">
+              <div class="text-sm-end">
+                <ng-template
+                  *ngIf="
+                    opcionesPage.length > 0;
+                    then opcionesVarias;
+                    else columnas
+                  "
+                />
+                <ng-template #opcionesVarias>
+                  <button
+                    type="button"
+                    data-content="0"
+                    class="btn btn-sm btn-rounded btn-dark"
+                    tooltip="Herramientas"
+                    (click)="verOpcionesPagina()"
+                  >
+                    <i
+                      class="bx bxs-widget bx-spin font-size-18 align-middle"
+                    ></i>
+                  </button>
+                </ng-template>
+                <ng-template #columnas>
+                  <ng-container
+                    *ngTemplateOutlet="contenidoColumnas"
+                  ></ng-container>
+                </ng-template>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-primary btn-rounded ms-1"
+                  (click)="refrescar()"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  tooltip="Refrescar Tabla"
+                >
+                  <i class="bx bx-rotate-left font-size-16"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-8"></div>
+            <div class="col-md-4">
+              <div class="row">
+                <div class="search-box d-inline-block col-11">
+                  <div class="position-relative">
+                    <input
+                      type="text"
+                      class="form-control end-0"
+                      [placeholder]="textoBuscar"
+                      [(ngModel)]="inputBuscar"
+                      (keyup)="buscarKeyDown($event)"
+                      (input)="onInputSearchKeyword($event)"
+                    />
+                    <i class="bx bx-search-alt search-icon"></i>
+                  </div>
+                </div>
+                <div class="col-1" style="margin-left: -10px">
+                  <button
+                    *ngIf="templateFiltrar"
+                    type="button"
+                    class="btn btn-sm btn-outline-primary btn-rounded"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    tooltip="Busqueda Avanzada"
+                    (click)="verSeccionBusqueda()"
+                  >
+                    <i class="mdi mdi-filter-plus font-size-16"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <div class="col-xl-12">
+              <ng-template
+                *ngIf="
+                  templateFiltrar !== undefined && verBusquedaAvanzada;
+                  then isTemplateFiltrar
+                "
+              />
+              <ng-template #isTemplateFiltrar>
+                <ng-container [ngTemplateOutlet]="templateFiltrar">
+                  <p class="text-secondary mb-0"><b>Busqueda Avanzada</b></p>
+                </ng-container>
+              </ng-template>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <div class="col-md-12">
+              <ng-template *ngIf="tabsEstado; then templateTab"></ng-template>
+              <ng-template #templateTab>
+                <ng-container [ngTemplateOutlet]="tabsEstado"> </ng-container>
+              </ng-template>
+            </div>
+
+            <div
+              *ngIf="datos"
+              class="table-responsive mt-2"
+              [class]="{
+                'container-scroll': paginate == false && datos.length > 10
+              }"
+            >
+              <table
+                class="table mb-0 table-hover align-middle nowrap data-table table-condensed"
+                [ngClass]="{ 'table-sm': smallTable }"
+              >
+                <thead>
+                  <tr>
+                    <ng-template ngFor let-campo [ngForOf]="this.cabeceras">
+                      <ng-template
+                        *ngIf="
+                          formato.cabeceras[campo].visibleCheck;
+                          then tempTH
+                        "
+                      ></ng-template>
+                      <ng-template #tempTH>
+                        <th>
+                          {{ cabeceras[campo] | json }}
+                          <button
+                            *ngIf="
+                              formato.cabeceras[campo].sortable === undefined
+                                ? true
+                                : formato.cabeceras[campo].sortable
+                            "
+                            class="colCabecera"
+                            [ngClass]="formato.cabeceras[campo].textAlingTh"
+                            id="{{ campo }}"
+                          >
+                            {{ formato.cabeceras[campo].texto }}
+                          </button>
+                          <button
+                            *ngIf="
+                              formato.cabeceras[campo].sortable === undefined
+                                ? false
+                                : !formato.cabeceras[campo].sortable
+                            "
+                            class="colCabecera noCursor"
+                            style="cursor: default"
+                            id="{{ campo }}"
+                          >
+                            {{ formato.cabeceras[campo].texto }}
+                          </button>
+                        </th>
+                      </ng-template>
+                    </ng-template>
+
+                    <ng-template
+                      *ngIf="conOpciones; then tempOptionsTH"
+                    ></ng-template>
+                    <ng-template #tempOptionsTH>
+                      <th>
+                        <button class="colCabecera noCursor">Opciones</button>
+                      </th>
+                    </ng-template>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-template
+                    *ngIf="
+                      templateTbody !== undefined;
+                      then isTemplatetbody;
+                      else noTemplatetbody
+                    "
+                  ></ng-template>
+                  <ng-template #isTemplatetbody>
+                    <ng-container
+                      [ngTemplateOutlet]="templateTbody"
+                      [ngTemplateOutletContext]="{ datos: datos }"
+                    ></ng-container>
+                  </ng-template>
+                  <ng-template #noTemplatetbody>
+                    <tr
+                      *ngFor="let data of datos; let i = index"
+                      let
+                      content="datos"
+                    >
+                      <ng-template
+                        {{templateFila}}
+                        [ngIf]="templateFila !== undefined"
+                        [ngIfElse]="sintemplate"
+                      >
+                        <ng-container
+                          [ngTemplateOutlet]="templateFila"
+                          [ngTemplateOutletContext]="{
+                            index: i,
+                            fila: data,
+                            content: datos,
+                            cabeceras: cabeceras
+                          }"
+                        ></ng-container>
+                      </ng-template>
+                      <ng-template #sintemplate>
+                        <ng-template ngFor let-campo [ngForOf]="this.cabeceras">
+                          <ng-template
+                            *ngIf="
+                              formato.cabeceras[campo].visibleCheck;
+                              then tempTD
+                            "
+                          ></ng-template>
+                          <ng-template #tempTD>
+                            <td>
+                              {{
+                                mascara(
+                                  data[campo],
+                                  data,
+                                  formato.cabeceras[campo]
+                                )
+                              }}
+                            </td>
+                          </ng-template>
+                        </ng-template>
+                      </ng-template>
+                      <ng-template
+                        *ngIf="conOpciones; then tempOptionsTD"
+                      ></ng-template>
+                      <ng-template #tempOptionsTD>
+                        <td>
+                          <!-- OPciones softdelete-->
+                          <div
+                            class="btn-toolbar d-flex justify-content-center"
+                            role="toolbar"
+                          >
+                            <div class="btn-group me-2" role="group">
+                              <button
+                                type="button"
+                                class="btn btn-sm btn-primary"
+                                (click)="alEditar.emit(data)"
+                              >
+                                <i class="fas fa-edit"></i>
+                              </button>
+                              <ng-template
+                                [ngIf]="softDelete"
+                                [ngIfElse]="templateHard"
+                              >
+                                <button
+                                  *ngIf="data[campoEstado] == valueEstado"
+                                  type="button"
+                                  class="btn btn-sm btn-danger"
+                                  (click)="alDeshabilitar.emit(data)"
+                                >
+                                  <i class="fas fa-power-off"></i>
+                                </button>
+                                <button
+                                  *ngIf="data[campoEstado] != valueEstado"
+                                  type="button"
+                                  class="btn btn-sm btn-success"
+                                  (click)="alHabilitar.emit(data)"
+                                >
+                                  <i class="fas fa-power-off"></i>
+                                </button>
+                              </ng-template>
+                              <ng-template #templateHard>
+                                <button
+                                  type="button"
+                                  class="btn btn-sm btn-danger"
+                                  (click)="alEliminar.emit(data)"
+                                >
+                                  <i class="fas fa-trash-alt"></i>
+                                </button>
+                              </ng-template>
+                            </div>
+                          </div>
+                        </td>
+                        <!-- fin de opciones softdelete -->
+                      </ng-template>
+                      <ng-template
+                        *ngIf="
+                          templateOptions !== undefined;
+                          then tempOptionsTD
+                        "
+                      ></ng-template
+                      ><!-- OPciones propias-->
+                      <ng-template #tempOptionsTD>
+                        <ng-container
+                          [ngTemplateOutlet]="templateOptions"
+                          [ngTemplateOutletContext]="{
+                            fila: data,
+                            cabeceras: cabeceras
+                          }"
+                        ></ng-container>
+                      </ng-template>
+                    </tr>
+                  </ng-template>
+                </tbody>
+                <ng-template
+                  *ngIf="templateTfooter !== undefined; then isTemplatetfooter"
+                ></ng-template>
+                <ng-template #isTemplatetfooter>
+                  <tfoot>
+                    <ng-container [ngTemplateOutlet]="templateTfooter">
+                    </ng-container>
+                  </tfoot>
+                </ng-template>
+              </table>
+            </div>
+          </div>
+
+          <div *ngIf="paginate">
+            <div
+              class="row justify-content-between align-items-center"
+              *ngIf="datos"
+            >
+              <div class="col-auto me-auto">
+                <small class="text-secondary"
+                  >Mostrando {{ datos.length }} de
+                  {{ pagination.limit }} registros</small
+                >
+              </div>
+
+              <div class="col-auto me-auto">
+                <select
+                  class="form-select"
+                  [value]="10"
+                  [(ngModel)]="pagination.size"
+                  (change)="obtenerDatos()"
+                >
+                  <option value="10">Mostrar 10</option>
+                  4n
+                  <option value="20">Mostrar 20</option>
+                  <option value="1000">Mostrar Todo</option>
+                </select>
+              </div>
+
+              <div class="col-auto">
+                <div class="card d-inline-block ms-auto mb-0">
+                  <div class="card-body p-2">
+                    <nav aria-label="Page navigation example" class="mb-0">
+                      <ul class="pagination pagination-rounded mb-0">
+                        <pagination
+                          [boundaryLinks]="true"
+                          [directionLinks]="true"
+                          [(ngModel)]="pagination.page"
+                          [totalItems]="pagination.limit"
+                          [maxSize]="10"
+                          [itemsPerPage]="pagination.size"
+                          (pageChanged)="pageChanged($event)"
+                          previousText="&lsaquo;"
+                          nextText="&rsaquo;"
+                          firstText="&laquo;"
+                          lastText="&raquo;"
+                        >
+                        </pagination>
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!paginate">
+            <div
+              class="row justify-content-between align-items-center"
+              *ngIf="datos"
+            >
+              <div class="col-auto me-auto">
+                <small class="text-muted mb-0 mt-2">
+                  Mostrando registros del
+                  <b> {{ datos.length == 0 ? 0 : 1 }} </b> al
+                  <b>{{ datos.length }}</b> registros de un total de
+                  <b>{{ datos.length }}</b> registros
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end row -->
+  </div>
+
+  <ng-template #contenidoColumnas>
+    <div class="btn-group" dropdown [insideClick]="true" placement="top">
+      <button
+        type="button"
+        data-content="0"
+        class="btn btn-sm btn-rounded btn-secondary dropdown-toggle"
+        dropdownToggle
+        tooltip="Ver columnas"
+      >
+        <i class="mdi mdi-view-column bx-spin font-size-14 align-middle"></i>
+      </button>
+      <div class="dropdown-menu dropdown-menu-end" *dropdownMenu>
+        <ng-template ngFor let-campo [ngForOf]="this.cabeceras">
+          <div
+            class="padLeft form-check form-check-secondary"
+            *ngIf="formato.cabeceras[campo].visible"
+          >
+            <input
+              class="form-check-input"
+              type="checkbox"
+              [(ngModel)]="formato.cabeceras[campo].visibleCheck"
+              (ngModelChange)="onChangeCheckboxHeaderModel()"
+              id="chkShow_{{ campo }}"
+              checked
+            />
+            <small class="form-check-label">
+              {{ formato.cabeceras[campo].texto }}
+            </small>
+          </div>
+        </ng-template>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item" (click)="mostrarTodas()">
+          Mostrar Todas
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</div>

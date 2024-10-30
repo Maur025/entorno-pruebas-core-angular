@@ -1,0 +1,135 @@
+<app-page-title
+	[title]="breadCrumbTitle"
+	[breadcrumbItems]="breadCrumbItems"
+></app-page-title>
+<krn-tabla
+	#tabla
+	[titulo]="titulo"
+	[datosService]="AnticipoService"
+	[getAll]="getAll"
+	[formato]="formato"
+	[isSubtable]="rel_prefix ? true : false"
+	[templateFila]="undefined"
+	[smallTable]="false"
+	[softDelete]="false"
+	(crearNuevo)="(null)"
+	(alCrear)="crear(nuevoAnticipo, 'nuevo')"
+	(alActualizar)="(null)"
+	(alFiltrar)="(null)"
+	(alEditar)="(null)"
+	campoEstado="estado"
+	valueEstado="habilitado"
+	[conOpciones]="false"
+	[botonExportar]="true"
+	[botonImportar]="false"
+	[templateFila]="templateFila"
+	[idRuta]="id"
+>
+</krn-tabla>
+
+<ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">
+	<ng-template ngFor let-campo [ngForOf]="cabeceras">
+		<ng-template
+			*ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"
+		></ng-template>
+		<ng-template #tempTD>
+			<td [ngSwitch]="campo">
+				<div *ngSwitchCase="'acciones'">
+					<ul class="list-unstyled hstack gap-1 mb-0">
+						<li
+							data-bs-toggle="tooltip"
+							data-bs-placement="top"
+							title="Devolución Anticipo"
+							*ngIf="fila.saldo > 0"
+						>
+							<button
+								class="btn btn-sm btn-light"
+								[disabled]="fila.deleted"
+								(click)="
+									aplicacionAnticipo(fila, modalGeneral, 'devolucion', true)
+								"
+							>
+								<i class="mdi mdi-transfer-down"></i>
+							</button>
+						</li>
+						<li
+							data-bs-toggle="tooltip"
+							data-bs-placement="top"
+							title="Aplicacion"
+						>
+							<button
+								class="btn btn-sm btn-info"
+								style="transform: scale(0.8)"
+								(click)="verDetalleAnticipo(fila.id)"
+							>
+								<i class="mdi mdi-eye"></i>
+							</button>
+						</li>
+					</ul>
+				</div>
+
+				<div *ngSwitchCase="'centroCosto'">
+					{{ fila.centroCosto.nombre }}
+				</div>
+				<div *ngSwitchCase="'proveedor'">
+					{{ fila['proveedor']['razonSocial'] }}
+				</div>
+				<div *ngSwitchCase="'fecha'">
+					{{ fila['createdAt'] | fechaSimple }}
+					<!--  fechasimple (pipe) -->
+				</div>
+				<div *ngSwitchDefault>
+					<td>{{ fila[campo] }}</td>
+				</div>
+			</td>
+		</ng-template>
+	</ng-template>
+</ng-template>
+
+<ng-template #modalGeneral role="document" let-modal>
+	<div class="modal-header">
+		<h5 class="modal-title">{{ titleModal }}</h5>
+		<button
+			type="button"
+			class="btn-close"
+			data-bs-dismiss="modal"
+			aria-label="Close"
+			(click)="modalRef?.hide()"
+		></button>
+	</div>
+	<div class="modal-body">
+		<app-formulario
+			#appFormAnticipo
+			[anticipoData]="anticipoData"
+			[tipo]="anticipoTipo"
+			[isRefund]="isRefund"
+			(alGuardar)="modalRef.hide(); tabla.obtenerDatos()"
+		/>
+	</div>
+	<div class="modal-footer">
+		<div class="hstack gap-2 justify-content-end">
+			<button
+				type="button"
+				class="btn btn-light"
+				data-bs-dismiss="modal"
+				(click)="cerrarModal()"
+			>
+				Cerrar
+			</button>
+			<button
+				type="button"
+				class="btn btn-success"
+				(click)="appFormAnticipo.guardar()"
+			>
+				Registrar
+			</button>
+		</div>
+	</div>
+</ng-template>
+
+<ng-template #nuevoAnticipo>
+  <nuevo-anticipo
+  (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
+  (alActualizar)="modalRef.hide(); tabla.obtenerDatos();"
+  ></nuevo-anticipo>
+</ng-template>

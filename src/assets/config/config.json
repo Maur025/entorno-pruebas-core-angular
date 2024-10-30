@@ -1,8 +1,11 @@
 {
-    "production": false,
-    "comprasApiKerno": "http://localhost:8080/api/compras",
-    "contabilidadApiKerno": "http://localhost:8081/api/contabilidad",
-    "inventariosApiKerno": "http://localhost:8000/api/v1",
-    "tesoreriaApiKerno": "http://localhost:8082/api/tesoreria",
-    "accountApiKerno": "http://localhost:8083/api/config"
-  }
+  "production": false,
+  "configApi": "http://172.20.50.24:8083/api/config",
+  "contabilidadApi": "http://172.20.50.24:18081/api/contabilidad",
+  "tesoreriaApi": "http://172.20.50.24:8082/api/tesoreria",
+  "inventariosApi": "http://172.20.50.24:8000/api/inventarios",
+  "comprasApi": "http://172.20.50.24:18082/api/compras",
+  "ventasAdminApi": "https://sandbox-kbi-ventas-admin-api.kernotec.com/api/ventas/admin",
+  "ventasEmisorApi": "https://sandbox-kbi-ventas-emisor-api.kernotec.com/api/ventas/emisor",
+  "ventasApi": "http://172.20.50.24:18083/api/ventas"
+}

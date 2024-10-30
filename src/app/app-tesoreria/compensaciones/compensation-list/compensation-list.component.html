@@ -1,0 +1,69 @@
+<app-page-title title="Compensaciones" [breadcrumbItems]="breadCrumbItems" />
+
+<app-tabla-new
+  #tabla
+  [botonNuevo]="true"
+  [smallTable]="false"
+  [conOpciones]="false"
+  [formato]="formato"
+  [datosService]="compensacionService"
+  getAll="getAll"
+  [templateFila]="templateFila"
+  [botonNuevo]="true"
+  (alCrear)="crearCompensacion()"
+  [textoBuscar]="'Descripción'"
+></app-tabla-new>
+
+<ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">
+  <ng-template ngFor let-campo [ngForOf]="cabeceras">
+    <ng-template
+      *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"
+    ></ng-template>
+    <ng-template #tempTD>
+      <td [ngSwitch]="campo">
+        <div *ngSwitchCase="'acciones'">
+          <button class="btn btn-sm btn-warning" (click)="descargarComprobante(fila.id)"tooltip="Imprimir comprobante" >
+            <i class="mdi mdi-download"></i>
+          </button>
+        </div>
+
+        <div *ngSwitchCase="'centroCosto'">
+          {{ fila.centroCosto.nombre }}
+        </div>
+        <div *ngSwitchCase="'descripcion'">
+          {{ fila.descripcion }}
+        </div>
+        <div *ngSwitchCase="'tipoPersonaOrigen'">
+          {{ fila.tipoPersonaOrigen.nombre }} -
+          {{ fila.operacionOrigen?.nombre }}
+        </div>
+        <div *ngSwitchCase="'tipoPersonaContraparte'">
+          {{ fila.tipoPersonaContraparte.nombre }} -
+          {{ fila.operacionContraparte?.nombre }}
+        </div>
+        <div *ngSwitchCase="'montoCompensacion'" class="text-end">
+          {{ fila.montoCompensacion }}
+        </div>
+        <div *ngSwitchCase="'fechaCompensacion'">
+          {{ fila.fechaCompensacion | fechaFormat }}
+        </div>
+        <div class="text-end" *ngSwitchCase="'estadoContabilidad'">
+          <span class="badge bg-primary font-size-10">
+            {{ fila["estadoContabilidad"]?.nombre }}
+          </span>
+        </div>
+        <!--         <div *ngSwitchDefault>
+          <td>{{ fila[campo] }}</td>
+        </div> -->
+      </td>
+    </ng-template>
+  </ng-template>
+</ng-template>
+
+<ng-template #nuevaCompisicion>
+  <compensation-form
+    [title]="titleCustom"
+    (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
+    (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"
+  ></compensation-form>
+</ng-template>

@@ -1,0 +1,81 @@
+<app-page-title title="Anticipo Cliente" [breadcrumbItems]="breadCrumbItems" />
+<app-tabla-new
+  #tabla
+  [botonNuevo]="true"
+  [smallTable]="false"
+  [conOpciones]="false"
+  [formato]="formato"
+  [datosService]="_anticipoClienteService"
+  getAll="getAll"
+  [templateFila]="templateFila"
+  [botonNuevo]="true"
+  (alCrear)="crearAnticipo(nuevoAnticipo)"
+></app-tabla-new>
+
+<ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">
+  <ng-template ngFor let-campo [ngForOf]="cabeceras">
+    <ng-template
+      *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"
+    ></ng-template>
+    <ng-template #tempTD>
+      <td [ngSwitch]="campo">
+        <div *ngSwitchCase="'acciones'">
+          <button
+            class="btn btn-sm btn-warning me-2"
+            tooltip="Devolucion"
+            [disabled]="fila['saldo'] == 0"
+            (click)="realizarDevolucion(devolucionAnticipo, fila)"
+          >
+            <i class="mdi mdi-keyboard-backspace"></i>
+          </button>
+        </div>
+        <div *ngSwitchCase="'proveedor'">
+          {{ fila["cliente"]["razonSocial"] }}
+        </div>
+
+        <div *ngSwitchCase="'centroCosto'">
+          {{ fila.centroCosto.nombre }}
+        </div>
+        <div *ngSwitchCase="'descripcion'">
+          {{ fila.descripcion }}
+        </div>
+        <div
+          class="text-end"
+          *ngSwitchCase="'monto'"
+          [ngClass]="fila['monto'] >= 0 ? 'text-success' : 'text-danger'"
+        >
+          {{ fila["monto"] | decimalAmount }}
+        </div>
+        <div
+          class="text-end"
+          *ngSwitchCase="'saldo'"
+          [ngClass]="fila['saldo'] >= 0 ? 'text-success' : 'text-danger'"
+        >
+          {{ fila["saldo"] | decimalAmount }}
+        </div>
+        <div *ngSwitchDefault>
+          <td>{{ fila[campo] }}</td>
+        </div>
+      </td>
+    </ng-template>
+  </ng-template>
+</ng-template>
+
+<ng-template #nuevoAnticipo>
+  <app-form-anticipo
+    [type]="type"
+    [label]="label"
+    [data]="data"
+    [title]="titleCustom"
+    (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
+    (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"
+  ></app-form-anticipo>
+</ng-template>
+
+<ng-template #devolucionAnticipo>
+  <app-form-devolucion
+    [datosCliente]="dataCliente"
+    (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
+    (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"
+  ></app-form-devolucion>
+</ng-template>

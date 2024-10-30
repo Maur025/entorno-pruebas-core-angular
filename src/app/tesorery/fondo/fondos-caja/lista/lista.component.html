@@ -1,0 +1,77 @@
+<krn-tabla
+  #tabla
+  [titulo]="titulo"
+  [datosService]="fondoCajaService"
+  getAll="getAll"
+  [formato]="formato"
+  [textoBuscar]="textoBuscar"
+  [isSubtable]="rel_prefix ? true : false"
+  [templateFila]="undefined"
+  [smallTable]="false"
+  [softDelete]="false"
+  (crearNuevo)="(null)"
+  (alCrear)="crear(modalGeneral)"
+  (alActualizar)="(null)"
+  (alFiltrar)="(null)"
+  (alEditar)="editar($event, modalGeneral)"
+  campoEstado="estado"
+  valueEstado="habilitado"
+  (alHabilitar)="habilitar($event, tabla, 'habilitar')"
+  (alDeshabilitar)="habilitar($event, tabla, 'inhabilitar')"
+  [botonExportar]="false"
+  [botonImportar]="false"
+  [conOpciones]="false"
+  [templateFila]="templateFila">
+</krn-tabla>
+
+<ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras" >
+  <ng-template ngFor let-campo [ngForOf]="cabeceras">
+    <ng-template *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"></ng-template>
+    <ng-template #tempTD>
+      <td [ngSwitch]="campo">
+        <div *ngSwitchCase="'acciones'">
+          <ul class="list-unstyled hstack gap-1 mb-0">
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" *ngIf="!fila.aperturado">
+              <button class="btn btn-sm btn-soft-info" [disabled]="fila.deleted" (click)="editar(fila, modalGeneral)"><i class="mdi mdi-pencil-outline"></i></button>
+            </li>
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Aperturar" *ngIf="!fila.aperturado">
+              <button class="btn btn-sm btn-primary" [disabled]="fila.deleted" (click)="aperturar(fila, modalGeneral)"><i class="bx bx-lock-open"></i></button>
+            </li>
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Descargos" *ngIf="fila.aperturado">
+              <button class="btn btn-sm btn-light" [disabled]="fila.deleted" (click)="descargos(fila, modalGeneral)"><i class="mdi mdi-transfer-down"></i></button>
+            </li>
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Habilitar" *ngIf="fila.deleted">
+              <a class="btn btn-sm btn-success" (click)="habilitar(fila, tabla, 'habilitar')"><i class="mdi mdi-power"></i></a>
+            </li>
+            <li data-bs-toggle="tooltip" data-bs-placement="top" title="Inhabilitar" *ngIf="!fila.deleted">
+              <a  data-bs-toggle="modal" class="btn btn-sm btn-danger" (click)="habilitar(fila, tabla, 'inhabilitar')"><i class="mdi mdi-power"></i></a>
+            </li>
+          </ul>
+        </div>
+        <div *ngSwitchCase="'estado'">
+          <span *ngIf="!fila.deleted" class="badge bg-success font-size-10"><i class="mdi mdi-lock-open me-1"></i> Habilitado</span>
+          <span *ngIf="fila.deleted" class="badge bg-danger font-size-10"><i class="mdi mdi-lock me-1"></i> Inhabilitado</span>
+        </div>
+        <div *ngSwitchDefault>
+          {{fila[campo]}}
+        </div>
+      </td>
+    </ng-template>
+  </ng-template>
+</ng-template>
+
+<ng-template #modalGeneral role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">{{titleModal}} Fondo de Caja</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"aria-label="Close"id="close-modal" (click)="modalRef.hide()"></button>
+  </div>
+  <div class="modal-body">
+    <app-formulario-caja #appFormCaja [fondo]="fondo" [apertura]="apertura" [descargo]="descargo" (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"></app-formulario-caja>
+  </div>
+  <div class="modal-footer">
+    <div class="hstack gap-2 justify-content-end">
+      <button type="button" class="btn btn-light" data-bs-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
+      <button type="button" class="btn" [class]="{ 'btn-warning': titleModal == 'Editar', 'btn-success': titleModal != 'Editar'}" (click)="appFormCaja.guardar()" >{{titleModal == 'Editar' ? 'Guardar' : 'Registrar' }}</button>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,209 @@
+<app-page-title title="Cajas" [breadcrumbItems]="breadCrumbItems" />
+<app-tabla-new
+  #tabla
+  [botonNuevo]="true"
+  [smallTable]="false"
+  [conOpciones]="false"
+  [formato]="formato"
+  [datosService]="cajaService"
+  getAll="getAll"
+  [templateFila]="templateFila"
+  [botonNuevo]="true"
+  (alCrear)="crearCaja(nuevaCaja)"
+></app-tabla-new>
+
+<ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">
+  <ng-template ngFor let-campo [ngForOf]="cabeceras">
+    <ng-template
+      *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"
+    ></ng-template>
+    <ng-template #tempTD>
+      <td [ngSwitch]="campo">
+        <div *ngSwitchCase="'acciones'">
+          <button
+            class="btn btn-sm btn-soft-info me-2"
+            tooltip="Editar"
+            [disabled]="fila.deleted"
+            (click)="editar(fila, nuevaCaja)"
+          >
+            <i class="mdi mdi-pencil-outline"></i>
+          </button>
+          <button
+            class="btn btn-sm btn-info me-1"
+            tooltip="Ver detalle de la caja"
+            [disabled]="fila.deleted"
+            (click)="detalleCaja(fila)"
+          >
+            <i class="mdi mdi-format-list-bulleted"></i>
+          </button>
+          <button
+            class="btn btn-sm btn-primary me-2"
+            *ngIf="!fila.aperturado"
+            tooltip="Aperturar Caja"
+            (click)="aperturarCaja(fila, aperturaCierre)"
+          >
+            <i class="bx bx-lock-open-alt"></i>
+          </button>
+        </div>
+        <div *ngSwitchCase="'nombre'">
+          {{ fila["nombre"] }}
+        </div>
+        <div *ngSwitchCase="'centroCosto'">
+          {{ fila["centroCosto"]["nombre"] }}
+        </div>
+        <div *ngSwitchCase="'empleado'">
+          {{ fila["empleado"]["nombre"] }}
+        </div>
+        <div *ngSwitchCase="'saldo'" class="text-end">
+          <p
+            class="mb-0"
+            [ngClass]="fila['saldoActual'] > 0 ? 'text-success' : 'text-danger'"
+          >
+            {{ fila["saldoActual"] | decimalAmount }}
+          </p>
+        </div>
+      </td>
+    </ng-template>
+  </ng-template>
+</ng-template>
+
+<ng-template #nuevaCaja>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">{{ titleModal }}</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="cerrarModal()"
+      [disabled]="onSubmitFormStatus"
+    ></button>
+  </div>
+  <form [formGroup]="formCajaCreate" (ngSubmit)="confirmAndContinueSaving()">
+    <div class="modal-body" id="form-create-caja">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="mb-3 px-1">
+            <label class="mb-2" for="cashName">(*) Nombre </label>
+            <input
+              id="cashName"
+              type="text"
+              class="form-control"
+              formControlName="nombre"
+              [ngClass]="{ 'is-invalid': submitted && form['nombre'].errors }"
+              placeholder="Ingrese nombre de caja"
+              (input)="
+                utilityService?.convertUppercase(
+                  'nombre',
+                  $event,
+                  formCajaCreate
+                )
+              "
+            />
+            <div *ngIf="submitted && form['nombre'].errors" class="col-sm-12">
+              <div
+                *ngIf="form['nombre'].errors['required']"
+                class="text-danger mt-1 font-size-10"
+              >
+                El nombre es obligatorio
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="mb-3 px-1">
+            <label class="mb-2" for="cashEmployeeId">(*) Responsable </label>
+            <ng-select
+              formControlName="empleadoId"
+              notFoundText="Sin registros"
+              placeholder="Seleccione empleado"
+              bindValue="id"
+              appendTo="#form-create-caja">
+              <ng-option *ngFor="let item of listaResponsables" [value]="item">
+                {{item.nombre}} ({{item['nitCi']}})
+              </ng-option>
+            </ng-select>
+            <div
+              *ngIf="submitted && form['empleadoId'].errors"
+              class="col-sm-12"
+            >
+              <div
+                *ngIf="form['empleadoId'].errors['required']"
+                class="text-danger mt-1 font-size-10"
+              >
+                Seleccione responsable.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="mb-3 px-1">
+            <label class="mb-2" for="cashCostCenterId"
+              >(*) Centro de Costos
+            </label>
+            <ng-select
+              formControlName="centroCostoId"
+              placeholder="Seleccione centro costos"
+              [items]="listaCentroCostos"
+              bindLabel="nombre"
+              bindValue="id"
+              [ngClass]="{
+                'ngselect-invalid':
+                  submitted && form['centroCostoId'].errors != null
+              }"
+            />
+            <div
+              *ngIf="submitted && form['centroCostoId'].errors"
+              class="col-sm-12"
+            >
+              <div
+                *ngIf="form['centroCostoId'].errors['required']"
+                class="text-danger mt-1 font-size-10"
+              >
+                Seleccione centro costos.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="hstack gap-2 justify-content-end">
+        <button
+          type="button"
+          class="btn btn-light"
+          data-bs-dismiss="modal"
+          (click)="cerrarModal()"
+          [disabled]="onSubmitFormStatus"
+        >
+          Cerrar
+        </button>
+        <button
+          type="submit"
+          class="btn d-flex gap-1 align-items-center"
+          [ngStyle]="{ padding: isStatusSubmit ? '6px' : '7.52px' }"
+          [class]="{ 'btn-warning': idCajaEdit, 'btn-success': !idCajaEdit }"
+          [disabled]="isStatusSubmit"
+        >
+          <app-loader-button *ngIf="isStatusSubmit" />
+          {{
+            isStatusSubmit
+              ? " Espere un momento..."
+              : idCajaEdit
+              ? "Editar caja"
+              : "Crear caja"
+          }}
+        </button>
+      </div>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #aperturaCierre let-modal>
+  <apertura-caja
+    [datosCaja]="datosCaja"
+    (alActualizar)="modalRef.hide(); tabla.obtenerDatos()"
+    (cerrarModal)="modalRef.hide()"
+  ></apertura-caja>
+</ng-template>

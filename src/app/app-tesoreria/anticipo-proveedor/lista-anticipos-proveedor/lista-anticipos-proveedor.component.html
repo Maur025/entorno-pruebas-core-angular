@@ -1,0 +1,93 @@
+<app-page-title
+  [title]="labelProveedor"
+  [breadcrumbItems]="breadCrumbItems"
+  descripcion="Anticipos del proveedor"
+></app-page-title>
+
+<app-tabla-new
+  #tabla
+  [botonNuevo]="true"
+  [smallTable]="false"
+  [conOpciones]="false"
+  [formato]="formato"
+  [datosService]="anticipoProveedor"
+  [idRuta]="idProveedor"
+  getAll="getAnticiposPorProveedor"
+  [templateFila]="templateFila"
+  [botonNuevo]="false"
+></app-tabla-new>
+
+<ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">
+  <ng-template ngFor let-campo [ngForOf]="cabeceras">
+    <ng-template
+      *ngIf="formato.cabeceras[campo].visibleCheck; then tempTD"
+    ></ng-template>
+    <ng-template #tempTD>
+      <td [ngSwitch]="campo">
+
+        <div *ngSwitchCase="'acciones'">
+          <button
+            class="btn btn-sm btn-secondary me-1"
+            tooltip="Ver movimientos"
+            [disabled]="fila.deleted"
+            (click)="verMovimientos(fila, modalDetalle)"
+           >
+              <i class="mdi mdi-chart-timeline-variant"></i>
+          </button>
+        </div>
+        <div *ngSwitchCase="'referencia'">
+          <div>
+            <p class="mb-0">
+             Nº referencia : {{fila['nroReferencia']}}
+            </p>
+            <p class="text-muted m-0">{{ fila["descripcion"]}}</p>
+          </div>
+        </div>
+        <div *ngSwitchCase="'fecha'">
+          {{ fila["fecha"]|fechaFormat }}
+        </div>
+
+        <div *ngSwitchCase="'centroCosto'">
+          {{ fila["centroCosto"]["nombre"] }}
+        </div>
+        <div *ngSwitchCase="'montoAnticipo'" class="text-end">
+          {{ fila["monto"]}}
+        </div>
+        <div *ngSwitchCase="'montoAplicado'" class="text-end">
+          {{ fila["montoAplicado"]}}
+        </div>
+        <div *ngSwitchCase="'saldo'" class="text-end">
+          {{ fila["saldo"]}}
+        </div>
+        <div *ngSwitchCase="'estadoContable'"  class="text-center">
+
+          <span class="badge font-size-10" [ngClass]="{
+            'bg-info': fila['estadoContabilidad']['codigo'] === 'INI',
+            'bg-success': fila['estadoContabilidad']['codigo'] === 'CONT',
+            'bg-primary': fila['estadoContabilidad']['codigo'] === 'PCONT'
+          }">
+            {{ fila["estadoContabilidad"]["nombre"]}}
+          </span>
+        </div>
+      </td>
+    </ng-template>
+  </ng-template>
+</ng-template>
+<div class="card p-4 m-0">
+  <div class="hstack gap-2 justify-content-center">
+    <button
+      type="button"
+      class="btn btn-primary btn-rounded"
+      (click)="this.location.back()"
+    >
+      <i class="mdi mdi-chevron-left"></i>
+      Regresar
+    </button>
+  </div>
+</div>
+<ng-template #modalDetalle>
+  <detalle-anticipo
+  [dataAnticipoProveedor]="dataAnticipo"
+  (cerrarModal)="modalRef.hide(); tabla.obtenerDatos()"
+  ></detalle-anticipo>
+</ng-template>
