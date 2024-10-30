@@ -65,7 +65,7 @@ export class IniClienteComponent {
   dataFila: any[];
   archivoCSV: any;
   cargandoContenido;
-  clientData:any;;
+  clientData: any;
   importDatafound;
   constructor(
     private _clienteService: ClienteService,
@@ -116,24 +116,30 @@ export class IniClienteComponent {
   }
 
   descargarPlantilla(codigo) {
-    if(this.formDownloadTemplateClient.valid){
+    if (this.formDownloadTemplateClient.valid) {
       this.inicializacionService
-      .exportarPlantillaInicializacion(codigo, this.formDownloadTemplateClient.value)
-      .subscribe({
-        next: (data) => {
-          this.archivoService.generar64aExcel(
-            data.data.content,
-            "Anticipos-Clientes-Plantilla-Saldos-Iniciales"
-          );
-          this.formDownloadTemplateClient.reset();
-        },
-        error: (err) => console.log(err),
-      });
+        .exportarPlantillaInicializacion(
+          codigo,
+          this.formDownloadTemplateClient.value
+        )
+        .subscribe({
+          next: (data) => {
+            let fileName = this.formDownloadTemplateClient
+            .get("razonSocial")
+            .value.replace(/[^a-zA-Z0-9 ]/g, "");
+            this.archivoService.generar64aExcel(
+              data.data.content,
+              `Plantilla anticipo - ${fileName}`
+            );
+            this.formDownloadTemplateClient.reset();
+          },
+          error: (err) => console.log(err),
+        });
     }
     this.submittedDownload = true;
   }
 
-  recibirExcelCliente = (archivo, codigoProceso): void=>{
+  recibirExcelCliente = (archivo, codigoProceso): void => {
     const target: DataTransfer = <DataTransfer>archivo.target;
     if (target.files.length !== 1) {
       this.notificacion.alertError(null, {
@@ -150,25 +156,25 @@ export class IniClienteComponent {
       this.data = utils.sheet_to_json(ws, { header: 1 });
 
       let dataCliente = this.data.slice(1, 2);
-      dataCliente.forEach(element => {
-        const referencia : Cliente = {
+      dataCliente.forEach((element) => {
+        const referencia: Cliente = {
           codigoCliente: element[0],
-          razonSocial:element[1],
-          numeroDocumento:element[2]
-        }
+          razonSocial: element[1],
+          numeroDocumento: element[2],
+        };
         this.clientData = referencia;
       });
       /* Eliminar las filas del dato del cliente*/
       this.data.splice(0, 2);
 
-      switch(codigoProceso){
-        case "ANT_CLIENTE" :
+      switch (codigoProceso) {
+        case "ANT_CLIENTE":
           this.dataFila = this.readerAdvancedData();
           break;
-        case "COB_CLIENTE" :
+        case "COB_CLIENTE":
           this.dataFila = this.readerCollectionData();
           break;
-   /*      case "" :
+        /*      case "" :
           break;   */
       }
       this.archivoCSV = utils.sheet_to_csv(ws);
@@ -176,9 +182,9 @@ export class IniClienteComponent {
       this.archivoCSV = new File([csvFile], "file.csv", { type: "text/csv" });
     };
     reader.readAsArrayBuffer(target.files[0]);
-  }
+  };
 
-  readerAdvancedData(){
+  readerAdvancedData() {
     const arrayObject: DataImporAnticipoCliente[] = this.data?.map(
       (element: object, index: number) => {
         const dataRow: DataImporAnticipoCliente = {
@@ -198,8 +204,8 @@ export class IniClienteComponent {
     return arrayObject;
   }
 
-  readerCollectionData(){
-  const arrayObject: DataImporCobrosCliente[] = this.data?.map(
+  readerCollectionData() {
+    const arrayObject: DataImporCobrosCliente[] = this.data?.map(
       (element: object, index: number) => {
         const dataRow: DataImporCobrosCliente = {
           filaError: null,
@@ -221,15 +227,16 @@ export class IniClienteComponent {
     return arrayObject;
   }
 
-  importarExcelCliente(codigoCliente){
+  importarExcelCliente(codigoCliente) {
     this.submitted = true;
     this.cargandoContenido = true;
     const archivoData = new FormData();
     archivoData.append("file", this.archivoCSV);
-    if(this.excelForm.valid){
-      this.inicializacionService.importarInicializacionCliente
-        (codigoCliente, archivoData).subscribe({
-          next:() =>{
+    if (this.excelForm.valid) {
+      this.inicializacionService
+        .importarInicializacionCliente(codigoCliente, archivoData)
+        .subscribe({
+          next: () => {
             this.excelForm.reset();
             this.notificacion.successStandar(
               "IMPORTACIÓN REALIZADA EXITOSAMENTE"
@@ -238,17 +245,18 @@ export class IniClienteComponent {
             this.submitted = false;
             this.dataFila = [];
             this.clientData = [];
-          }, error:(error: ErrorResponseStandard)=>{
-            if (error?.error.data) this.getErrorsImportCliente(codigoCliente,error?.error);
+          },
+          error: (error: ErrorResponseStandard) => {
+            if (error?.error.data)
+              this.getErrorsImportCliente(codigoCliente, error?.error);
             this.cargandoContenido = false;
             this.submitted = false;
             this.notificacion.alertError(error);
-          }
+          },
         });
-
     }
   }
-  errorsCollection(errorRow, importDatafound){
+  errorsCollection(errorRow, importDatafound) {
     switch (errorRow.propertyPath?.column) {
       case "DESCRIPCIÓN":
         importDatafound.columnError = {
@@ -301,7 +309,7 @@ export class IniClienteComponent {
     }
   }
 
-  errorsAdvances(errorRow, importDatafound){
+  errorsAdvances(errorRow, importDatafound) {
     switch (errorRow.propertyPath?.column) {
       case "FECHA":
         importDatafound.columnError = {
@@ -330,7 +338,10 @@ export class IniClienteComponent {
     }
   }
 
-  getErrorsImportCliente = (codigoCliente, errorDetail: ErrorDetailResponseStandard): void => {
+  getErrorsImportCliente = (
+    codigoCliente,
+    errorDetail: ErrorDetailResponseStandard
+  ): void => {
     const errorData: ErrorDetailDataResponseStandard[] = errorDetail?.data?.map(
       (rowData: ErrorDetailDataResponseStandard) => {
         rowData.propertyPath = JSON.parse(rowData.propertyPath);
@@ -348,12 +359,12 @@ export class IniClienteComponent {
 
       importDatafound.filaError = errorRow.propertyPath?.row;
 
-      switch(codigoCliente){
+      switch (codigoCliente) {
         case "ANT_CLIENTE":
-          this.errorsAdvances(errorRow,importDatafound);
+          this.errorsAdvances(errorRow, importDatafound);
           break;
         case "COB_CLIENTE":
-          this.errorsCollection(errorRow,importDatafound);
+          this.errorsCollection(errorRow, importDatafound);
           break;
         case "":
           break;
