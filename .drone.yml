@@ -94,7 +94,7 @@ steps:
         - k8s-service-deploy sandbox tesoreria-ui
     when:
       branch:
-        - develop
+        - sandbox
       repo:
         - KernoTec/${DRONE_REPO_NAME}
       event:
