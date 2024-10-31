@@ -15,37 +15,7 @@ import {
   ErrorResponseStandard,
 } from "src/app/shared/interface/common-api-response";
 import { read, utils, WorkBook, WorkSheet } from "xlsx";
-
-interface DataImporAnticipoCliente {
-  filaError: number | null;
-  error: boolean | null;
-  descripcion: string | null;
-  monto: number | null;
-  fecha: Date | null;
-  centroCosto: string | null;
-  nroReferencia: string | null;
-  messageError: string | null;
-  columnError: { [key: string]: any } | null;
-}
-interface DataImporCobrosCliente {
-  filaError: number | null;
-  error: boolean | null;
-  descripcion: string | null;
-  tipoDocumento: number | null;
-  nroFacturaRecibo: string | null;
-  totalVenta: number | null;
-  fechaVenta: Date | null;
-  centroCosto: string | null;
-  montoCobrar: number | null;
-  fechaCobrar: Date | null;
-  messageError: string | null;
-  columnError: { [key: string]: any } | null;
-}
-interface Cliente {
-  codigoCliente: string;
-  razonSocial: string;
-  numeroDocumento: string;
-}
+import { Cliente, DataImporAnticipoCliente, DataImporCobrosCliente } from "../inicializacion.model";
 
 @Component({
   selector: "app-ini-cliente",
@@ -116,6 +86,13 @@ export class IniClienteComponent {
   }
 
   descargarPlantilla(codigo) {
+    let nombrePlantilla = "";
+    if(codigo == "ANT_CLIENTE"){
+      nombrePlantilla = "anticipo";
+    }else if(codigo == "COB_CLIENTE"){
+      nombrePlantilla = "credito";
+    }
+
     if (this.formDownloadTemplateClient.valid) {
       this.inicializacionService
         .exportarPlantillaInicializacion(
@@ -129,11 +106,11 @@ export class IniClienteComponent {
             .value.replace(/[^a-zA-Z0-9 ]/g, "");
             this.archivoService.generar64aExcel(
               data.data.content,
-              `Plantilla anticipo - ${fileName}`
+              `Plantilla ${nombrePlantilla} - ${fileName}`
             );
             this.formDownloadTemplateClient.reset();
           },
-          error: (err) => console.log(err),
+          error: (err) => console.error(err),
         });
     }
     this.submittedDownload = true;
@@ -270,7 +247,7 @@ export class IniClienteComponent {
           tipoDocumento: true,
         };
         break;
-      case "NRO. FACTURA-ReCIBO":
+      case "NRO. FACTURA-RECIBO":
         importDatafound.columnError = {
           ...importDatafound.columnError,
           nroFacturaRecibo: true,

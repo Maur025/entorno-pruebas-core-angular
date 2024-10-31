@@ -180,6 +180,115 @@
    </ng-template>
   <!-- Vista previa creditos -->
   <ng-template #preview_credit>
-    credito
+    <div class="table-responsive seccion-data-import mb-2" *ngIf="dataFila">
+      <table class="table table-hover mb-0 table-bordered table-sm m-0">
+        <tbody>
+          <tr>
+            <td></td>
+            <td colspan="5">
+              <div class="d-flex">
+                <h6 class="fw-bold text-primary">Cliente :</h6>
+                <h6 class="text-primary">{{  dataProveedor['razonSocial'] }}</h6>
+              </div>
+            </td>
+            <td colspan="3">
+              <div class="d-flex">
+                <h6 class="fw-bold text-primary">Nº documento :</h6>
+                <h6 class="text-primary">{{  dataProveedor['numeroDocumento'] }}</h6>
+              </div>
+            </td>
+          </tr>
+          <tr
+          *ngFor="let data of dataFila; let i = index"
+          [class]="{ 'table-danger': data['messageError']}">
+
+          <td
+            class="text-secondary"
+            [class]="{ error: data['error'], 'bg-light': i == 0 }"
+          >
+            <b *ngIf="i != 0">{{ i }}</b>
+          </td>
+          <td>
+            <span
+              [ngClass]="{
+                'text-secondary fw-semibold semi font-size-13': i == 0
+              }"
+            >
+              {{ data["descripcion"] }}
+            </span>
+          </td>
+          <td>
+            <span
+              [ngClass]="{
+                'text-secondary fw-semibold semi font-size-13': i == 0
+              }"
+            >
+              {{ data["tipoDocumento"] }}
+            </span>
+          </td>
+          <td>
+            <span
+              [ngClass]="{
+                'text-secondary fw-semibold semi font-size-13': i == 0
+              }"
+            >
+              {{ data["nroFacturaRecibo"] }}
+            </span>
+          </td>
+          <td>
+            <span
+              [ngClass]="{
+                'text-secondary fw-semibold semi font-size-13': i == 0
+              }"
+            >
+              {{ data["totalCompra"] }}
+            </span>
+          </td>
+          <td>
+            <span
+              [ngClass]="{
+                'text-secondary fw-semibold semi font-size-13': i == 0
+              }"
+            >
+              {{ data["fechaCompra"] }}
+            </span>
+          </td>
+          <td>
+            <span
+              [ngClass]="{
+                'text-secondary fw-semibold semi font-size-13': i == 0
+              }"
+            >
+              {{ data["centroCosto"] }}
+            </span>
+          </td>
+          <td>
+            <span
+              [ngClass]="{
+                'text-secondary fw-semibold semi font-size-13': i == 0
+              }"
+            >
+              {{ data["montoPagar"] }}
+            </span>
+          </td>
+          <td>
+            <span
+              [ngClass]="{
+                'text-secondary fw-semibold semi font-size-13': i == 0
+              }"
+            >
+              {{ data["fechaPago"] }}
+            </span>
+          </td>
+          <td
+            *ngIf="data['messageError']"
+            [ngStyle]="{ width: '22%' }"
+          >
+            <p class="error" [innerHTML]="data.messageError"></p>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </ng-template>
 </ng-template>

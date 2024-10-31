@@ -14,24 +14,9 @@ import {
   ErrorResponseStandard,
 } from "src/app/shared/interface/common-api-response";
 import { read, utils, WorkBook, WorkSheet } from "xlsx";
+import { DataImporAnticipoProveedor, DataImporPagosProveedor, Proveedor } from "../inicializacion.model";
 
-interface DataImporAnticipoProveedor {
-  filaError: number | null;
-  error: boolean | null;
-  descripcion: string | null;
-  monto: number | null;
-  fecha: Date | null;
-  centroCosto: string | null;
-  nroReferencia: string | null;
-  messageError: string | null;
-  columnError: { [key: string]: any } | null;
-}
 
-interface Proveedor {
-  codigoProveedor: string;
-  razonSocial: string;
-  numeroDocumento: string;
-}
 @Component({
   selector: "app-ini-proveedor",
   templateUrl: "./ini-proveedor.component.html",
@@ -99,6 +84,13 @@ export class IniProveedorComponent {
   }
 
   descargarPlantilla(codeProveedor) {
+    let nombrePlantilla = "";
+    if(codeProveedor == "ANT_PROVEEDOR"){
+      nombrePlantilla = "anticipo";
+    }else if(codeProveedor == "CRED_PROVEEDOR"){
+      nombrePlantilla = "credito";
+    }
+
     if (this.formDownloadTemplateProveedor.valid) {
       this.inicializacionService
         .exportarPlantillaInicializacionProveedor(
@@ -112,11 +104,11 @@ export class IniProveedorComponent {
               .value.replace(/[^a-zA-Z0-9 ]/g, "");
             this.archivoService.generar64aExcel(
               data.data.content,
-              `Plantilla Anticipo-${fileName}`
+              `Plantilla ${nombrePlantilla}-${fileName}`
             );
             this.formDownloadTemplateProveedor.reset();
           },
-          error: (err) => console.log(err),
+          error: (err) => console.error(err),
         });
     }
     this.submittedDownload = true;
@@ -187,8 +179,27 @@ export class IniProveedorComponent {
     return arrayObject;
   };
 
-  readerCreditData = (): DataImporAnticipoProveedor[] => {
-    return null;
+  readerCreditData = (): DataImporPagosProveedor[] => {
+    const arrayObject: DataImporPagosProveedor[] = this.dataXLSX?.map(
+      (element: object, index: number) => {
+        const dataRow: DataImporPagosProveedor = {
+          filaError: null,
+          error: null,
+          descripcion: element[0] || "",
+          tipoDocumento: element[1] || "",
+          nroFacturaRecibo: element[2] || "",
+          totalCompra: element[3] || 0,
+          fechaCompra: element[4] || "",
+          centroCosto: element[5] || "",
+          montoPagar: element[6] || 0,
+          fechaPago: element[7] || "",
+          messageError: null,
+          columnError: null,
+        };
+        return dataRow;
+      }
+    );
+    return arrayObject;
   };
 
   importarExcelProveedor(codeProveedor) {
@@ -243,10 +254,10 @@ export class IniProveedorComponent {
       importDatafound.filaError = errorRow.propertyPath?.row;
 
       switch(codeProveedor){
-        case "ANT_CLIENTE":
+        case "ANT_PROVEEDOR":
           this.errorsAdvances(errorRow,importDatafound);
           break;
-        case "COB_CLIENTE":
+        case "CRED_PROVEEDOR":
           this.errorsCredit(errorRow,importDatafound);
           break;
         case "":
@@ -255,7 +266,56 @@ export class IniProveedorComponent {
     }
   }
   errorsCredit=(errorRow, importDatafound):void=>{
-
+    switch (errorRow.propertyPath?.column) {
+      case "DESCRIPCIÓN":
+        importDatafound.columnError = {
+          ...importDatafound.columnError,
+          descripcion: true,
+        };
+        break;
+      case "TIPO DOCUMENTO":
+        importDatafound.columnError = {
+          ...importDatafound.columnError,
+          tipoDocumento: true,
+        };
+        break;
+      case "NRO. FACTURA-RECIBO":
+        importDatafound.columnError = {
+          ...importDatafound.columnError,
+          nroFacturaRecibo: true,
+        };
+        break;
+      case "TOTAL COMPRA":
+        importDatafound.columnError = {
+          ...importDatafound.columnError,
+          totalVenta: true,
+        };
+        break;
+      case "CENTRO COSTOS":
+        importDatafound.columnError = {
+          ...importDatafound.columnError,
+          centroCosto: true,
+        };
+        break;
+      case "FECHA COMPRA":
+        importDatafound.columnError = {
+          ...importDatafound.columnError,
+          fechaVenta: true,
+        };
+        break;
+      case "MONTO PAGO":
+        importDatafound.columnError = {
+          ...importDatafound.columnError,
+          montoCobrar: true,
+        };
+        break;
+      case "FECHA PAGO":
+        importDatafound.columnError = {
+          ...importDatafound.columnError,
+          fechaCobrar: true,
+        };
+        break;
+    }
   }
 
   errorsAdvances=(errorRow, importDatafound):void=>{
