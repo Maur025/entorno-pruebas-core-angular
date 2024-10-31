@@ -9,9 +9,10 @@ import { NgSelectModule } from "@ng-select/ng-select";
 import { IniClienteComponent } from "./ini-cliente/ini-cliente.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { IniProveedorComponent } from './ini-proveedor/ini-proveedor.component';
+import { IniFondoRendirComponent } from './ini-fondo-rendir/ini-fondo-rendir.component';
 
 @NgModule({
-  declarations: [InicializacionComponent, IniClienteComponent, IniProveedorComponent],
+  declarations: [InicializacionComponent, IniClienteComponent, IniProveedorComponent, IniFondoRendirComponent],
   imports: [
     CommonModule,
     InicializacionRoutingModule,

@@ -30,7 +30,7 @@
           </div>
 <!--           </div> -->
         </div>
-        <div class="col-md-4 border-end">
+        <div class="col-md-4 border-end"  *ngIf="optionListInitialization?.length>0">
           <div class="text-muted" *ngIf="optionListInitialization?.length>0">
             <p class="mb-0">{{selectLabel}}</p>
             <small class="mb-0 mt-0">Inicializar con:</small>
@@ -49,7 +49,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div [ngClass]="optionListInitialization == undefined ? 'col-md-7': 'col-md-4'">
           <div class="row mt-3 mb-3 me-3" [ngClass]="!optionFinalSelect ? 'disabled-butons':''">
             <div class="hstack gap-2 justify-content-center">
 
@@ -79,7 +79,7 @@
     </div>
   </div>
 </div>
-<!-- select final----_>{{optionFinalSelect|json}} -->
+
 <div class="row">
   <div class="col-lg-12">
     <div class="card">
@@ -101,6 +101,10 @@
           *ngSwitchCase="'CRED_PROVEEDOR'"
           [ngTemplateOutlet]="ini_provider_template"
         />
+        <ng-template
+          *ngSwitchCase="'FR'"
+          [ngTemplateOutlet]="ini_fondorendir_template"
+        />
 
       </ng-container>
       <ng-template #ini_cliente_template>
@@ -117,6 +121,14 @@
           [codeProveedor]="optionFinalSelect"
           [importarDescargar]="importarDescargar"
           ></app-ini-proveedor>
+        </div>
+      </ng-template>
+
+      <ng-template #ini_fondorendir_template>
+        <div *ngIf="optionFinalSelect && (importarDescargar == true || importarDescargar == false)">
+          <app-ini-fondo-rendir
+          [importarDescargar]="importarDescargar"
+          ></app-ini-fondo-rendir>
         </div>
       </ng-template>
 
