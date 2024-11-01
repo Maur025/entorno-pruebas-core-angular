@@ -95,7 +95,6 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
       descripcion: [
         "",
         [
-          Validators.required,
           Validators.minLength(8),
           Validators.maxLength(255),
         ],
