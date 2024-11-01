@@ -67,7 +67,13 @@ export class InicializacionesService {
 
     }
   }
+
   exportarPlantillaInicializacionFondoRendir(dataProveedor) {
     return this.apiService.tesoreria.post(this.prefix + `/fondoRendir/${this.apiNameExport}`, dataProveedor);
   }
+
+  importarInicializacionFondoRendir(file){
+    return this.apiService.tesoreria.post(this.prefix + `/fondoRendir/${this.apiNameImport}`, file);
+  }
+
 }

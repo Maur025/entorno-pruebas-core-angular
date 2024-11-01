@@ -60,3 +60,21 @@ export interface DataImporCobrosCliente {
   columnError: { [key: string]: any } | null;
 }
 
+export interface Employee {
+  id: string;
+  nombre: string;
+  numeroDocumento: string;
+}
+
+export interface DataImporFondoRendir {
+  filaError: number | null;
+  error: boolean | null;
+  descripcion: string | null;
+  fecha: Date | null;
+  centroCosto: string | null;
+  nroReferencia: string | null;
+  estadoFondo: string | null;
+  montoPendiente: number | null;
+  messageError: string | null;
+  columnError: { [key: string]: any } | null;
+}
