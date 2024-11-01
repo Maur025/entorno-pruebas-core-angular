@@ -53,7 +53,7 @@ steps:
         from_secret: kernotec_password
     when:
       branch:
-        - develop
+        - sandbox
         - staging
       repo:
         - KernoTec/${DRONE_REPO_NAME}
