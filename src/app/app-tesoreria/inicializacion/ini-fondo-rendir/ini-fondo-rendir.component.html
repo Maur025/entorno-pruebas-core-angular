@@ -19,11 +19,12 @@
                 class="me-3 col-9"
                 formControlName="id"
                 placeholder="Seleccione empleado"
-                [items]="empleadoList"
-                bindLabel="nombre"
-                bindValue="id"
                 (change)="selectEmpleado($event)"
-              />
+                bindValue="id"
+              ><ng-option *ngFor="let empleado of empleadoList" [value]="empleado">
+                {{empleado['nombre']}} ({{empleado['nitCi']}})
+              </ng-option></ng-select>
+
               <button type="submit" class="btn btn-info">Descargar</button>
             </div>
           </form>

@@ -20,7 +20,7 @@ import { IniFondoRendirComponent } from './ini-fondo-rendir/ini-fondo-rendir.com
     UIModule,
     NgSelectModule,
     FormsModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule
   ],
 })
 export class InicializacionModule {}

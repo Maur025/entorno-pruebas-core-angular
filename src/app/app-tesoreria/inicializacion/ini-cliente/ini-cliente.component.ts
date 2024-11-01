@@ -66,9 +66,9 @@ export class IniClienteComponent {
   };
   setForm() {
     this.formDownloadTemplateClient = this.formBuilder.group({
-      referenciaId: [Validators.required],
-      razonSocial: [Validators.required],
-      nroDocumento: [Validators.required],
+      referenciaId: [null, [Validators.required]],
+      razonSocial: [null, [Validators.required]],
+      nroDocumento: [null, [Validators.required]],
     });
   }
   selectData(data) {

@@ -47,9 +47,9 @@ export class IniFondoRendirComponent {
 
   setForm() {
     this.formDownloadTemplateFondoRendir = this.formBuilder.group({
-      id: [Validators.required],
-      nombre: [Validators.required],
-      nitCi: [Validators.required],
+      id: ['',[Validators.required]],
+      nombre: ['',[Validators.required]],
+      nitCi: ['',[Validators.required]],
     });
   }
 
@@ -60,6 +60,7 @@ export class IniFondoRendirComponent {
   }
 
   selectEmpleado(value){
+    console.log(value);
     if (value != undefined) {
       this.formDownloadTemplateFondoRendir.controls["id"].setValue(value["id"]);
       this.formDownloadTemplateFondoRendir.controls["nombre"].setValue(
