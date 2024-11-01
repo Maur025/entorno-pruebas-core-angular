@@ -8,7 +8,6 @@
   [datosService]="bancoService"
   getAll="getAll"
   [templateFila]="templateFila"
-  [botonNuevo]="true"
   (alCrear)="crearBanco(nuevoBanco)"
 ></app-tabla-new>
 
@@ -110,7 +109,7 @@
         </div>
         <div class="col-md-12">
           <div class="mb-3 px-1">
-            <label class="mb-2 mt-2">(*) Descripción </label>
+            <label class="mb-2 mt-2">Descripción </label>
             <textarea
               formControlName="descripcion"
               class="form-control"
