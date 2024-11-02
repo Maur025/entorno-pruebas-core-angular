@@ -15,7 +15,7 @@ export class InicializacionComponent {
   arrayTypeInitialization : any[] = [
     {value:"CLI", label:"CLIENTES" , options: [{label:"ANTICIPOS", code:"ANT_CLIENTE"}, {label:"COBROS", code: "COB_CLIENTE"}]},
     {value:"PRO", label:"PROVEEDORES", options: [{label:"ANTICIPOS", code:"ANT_PROVEEDOR"}, {label:"CREDITOS", code: "CRED_PROVEEDOR"}] },
-    {value:"FD", label:"FONDOS" },
+    {value:"FR", label:"FONDO A RENDIR" },
   ];
 
   ngOnInit(): void {
@@ -32,7 +32,13 @@ export class InicializacionComponent {
   selectypeInitialization(value){
     this.selectLabel = value['label'];
     this.optionListInitialization = value['options'];
-    this.optionFinalSelect = "";
+
+    let provisionalFinalOption ="";
+
+    if(this.optionListInitialization == undefined && value['value'] == "FR"){
+      provisionalFinalOption = value["value"];
+    }
+    this.optionFinalSelect = this.optionListInitialization == undefined ? provisionalFinalOption: "" ;
   }
 
   accionDescargar(){

@@ -3,7 +3,7 @@
 />
 
 <ng-template #downloadTemplateClient>
-  <div class="row">
+  <div class="row" id="form-body">
     <div class="hstack gap-2 justify-content-center">
       <div class="col-lg-8 border">
         <div class="m-3">
@@ -14,16 +14,19 @@
             <h6 class="fw-bold text-secondary">
               Seleccione un proveedor antes de descargar la plantilla
             </h6>
+<!--             {{proveedoresList|json}} -->
             <div class="d-flex">
               <ng-select
-                class="me-3 col-9"
+                class="col-md-9"
                 formControlName="id"
-                placeholder="Seleccione proveedor"
-                [items]="proveedoresList"
-                bindLabel="nombre"
-                bindValue="id"
-                (change)="selectProveedor($event)"
-              />
+                notFoundText="Sin registros"
+                placeholder="Seleccione empleado"
+                appendTo="#form-body"
+                [ngClass]="{'is-invalid': formDownloadTemplateProveedor.get('id').invalid && submitted}">
+                <ng-option *ngFor="let item of proveedoresList" [value]="item">
+                  {{item.nombre}} ({{item['nitCi']}})
+                </ng-option>
+              </ng-select>
               <button type="submit" class="btn btn-info">Descargar</button>
             </div>
           </form>

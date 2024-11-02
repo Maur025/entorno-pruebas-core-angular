@@ -56,6 +56,11 @@ export class IniProveedorComponent {
     return this.excelForm.controls;
   }
 
+  get form() {
+    return this.formDownloadTemplateProveedor.controls;
+  }
+
+
   getProveedores() {
     this.proveedorService.habilitados().subscribe(
       (data) => {
@@ -66,9 +71,9 @@ export class IniProveedorComponent {
   }
   setForm() {
     this.formDownloadTemplateProveedor = this.formBuilder.group({
-      id: [Validators.required],
-      razonSocial: [Validators.required],
-      nroDocumento: [Validators.required],
+      id: ["",[Validators.required]],
+      razonSocial: ["",[Validators.required]],
+      nroDocumento: ["",[Validators.required]],
     });
   }
   selectProveedor(data) {

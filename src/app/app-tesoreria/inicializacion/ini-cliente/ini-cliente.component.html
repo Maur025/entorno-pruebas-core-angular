@@ -19,11 +19,10 @@
                 class="me-3 col-9"
                 formControlName="referenciaId"
                 placeholder="Seleccione Cliente"
-                [items]="dataClient"
-                bindLabel="nombre"
-                bindValue="id"
                 (change)="selectData($event)"
-              />
+              ><ng-option *ngFor="let cliente of dataClient">
+                {{cliente['nombre']}} ({{cliente['documentoNumero']}})
+              </ng-option></ng-select>
               <button type="submit" class="btn btn-info">Descargar</button>
             </div>
           </form>
