@@ -11,9 +11,9 @@ export class ListAnticiposComponent {
 
   @Input() proveedorId;
   @Output() alSelectAnticipo: EventEmitter<any> = new EventEmitter();
-  listaAnticipos: any[];
+  listaAnticipos: any[]=[];
   anticipoId:string;
-  
+
 
   constructor(
     private anticipoProveedorService: AnticipoProveedorService,
@@ -25,7 +25,7 @@ export class ListAnticiposComponent {
   }
 
   listAnticipos(){
-    this.anticipoProveedorService.findAnticipoProveedor(this.proveedorId).subscribe(
+    this.anticipoProveedorService.findAnticipoProveedor(1000, 1, "id",false,'',this.proveedorId).subscribe(
       data=>{
         this.listaAnticipos = data['data'];
       },error=>this.notificacionService.alertError(error)
