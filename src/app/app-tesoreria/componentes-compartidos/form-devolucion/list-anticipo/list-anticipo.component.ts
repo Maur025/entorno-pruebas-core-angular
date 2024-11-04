@@ -12,7 +12,7 @@ export class ListAnticipoComponent {
   @Input() title: string = "";
   @Input() clienteId;
   @Output() alSelectAnticipo: EventEmitter<any> = new EventEmitter();
-  listaAnticipos: any[];
+  listaAnticipos: any[]=[];
   anticipoId: string;
 
   constructor(private notificacionService: NotificacionService) {}
@@ -21,12 +21,12 @@ export class ListAnticipoComponent {
     this.listAnticipos();
   }
 
-  listAnticipos() {
-    this.anticipoClienteService.findAnticipoCliente(this.clienteId).subscribe(
-      (data) => {
-        this.listaAnticipos = data["data"];
-      },
-      (error) => this.notificacionService.alertError(error)
+  listAnticipos(){
+    this.anticipoClienteService.findAnticipoCliente(1000, 1, "id",false,'',this.clienteId).subscribe(
+      data=>{
+        console.log(data);
+        this.listaAnticipos = data['data'];
+      },error=>this.notificacionService.alertError(error)
     );
   }
 

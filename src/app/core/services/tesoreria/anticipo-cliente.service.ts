@@ -40,15 +40,24 @@ export class AnticipoClienteService {
     );
   }
 
-  findAnticipoCliente(idClient) {
+  findAnticipoCliente(
+    size: number = 100,
+    page: number = 1,
+    sortBy: string = "id",
+    descending: false,
+    keyword: any = "",
+    clienteId
+  ) {
+    size = size <= 0 ? 100 : size;
+    page = page <= 0 ? 1 : page;
     return this.apiService.tesoreria.get(
-      `${this.apiUrl}${this.prefix}/${this.apiName}/${idClient}`
+      `${this.apiUrl}${this.prefix}/${this.apiName}/con-saldo/${clienteId}?size=${size}&page=${
+        page - 1
+      }&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
     );
   }
-/*   exportarPlantillaInicializacion(dataClient) {
-    return this.apiService.tesoreria.post(this.prefix + `/${this.apiName}/exportar/plantilla`, dataClient);
-  }
- */
+
+
   importarSaldosIniciales(file) {
     return this.apiService.tesoreria.post(
       this.prefix + `/${this.apiName}/importar/saldos-iniciales`,

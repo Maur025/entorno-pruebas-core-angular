@@ -9,36 +9,53 @@
       </div>
     </div>
 
-
-
     <div class="table-responsive">
       <table class="table table-sm m-0">
         <thead>
           <tr>
             <th [width]="50"></th>
-            <th class="text-muted fs-14 mb-2">N° anticipo</th>
             <th class="text-muted fs-14 mb-2">Centro costos</th>
-            <th class="text-muted fs-14 mb-2">Monto</th>
+            <th class="text-muted fs-14 mb-2">Referencia</th>
+            <th class="text-muted fs-14 mb-2">Monto Anticipo</th>
             <th class="text-muted fs-14 mb-2">Saldo</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let anticipo of listaAnticipos; let i = index">
-            <td class="text-center">
-                <div class="form-check form-radio-primary">
-                    <input
-                        class="form-check-input ms-2 me-2"
-                        type="radio"
-                        name="anticipoId"
-                        (change)="selectAnticipo(anticipo)"
-                        style="transform: scale(1.2)">
+          <ng-template *ngIf="listaAnticipos.length > 0; then listAnticipos; else mensaje"/>
+          <ng-template #listAnticipos>
+            <tr *ngFor="let anticipo of listaAnticipos; let i = index">
+              <td class="text-center">
+                  <div class="form-check form-radio-primary">
+                      <input
+                          class="form-check-input ms-2 me-2"
+                          type="radio"
+                          name="anticipoId"
+                          (change)="selectAnticipo(anticipo)"
+                          style="transform: scale(1.2)">
+                  </div>
+              </td>
+              <td>{{anticipo['centroCostoNombre']}}</td>
+              <td>
+                <div>
+                  <p class="mb-0 text-muted">
+                    Nº referencia :{{anticipo['nroReferencia']}}
+                  </p>
+                  <small class="text-muted text-end mb-0"
+                    >Descripción: <b>{{ anticipo["descripcion"] }}</b></small
+                  >
                 </div>
-            </td>
-            <td class="text-center">{{anticipo['nroReferencia']}}</td>
-            <td>{{anticipo['centroCosto']['nombre']}}</td>
-            <td class="text-end">{{anticipo['monto']|decimalAmount}}</td>
-            <td class="text-end">{{anticipo['saldo']|decimalAmount}}</td>
-        </tr>
+              </td>
+              <td class="text-center">{{anticipo['monto']|decimalAmount}}</td>
+              <td class="text-center">{{anticipo['saldo']|decimalAmount}}</td>
+            </tr>
+          </ng-template>
+          <ng-template #mensaje>
+            <tr><td colspan="5" class="text-center">
+              <span class="badge bg-info font-size-10">
+               No se encontraron anticipos con saldo.
+              </span>
+            </td></tr>
+          </ng-template>
         </tbody>
       </table>
     </div>
