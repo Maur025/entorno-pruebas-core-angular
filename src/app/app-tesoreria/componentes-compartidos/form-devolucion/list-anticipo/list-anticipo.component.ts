@@ -12,7 +12,7 @@ export class ListAnticipoComponent {
   @Input() title: string = "";
   @Input() clienteId;
   @Output() alSelectAnticipo: EventEmitter<any> = new EventEmitter();
-  listaAnticipos: any[];
+  listaAnticipos: any[]=[];
   anticipoId: string;
 
   constructor(private notificacionService: NotificacionService) {}
