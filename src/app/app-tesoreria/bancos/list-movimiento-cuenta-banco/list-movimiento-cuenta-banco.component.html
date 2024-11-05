@@ -41,8 +41,8 @@
             <th>Acciones</th>
             <th>Movimiento</th>
             <th>Fecha</th>
+            <th>Referencia</th>
             <th>Medio de Movimiento</th>
-            <th>Nº Referencia</th>
             <th class="text-end">Monto</th>
           </tr>
         </thead>
@@ -71,23 +71,31 @@
               EGRESO
             </span>
             </td>
+            <td>{{ mov['fecha']|fechaFormat}}</td>
             <td>
               <div>
                 <p class="mb-0 text-muted">
-                  {{ mov['fecha']|fechaFormat}}
+                  Nº: {{mov['nroReferencia']}}
                 </p>
                 <small class="text-muted text-end mb-0"
-                  >{{mov['descripcion']}}</small
-                >
+                  >Descripción: {{mov['descripcion']}}</small>
               </div>
             </td>
-            <td>{{mov['medioTransferencia']?mov['medioTransferencia']['medio']:''}}</td>
-            <td>{{mov['nroReferencia']}}</td>
+            <td>
+              <h6 class="text-muted fw-bold">
+                {{mov['medioTransferencia']?mov['medioTransferencia']['medio']:'SALDO INICIAL'}}
+              </h6>
+            </td>
             <td class="text-end">{{mov['monto']|decimalAmount}}</td>
           </tr>
         </tbody>
       </table>
-
+      <pagination-only
+        [selectPageSmall]="true"
+        [datos]="movimientosList"
+        [pagination]="pagination"
+        (alPaginar)="recibirParametrosPage($event)"
+      ></pagination-only>
     </div>
   </div>
 

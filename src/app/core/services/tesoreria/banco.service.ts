@@ -54,10 +54,20 @@ export class BancoService {
     );
   }
   /* Movimientos */
+  movimientoCuentaBanco(
+    size: number = 20,
+    page: number = 0,
+    sortBy: string = "id",
+    descending: boolean = false,
+    cuentaBancoId,
+    filtros={}
+  ) {
+    size = size <= 0 ? 100 : size;
+    page = page <= 0 ? 1 : page;
 
-  movimientoCuentaBanco(cuentaBancoId, filtros = {}) {
     return this.apiService.tesoreria.post(
-      `${this.apiUrl}${this.prefix}/${this.apiName}/cuenta_banco/detail/${cuentaBancoId}`,
+      `${this.apiUrl}${this.prefix}/${this.apiName}/cuenta_banco/detail/${cuentaBancoId}
+      ?page=${page - 1}&size=${size}&sortBy=${sortBy}&descending=${descending}`,
       filtros
     );
   }
