@@ -58,18 +58,23 @@ export class AnticipoProveedorService {
     );
   }
 
-  findAnticipoProveedor(idProveedor) {
+  findAnticipoProveedor(
+    size: number = 100,
+    page: number = 1,
+    sortBy: string = "id",
+    descending: false,
+    keyword: any = "",
+    proveedorId
+  ) {
+    size = size <= 0 ? 100 : size;
+    page = page <= 0 ? 1 : page;
     return this.apiService.tesoreria.get(
-      `${this.apiUrl}${this.prefix}/${this.apiName}/${idProveedor}`
+      `${this.apiUrl}${this.prefix}/${this.apiName}/con-saldo/${proveedorId}?size=${size}&page=${
+        page - 1
+      }&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
     );
   }
 
-/*   detalleAnticipoProveedor(anticipoProveedorId) {
-    return this.apiService.tesoreria.get(
-      `${this.apiUrl}${this.prefix}/${this.apiName}/detalle/${anticipoProveedorId}`
-    );
-  }
- */
   detalleAnticipoProveedor(
     size: number = 20,
     page: number = 0,
