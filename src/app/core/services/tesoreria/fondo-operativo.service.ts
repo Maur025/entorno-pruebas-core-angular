@@ -69,18 +69,11 @@ export class FondoOperativoService {
     );
   }
 
-  movimientoFondoRendir(fondoOperativoId, filtros) {
-    return this.apiService.tesoreria.post(
-      `${this.apiUrl}${this.prefix}/${this.apiName}/detail/${fondoOperativoId}`,
-      filtros
-    );
-  }
-
   movimientosFondoOpertativo(
     size: number = 20,
     page: number = 0,
     sortBy: string = "id",
-    descending: boolean = false,
+    descending: boolean = true,
     fondoOperativoId,
     filtros
   ) {

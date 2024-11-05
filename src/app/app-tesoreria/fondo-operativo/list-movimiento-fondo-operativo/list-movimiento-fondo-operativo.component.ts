@@ -27,7 +27,7 @@ export class ListMovimientoFondoOperativoComponent implements OnInit{
   estadoFondoSelect: any;
   listaEstadosFondo: any[]=[];
   public pagination = {
-    size: 1,
+    size: 10,
     page: 0,
     sortBy: "id",
     descending: false,

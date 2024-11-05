@@ -58,7 +58,7 @@ export class BancoService {
     size: number = 20,
     page: number = 0,
     sortBy: string = "id",
-    descending: boolean = false,
+    descending: boolean = true,
     cuentaBancoId,
     filtros={}
   ) {

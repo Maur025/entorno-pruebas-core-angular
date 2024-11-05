@@ -50,11 +50,11 @@ export class ListaAnticiposProveedorComponent extends FuncionesComponent impleme
     return {
       cabeceras: {
         "acciones": this.getOpcionesCabecera('', 12),
-        "referencia": this.getOpcionesCabecera('Referencia', 12),
-        "fecha": this.getOpcionesCabecera('Fecha anticipo', 12),
         "centroCosto": this.getOpcionesCabecera('Centro de costos', 12),
-        "montoAnticipo": this.getOpcionesCabecera('Monto Anticipo', 12),
-        "montoAplicado": this.getOpcionesCabecera('Monto Anticipo-Aplicado', 12),
+        "fecha": this.getOpcionesCabecera('Fecha anticipo', 12),
+        "referencia": this.getOpcionesCabecera('Referencia', 12),
+        "montoAnticipo": this.getOpcionesCabecera('Total Anticipo', 12),
+        "montoAplicado": this.getOpcionesCabecera('Anticipo aplicado', 12),
         "saldo": this.getOpcionesCabecera('Saldo', 12),
         "estadoContable": this.getOpcionesCabecera('Estado Contable', 12),
       }

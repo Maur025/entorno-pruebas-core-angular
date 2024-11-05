@@ -11,6 +11,15 @@ export class DetalleAnticipoComponent {
   @Output() cerrarModal = new EventEmitter<void>();
   detalleList: any[]=[];
 
+  public pagination = {
+    size: 10,
+    page: 0,
+    sortBy: "id",
+    descending: true,
+    pages: 0,
+    limit: 0,
+  };
+
   constructor(private anticipoProveedorService: AnticipoProveedorService){}
 
   ngOnInit(): void {
@@ -18,8 +27,22 @@ export class DetalleAnticipoComponent {
   }
 
   getDetalleDevengado(){
-    this.anticipoProveedorService.detalleAnticipoProveedor(this.dataAnticipoProveedor['id']).subscribe(data=>{
+    this.anticipoProveedorService.detalleAnticipoProveedor(
+      this.pagination.size,
+      this.pagination.page,
+      this.pagination.descending,
+      this.dataAnticipoProveedor['id']).subscribe(data=>{
       this.detalleList = data['data'];
+      this.pagination.limit = data['pagination']['count'];
+      this.pagination.pages = data['pagination']['pages'];
+      this.pagination.pages = data['pagination']['pages'];
     }, error=>console.error("Ha ocurrido un error al llamar el servicio", error));
+  }
+
+  recibirParametrosPage(paramPage){
+    this.pagination.page = paramPage.page;
+    this.pagination.size = paramPage.size;
+    this.getDetalleDevengado();
+
   }
 }
