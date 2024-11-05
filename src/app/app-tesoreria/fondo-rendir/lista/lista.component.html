@@ -22,6 +22,13 @@
       <td [ngSwitch]="campo">
         <div *ngSwitchCase="'acciones'">
           <button
+            class="btn btn-sm btn-secondary me-1"
+            tooltip="Ver movimientos"
+            (click)="verMovimientos(fila, modalMovimientos)"
+          >
+            <i class="mdi mdi-chart-timeline-variant"></i>
+          </button>
+          <button
             *ngIf="fila['saldoReembolsar'] > 0"
             class="btn btn-sm btn-warning me-2"
             tooltip="Pagar reembolso"
@@ -36,13 +43,6 @@
             (click)="pagoDevolucionForm(fila, pagoModal)"
           >
             <i class="mdi mdi-keyboard-backspace"></i>
-          </button>
-          <button
-            class="btn btn-sm btn-secondary me-1"
-            tooltip="Ver movimientos"
-            (click)="verMovimientos(fila, modalMovimientos)"
-          >
-            <i class="mdi mdi-file-replace"></i>
           </button>
         </div>
         <div *ngSwitchCase="'nombre'" style="width: 180px">

@@ -26,6 +26,14 @@ export class ListMovimientoFondoOperativoComponent implements OnInit{
   centroCostoSelect: any;
   estadoFondoSelect: any;
   listaEstadosFondo: any[]=[];
+  public pagination = {
+    size: 10,
+    page: 0,
+    sortBy: "id",
+    descending: false,
+    pages: 0,
+    limit: 0,
+  };
 
   constructor(private fondoOperativoService:FondoOperativoService,
     private notificacionService: NotificacionService,
@@ -41,9 +49,18 @@ export class ListMovimientoFondoOperativoComponent implements OnInit{
   }
 
   movimientoFondo(){
-    this.fondoOperativoService.movimientoFondoRendir(this.dataFondo['id'], this.bodyFilters).subscribe(
+    this.fondoOperativoService.movimientosFondoOpertativo(
+        this.pagination.size,
+        this.pagination.page,
+        this.pagination.sortBy,
+        this.pagination.descending,
+        this.dataFondo['id'],
+        this.bodyFilters).subscribe(
       data=>{
         this.movimientosList = data['data'];
+        this.pagination.limit = data['pagination']['count'];
+        this.pagination.pages = data['pagination']['pages'];
+        this.pagination.pages = data['pagination']['pages'];
       }, error=>this.notificacionService.alertError(error));
   }
 
@@ -97,4 +114,10 @@ export class ListMovimientoFondoOperativoComponent implements OnInit{
     ).subscribe();
 	}
 
+  recibirParametrosPage(paramPage){
+    this.pagination.page = paramPage.page;
+    this.pagination.size = paramPage.size;
+    this.movimientoFondo();
+
+  }
 }

@@ -76,6 +76,24 @@ export class FondoOperativoService {
     );
   }
 
+  movimientosFondoOpertativo(
+    size: number = 20,
+    page: number = 0,
+    sortBy: string = "id",
+    descending: boolean = false,
+    fondoOperativoId,
+    filtros
+  ) {
+    size = size <= 0 ? 100 : size;
+    page = page <= 0 ? 1 : page;
+
+    return this.apiService.tesoreria.post(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/detail/${fondoOperativoId}
+      ?page=${page - 1}&size=${size}&sortBy=${sortBy}&descending=${descending}`,
+      filtros
+    );
+  }
+
   exportComprobante(id: any) {
 		return this.apiService.tesoreria.get(
       `${this.apiUrl}${this.prefix}/${this.apiName}/${id}/pdf`
