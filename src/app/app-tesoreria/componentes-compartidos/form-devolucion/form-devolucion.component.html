@@ -6,9 +6,9 @@
     <div class="d-flex">
       <div>
         <h6 class="fs-14 mb-0 ms-1 text-primary">
-          {{ datosCliente["cliente"]["razonSocial"] }}
+          {{ datosCliente["razonSocial"] }}
         </h6>
-        <small class="text-muted ms-1 mb-0">Devolucion de anticipo</small>
+        <small class="text-muted ms-1 mb-0">Devolución de anticipo</small>
       </div>
     </div>
   </div>
@@ -31,7 +31,7 @@
       <div class="row">
         <app-list-anticipo
           [title]="'cliente'"
-          [clienteId]="datosCliente['clienteId']"
+          [clienteId]="datosCliente['id']"
           (alSelectAnticipo)="recibirAnticipo($event)"
         ></app-list-anticipo>
       </div>

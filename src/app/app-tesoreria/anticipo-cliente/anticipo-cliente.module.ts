@@ -11,9 +11,12 @@ import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { UiSwitchModule } from "ngx-ui-switch";
 import { TooltipModule } from "ngx-bootstrap/tooltip";
 import { ComponentesCompartidosModule } from "../componentes-compartidos/componentes-compartidos.module";
+import { ListaAnticiposClienteComponent } from './lista-anticipos-cliente/lista-anticipos-cliente.component';
+import { DetalleAnticipoComponent } from './detalle-anticipo/detalle-anticipo.component';
+import { AlertModule } from "ngx-bootstrap/alert";
 
 @NgModule({
-  declarations: [ListaComponent],
+  declarations: [ListaComponent, ListaAnticiposClienteComponent, DetalleAnticipoComponent],
   imports: [
     CommonModule,
     AnticipoClienteRoutingModule,
@@ -26,6 +29,7 @@ import { ComponentesCompartidosModule } from "../componentes-compartidos/compone
     UiSwitchModule,
     TooltipModule.forRoot(),
     ComponentesCompartidosModule,
+    AlertModule.forRoot(),
   ],
 })
 export class AnticipoClienteModule {}

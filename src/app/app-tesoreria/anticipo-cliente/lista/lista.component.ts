@@ -9,6 +9,7 @@ import { FuncionesComponent } from "../../funciones.component";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { AnticipoClienteService } from "src/app/core/services/tesoreria/anticipo-cliente.service";
 import { ClienteService } from "src/app/core/services/ventas/clientes.service";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "app-lista",
@@ -29,7 +30,11 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   label: string = "Clientes";
   data: any;
   dataCliente: any;
-  constructor(private modalService: BsModalService) {
+  constructor(
+    private modalService: BsModalService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     super();
   }
   ngOnInit(): void {
@@ -108,7 +113,14 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   }
 
   realizarDevolucion(template, cliente) {
+    console.log(cliente);
     this.dataCliente = cliente;
     this.modalRef = this.modalService.show(template, this.modalConfig);
+  }
+
+  listAnticipos(clienteId){
+    this.router.navigate(["./" + clienteId + "/anticipos-list/", {}], {
+      relativeTo: this.route,
+    });
   }
 }
