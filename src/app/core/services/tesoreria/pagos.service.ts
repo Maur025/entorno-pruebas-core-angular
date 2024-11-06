@@ -34,9 +34,20 @@ export class PagosService {
     );
   }
 
-  comprasPorProveedor(idProveedor) {
+  comprasPorProveedor(
+    size: number = 20,
+    page: number = 0,
+    descending: boolean = true,
+    idProveedor,
+    filtros={}
+  ) {
+    size = size <= 0 ? 100 : size;
+    page = page <= 0 ? 1 : page;
+
     return this.apiService.tesoreria.get(
-      `${this.apiUrl}${this.prefix}/${this.apiName}/${idProveedor}`
+      `${this.apiUrl}${this.prefix}/${this.apiName}/${idProveedor}
+      ?page=${page - 1}&size=${size}&descending=${descending}`,
+      filtros
     );
   }
 

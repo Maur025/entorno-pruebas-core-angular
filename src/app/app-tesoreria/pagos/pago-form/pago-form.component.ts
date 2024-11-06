@@ -100,7 +100,7 @@ export class PagoFormComponent {
   }
 
   getComprasPorProveedor(idProveedor) {
-    this.pagoService.comprasPorProveedor(idProveedor).subscribe(
+    this.pagoService.comprasPorProveedor(1000,0,true,idProveedor).subscribe(
       (data) => {
         this.comprasDelProveedor = data["data"];
       },

@@ -24,8 +24,6 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
   constructor(
     private modalService: BsModalService,
     public pagoService: PagosService,
-    private notificacionService: NotificacionService,
-    private responseHandlerService: ResponseHandlerService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -55,7 +53,6 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
       cabeceras: {
         acciones: this.getOpcionesCabecera("Acciones", 12, "text", true, false),
         razonSocial: this.getOpcionesCabecera("Razón Social", 12),
-        nombreComercial: this.getOpcionesCabecera("Nombre Comercial", 12),
         nroDocumento: this.getOpcionesCabecera("Nº Documento", 12),
         totalCredito: this.getOpcionesCabecera("Credito total", 12),
         totalPago: this.getOpcionesCabecera("Pago Total", 12),

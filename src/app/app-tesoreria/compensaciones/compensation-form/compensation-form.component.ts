@@ -286,7 +286,7 @@ export class CompensationFormComponent implements OnInit {
 
   getSupplierCredit = (idProveedor: string, origin: boolean = true) => {
     this.isEmptyOrigin = false;
-    this._supplierAdvanceService.comprasPorProveedor(idProveedor).subscribe(
+    this._supplierAdvanceService.comprasPorProveedor(1000,0,true,idProveedor).subscribe(
       (data) => {
         if (origin) {
           this.listMovesOrigin =
