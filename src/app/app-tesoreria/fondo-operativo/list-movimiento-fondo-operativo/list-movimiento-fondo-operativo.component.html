@@ -90,6 +90,12 @@
             </tr>
           </tbody>
         </table>
+        <pagination-only
+          [selectPageSmall]="true"
+          [datos]="movimientosList"
+          [pagination]="pagination"
+          (alPaginar)="recibirParametrosPage($event)"
+        ></pagination-only>
 
       </div>
     </div>
@@ -134,7 +140,7 @@
 
       <div class="col-md-4">
         <div class="d-flex mb-1">
-          <p class="text-muted fs-14 mb-0">Rango de fecha?</p>
+          <p class="text-muted fs-14 mb-0">¿Rango de fecha?</p>
             <p class="text-muted fs-14 mb-0 ms-4 fw-bold">{{!rangoFechas?'NO':'SI'}}</p>
             <div class="form-check form-check-success m-0 p-0 ms-5">
               <input
@@ -180,7 +186,6 @@
             class="btn btn-success"
             (click)="filtrar()"
            >Filtrar</button>
-
       </div>
     </div>
   </div>

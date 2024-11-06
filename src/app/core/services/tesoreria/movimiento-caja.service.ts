@@ -17,7 +17,7 @@ export class MovimientoCajaService {
     size: number = 100,
     page: number = 0,
     sortBy: string = "id",
-    descending: boolean = false,
+    descending: boolean = true,
     keyword: string = "",
     id: string | number
   ): Observable<ApiResponseStandard> => {

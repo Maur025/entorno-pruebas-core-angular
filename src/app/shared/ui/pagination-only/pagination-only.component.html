@@ -1,0 +1,46 @@
+<div class="row justify-content-between align-items-center">
+  <div class="col-auto me-auto">
+    <small class="text-secondary">
+      Mostrando {{ datos.length }} de {{ pagination.limit }} registros.
+    </small>
+  </div>
+
+  <div class="col-auto me-auto">
+    <select
+      class="form-select"
+      [ngClass]="selectPageSmall?'form-select-sm': ''"
+      [value]="10"
+      [(ngModel)]="pagination.size"
+      (change)="obtenerDatos()">
+        <option value="10">Mostrar 10</option>
+        <option value="20">Mostrar 20</option>
+        <option value="1000">Mostrar Todo</option>
+    </select>
+  </div>
+  <div class="col-auto">
+    <div class="card d-inline-block ms-auto mb-0">
+      <div class="card-body p-2">
+        <nav aria-label="Page navigation only" class="mb-0">
+          <ul class="pagination pagination-rounded mb-0">
+            <pagination
+              [boundaryLinks]="true"
+              [directionLinks]="true"
+              [(ngModel)]="pagination.page"
+              [totalItems]="pagination.limit"
+              [maxSize]="10"
+              [itemsPerPage]="pagination.size"
+              (pageChanged)="pageChanged($event)"
+              previousText="&lsaquo;"
+              nextText="&rsaquo;"
+              firstText="&laquo;"
+              lastText="&raquo;"
+            >
+            </pagination>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+

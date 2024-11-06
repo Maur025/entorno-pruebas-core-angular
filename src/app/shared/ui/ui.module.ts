@@ -13,6 +13,7 @@ import { TablaNewComponent } from "./tabla-new/tabla-new.component";
 import { TooltipModule } from "ngx-bootstrap/tooltip";
 import { PaginationModule } from "ngx-bootstrap/pagination";
 import { LoaderButtonComponent } from "./loader-button/loader-button.component";
+import { PaginationOnlyComponent } from './pagination-only/pagination-only.component';
 @NgModule({
   declarations: [
     PagetitleComponent,
@@ -20,6 +21,7 @@ import { LoaderButtonComponent } from "./loader-button/loader-button.component";
     SimpleLoaderComponent,
     TablaNewComponent,
     LoaderButtonComponent,
+    PaginationOnlyComponent,
   ],
   imports: [
     CommonModule,
@@ -36,6 +38,7 @@ import { LoaderButtonComponent } from "./loader-button/loader-button.component";
     SimpleLoaderComponent,
     TablaNewComponent,
     LoaderButtonComponent,
+    PaginationOnlyComponent
   ],
 })
 export class UIModule {}

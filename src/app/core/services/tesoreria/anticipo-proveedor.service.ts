@@ -75,10 +75,18 @@ export class AnticipoProveedorService {
     );
   }
 
+  detalleAnticipoProveedor(
+    size: number = 20,
+    page: number = 0,
+    descending: boolean = true,
+    anticipoProveedorId
+  ) {
+    size = size <= 0 ? 100 : size;
+    page = page <= 0 ? 1 : page;
 
-  detalleAnticipoProveedor(anticipoProveedorId) {
     return this.apiService.tesoreria.get(
-      `${this.apiUrl}${this.prefix}/${this.apiName}/detalle/${anticipoProveedorId}`
+      `${this.apiUrl}${this.prefix}/${this.apiName}/detalle/${anticipoProveedorId}
+      ?page=${page - 1}&size=${size}&descending=${descending}`
     );
   }
 

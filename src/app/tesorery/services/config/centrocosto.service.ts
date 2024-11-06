@@ -20,6 +20,6 @@ export class CentroCostosService {
   }
 
   habilitados() {
-    return this.apiService.config.get(`${this.apiUrl}${this.prefix}/${this.apiName}/listarHabilitados`);
+    return this.apiService.config.get(`${this.apiUrl}${this.prefix}/${this.apiName}/habilitados`);
   }
 }

@@ -37,55 +37,68 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let detalle of detalleList">
-            <td>
-              <div class="d-flex">
-              </div>
-                <span class="badge bg-secondary font-size-10">
-                  {{ detalle["estadoAnticipoProveedor"]["nombre"] }}
-                </span> |
-                <span class="badge font-size-10" [ngClass]="{
-                  'bg-info': detalle['estadoContabilidad']['codigo'] === 'INI',
-                  'bg-success': detalle['estadoContabilidad']['codigo'] === 'CONT',
-                  'bg-primary': detalle['estadoContabilidad']['codigo'] === 'PCONT'
-                }">
-                  {{ detalle["estadoContabilidad"]["nombre"]}}
-                </span>
-            </td>
-            <td>
-              <div>
-                <p class="mb-0 text-muted">
-                  {{ detalle["fecha"] | fechaFormat }}
-                </p>
-              </div>
-            </td>
-            <td>{{ detalle["monto"] }}</td>
-            <td>
-              <div *ngIf="detalle.compra">
-                <p class="mb-0 text-muted">
-                  {{ detalle.compra?.tipo }}:
-                  {{ detalle.compra?.nroFacturaRecibo }}
-                </p>
-                <small class="text-muted text-end mb-0"
-                  ><b>Fecha:</b
-                  >{{ detalle.compra?.fechaCompra | fechaFormat }}</small
-                >
-              </div>
-              <div *ngIf="!detalle.compra">
-                <span class="badge bg-secondary font-size-10">
-                  <i>Sin detalles</i>
-                </span>
-              </div>
-            </td>
-          </tr>
+          <ng-template *ngIf="detalleList.length != 0; then listado else mensaje "/>
+          <ng-template #listado>
+            <tr *ngFor="let detalle of detalleList">
+              <td>
+                <div class="d-flex">
+                </div>
+                  <span class="badge bg-secondary font-size-10">
+                    {{ detalle["estadoAnticipoProveedor"]["nombre"] }}
+                  </span> |
+                  <span class="badge font-size-10" [ngClass]="{
+                    'bg-info': detalle['estadoContabilidad']['codigo'] === 'INI',
+                    'bg-success': detalle['estadoContabilidad']['codigo'] === 'CONT',
+                    'bg-primary': detalle['estadoContabilidad']['codigo'] === 'PCONT'
+                  }">
+                    {{ detalle["estadoContabilidad"]["nombre"]}}
+                  </span>
+              </td>
+              <td>
+                <div>
+                  <p class="mb-0 text-muted">
+                    {{ detalle["fecha"] | fechaFormat }}
+                  </p>
+                </div>
+              </td>
+              <td>{{ detalle["monto"] }}</td>
+              <td>
+                <div *ngIf="detalle.compra">
+                  <p class="mb-0 text-muted">
+                    {{ detalle.compra?.tipo }}:
+                    {{ detalle.compra?.nroFacturaRecibo }}
+                  </p>
+                  <small class="text-muted text-end mb-0"
+                    ><b>Fecha compra: </b
+                    >{{ detalle.compra?.fechaCompra | fechaFormat }}</small
+                  >
+                </div>
+                <div *ngIf="!detalle.compra">
+                  <span class="badge bg-secondary font-size-10">
+                    <i>Sin detalles</i>
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template #mensaje>
+            <tr>
+              <td colspan="4">
+                <alert type="info" [dismissible]="false" role="alert">
+                  <i class="mdi mdi-alert-circle-outline me-2"></i>
+                  Sin registros encontrados
+                </alert>
+              </td>
+            </tr>
+          </ng-template>
         </tbody>
       </table>
-      <div *ngIf="detalleList.length == 0">
-        <alert type="info" [dismissible]="false" role="alert">
-          <i class="mdi mdi-alert-circle-outline me-2"></i>
-          Sin registros encontrados
-        </alert>
-      </div>
+      <pagination-only
+        [selectPageSmall]="true"
+        [datos]="detalleList"
+        [pagination]="pagination"
+        (alPaginar)="recibirParametrosPage($event)"
+      ></pagination-only>
     </div>
   </div>
 

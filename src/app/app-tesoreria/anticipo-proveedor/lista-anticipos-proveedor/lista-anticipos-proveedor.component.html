@@ -38,9 +38,9 @@
         <div *ngSwitchCase="'referencia'">
           <div>
             <p class="mb-0">
-             Nº referencia : {{fila['nroReferencia']}}
+             Nº: {{fila['nroReferencia']}}
             </p>
-            <p class="text-muted m-0">{{ fila["descripcion"]}}</p>
+            <small class="text-muted m-0">Descripción: {{ fila["descripcion"]|uppercase}}</small>
           </div>
         </div>
         <div *ngSwitchCase="'fecha'">
