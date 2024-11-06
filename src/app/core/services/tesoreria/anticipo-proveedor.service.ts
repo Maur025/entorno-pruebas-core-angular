@@ -61,8 +61,8 @@ export class AnticipoProveedorService {
   findAnticipoProveedor(
     size: number = 100,
     page: number = 1,
-    sortBy: string = "id",
-    descending: false,
+    sortBy: string = "fecha",
+    descending: boolean = false,
     keyword: any = "",
     proveedorId
   ) {
