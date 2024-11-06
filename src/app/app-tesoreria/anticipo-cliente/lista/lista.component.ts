@@ -8,7 +8,6 @@ import {
 import { FuncionesComponent } from "../../funciones.component";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { AnticipoClienteService } from "src/app/core/services/tesoreria/anticipo-cliente.service";
-import { FormAnticipoComponent } from "../../componentes-compartidos/form-anticipo/form-anticipo.component";
 import { ClienteService } from "src/app/core/services/ventas/clientes.service";
 
 @Component({
@@ -59,30 +58,24 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     return {
       cabeceras: {
         acciones: this.getOpcionesCabecera("Acciones", 12, "text", true, false),
-        proveedor: this.getOpcionesCabecera("Cliente", 12, "text", true, true),
-        centroCosto: this.getOpcionesCabecera(
-          "Centro Costo",
+        cliente: this.getOpcionesCabecera("Cliente", 12, "text", true, true),
+        nroDocumento: this.getOpcionesCabecera(
+          "Nro Documento",
           12,
           "text",
           true,
           true
         ),
-        descripcion: this.getOpcionesCabecera(
-          "Descripción",
-          12,
-          "text",
-          true,
-          true
-        ),
-        nroReferencia: this.getOpcionesCabecera(
-          "Nro Referencia",
-          12,
-          "text",
-          true,
-          true
-        ),
-        monto: this.getOpcionesCabecera(
+        montoAnticipo: this.getOpcionesCabecera(
           "Monto Anticipo",
+          12,
+          "text",
+          true,
+          true,
+          "text-end"
+        ),
+        anticipoAplicado: this.getOpcionesCabecera(
+          "Anticipo Aplicado",
           12,
           "text",
           true,

@@ -6,7 +6,7 @@
   [conOpciones]="false"
   [formato]="formato"
   [datosService]="_anticipoClienteService"
-  getAll="getAll"
+  getAll="getListClientes"
   [templateFila]="templateFila"
   [botonNuevo]="true"
   (alCrear)="crearAnticipo(nuevoAnticipo)"
@@ -29,32 +29,31 @@
             <i class="mdi mdi-keyboard-backspace"></i>
           </button>
         </div>
-        <div *ngSwitchCase="'proveedor'">
-          {{ fila["cliente"]["razonSocial"] }}
+        <div *ngSwitchCase="'cliente'">
+          {{ fila["razonSocial"] }}
+        </div>
+        <div *ngSwitchCase="'nroDocumento'">
+          {{ fila["nroDocumento"] }}
         </div>
 
-        <div *ngSwitchCase="'centroCosto'">
-          {{ fila.centroCosto.nombre }}
-        </div>
-        <div *ngSwitchCase="'descripcion'">
-          {{ fila.descripcion }}
+        <div
+          *ngSwitchCase="'montoAnticipo'"
+          class="text-end"
+          [ngClass]="fila['totalAnticipo'] >= 0 ? 'text-success' : 'text-danger'">
+          {{ fila['totalAnticipo'] | decimalAmount}}
         </div>
         <div
+          *ngSwitchCase="'anticipoAplicado'"
           class="text-end"
-          *ngSwitchCase="'monto'"
-          [ngClass]="fila['monto'] >= 0 ? 'text-success' : 'text-danger'"
-        >
-          {{ fila["monto"] | decimalAmount }}
+          [ngClass]="fila['totalAplicacionAnticipo'] >= 0 ? 'text-success' : 'text-danger'">
+          {{ fila['totalAplicacionAnticipo'] | decimalAmount }}
         </div>
         <div
           class="text-end"
           *ngSwitchCase="'saldo'"
-          [ngClass]="fila['saldo'] >= 0 ? 'text-success' : 'text-danger'"
+          [ngClass]="fila['totalSaldo'] >= 0 ? 'text-success' : 'text-danger'"
         >
-          {{ fila["saldo"] | decimalAmount }}
-        </div>
-        <div *ngSwitchDefault>
-          <td>{{ fila[campo] }}</td>
+          {{ fila["totalSaldo"] | decimalAmount }}
         </div>
       </td>
     </ng-template>

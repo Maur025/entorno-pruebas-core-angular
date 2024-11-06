@@ -26,6 +26,23 @@ export class AnticipoClienteService {
     );
   }
 
+  getListClientes(
+    size: number = 100,
+    page: number = 1,
+    sortBy: string = "id",
+    descending: false,
+    keyword: any = ""
+  ) {
+    size = size <= 0 ? 100 : size;
+    page = page <= 0 ? 1 : page;
+    return this.apiService.tesoreria.get(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/listar-clientes?size=${size}&page=${
+        page - 1
+      }&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
+    );
+  }
+
+
   crearAnticipo(datos: any) {
     return this.apiService.tesoreria.post(
       `${this.apiUrl}${this.prefix}/${this.apiName}`,
