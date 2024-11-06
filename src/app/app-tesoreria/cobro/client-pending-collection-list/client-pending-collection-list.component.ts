@@ -12,6 +12,8 @@ export class ClientPendingCollectionListComponent
 	extends FuncionesComponent
 	implements OnInit
 {
+  titulo = "Cobros Cliente"
+  tituloLista = "Lista de cobros"
 	protected breadCrumbItems: object[] = []
 	protected tableHeadersFormat: { [key: string]: unknown } = {}
 
@@ -20,9 +22,9 @@ export class ClientPendingCollectionListComponent
 	}
 
 	ngOnInit(): void {
-		this.breadCrumbItems = [
-			{ label: 'Cobros' },
-			{ label: 'Gestión de cobros', active: true },
+    this.breadCrumbItems = [
+			{ label: this.titulo },
+			{ label: this.tituloLista, active: true },
 		]
 		this.getHeaders()
 	}

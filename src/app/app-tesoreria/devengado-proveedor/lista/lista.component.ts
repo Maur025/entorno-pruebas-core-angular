@@ -13,6 +13,8 @@ import { DevengadoService } from 'src/app/core/services/tesoreria/devengado.serv
   styleUrls: ['./lista.component.scss']
 })
 export class ListaComponent extends FuncionesComponent implements OnInit{
+  titulo = "Devengados Proveedor"
+  tituloLista = "Lista de devengados"
   @ViewChild('tabla') tabla: TablaNewComponent;
   breadCrumbItems: object[];
   formato: any;
@@ -29,8 +31,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
 
   ngOnInit(): void {
     this.breadCrumbItems = [
-			{ label: "Devengados " },
-			{ label: "Gestión de devengados", active: true },
+			{ label: this.titulo },
+			{ label: this.tituloLista, active: true },
 		]
     this.formato = this.getCabeceras();
   }

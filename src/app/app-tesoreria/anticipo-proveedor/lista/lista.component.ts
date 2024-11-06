@@ -10,6 +10,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./lista.component.scss']
 })
 export class ListaComponent extends FuncionesComponent{
+  titulo = "Anticipo Proveedor"
+  tituloLista = "Lista de Anticipos"
   @ViewChild('tabla') tabla: TablaNewComponent;
   breadCrumbItems: object[];
   formato: any;
@@ -27,8 +29,8 @@ export class ListaComponent extends FuncionesComponent{
 
   ngOnInit(): void {
     this.breadCrumbItems = [
-			{ label: "Anticipo Proveedor" },
-			{ label: "Gestión de anticipo proveedor", active: true },
+			{ label: this.titulo },
+			{ label: this.tituloLista, active: true },
 		]
     this.formato = this.getCabeceras();
   }

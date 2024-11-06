@@ -1,14 +1,24 @@
-<app-page-title title="Bancos" [breadcrumbItems]="breadCrumbItems" />
+<app-page-title title="{{titulo}}" [breadcrumbItems]="breadCrumbItems" />
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-0">
+        <app-header-content [titulo]="tituloLista" (nuevo)="crearBanco(nuevoBanco)"
+          (refrescar)="tabla.refrescar()"></app-header-content>
+      </div>
+    </div>
+  </div>
+</div>
 <app-tabla-new
   #tabla
-  [botonNuevo]="true"
+  [botonNuevo]="false"
   [smallTable]="false"
   [conOpciones]="false"
   [formato]="formato"
   [datosService]="bancoService"
   getAll="getAll"
   [templateFila]="templateFila"
-  (alCrear)="crearBanco(nuevoBanco)"
+  [btnRefrescar] = "false"
 ></app-tabla-new>
 
 <ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">

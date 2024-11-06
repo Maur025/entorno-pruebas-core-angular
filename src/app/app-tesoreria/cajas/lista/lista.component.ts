@@ -26,6 +26,8 @@ import { EmpleadoService } from "src/app/core/services/tesoreria/empleado.servic
   styleUrls: ["./lista.component.scss"],
 })
 export class ListaComponent extends FuncionesComponent implements OnInit {
+  titulo = "Cajas"
+  tituloLista = "Lista de Cajas"
   @ViewChild("tabla") tabla: TablaNewComponent;
   breadCrumbItems: object[];
   formato: any;
@@ -59,8 +61,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 
   ngOnInit(): void {
     this.breadCrumbItems = [
-      { label: "Cajas" },
-      { label: "Gestión de Cajas", active: true },
+      { label: this.titulo },
+      { label: this.tituloLista, active: true },
     ];
     this.formato = this.getCabeceras();
     this.setForm();
