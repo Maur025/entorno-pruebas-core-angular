@@ -26,6 +26,54 @@ export class AnticipoClienteService {
     );
   }
 
+  getListClientes(
+    size: number = 100,
+    page: number = 1,
+    sortBy: string = "id",
+    descending: false,
+    keyword: any = ""
+  ) {
+    size = size <= 0 ? 100 : size;
+    page = page <= 0 ? 1 : page;
+    return this.apiService.tesoreria.get(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/listar-clientes?size=${size}&page=${
+        page - 1
+      }&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
+    );
+  }
+
+  getListAnticipoClientes(
+    size: number = 100,
+    page: number = 1,
+    sortBy: string = "id",
+    descending: false,
+    keyword: any = "",
+    clienteId: number | string,
+  ) {
+    size = size <= 0 ? 100 : size;
+    page = page <= 0 ? 1 : page;
+    return this.apiService.tesoreria.get(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/anticipos/${clienteId}?size=${size}&page=${
+        page - 1
+      }&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
+    );
+  }
+
+  detalleAnticipoCliente(
+    size: number = 20,
+    page: number = 0,
+    descending: boolean = true,
+    anticipoClienteId
+  ) {
+    size = size <= 0 ? 100 : size;
+    page = page <= 0 ? 1 : page;
+
+    return this.apiService.tesoreria.get(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/detalle/${anticipoClienteId}
+      ?page=${page - 1}&size=${size}&descending=${descending}`
+    );
+  }
+
   crearAnticipo(datos: any) {
     return this.apiService.tesoreria.post(
       `${this.apiUrl}${this.prefix}/${this.apiName}`,
@@ -43,8 +91,7 @@ export class AnticipoClienteService {
   findAnticipoCliente(
     size: number = 100,
     page: number = 1,
-    sortBy: string = "id",
-    descending: false,
+    descending: boolean,
     keyword: any = "",
     clienteId
   ) {
@@ -53,7 +100,7 @@ export class AnticipoClienteService {
     return this.apiService.tesoreria.get(
       `${this.apiUrl}${this.prefix}/${this.apiName}/con-saldo/${clienteId}?size=${size}&page=${
         page - 1
-      }&sortBy=${sortBy}&descending=${descending}&keyword=${keyword}`
+      }&descending=${descending}&keyword=${keyword}`
     );
   }
 

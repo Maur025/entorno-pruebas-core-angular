@@ -7,13 +7,26 @@
         <div class="flex-grow-1 align-self-center">
             <div class="text-muted">
                 <h5 class="mb-1">{{dataProveedor['razonSocial']}}</h5>
-                <p class="mb-0">Nombre comercial: {{dataProveedor['nombreComercial']}}</p>
-                <p class="mb-0">Nº documento: {{dataProveedor['nroDocumento']}}</p>
-                <p class="mb-0 fw-medium">Total credito:{{dataProveedor['totalCredito']}}</p>
-                <p class="mb-0 fw-medium">Total pagado:{{dataProveedor['totalPago']}}</p>
-                <p class="mb-0 fw-medium">Saldo:{{dataProveedor['totalSaldo']}}</p>
             </div>
         </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12 mb-2">
+        <div class="float-end ms-2">
+          <div class="text-primary">
+            <p class="mb-0 fw-medium">Total credito:{{dataProveedor['totalCredito']}}</p>
+            <p class="mb-0 fw-medium">Total pagado:{{dataProveedor['totalPago']}}</p>
+            <p class="mb-0 fw-medium">Saldo:{{dataProveedor['totalSaldo']}}</p>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="text-muted">
+            <p class="mb-0">Nombre comercial: {{dataProveedor['nombreComercial']?dataProveedor['nombreComercial']:'Sin nombre comercial'}}</p>
+            <p class="mb-0">Nº documento: {{dataProveedor['nroDocumento']}}</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
   <div class="row p-3">
@@ -34,7 +47,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let compra of listCompras" [ngStyle]="{'background-color':verDetalle ? '#e9eafa':''}">
+            <tr *ngFor="let compra of listCompras" [ngStyle]="{'background-color':compra.showForm ? '#e9eafa':''}">
               <td>
                 <button
                 type="button"
@@ -67,6 +80,12 @@
             </tr>
           </tbody>
         </table>
+        <pagination-only
+          [selectPageSmall]="true"
+          [datos]="listCompras"
+          [pagination]="pagination"
+          (alPaginar)="recibirParametrosPage($event)"
+        ></pagination-only>
       </div>
     </div>
     <div class="col-md-5">

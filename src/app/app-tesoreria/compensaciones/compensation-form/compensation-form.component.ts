@@ -242,7 +242,7 @@ export class CompensationFormComponent implements OnInit {
 
   getClientAdvanced = (clientId: string, origin: boolean = true) => {
     this.isEmptyOrigin = false;
-    this._anticipoClienteService.findAnticipoCliente(1000, 1, "id",false,'',clientId).subscribe({
+    this._anticipoClienteService.findAnticipoCliente(1000, 1,false,'',clientId).subscribe({
       next: (data: ApiResponseStandard) => {
         if (origin) {
           this.listMovesOrigin =
@@ -286,7 +286,7 @@ export class CompensationFormComponent implements OnInit {
 
   getSupplierCredit = (idProveedor: string, origin: boolean = true) => {
     this.isEmptyOrigin = false;
-    this._supplierAdvanceService.comprasPorProveedor(idProveedor).subscribe(
+    this._supplierAdvanceService.comprasPorProveedor(1000,0,true,idProveedor).subscribe(
       (data) => {
         if (origin) {
           this.listMovesOrigin =

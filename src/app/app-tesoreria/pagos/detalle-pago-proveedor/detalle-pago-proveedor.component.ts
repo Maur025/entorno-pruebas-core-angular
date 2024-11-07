@@ -11,8 +11,18 @@ export class DetallePagoProveedorComponent implements OnInit {
   @Input() dataProveedor: any;
   @Output() cerrarModal = new EventEmitter<void>();
   listCompras: any[]=[];
-  detalleCompra: any;
+  detalleCompra: any ={};
   verDetalle: boolean=false;
+  public pagination = {
+    size: 10,
+    page: 0,
+    sortBy: "id",
+    descending: true,
+    pages: 0,
+    limit: 0,
+  };
+
+
   constructor(
     private pagosService:PagosService,
     private notificacionService:NotificacionService
@@ -23,13 +33,30 @@ export class DetallePagoProveedorComponent implements OnInit {
   }
 
   comprasDelProveedor(){
-    this.pagosService.comprasPorProveedor(this.dataProveedor['id']).subscribe(data=>{
-      this.listCompras = data['data'];
+    this.pagosService.comprasPorProveedor(
+      this.pagination.size,
+      this.pagination.page,
+      this.pagination.descending,
+      this.dataProveedor['id']).subscribe(data=>{
+         data['data'].forEach(element => {
+          element['showForm'] = false;
+        });
+        this.listCompras = data['data'];
+      this.pagination.limit = data['pagination']['count'];
+      this.pagination.pages = data['pagination']['pages'];
+      this.pagination.pages = data['pagination']['pages'];
     }, error=>this.notificacionService.alertError(error));
   }
   verMas= (pagoData): void => {
-    this.detalleCompra = pagoData;
     pagoData.showForm = !pagoData.showForm;
+    this.detalleCompra = pagoData;
     this.verDetalle = !this.verDetalle;
+  }
+
+  recibirParametrosPage(paramPage){
+    this.pagination.page = paramPage.page;
+    this.pagination.size = paramPage.size;
+    this.comprasDelProveedor();
+
   }
 }

@@ -12,6 +12,7 @@
       [value]="10"
       [(ngModel)]="pagination.size"
       (change)="obtenerDatos()">
+        <option value="5">Mostrar 5</option>
         <option value="10">Mostrar 10</option>
         <option value="20">Mostrar 20</option>
         <option value="1000">Mostrar Todo</option>
@@ -27,7 +28,7 @@
               [directionLinks]="true"
               [(ngModel)]="pagination.page"
               [totalItems]="pagination.limit"
-              [maxSize]="10"
+              [maxSize]="5"
               [itemsPerPage]="pagination.size"
               (pageChanged)="pageChanged($event)"
               previousText="&lsaquo;"

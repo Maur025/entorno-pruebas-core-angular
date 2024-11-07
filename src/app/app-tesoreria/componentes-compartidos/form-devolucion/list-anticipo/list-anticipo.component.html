@@ -57,5 +57,11 @@
           </ng-template>
       </tbody>
     </table>
+    <pagination-only
+    [selectPageSmall]="true"
+    [datos]="listaAnticipos"
+    [pagination]="pagination"
+    (alPaginar)="recibirParametrosPage($event)"
+  ></pagination-only>
   </div>
 </div>

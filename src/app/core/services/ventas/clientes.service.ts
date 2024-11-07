@@ -34,6 +34,12 @@ export class ClienteService {
       .pipe(map((data: any) => data.data));
   }
 
+  find(id: string) {
+    return this.apiService.tesoreria.get(
+      `${this.apiUrl}${this.prefix}/${this.apiName}/${id}`
+    );
+  }
+
   /*   getClientes = (
     page: number = 0,
     size: number = 100,
