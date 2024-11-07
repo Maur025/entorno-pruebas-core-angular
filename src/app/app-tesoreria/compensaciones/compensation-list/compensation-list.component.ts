@@ -17,6 +17,8 @@ export class CompensationListComponent
   extends FuncionesComponent
   implements OnInit
 {
+  titulo = "Compensaciones"
+  tituloLista = "Lista de compensaciones"
   public compensacionService = inject(CompensacionService);
   private router = inject(Router);
   breadCrumbItems: object[];
@@ -34,9 +36,9 @@ export class CompensationListComponent
 
   ngOnInit(): void {
     this.breadCrumbItems = [
-      { label: "Compensaciones" },
-      { label: "Gestión de compensaciones", active: true },
-    ];
+			{ label: this.titulo },
+			{ label: this.tituloLista, active: true },
+		]
     this.formato = this.getCabeceras();
   }
 

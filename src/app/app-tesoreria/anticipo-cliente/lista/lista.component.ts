@@ -17,6 +17,9 @@ import { ActivatedRoute, Router } from "@angular/router";
   styleUrls: ["./lista.component.scss"],
 })
 export class ListaComponent extends FuncionesComponent implements OnInit {
+  titulo = "Anticipo Cliente"
+  tituloLista = "Lista de Anticipos"
+
   /*Servicios Necesarios*/
   @ViewChild("nuevoAnticipo", { static: true }) nuevoAnticipo: TemplateRef<any>;
 
@@ -40,9 +43,9 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   ngOnInit(): void {
     this.getVentas();
     this.breadCrumbItems = [
-      { label: "Anticipo Cliente" },
-      { label: "Gestión de anticipo cliente", active: true },
-    ];
+			{ label: this.titulo },
+			{ label: this.tituloLista, active: true },
+		]
     this.formato = this.getCabeceras();
   }
   private modalConfig: {

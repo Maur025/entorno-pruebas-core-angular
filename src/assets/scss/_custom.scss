@@ -2,14 +2,11 @@
 // Lightbox
 @import "~ngx-lightbox/lightbox.css";
 
-// Select 2 
+// Select 2
 @import "~@ng-select/ng-select/themes/default.theme.css";
 
 // Date Picker
 @import '~flatpickr/dist/flatpickr.css';
-
-// LeafLet Chart
-@import 'leaflet/dist/leaflet.css';
 
 // Emoji Picker
 // @import '~@ctrl/ngx-emoji-mart/picker';
@@ -21,13 +18,13 @@
   .emoji-mart-preview{
     display: none;
   }
-  
+
 
 
 // dropdown
 .dropdown-toggle {
     &:after {
-        display: none;        
+        display: none;
     }
 }
 
@@ -196,7 +193,7 @@
     .accordion-button{
         color: var(--bs-body-color);
     }
-  } 
+  }
 
   .page-link{
     display: inline-table;
@@ -211,14 +208,14 @@
         position: relative;
         z-index: 1;
         border: 0;
-        @media (max-width: 1024px) { 
+        @media (max-width: 1024px) {
             display: block;
         }
         li{
             a{
                 padding: 8px 50px;
 
-                @media (max-width: 1440mpx) { 
+                @media (max-width: 1440mpx) {
                     padding: 8px 30px;
                 }
             }
@@ -229,7 +226,7 @@
         position: absolute;
         top: 0;
 
-        @media (max-width: 1024px) { 
+        @media (max-width: 1024px) {
             position: inherit;
         }
 
@@ -243,7 +240,7 @@
    float: left;
     margin-right: 20px;
     border: 0;
-    @media (max-width: 600px) { 
+    @media (max-width: 600px) {
         display: block;
         float: inherit;
     }
@@ -261,7 +258,7 @@
         a{
             border: 0 !important;
             width: 130px;
-            @media (max-width: 425px) { 
+            @media (max-width: 425px) {
                 width: 50px;
             }
         }

@@ -48,7 +48,7 @@ export const MENU: MenuItem[] = [
     subItems: [
       {
         id: 321,
-        label: "Fondos Operativos",
+        label: "Fondo Operativo",
         link: "/fondo-operativo",
       },
       {

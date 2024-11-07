@@ -9,6 +9,8 @@ import { CobrosVariosService } from 'src/app/core/services/tesoreria/cobros-vari
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent extends FuncionesComponent implements OnInit {
+  titulo = "cobros varios"
+  tituloLista = "Lista de Cobros Varios"
 
   breadCrumbItems: object[];
   formato: any;
@@ -34,9 +36,9 @@ export class ListComponent extends FuncionesComponent implements OnInit {
 
   ngOnInit(): void {
     this.breadCrumbItems = [
-      { label: "Cobros Varios" },
-      { label: "Gestión de cobros varios", active: true },
-    ];
+			{ label: this.titulo },
+			{ label: this.tituloLista, active: true },
+		]
     this.formato = this.getCabeceras();
   }
 
