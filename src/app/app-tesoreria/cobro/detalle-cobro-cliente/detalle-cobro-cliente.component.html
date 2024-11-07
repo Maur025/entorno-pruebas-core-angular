@@ -1,0 +1,145 @@
+<div id="accountFormModalBodyDiv">
+  <div class="col-xl-12 border-bottom p-4 pb-2">
+      <div class="float-end ms-2">
+        <h6 class="fs-14 mb-0 ms-1 text-secondary fw-bold">DETALLE DE COBROS DEL CLIENTE</h6>
+      </div>
+      <div class="d-flex">
+        <div class="flex-grow-1 align-self-center">
+            <div class="text-muted">
+                <h5 class="mb-1">{{dataCliente['razonSocial']}}</h5>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12 mb-2">
+        <div class="float-end ms-2">
+          <div class="text-primary">
+            <p class="mb-0 fw-medium">Total credito:{{dataCliente['totalCreditos']}}</p>
+            <p class="mb-0 fw-medium">Total pagado:{{dataCliente['totalCreditosPagados']}}</p>
+            <p class="mb-0 fw-medium">Saldo:{{dataCliente['totalSaldoCreditos']}}</p>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="text-muted">
+            <p class="mb-0">Nombre comercial: {{dataCliente['nombreComercial']?dataCliente['nombreComercial']:'Sin nombre comercial'}}</p>
+            <p class="mb-0">Nº documento: {{dataCliente['nroDocumento']}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row p-3">
+    <h6 class="fs-14 mt-0 mb-2 ms-1 text-primary">
+      Cobros pendientes del clientes
+    </h6>
+
+    <div class="" [ngClass]="verDetalle?'col-md-7':'col-md-12'">
+      <div class="table-responsive">
+        <table class="table table-sm m-0">
+          <thead>
+            <tr>
+              <th></th>
+              <th  class="text-muted fs-14 mb-2">Venta</th>
+              <th  class="text-muted fs-14 mb-2">Fecha</th>
+              <th  class="text-muted fs-14 mb-2">Total</th>
+              <th  class="text-muted fs-14 mb-2">Saldo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let venta of listVentas" [ngStyle]="{'background-color':venta.showForm ? '#e9eafa':''}">
+              <td>
+                <button
+                type="button"
+                class="btn btn-secondary btn-sm ms-2 py-0 px-1"
+                tooltip="Ver mas"
+                (click)="verMas(venta)"
+              >
+                <i
+                  class="mdi m-0 p-0"
+                  [ngClass]="{
+                    'mdi-plus': !venta.showForm,
+                    'mdi-minus': venta.showForm
+                  }"
+                  style="font-size: 15px"
+                ></i>
+              </button>
+              </td>
+              <td>
+                <p class="mb-0 text-muted">
+                  {{venta['nroFacturaRecibo']}}</p>
+              </td>
+              <td>
+                {{venta['fechaVenta']|fechaFormat}}
+              </td>
+              <td>
+                {{venta['total']|decimalAmount}}
+              </td>
+              <td>
+                {{venta['saldoPendiente']|decimalAmount}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <pagination-only
+        [selectPageSmall]="true"
+        [datos]="listVentas"
+        [pagination]="pagination"
+        (alPaginar)="recibirParametrosPage($event)"
+      ></pagination-only>
+
+      </div>
+    </div>
+    <div class="col-md-5">
+
+      <div class="card seccion-pagos" *ngIf="verDetalle">
+        <div class="card-body">
+          <p class="mb-2 ms-2 text-muted"><b>Cobros - Venta: {{detalleVenta['nroFacturaRecibo']}}</b></p>
+
+          <div class="border p-3" *ngFor="let cobro of detalleVenta['planCobros']; let index=index">
+
+            <p class="mb-1 text-muted text-center">{{index+1}}</p>
+            <p class="mb-0 text-muted"  *ngIf="cobro['conSaldo']">
+              <span class="text-primary mdi mdi-check-circle me-1 fs-5"></span>
+              Pendiente de cobro
+            </p>
+            <p class="mb-0 text-muted"  *ngIf="!cobro['conSaldo']">
+              <span class="text-primary mdi mdi-check-circle me-1 fs-5"></span>
+              Cobro realizado
+            </p>
+
+            <p class="mb-0 text-muted"  *ngIf="cobro['conSaldo']">
+              <span class="text-primary mdi mdi-check-circle me-1 fs-5"></span>
+              Total pagar : {{cobro['monto']}}
+            </p>
+            <p class="mb-0 text-muted">
+              <span class="text-primary mdi mdi-check-circle me-1 fs-5"></span>
+              Saldo cobrar : {{cobro['saldoPendiente']}}
+            </p>
+            <p class="mb-0 text-muted"  *ngIf="cobro['conSaldo']">
+              <span class="text-primary mdi mdi-check-circle me-1 fs-5"></span>
+              Fecha limite de pago : {{cobro['fechaLimiteCobro']|fechaFormat}}
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+  <div class="row mt-3 mb-3 me-3">
+    <div class="hstack gap-2 justify-content-end">
+        <button
+            type="button"
+            class="btn btn-light"
+            data-bs-dismiss="modal"
+            (click)="this.cerrarModal.emit()"
+           >
+            Cerrar
+        </button>
+    </div>
+  </div>
+
+</div>

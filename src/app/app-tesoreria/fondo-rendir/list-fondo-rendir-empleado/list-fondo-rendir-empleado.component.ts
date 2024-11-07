@@ -18,6 +18,16 @@ export class ListFondoRendirEmpleadoComponent extends FuncionesComponent{
   formato: any;
   modalRef?: BsModalRef;
   empleadoFondoData: any;
+  fondoRendirData: any;
+  private modalConfig: {
+		ignoreBackdropClick: boolean
+		keyboard: boolean
+		class: string
+	} = {
+		ignoreBackdropClick: true,
+		keyboard: false,
+		class: 'modal-xl modal-scrollable',
+	}
 
   constructor(
     private route: ActivatedRoute,
@@ -29,16 +39,6 @@ export class ListFondoRendirEmpleadoComponent extends FuncionesComponent{
     super();
     this.idEmpleado = this.route.snapshot.paramMap.get('id');
   }
-
-  private modalConfig: {
-		ignoreBackdropClick: boolean
-		keyboard: boolean
-		class: string
-	} = {
-		ignoreBackdropClick: true,
-		keyboard: false,
-		class: 'modal-xl modal-scrollable',
-	}
 
   ngOnInit(): void {
     this.empleadoService.find(this.idEmpleado).subscribe(data=>{
@@ -54,19 +54,18 @@ export class ListFondoRendirEmpleadoComponent extends FuncionesComponent{
       cabeceras: {
         "acciones": this.getOpcionesCabecera('Acciones', 12),
         "fechaDesembolso": this.getOpcionesCabecera('Fecha desembolso', 12),
-        "nroReferencia": this.getOpcionesCabecera('Nº de Referencia', 12),
-        "descripcion": this.getOpcionesCabecera('Descripción', 12),
+        "referencia": this.getOpcionesCabecera('Referencia', 12),
         "desembolso": this.getOpcionesCabecera('Desembolso', 12),
         "descargo": this.getOpcionesCabecera('Descargo', 12),
-        "saldoDesembolso": this.getOpcionesCabecera('Saldo Desembolso', 12),
+        "saldoDesembolso": this.getOpcionesCabecera('Saldo por Rendir', 12),
         "reembolso": this.getOpcionesCabecera('Reembolso', 12),
         "pagoReembolso": this.getOpcionesCabecera('Pago Reembolso', 12),
-        "saldoReembolso": this.getOpcionesCabecera('Saldo Reembolso', 12),
+        "saldoReembolso": this.getOpcionesCabecera('Saldo  a reembolsar', 12),
         "saldoNeto": this.getOpcionesCabecera('Saldo Neto', 12),
       }
     };
   }
-  fondoRendirData: any;
+
   verMovimientos(fondoRendir, modalMovimientos){
     this.fondoRendirData=fondoRendir;
     this.modalRef = this.modalService.show(modalMovimientos, this.modalConfig)

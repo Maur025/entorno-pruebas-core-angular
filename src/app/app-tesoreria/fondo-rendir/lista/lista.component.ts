@@ -54,10 +54,10 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
         "nombre": this.getOpcionesCabecera('Empleado', 12),
         "desembolso": this.getOpcionesCabecera('Asignado', 12),
         "descargo":this.getOpcionesCabecera('Rendido', 12),
-        "saldoDesembolso": this.getOpcionesCabecera('Saldo Desembolso', 12),
+        "saldoDesembolso": this.getOpcionesCabecera('Saldo por rendir', 12),
         "reembolso":this.getOpcionesCabecera('Reembolso', 12),
         "pagoReembolso": this.getOpcionesCabecera('Pago Reembolso', 12),
-        "saldoReembolso":this.getOpcionesCabecera('Saldo Reembolso', 12),
+        "saldoReembolso":this.getOpcionesCabecera('Saldo a reembolsar', 12),
         "saldoNeto": this.getOpcionesCabecera('Saldo Neto', 12),
       }
     };

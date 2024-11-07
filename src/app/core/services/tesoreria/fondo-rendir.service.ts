@@ -59,12 +59,30 @@ export class FondoRendirService {
     );
   }
 
-  getFondoRendirMovimiento(fondoRendirId, datos) {
+  getFondoRendirMovimiento(
+    size: number = 100,
+    page: number = 0,
+    descending: boolean = false,
+    fondoRendirId,
+    datos
+  ) {
+    size = size <= 0 ? 100 : size;
+    page = page <= 0 ? 1 : page;
+    return this.apiService.tesoreria.post(
+      `${this.apiUrl}${this.prefix}/${
+        this.apiName
+      }/movimiento/detail/${fondoRendirId}?size=${size}&page=${
+        page - 1
+      }&descending=${descending}`, datos
+    );
+  }
+
+/*   getFondoRendirMovimiento(fondoRendirId, datos) {
     return this.apiService.tesoreria.post(
       `${this.apiUrl}${this.prefix}/${this.apiName}/movimiento/detail/${fondoRendirId}`,
       datos
     );
-  }
+  } */
 
   pagoReembolso(datos: any) {
     return this.apiService.tesoreria.post(

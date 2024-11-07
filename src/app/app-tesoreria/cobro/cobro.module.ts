@@ -11,10 +11,11 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { TooltipModule } from 'ngx-bootstrap/tooltip'
 import { ComponentesCompartidosModule } from '../componentes-compartidos/componentes-compartidos.module'
 import { CollectionFormComponent } from './collection-form/collection-form.component';
-import { SalePendingCollectionListComponent } from './sale-pending-collection-list/sale-pending-collection-list.component'
+import { SalePendingCollectionListComponent } from './sale-pending-collection-list/sale-pending-collection-list.component';
+import { DetalleCobroClienteComponent } from './detalle-cobro-cliente/detalle-cobro-cliente.component'
 
 @NgModule({
-	declarations: [ClientPendingCollectionListComponent, CollectionFormComponent, SalePendingCollectionListComponent],
+	declarations: [ClientPendingCollectionListComponent, CollectionFormComponent, SalePendingCollectionListComponent, DetalleCobroClienteComponent],
 	imports: [
 		CommonModule,
 		CobroRoutingModule,

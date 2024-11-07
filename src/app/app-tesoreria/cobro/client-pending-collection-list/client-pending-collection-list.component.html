@@ -29,6 +29,15 @@
 		/>
 		<ng-template #tdTemp>
 			<td [ngSwitch]="field">
+        <div *ngSwitchCase="'acciones'">
+          <button
+            class="btn btn-sm btn-info me-1"
+            tooltip="Ver detalles"
+            (click)="verDetalles(rowData, modalDetalle)"
+          >
+            <i class="mdi mdi-eye"></i>
+          </button>
+        </div>
 				<div *ngSwitchCase="'totalCreditos'" class="text-end">
 					{{ rowData?.totalCreditos || 0 | decimalAmount }}
 				</div>
@@ -51,4 +60,11 @@
 			</td>
 		</ng-template>
 	</ng-template>
+</ng-template>
+
+<ng-template #modalDetalle>
+  <detalle-cobro-cliente
+    [dataCliente]="dataCliente"
+    (cerrarModal)="modalRef.hide()"
+  ></detalle-cobro-cliente>
 </ng-template>
