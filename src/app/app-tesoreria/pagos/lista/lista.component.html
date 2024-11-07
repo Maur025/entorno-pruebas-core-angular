@@ -1,16 +1,25 @@
-<app-page-title title="PAGOS" [breadcrumbItems]="breadCrumbItems" />
+<app-page-title title="{{titulo}}" [breadcrumbItems]="breadCrumbItems" />
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-0">
+        <app-header-content [titulo]="tituloLista" (nuevo)="crearCaja(nuevoPago)"
+          (refrescar)="tabla.refrescar()"></app-header-content>
+      </div>
+    </div>
+  </div>
+</div>
+
 <app-tabla-new
   #tabla
-  [botonNuevo]="true"
   [smallTable]="false"
   [conOpciones]="false"
   [formato]="formato"
   [datosService]="pagoService"
   getAll="getAll"
   [templateFila]="templateFila"
-  [botonNuevo]="true"
-  labelNuevo="Pago Nuevo"
-  (alCrear)="crearCaja(nuevoPago)"
+  [botonNuevo]="false"
+  [btnRefrescar] = "false"
 ></app-tabla-new>
 
 <ng-template #templateFila let-fila="fila" let-cabeceras="cabeceras">

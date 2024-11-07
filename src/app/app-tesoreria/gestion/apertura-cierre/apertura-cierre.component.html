@@ -1,8 +1,20 @@
-<app-page-title title="Lista de Meses"/>
+<app-page-title [title]="breadCrumbTitle" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-0">
+        <app-header-content [btnNuevo]="false" [titulo]="tableTitle"
+          (refrescar)="tabla.refrescar()"></app-header-content>
+      </div>
+    </div>
+  </div>
+</div>
+
 <app-tabla-new
 #tabla
 *ngIf="filterData && filterData.gestionId"
 [botonNuevo]="false"
+[btnRefrescar] = "false"
 [smallTable]="false"
 [conOpciones]="false"
 [formato]="formatList"

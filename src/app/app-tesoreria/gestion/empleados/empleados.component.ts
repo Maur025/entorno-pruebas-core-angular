@@ -19,6 +19,8 @@ import { UtilityService } from "src/app/shared/services/utilityService.service";
   styleUrls: ["./empleados.component.scss"],
 })
 export class EmpleadosComponent extends FuncionesComponent implements OnInit {
+  titulo = "Empleados"
+  tituloLista = "Lista de Empleados"
   @ViewChild("tabla") tabla: TablaNewComponent;
   breadCrumbItems: object[];
   formato: any;
@@ -44,8 +46,8 @@ export class EmpleadosComponent extends FuncionesComponent implements OnInit {
 
   ngOnInit(): void {
     this.breadCrumbItems = [
-      { label: "Empleado" },
-      { label: "Gestión de empleados", active: true },
+      { label: this.titulo },
+      { label: this.tituloLista, active: true },
     ];
     this.formato = this.getCabeceras();
     this.setForm();

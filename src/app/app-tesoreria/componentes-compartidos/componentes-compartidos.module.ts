@@ -50,6 +50,7 @@ import { ListAnticipoComponent } from "./form-devolucion/list-anticipo/list-anti
     FormAnticipoComponent,
     FormDevolucionComponent,
     ListAnticipoComponent,
+    HerramientasModule
   ],
 })
 export class ComponentesCompartidosModule {}

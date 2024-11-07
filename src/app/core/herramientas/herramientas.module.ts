@@ -24,7 +24,6 @@ import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { LightboxModule } from 'ngx-lightbox';
 import { UIModule } from 'src/app/shared/ui/ui.module';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { CargandoDirective } from './directives/cargando.directive';
 import { CargandotoolsDirective } from './directives/cargandotools.directive';
 import { FormularioComponent as SubFormularioComponent } from './subtabla/formulario/formulario.component';
@@ -38,6 +37,7 @@ import { ImportarComponent } from './importar/importar.component';
 //import { SelectorImageComponent } from './selector-image/selector-image.component';
 import { FechasimplePipe } from 'src/app/core/pipes/fechasimple.pipe';
 import { ExportarComponent } from './exportar/exportar.component';
+import { HeaderContentComponent } from './kernobi-tools/components/header-content/header-content.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +51,8 @@ import { ExportarComponent } from './exportar/exportar.component';
     SubFormularioComponent,
     TablaBasicaComponent,
     FechasimplePipe,
-    ExportarComponent
+    ExportarComponent,
+    HeaderContentComponent
   ],
   imports: [
     CommonModule,
@@ -75,7 +76,6 @@ import { ExportarComponent } from './exportar/exportar.component';
     PaginationModule.forRoot(),
     AccordionModule.forRoot(),
     BsDatepickerModule.forRoot(),
-    LeafletModule,
   ],
   exports: [
     CommonModule,
@@ -84,7 +84,8 @@ import { ExportarComponent } from './exportar/exportar.component';
     TablaselectorComponent,
     FechasimplePipe,
     CargandoDirective,
-    ExportarComponent
+    ExportarComponent,
+    HeaderContentComponent
   ]
 })
 export class HerramientasModule { }

@@ -12,6 +12,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./lista.component.scss']
 })
 export class ListaComponent extends FuncionesComponent implements OnInit{
+  titulo = "Fondo a Rendir"
+  tituloLista = "Desembolsos y Movimientos"
   @ViewChild('tabla') tabla: TablaNewComponent;
   breadCrumbItems: object[];
   formato: any;
@@ -29,8 +31,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit{
 
   ngOnInit(): void {
     this.breadCrumbItems = [
-			{ label: "Fondo a rendir" },
-			{ label: "Gestión de fondo a rendir", active: true },
+			{ label: this.titulo },
+			{ label: this.tituloLista, active: true },
 		]
     this.formato = this.getCabeceras();
   }

@@ -88,7 +88,7 @@
                     *ngTemplateOutlet="contenidoColumnas"
                   ></ng-container>
                 </ng-template>
-                <button
+                <button *ngIf="btnRefrescar"
                   type="button"
                   class="btn btn-sm btn-outline-primary btn-rounded ms-1"
                   (click)="refrescar()"

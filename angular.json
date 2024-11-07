@@ -22,7 +22,6 @@
               "core-js",
               "chart.js",
               "chartist",
-              "leaflet",
               "sweetalert2",
               "apexcharts",
               "dropzone",

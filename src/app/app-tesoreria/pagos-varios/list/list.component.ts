@@ -12,6 +12,8 @@ import { NotificacionService } from "src/app/core/services/notificacion.service"
   styleUrls: ["./list.component.scss"],
 })
 export class ListComponent extends FuncionesComponent implements OnInit {
+  titulo = "Pagos varios"
+  tituloLista = "Lista de Pagos Varios"
   breadCrumbItems: object[];
   formato: any;
   modalRef?: BsModalRef;
@@ -38,9 +40,9 @@ export class ListComponent extends FuncionesComponent implements OnInit {
 
   ngOnInit(): void {
     this.breadCrumbItems = [
-      { label: "Pagos Varios" },
-      { label: "Gestión de pagos varios", active: true },
-    ];
+			{ label: this.titulo },
+			{ label: this.tituloLista, active: true },
+		]
     this.formato = this.getCabeceras();
   }
 
