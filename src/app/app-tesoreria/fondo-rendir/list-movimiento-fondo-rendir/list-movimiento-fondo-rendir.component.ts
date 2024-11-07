@@ -18,6 +18,14 @@ export class ListMovimientoFondoRendirComponent {
   filtroFecha:any;
   fechaSelect:any;
   descripcion:string="";
+  public pagination = {
+    size: 10,
+    page: 0,
+    sortBy: "id",
+    descending: false,
+    pages: 0,
+    limit: 0,
+  };
 
   constructor(
 		public fondoRendirService: FondoRendirService,
@@ -30,9 +38,17 @@ export class ListMovimientoFondoRendirComponent {
   }
 
   movimientoFondoRendir(){
-    this.fondoRendirService.getFondoRendirMovimiento(this.fondoRendirData['id'], this.bodyFilters).subscribe(
+    this.fondoRendirService.getFondoRendirMovimiento(
+      this.pagination.size,
+      this.pagination.page,
+      this.pagination.descending,
+      this.fondoRendirData['id'],
+      this.bodyFilters).subscribe(
       data=>{
         this.movimientosList = data['data'];
+        this.pagination.limit = data['pagination']['count'];
+        this.pagination.pages = data['pagination']['pages'];
+        this.pagination.pages = data['pagination']['pages'];
       }, error=>this.notificacionService.alertError(error));
   }
   verFiltros(){
@@ -55,5 +71,11 @@ export class ListMovimientoFondoRendirComponent {
 
     this.bodyFilters = filtros;
     this.movimientoFondoRendir();
+  }
+  recibirParametrosPage(paramPage){
+    this.pagination.page = paramPage.page;
+    this.pagination.size = paramPage.size;
+    this.movimientoFondoRendir();
+
   }
 }

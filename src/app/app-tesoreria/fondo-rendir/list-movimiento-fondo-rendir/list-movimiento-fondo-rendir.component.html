@@ -1,15 +1,18 @@
 <div id="accountFormModalBodyDiv">
   <div class="col-xl-12 border-bottom p-4 pb-2">
       <div class="float-end ms-2">
-        <h6 class="fs-14 mb-0 ms-1 text-secondary fw-bold">MOVIMIENTOS DE LA CUENTA DE BANCO</h6>
+        <h6 class="fs-14 mb-0 ms-1 text-secondary fw-bold">MOVIMIENTOS DEL DESEMBOLSO</h6>
       </div>
       <div class="d-flex">
         <div class="flex-grow-1 align-self-center">
             <div class="text-muted">
-                <p class="mb-2">Referencia:{{fondoRendirData['nroReferencia']}}</p>
-                <h5 class="mb-1">Descripción :{{fondoRendirData['descripcion']}}</h5>
-                <p class="mb-0">Monto desembolso: {{fondoRendirData['desembolso']}}</p>
-                <p class="mb-0 fw-medium">Saldo neto: {{fondoRendirData['saldoNeto']}}</p>
+                <p class="mb-1">Referencia : {{fondoRendirData['nroReferencia']==0?'INICIALIZACIÓN':fondoRendirData['nroReferencia']}}</p>
+                <small class="mb-0">Descripción:</small>
+                <h5 class="mb-0">{{fondoRendirData['descripcion']}}</h5>
+            </div>
+            <div class="text-primary">
+              <p class="mb-0">Monto desembolso: {{fondoRendirData['desembolso']}}</p>
+              <p class="mb-0 fw-medium">Saldo neto: {{fondoRendirData['saldoNeto']}}</p>
             </div>
         </div>
     </div>
@@ -57,7 +60,12 @@
           </tr>
         </tbody>
       </table>
-
+      <pagination-only
+        [selectPageSmall]="true"
+        [datos]="movimientosList"
+        [pagination]="pagination"
+        (alPaginar)="recibirParametrosPage($event)"
+      ></pagination-only>
     </div>
   </div>
 

@@ -33,28 +33,38 @@
         <div *ngSwitchCase="'fechaDesembolso'">
           {{ fila["fechaDesembolso"]|fechaFormat }}
         </div>
-        <div *ngSwitchCase="'desembolso'">
+        <div *ngSwitchCase="'referencia'">
+          <div>
+            <p class="mb-0 text-muted">
+              Nº: {{fila['nroReferencia'] == 0 ? 'INICIALIZACIÓN':fila['nroReferencia']}}
+            </p>
+            <small class="text-muted text-end mb-0"
+              ><b>Descripción:</b> {{fila['descripcion']}} <b></b></small
+            >
+          </div>
+        </div>
+        <div *ngSwitchCase="'desembolso'" class="text-end">
           {{ fila["desembolso"]}}
         </div>
-        <div *ngSwitchCase="'descargo'">
+        <div *ngSwitchCase="'descargo'" class="text-end">
           {{ fila["descargo"]}}
         </div>
         <div *ngSwitchCase="'saldoDesembolso'" class="text-end">
           <div>
-            <p class="mb-0" [ngClass]="fila['saldoDesembolso'] > 0 ? 'text-success' : 'text-danger'">
+            <p class="mb-0" [ngClass]="fila['saldoDesembolso'] >= 0 ? 'text-success' : 'text-danger'">
               {{ fila["saldoDesembolso"]|decimalAmount }}
             </p>
           </div>
         </div>
-        <div *ngSwitchCase="'reembolso'">
+        <div *ngSwitchCase="'reembolso'" class="text-end">
           {{ fila["reembolso"]}}
         </div>
-        <div *ngSwitchCase="'pagoReembolso'">
+        <div *ngSwitchCase="'pagoReembolso'" class="text-end">
           {{ fila["pagoReembolso"]}}
         </div>
         <div *ngSwitchCase="'saldoReembolso'" class="text-end">
           <div>
-            <p class="mb-0" [ngClass]="fila['saldoReembolso'] > 0 ? 'text-success' : 'text-danger'">
+            <p class="mb-0" [ngClass]="fila['saldoReembolso'] >= 0 ? 'text-success' : 'text-danger'">
               {{ fila["saldoReembolso"]|decimalAmount }}
             </p>
           </div>
@@ -65,9 +75,6 @@
               {{ fila["saldoNeto"]|decimalAmount }}
             </p>
           </div>
-        </div>
-        <div *ngSwitchDefault>
-          <td>{{ fila[campo] }}</td>
         </div>
       </td>
     </ng-template>

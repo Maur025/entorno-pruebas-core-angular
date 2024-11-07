@@ -29,18 +29,18 @@
             <i class="mdi mdi-chart-timeline-variant"></i>
           </button>
           <button
-            *ngIf="fila['saldoReembolsar'] > 0"
             class="btn btn-sm btn-warning me-2"
             tooltip="Pagar reembolso"
             (click)="pagoReemblosoForm(fila, pagoModal)"
+            [disabled]="fila['saldoReembolsar'] > 0"
           >
             <i class="mdi mdi-contactless-payment"></i>
           </button>
           <button
-            *ngIf="fila['saldoDesembolso'] > 0"
             class="btn btn-sm btn-primary me-2"
             tooltip="Pago por devolución"
             (click)="pagoDevolucionForm(fila, pagoModal)"
+            [disabled]="fila['saldoDesembolso'] > 0"
           >
             <i class="mdi mdi-keyboard-backspace"></i>
           </button>

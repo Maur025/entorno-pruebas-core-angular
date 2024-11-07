@@ -88,7 +88,7 @@ export class FormPagoComponent {
       this.labelMonto = "Monto total por reembolso";
     }
     if (this.operacion == EstadosFondoRendir.DEVOLUCION) {
-      this.labelTitle = "Pago por devolución del empleado";
+      this.labelTitle = "Pago por devolución a la empresa";
       this.labelFecha = "(*)Fecha pago devolucion";
       this.labelMonto = "Monto total por devolución";
     }
