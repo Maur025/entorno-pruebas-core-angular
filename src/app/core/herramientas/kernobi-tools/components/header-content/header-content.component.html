@@ -1,0 +1,12 @@
+
+<div class="card-body border-bottom">
+  <div class="d-flex align-items-center">
+    <h3 class="mb-0 card-title flex-grow-1">{{ titulo }}</h3>
+    <div class="flex-shrink-0 d-flex gap-1">
+      <a class="btn btn-primary btn-icon" *ngIf="btnNuevo" (click)="nuevo.emit()" routerLinkActive="active">
+        <i class="mdi mdi-plus me-1"></i>Nuevo
+      </a>
+      <a class="btn btn-light" (click)="refrescar.emit()" data-bs-toggle="tooltip" data-bs-placement="top" tooltip="Refrescar Tabla" ><i class="mdi mdi-refresh"></i></a>
+    </div>
+  </div>
+</div>

@@ -28,6 +28,7 @@ import {
   styleUrls: ["./tabla-new.component.scss"],
 })
 export class TablaNewComponent implements OnChanges {
+  @Input() btnRefrescar = true;
   @Input() textoBuscar: string = "Criterio de búsqueda...";
   @Input() templateFiltrar: any;
   @Input() botonNuevo = true;

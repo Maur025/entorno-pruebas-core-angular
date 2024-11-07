@@ -1,7 +1,18 @@
-<app-page-title title="COBROS" [breadcrumbItems]="breadCrumbItems" />
+<app-page-title title="{{titulo}}" [breadcrumbItems]="breadCrumbItems" />
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-0">
+        <app-header-content [titulo]="tituloLista" (nuevo)="navigateToCollectForm()"
+          ></app-header-content>
+      </div>
+    </div>
+  </div>
+</div>
+
 <app-tabla-new
 	#table
-	[botonNuevo]="true"
+	[botonNuevo]="false"
 	[smallTable]="false"
 	[conOpciones]="false"
 	[formato]="tableHeadersFormat"
@@ -9,7 +20,6 @@
 	getAll="getClientsByKeyword"
 	[templateFila]="rowTemplate"
 	labelNuevo="Nuevo Cobro"
-	(alCrear)="navigateToCollectForm()"
 />
 
 <ng-template #rowTemplate let-rowData="fila" let-tableHeaders="cabeceras">

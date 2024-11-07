@@ -10,11 +10,6 @@ import {
 import { ScreenshotService } from "src/app/core/services/screenshot.service";
 import { NotificacionService } from "src/app/core/services/notificacion.service";
 import { UtilityService } from "src/app/shared/services/utilityService.service";
-import { ResponseHandlerService } from "src/app/core/services/response-handler.service";
-import {
-  ApiResponseStandard,
-  ErrorResponseStandard,
-} from "src/app/shared/interface/common-api-response";
 import { BancoService } from "src/app/core/services/tesoreria/banco.service";
 import { ActivatedRoute, Router } from "@angular/router";
 
@@ -24,6 +19,8 @@ import { ActivatedRoute, Router } from "@angular/router";
   styleUrls: ["./lista.component.scss"],
 })
 export class ListaComponent extends FuncionesComponent implements OnInit {
+  titulo = "Bancos"
+  tituloLista = "Lista de Bancos"
   @ViewChild("tabla") tabla: TablaNewComponent;
   breadCrumbItems: object[];
   formato: any;
@@ -44,7 +41,6 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     private screenshotService: ScreenshotService,
     private notificacionService: NotificacionService,
     protected utilityService: UtilityService,
-    private responseHandlerService: ResponseHandlerService,
     public bancoService: BancoService,
     private router: Router,
     private route: ActivatedRoute
@@ -54,8 +50,8 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
 
   ngOnInit(): void {
     this.breadCrumbItems = [
-      { label: "Bancos" },
-      { label: "Gestión de bancos", active: true },
+      { label: this.titulo },
+      { label: this.tituloLista, active: true },
     ];
     this.formato = this.getCabeceras();
     this.setForm();

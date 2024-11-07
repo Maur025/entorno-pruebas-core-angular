@@ -14,6 +14,9 @@ import { GestionService } from 'src/app/core/services/tesoreria/gestion.service'
   styleUrls: ['./apertura-cierre.component.scss']
 })
 export class AperturaCierreComponent extends FuncionesComponent {
+  breadCrumbItems: Array<{}>;
+  breadCrumbTitle: string = 'Apertura y Cierre';
+
   @ViewChild('tabla') tabla: TablaNewComponent;
 
 	public tableTitle: string = 'Listado de Meses'
@@ -35,6 +38,7 @@ export class AperturaCierreComponent extends FuncionesComponent {
 	}
 
 	ngOnInit(): void {
+    this.breadCrumbItems = [{ label: this.breadCrumbTitle }, { label: "Lista", active: true }];
 		this.setFormatList()
 		this.getAccountingPeriod()
 	}
