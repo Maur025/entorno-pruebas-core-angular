@@ -140,6 +140,11 @@ export const MENU: MenuItem[] = [
         label: "Clientes",
         link: "/reportes/clientes-estado-cuentas",
       },
+      {
+        id: 52,
+        label: "Proveedor",
+        link: "/reportes/proveedores-estado-cuentas",
+      },
     ]
   },
   {

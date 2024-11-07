@@ -10,11 +10,12 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { UIModule } from 'src/app/shared/ui/ui.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { ProveedorEstadoCuentaComponent } from './proveedor-estado-cuenta/proveedor-estado-cuenta.component';
 
 @NgModule({
   declarations: [
-    ClienteEstadoCuentaComponent
+    ClienteEstadoCuentaComponent,
+    ProveedorEstadoCuentaComponent
   ],
   imports: [
     CommonModule,

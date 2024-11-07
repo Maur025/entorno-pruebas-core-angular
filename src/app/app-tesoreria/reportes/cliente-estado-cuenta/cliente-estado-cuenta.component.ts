@@ -14,15 +14,13 @@ import { ArchivosService } from 'src/app/core/services/archivos.service';
 export class ClienteEstadoCuentaComponent extends FuncionesComponent implements OnInit{
 
   breadCrumbItems: object[];
-  formReporCliente: UntypedFormGroup;
   filtroFecha:any;
   filtros={}
+  conDetalle: boolean = false;
+  submitted: boolean = false;
 
   constructor(
     private clientesReportService: ClientesReportService,
-    private modalService: BsModalService,
-    private router: Router,
-    private route: ActivatedRoute,
     private archivoService: ArchivosService
     ){super()}
 
@@ -34,32 +32,26 @@ export class ClienteEstadoCuentaComponent extends FuncionesComponent implements 
   }
 
   getFechas(date){
-    console.log(date);
     this.filtroFecha = date;
   }
 
   exportarDatos(tipo){
-    this.filtros['fechaDesde'] = this.filtroFecha[0];
-    this.filtros['fechaHasta'] = this.filtroFecha[1];
-    this.clientesReportService.estadoCuentas(false, tipo, this.filtros).subscribe(data=>{
-      console.log("data"+data['data']['content']);
-      let content = data['data']['content'];
-      let name = 'Clientes_estado_de_cuentas';
-      if (tipo === 'XLSX') {
-        let extencion = 'xlsx';
-        this.archivoService.generar64aExcel(content, `${name}.${extencion}`);
-      } else if (tipo === 'PDF') {
-        let extencion = 'pdf';
-        this.archivoService.generar64aPDFByNewWindow(content, `${name}.${extencion}`);
-      }
-    });
-
-
-
+    if(this.filtroFecha !== undefined){
+      this.filtros['fechaDesde'] = this.filtroFecha[0];
+      this.filtros['fechaHasta'] = this.filtroFecha[1];
+      this.clientesReportService.estadoCuentas(this.conDetalle, tipo, this.filtros).subscribe(data=>{
+        console.log("data"+this.conDetalle);
+        let content = data['data']['content'];
+        let name = 'Clientes_estados_de_cuentas';
+        if (tipo === 'XLSX') {
+          let extencion = 'xlsx';
+          this.archivoService.generar64aExcel(content, `${name}.${extencion}`);
+        } else if (tipo === 'PDF') {
+          let extencion = 'pdf';
+          this.archivoService.generar64aPDFByNewWindow(content, `${name}.${extencion}`);
+        }
+      });
+    }
+    this.submitted = true;
   }
-
-  getReportClient(){
-
-  }
-
 }
