@@ -102,6 +102,13 @@ const routes: Routes = [
         (m) => m.DevengadosVentasModule
       ),
   },
+  {
+    path: "reportes",
+    loadChildren: () =>
+      import("./reportes/reportes.module").then(
+        (m) => m.ReportesModule
+      ),
+  },
 ];
 
 @NgModule({

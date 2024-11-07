@@ -126,6 +126,23 @@ export const MENU: MenuItem[] = [
     icon: "mdi mdi-scale-balance",
   },
   {
+    id: 5,
+    label: "REPORTES",
+    isTitle: true,
+  },
+  {
+    id: 50,
+    label: "Estados de cuentas",
+    icon: "bx bxs-collection",
+    subItems: [
+      {
+        id: 51,
+        label: "Clientes",
+        link: "/reportes/clientes-estado-cuentas",
+      },
+    ]
+  },
+  {
     id: 9,
     label: "SALDOS INICIALES",
     isTitle: true,

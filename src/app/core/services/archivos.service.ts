@@ -35,6 +35,24 @@ export class ArchivosService {
     };
   }());
 
+  generar64aPDFByNewWindow = (function () {
+    var enlace: any = document.createElement("a");
+    document.body.appendChild(enlace);
+    return function (data: any, fileName: any) {
+      const byteArray = new Uint8Array(
+        atob(data)
+          .split("")
+          .map((char) => char.charCodeAt(0))
+      );
+      var blob = new Blob([byteArray], { type: "application/pdf" });
+      var url = window.URL.createObjectURL(blob);
+      enlace.download = fileName;
+      enlace.href = url;
+      enlace.target = "_blank";
+      window.open(url, "_blank");
+    };
+  })();
+
   generar64aExcel = (function () {
     var a: any = document.createElement("a");
     document.body.appendChild(a);

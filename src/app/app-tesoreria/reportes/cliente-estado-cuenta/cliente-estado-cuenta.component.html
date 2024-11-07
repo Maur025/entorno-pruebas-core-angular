@@ -1,0 +1,41 @@
+<app-page-title title="Reportes" [breadcrumbItems]="breadCrumbItems" />
+
+<div class="card">
+  <div class="card-body">
+    <div>
+<!--       <form [formGroup]="formReporCliente" (ngSubmit)="getReportClient()"> -->
+        <div class="row">
+          <div class="hstack gap-2 justify-content-center">
+            <div class="col-md-8">
+              <p class="text-muted fs-14 mb-0">Fecha (Desde-Hasta)</p>
+              <input
+                type="text"
+                [(ngModel)]="filtroFecha"
+                placeholder="dd/mm/AAAA - dd/mm/AAAA"
+                class="form-control date m-3"
+                name="daterange"
+                autocomplete="off"
+                bsDaterangepicker
+                (bsValueChange)="getFechas($event)"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="hstack gap-2 justify-content-center">
+            <button
+                type="button"
+                class="btn btn-danger"
+                (click)="exportarDatos('PDF')"
+               >Exportar PDF</button>
+               <button
+               type="button"
+               class="btn btn-success"
+               (click)="exportarDatos('XLSX')"
+              >Exportar EXCEL</button>
+          </div>
+        </div>
+ <!--      </form> -->
+    </div>
+  </div>
+</div>
