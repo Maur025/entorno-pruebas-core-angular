@@ -13,7 +13,7 @@ import { CajaService } from "src/app/core/services/tesoreria/caja.service";
 import { UtilityService } from "src/app/shared/services/utilityService.service";
 import { TablaNewComponent } from "src/app/shared/ui/tabla-new/tabla-new.component";
 import { FuncionesComponent } from "../../funciones.component";
-import { CentroCostosService } from "src/app/core/services/tesoreria/centro-costos.service";
+
 import {
   ApiResponseStandard,
   ErrorResponseStandard,
@@ -37,7 +37,6 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   submitted: boolean = false;
   formCajaCreate: UntypedFormGroup;
   listaResponsables: any[] = [];
-  listaCentroCostos: any[] = [];
   datosCaja: any;
   isStatusSubmit: boolean = false;
 
@@ -48,7 +47,6 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     private modalService: BsModalService,
     private screenshotService: ScreenshotService,
     private notificacionService: NotificacionService,
-    private centroCostosService: CentroCostosService,
     private empleadoService: EmpleadoService,
     protected utilityService: UtilityService,
     private responseHandlerService: ResponseHandlerService,
@@ -67,7 +65,6 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     this.formato = this.getCabeceras();
     this.setForm();
     this.getEmployeesList();
-    this.getCentroCostos();
   }
 
   private modalConfig: {
@@ -85,7 +82,6 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
       cabeceras: {
         acciones: this.getOpcionesCabecera("Acciones", 12, "text", true, false),
         nombre: this.getOpcionesCabecera("Nombre", 12),
-        centroCosto: this.getOpcionesCabecera("Centro de Costos", 12),
         empleado: this.getOpcionesCabecera("Responsable", 12),
         saldo: this.getOpcionesCabecera("Saldo", 12),
       },
@@ -104,7 +100,6 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
         ],
       ],
       empleadoId: [null, [Validators.required]],
-      centroCostoId: [null, [Validators.required]],
     });
   }
   get form() {
@@ -125,9 +120,6 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     this.idCajaEdit = fila["id"];
     this.formCajaCreate.controls["id"].setValue(fila["id"]);
     this.formCajaCreate.controls["nombre"].setValue(fila["nombre"]);
-    this.formCajaCreate.controls["centroCostoId"].setValue(
-      fila["centroCosto"]["id"]
-    );
     setTimeout(()=>{
       this.formCajaCreate.get('empleadoId')?.setValue(fila["empleado"]["id"]);
     }, 500);
@@ -142,17 +134,6 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
   detalleCaja(caja) {
     this.router.navigate(["./" + caja.id + "/caja/", {}], {
       relativeTo: this.route,
-    });
-  }
-
-  getCentroCostos() {
-    this.centroCostosService.habilitados().subscribe({
-      next: (response: ApiResponseStandard) => {
-        this.listaCentroCostos =
-          this.responseHandlerService?.handleResponseAsArray(response);
-      },
-      error: (error: ErrorResponseStandard) =>
-        this.notificacionService.alertError(error),
     });
   }
 
