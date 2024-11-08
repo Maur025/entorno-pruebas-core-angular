@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core'
 import Swal from 'sweetalert2'
 import { ToastrService } from 'ngx-toastr'
 import { AuthenticationService } from 'src/app/core/services/auth.service'
-import { HttpErrorResponse } from '@angular/common/http'
 import { Router } from '@angular/router'
 import {
 	ErrorDetailDataResponseStandard,
@@ -14,8 +13,7 @@ import { environment } from 'src/environments/environment'
 export class NotificacionService {
 	constructor(
 		public toastService: ToastrService,
-		public authServices: AuthenticationService,
-		private router: Router
+		public authServices: AuthenticationService
 	) {}
 
 	alertError(
