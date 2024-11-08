@@ -122,7 +122,7 @@ export class AperturaFormComponent {
     let totalDiference = false;
     let mensajeDiference = "";
     switch (this.operacion) {
-      case "APER":
+   /*    case "APER":
         if (this.montoTotalTransferencia == 0) totalCero = true;
         mensaje = "El monto total de apertura no debe ser 0";
 
@@ -130,6 +130,8 @@ export class AperturaFormComponent {
           totalDiference = true;
         mensajeDiference =
           "El monto total de apertura no debe ser diferente al importe del fondo";
+        break; */
+      case "APER":
         break;
       case "REPO":
         if (this.montoTotalTransferencia == 0) totalCero = true;
@@ -203,8 +205,8 @@ export class AperturaFormComponent {
         this.labelTransferencias = "la apertura de fondo";
         this.labelMonto = "Monto total de apertura";
         this.labelPlaceholder = "Descripción para la apertura de fondo";
-        this.labelAlert = "Importe de fondo operativo";
-        this.montoPendienteReponer = this.datosFondo["importe"];
+/*         this.labelAlert = "Importe de fondo operativo";
+        this.montoPendienteReponer = this.datosFondo["importe"]; */
         break;
       case "REPO":
         this.labelOperacion = "Reposición de Fondo Operativo";
