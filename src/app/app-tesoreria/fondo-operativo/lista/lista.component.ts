@@ -78,7 +78,6 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
       cabeceras: {
         acciones: this.getOpcionesCabecera("Acciones", 12, "text", true, false),
         nombre: this.getOpcionesCabecera("Nombre", 12, "text-end"),
- /*        importe: this.getOpcionesCabecera("Importe", 12), */
         montoApertura: this.getOpcionesCabecera("Monto Apertura", 12),
         totalDescargos: this.getOpcionesCabecera("Total Descargos", 12),
         totalReposicion: this.getOpcionesCabecera("Total Reposición", 12),
@@ -100,14 +99,6 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
         ],
       ],
       empleadoId: [null, [Validators.required]],
-/*       importe: [
-        null,
-        [
-          Validators.required,
-          Validators.min(1),
-          Validators.pattern("^[0-9]+(.[0-9]*)?$"),
-        ],
-      ], */
     });
   }
 
@@ -128,7 +119,6 @@ export class ListaComponent extends FuncionesComponent implements OnInit {
     this.idFondoEdit = fila["id"];
     this.formFondoCreate.controls["id"].setValue(fila["id"]);
     this.formFondoCreate.controls["nombre"].setValue(fila["nombre"]);
-/*     this.formFondoCreate.controls["importe"].setValue(fila["importe"]); */
     setTimeout(()=>{
       this.formFondoCreate.get('empleadoId')?.setValue(fila["empleado"]["id"]);
     }, 500);
