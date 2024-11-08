@@ -1,0 +1,65 @@
+<app-page-title title="Reportes" [breadcrumbItems]="breadCrumbItems" />
+
+<div class="card">
+  <div class="card-body">
+
+    <h6 class="text-secondary fw-bold mb-4 pb-2 border-bottom">
+      Reportes de estado de cuentas de Proveedores
+    </h6>
+
+    <div class="row">
+      <div class="col-md-5">
+        <p class="text-muted fs-14 mb-0">Fecha (Desde-Hasta)</p>
+        <input
+          type="text"
+          [(ngModel)]="filtroFecha"
+          placeholder="dd/mm/AAAA - dd/mm/AAAA"
+          class="form-control date"
+          name="daterange"
+          autocomplete="off"
+          bsDaterangepicker
+          (bsValueChange)="getFechas($event)"
+        />
+        <div *ngIf="submitted && filtroFecha == undefined">
+          <div
+            class="text-danger mt-1 font-size-10"
+            *ngIf="filtroFecha == undefined"
+          >
+            Agregue un rango de fechas para el reporte
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="d-flex mt-3">
+          <p class="text-muted fs-14 mb-0">Reporte con detalles</p>
+          <div class="form-check form-check-success m-0 p-0 ms-5">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              style="transform: scale(1.7)"
+              placement="top"
+              [ngModel]="conDetalle"
+              (ngModelChange)="conDetalle=$event"
+              />
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="hstack gap-2 justify-content-center mt-3">
+          <button
+              type="button"
+              class="btn btn-danger"
+              (click)="exportarDatos('PDF')"
+             >Exportar PDF</button>
+             <button
+             type="button"
+             class="btn btn-success"
+             (click)="exportarDatos('XLSX')"
+            >Exportar EXCEL</button>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
