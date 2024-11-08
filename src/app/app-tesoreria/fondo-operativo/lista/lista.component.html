@@ -203,39 +203,6 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12">
-          <label class="mb-2" for="cashEmployeeId">(*) Monto </label>
-          <input
-            type="number"
-            class="form-control text-end"
-            formControlName="importe"
-            placeholder="Bs"
-            [ngClass]="{
-              'is-invalid':
-                submitted && formFondoCreate.controls['importe'].errors != null
-            }"
-          />
-          <div *ngIf="submitted && formFondoCreate.controls['importe'].errors">
-            <small
-              class="text-danger"
-              *ngIf="formFondoCreate.controls['importe'].errors?.required"
-            >
-              Agregue un monto para el fondo operativo
-            </small>
-            <small
-              class="text-danger"
-              *ngIf="formFondoCreate.controls['importe'].errors['pattern']"
-            >
-              El monto solo acepta carácteres numéricos y un punto decimal
-            </small>
-            <small
-              class="text-danger"
-              *ngIf="formFondoCreate.controls['importe'].errors['min']"
-            >
-              El monto debe ser mayor a 0
-            </small>
-          </div>
-        </div>
       </div>
     </div>
     <div class="modal-footer">

@@ -10,7 +10,7 @@
       </div>
     </div>
   </div>
-  <div class="mt-1 ms-4 me-4">
+  <div class="mt-1 ms-4 me-4" *ngIf="operacion !== 'APER'">
     <alert type="info" [dismissible]="true" role="alert">
       <i class="mdi mdi-alert-circle-outline me-2"></i>
       {{ labelAlert }}: <b>{{ montoPendienteReponer }}</b>
