@@ -42,6 +42,7 @@
     "bootstrap": "^5.2.0",
     "chart.js": "^2.9.4",
     "chartist": "^0.11.4",
+    "core-keycloak": "^0.0.1",
     "decimal.js": "^10.4.3",
     "echarts": "^5.4.1",
     "flatpickr": "^4.6.13",
